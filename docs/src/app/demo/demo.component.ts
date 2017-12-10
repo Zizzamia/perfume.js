@@ -15,4 +15,7 @@ export class DemoComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngAfterViewInit() {
+    
+  }
 }
