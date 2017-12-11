@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Perfume } from '../../../../src/perfume';
+import { Perfume } from '../../../../package';
 
 const perfume = new Perfume;
 

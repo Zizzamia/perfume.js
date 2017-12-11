@@ -1,11 +1,11 @@
 {
-  "name": "perfume",
+  "name": "Perfume.js",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "perfume.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Leonardo Zizzamia",
+  "license": "MIT"
 }
