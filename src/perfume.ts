@@ -1,7 +1,13 @@
 
 export default class Perfume {
 
-  metrics: object;
+  metrics: { 
+    [key: string]: {
+      start: number,
+      end: number,
+      duration: number
+    } 
+  };
   logSuffix: string;
 
   constructor() {
@@ -34,7 +40,7 @@ export default class Perfume {
    * This assumes the user has made only one measurement for the given
    * name. Return the first one found.
    */
-  getMeasurementForGivenName(metricName) {
+  getMeasurementForGivenName(metricName: string) {
     return performance.getEntriesByName(metricName)[0];
   }
 
@@ -44,7 +50,7 @@ export default class Perfume {
    * Use User Timing API results if available, otherwise return
    * performance.now() fallback.
    */
-  set duration(metricName) {
+  set duration(metricName: string) {
     let duration = this.metrics[metricName].end - this.metrics[metricName].start;
     if (this.supportsPerfMark) {
       const entry = this.getMeasurementForGivenName(metricName);
@@ -58,7 +64,7 @@ export default class Perfume {
   /**
    *
    */
-  checkMetricName(metricName) {
+  checkMetricName(metricName: string) {
     if (metricName) {
       return;
     }
@@ -68,7 +74,7 @@ export default class Perfume {
   /**
    *
    */
-  start(metricName) {
+  start(metricName: string) {
     this.checkMetricName(metricName);
     if (!this.supportsPerfMark) {
       console.warn(this.logSuffix, `Timeline won't be marked for "${metricName}".`);
@@ -77,9 +83,7 @@ export default class Perfume {
       console.warn(this.logSuffix, 'Recording already started.');
       return;
     }
-    this.metrics[metricName] = {
-      start: performance.now()
-    };
+    this.metrics[metricName].start = performance.now();
     if (this.supportsPerfMark) {
       performance.mark(`mark_${metricName}_start`);
     }
@@ -88,7 +92,7 @@ export default class Perfume {
   /**
    *
    */
-  end(metricName, log = false, destroy = false) {
+  end(metricName: string, log = false, destroy = false) {
     this.checkMetricName(metricName);
     if (!this.metrics[metricName]) {
       console.warn(this.logSuffix, 'Recording already stopped.');
@@ -138,7 +142,7 @@ export default class Perfume {
   /**
    *
    */
-  log(metricName, duration) {
+  log(metricName: string, duration: number) {
     const style = 'color: #ff6d00;font-size:12px;';
     const text = `%c ⚡️ Perfume.js ${metricName} ${duration} ms`;
     console.log(text, style);

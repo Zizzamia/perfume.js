@@ -11,10 +11,17 @@
   ],
   "author": "Leonardo Zizzamia",
   "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "scripts": {
     "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
-    "test": "jest"
+    "build": "tsc && tsc --module commonjs --outDir dist/lib && rollup -c rollup.config.ts",
+    "start": "tsc -w & rollup -c rollup.config.ts -w",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:prod": "npm run lint && npm run test -- --coverage --no-cache"
   },
   "jest": {
     "transform": {
@@ -53,6 +60,7 @@
     "@types/jest": "^21.1.0",
     "@types/node": "^8.0.0",
     "jest": "^21.0.0",
+    "lodash.camelcase": "^4.3.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.52.0",
     "rollup-plugin-commonjs": "^8.0.2",
