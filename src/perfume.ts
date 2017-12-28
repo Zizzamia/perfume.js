@@ -8,14 +8,14 @@ export default class Perfume {
       duration: number
     } 
   };
-  logSuffix: string;
+  logPrefix: string;
 
   constructor() {
     this.metrics = {};
-    this.logSuffix = 'Perfume.js: ';
+    this.logPrefix = '⚡️ Perfume.js: ';
 
     if (!this.supportsPerfNow) {
-      throw Error(this.logSuffix + ' Cannot be used in this browser.');
+      throw Error(this.logPrefix + ' Cannot be used in this browser.');
     }
   }
 
@@ -68,7 +68,7 @@ export default class Perfume {
     if (metricName) {
       return;
     }
-    throw Error(this.logSuffix + 'Please provide a metric name');
+    throw Error(this.logPrefix + 'Please provide a metric name');
   }
 
   /**
@@ -77,10 +77,10 @@ export default class Perfume {
   start(metricName: string) {
     this.checkMetricName(metricName);
     if (!this.supportsPerfMark) {
-      console.warn(this.logSuffix, `Timeline won't be marked for "${metricName}".`);
+      console.warn(this.logPrefix, `Timeline won't be marked for "${metricName}".`);
     }
     if (this.metrics[metricName]) {
-      console.warn(this.logSuffix, 'Recording already started.');
+      console.warn(this.logPrefix, 'Recording already started.');
       return;
     }
     this.metrics[metricName].start = performance.now();
@@ -95,7 +95,7 @@ export default class Perfume {
   end(metricName: string, log = false, destroy = false) {
     this.checkMetricName(metricName);
     if (!this.metrics[metricName]) {
-      console.warn(this.logSuffix, 'Recording already stopped.');
+      console.warn(this.logPrefix, 'Recording already stopped.');
       return;
     }
     this.metrics[metricName].end = performance.now();
@@ -144,7 +144,7 @@ export default class Perfume {
    */
   log(metricName: string, duration: number) {
     const style = 'color: #ff6d00;font-size:12px;';
-    const text = `%c ⚡️ Perfume.js ${metricName} ${duration} ms`;
+    const text = `%c ${this.logPrefix} ${metricName} ${duration} ms`;
     console.log(text, style);
   }
 }
