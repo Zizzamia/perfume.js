@@ -1,21 +1,19 @@
-
 export default class Perfume {
-
-  metrics: { 
+  private metrics: {
     [key: string]: {
-      start: number,
-      end: number,
-      duration: number
-    } 
+      start: number;
+      end: number;
+      duration: number;
+    };
   };
-  logPrefix: string;
+  private logPrefix: string;
 
   constructor() {
     this.metrics = {};
-    this.logPrefix = '⚡️ Perfume.js: ';
+    this.logPrefix = "⚡️ Perfume.js: ";
 
     if (!this.supportsPerfNow) {
-      throw Error(this.logPrefix + ' Cannot be used in this browser.');
+      throw Error(this.logPrefix + " Cannot be used in this browser.");
     }
   }
 
@@ -40,7 +38,7 @@ export default class Perfume {
    * This assumes the user has made only one measurement for the given
    * name. Return the first one found.
    */
-  getMeasurementForGivenName(metricName: string) {
+  public getMeasurementForGivenName(metricName: string) {
     return performance.getEntriesByName(metricName)[0];
   }
 
@@ -54,7 +52,7 @@ export default class Perfume {
     let duration = this.metrics[metricName].end - this.metrics[metricName].start;
     if (this.supportsPerfMark) {
       const entry = this.getMeasurementForGivenName(metricName);
-      if (entry && entry.entryType !== 'measure') {
+      if (entry && entry.entryType !== "measure") {
         duration = entry.duration;
       }
     }
@@ -64,23 +62,23 @@ export default class Perfume {
   /**
    *
    */
-  checkMetricName(metricName: string) {
+  public checkMetricName(metricName: string) {
     if (metricName) {
       return;
     }
-    throw Error(this.logPrefix + 'Please provide a metric name');
+    throw Error(this.logPrefix + "Please provide a metric name");
   }
 
   /**
    *
    */
-  start(metricName: string) {
+  public start(metricName: string) {
     this.checkMetricName(metricName);
     if (!this.supportsPerfMark) {
-      console.warn(this.logPrefix, `Timeline won't be marked for "${metricName}".`);
+      global.console.warn(this.logPrefix, `Timeline won"t be marked for "${metricName}".`);
     }
     if (this.metrics[metricName]) {
-      console.warn(this.logPrefix, 'Recording already started.');
+      global.console.warn(this.logPrefix, "Recording already started.");
       return;
     }
     this.metrics[metricName].start = performance.now();
@@ -92,10 +90,10 @@ export default class Perfume {
   /**
    *
    */
-  end(metricName: string, log = false, destroy = false) {
+  public end(metricName: string, log = false, destroy = false) {
     this.checkMetricName(metricName);
     if (!this.metrics[metricName]) {
-      console.warn(this.logPrefix, 'Recording already stopped.');
+      global.console.warn(this.logPrefix, "Recording already stopped.");
       return;
     }
     this.metrics[metricName].end = performance.now();
@@ -116,7 +114,7 @@ export default class Perfume {
   /**
    * http://msdn.microsoft.com/ff974719
    */
-  getFirstPaint() {
+  public getFirstPaint() {
     if (performance) {
       const navTiming = performance.timing;
       if (navTiming && navTiming.navigationStart !== 0) {
@@ -127,14 +125,14 @@ export default class Perfume {
   }
 
   /**
-   * First Paint is essentially the paint after which 
+   * First Paint is essentially the paint after which
    * the biggest above-the-fold layout change has happened.
    */
-  firstPaint() {
+  public firstPaint() {
     setTimeout(() => {
       const fp = this.getFirstPaint();
       if (fp) {
-        this.log('firstPaint', fp);
+        this.log("firstPaint", fp);
       }
     });
   }
@@ -142,9 +140,9 @@ export default class Perfume {
   /**
    *
    */
-  log(metricName: string, duration: number) {
-    const style = 'color: #ff6d00;font-size:12px;';
+  public log(metricName: string, duration: number) {
+    const style = "color: #ff6d00;font-size:12px;";
     const text = `%c ${this.logPrefix} ${metricName} ${duration} ms`;
-    console.log(text, style);
+    global.console.log(text, style);
   }
 }
