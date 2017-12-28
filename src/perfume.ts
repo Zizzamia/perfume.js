@@ -1,21 +1,19 @@
-
 export default class Perfume {
-
-  metrics: { 
+  private metrics: {
     [key: string]: {
-      start: number,
-      end: number,
+      start: number
+      end: number
       duration: number
-    } 
-  };
-  logPrefix: string;
+    }
+  }
+  private logPrefix: string
 
   constructor() {
-    this.metrics = {};
-    this.logPrefix = '⚡️ Perfume.js: ';
+    this.metrics = {}
+    this.logPrefix = '⚡️ Perfume.js: '
 
     if (!this.supportsPerfNow) {
-      throw Error(this.logPrefix + ' Cannot be used in this browser.');
+      throw Error(this.logPrefix + ' Cannot be used in this browser.')
     }
   }
 
@@ -24,7 +22,7 @@ export default class Perfume {
    * @type {boolean}
    */
   get supportsPerfNow() {
-    return Boolean(window.performance && performance.now);
+    return Boolean(window.performance && performance.now)
   }
 
   /**
@@ -33,15 +31,15 @@ export default class Perfume {
    * @type {boolean}
    */
   get supportsPerfMark() {
-    return Boolean(window.performance && performance.mark);
+    return Boolean(window.performance && performance.mark)
   }
 
   /**
    * This assumes the user has made only one measurement for the given
    * name. Return the first one found.
    */
-  getMeasurementForGivenName(metricName: string) {
-    return performance.getEntriesByName(metricName)[0];
+  public getMeasurementForGivenName(metricName: string) {
+    return performance.getEntriesByName(metricName)[0]
   }
 
   /**
@@ -51,100 +49,100 @@ export default class Perfume {
    * performance.now() fallback.
    */
   set duration(metricName: string) {
-    let duration = this.metrics[metricName].end - this.metrics[metricName].start;
+    let duration = this.metrics[metricName].end - this.metrics[metricName].start
     if (this.supportsPerfMark) {
-      const entry = this.getMeasurementForGivenName(metricName);
+      const entry = this.getMeasurementForGivenName(metricName)
       if (entry && entry.entryType !== 'measure') {
-        duration = entry.duration;
+        duration = entry.duration
       }
     }
-    this.metrics[metricName].duration = duration || -1;
+    this.metrics[metricName].duration = duration || -1
   }
 
   /**
    *
    */
-  checkMetricName(metricName: string) {
+  public checkMetricName(metricName: string) {
     if (metricName) {
-      return;
+      return
     }
-    throw Error(this.logPrefix + 'Please provide a metric name');
+    throw Error(this.logPrefix + 'Please provide a metric name')
   }
 
   /**
    *
    */
-  start(metricName: string) {
-    this.checkMetricName(metricName);
+  public start(metricName: string) {
+    this.checkMetricName(metricName)
     if (!this.supportsPerfMark) {
-      console.warn(this.logPrefix, `Timeline won't be marked for "${metricName}".`);
+      global.console.warn(this.logPrefix, `Timeline won"t be marked for "${metricName}".`)
     }
     if (this.metrics[metricName]) {
-      console.warn(this.logPrefix, 'Recording already started.');
-      return;
+      global.console.warn(this.logPrefix, 'Recording already started.')
+      return
     }
-    this.metrics[metricName].start = performance.now();
+    this.metrics[metricName].start = performance.now()
     if (this.supportsPerfMark) {
-      performance.mark(`mark_${metricName}_start`);
+      performance.mark(`mark_${metricName}_start`)
     }
   }
 
   /**
    *
    */
-  end(metricName: string, log = false, destroy = false) {
-    this.checkMetricName(metricName);
+  public end(metricName: string, log = false, destroy = false) {
+    this.checkMetricName(metricName)
     if (!this.metrics[metricName]) {
-      console.warn(this.logPrefix, 'Recording already stopped.');
-      return;
+      global.console.warn(this.logPrefix, 'Recording already stopped.')
+      return
     }
-    this.metrics[metricName].end = performance.now();
+    this.metrics[metricName].end = performance.now()
     if (this.supportsPerfMark) {
-      const startMark = `mark_${metricName}_start`;
-      const endMark = `mark_${metricName}_end`;
-      performance.mark(endMark);
-      performance.measure(metricName, startMark, endMark);
+      const startMark = `mark_${metricName}_start`
+      const endMark = `mark_${metricName}_end`
+      performance.mark(endMark)
+      performance.measure(metricName, startMark, endMark)
     }
     if (log) {
-      this.log(metricName, this.metrics[metricName].duration);
+      this.log(metricName, this.metrics[metricName].duration)
     }
     if (destroy) {
-      delete this.metrics[metricName];
+      delete this.metrics[metricName]
     }
   }
 
   /**
    * http://msdn.microsoft.com/ff974719
    */
-  getFirstPaint() {
+  public getFirstPaint() {
     if (performance) {
-      const navTiming = performance.timing;
+      const navTiming = performance.timing
       if (navTiming && navTiming.navigationStart !== 0) {
-        return Date.now() - navTiming.navigationStart;
+        return Date.now() - navTiming.navigationStart
       }
     }
-    return null;
+    return null
   }
 
   /**
-   * First Paint is essentially the paint after which 
+   * First Paint is essentially the paint after which
    * the biggest above-the-fold layout change has happened.
    */
-  firstPaint() {
+  public firstPaint() {
     setTimeout(() => {
-      const fp = this.getFirstPaint();
+      const fp = this.getFirstPaint()
       if (fp) {
-        this.log('firstPaint', fp);
+        this.log('firstPaint', fp)
       }
-    });
+    })
   }
 
   /**
    *
    */
-  log(metricName: string, duration: number) {
-    const style = 'color: #ff6d00;font-size:12px;';
-    const text = `%c ${this.logPrefix} ${metricName} ${duration} ms`;
-    console.log(text, style);
+  public log(metricName: string, duration: number) {
+    const style = 'color: #ff6d00;font-size:12px;'
+    const text = `%c ${this.logPrefix} ${metricName} ${duration} ms`
+    global.console.log(text, style)
   }
 }
