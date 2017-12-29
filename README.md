@@ -24,7 +24,13 @@ import Perfume from 'perfume.js';
 Additionally, you can import the transpiled modules from `dist/es` in case you have a modular library:
 
 ```javascript
-import Perfume from 'perfume/dist/es/perfume'
+import Perfume from 'node_modules/perfume.js/dist/es/perfume';
+```
+
+Universal Module Definition
+
+```javascript
+import Perfume from 'node_modules/perfume.js/perfume.umd.js';
 ```
 
 ### Start measuring
