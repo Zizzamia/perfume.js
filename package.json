@@ -84,6 +84,7 @@
     "@types/node": "^8.0.0",
     "colors": "^1.1.2",
     "commitizen": "^2.9.6",
+    "coveralls": "^3.0.0",
     "cz-conventional-changelog": "^2.0.0",
     "husky": "^0.14.0",
     "jest": "^21.0.0",

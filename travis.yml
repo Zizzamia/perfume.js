@@ -2,7 +2,6 @@ language: node_js
 branches:
   only:
     - master
-    - /^greenkeeper/.*$/
 cache:
   yarn: true
   directories:
@@ -15,4 +14,3 @@ script:
   - npm run test:prod && npm run build
 after_success:
   - npm run report-coverage
-  - npm run semantic-release
