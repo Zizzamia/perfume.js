@@ -33,7 +33,7 @@ import Perfume from 'perfume/dist/es/perfume'
 Page load is a key aspect of how a user perceives the performance of your page. See Measure Performance with the [RAIL Method](https://developers.google.com/web/fundamentals/performance/rail) for more information.
 
 ```javascript
-const perfume = new Perfume;
+const perfume = new Perfume();
 perfume.firstPaint(); // ⚡️ Perfume.js: firstPaint 1604 ms
 ```
 

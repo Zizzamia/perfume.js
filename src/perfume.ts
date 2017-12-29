@@ -82,9 +82,9 @@ export default class Perfume {
       return;
     }
     this.metrics[metricName] = {
-      start: performance.now(),
+      duration: 0,
       end: 0,
-      duration: 0
+      start: performance.now(),
     };
     if (this.supportsPerfMark) {
       performance.mark(`mark_${metricName}_start`);

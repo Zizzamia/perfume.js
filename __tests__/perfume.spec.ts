@@ -8,30 +8,32 @@ describe("Perfume test", () => {
 
   beforeAll(() => {
     window.performance = {
-      // https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
-      now: Date.now,
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
       getEntriesByName: () => {
         return [12345];
       },
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark
       mark: () => {
+        return 12345;
       },
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure
       measure: () => {
-      }
+        return 12345;
+      },
+      // https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
+      now: Date.now,
     };
   });
 
   beforeEach(() => {
-    perfume = new Perfume;
+    perfume = new Perfume();
   });
 
   beforeEach(() => {
-    spyOn(console, 'log').and.callThrough();
-    spyOn(console, 'warn').and.callThrough();
-    spyOn(perfume, 'getFirstPaint').and.callThrough();
-    spyOn(perfume, 'log').and.callThrough();
+    spyOn(console, "log").and.callThrough();
+    spyOn(console, "warn").and.callThrough();
+    spyOn(perfume, "getFirstPaint").and.callThrough();
+    spyOn(perfume, "log").and.callThrough();
   });
 
   it("should initialize correctly in the constructor", () => {
