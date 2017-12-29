@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Perfume } from '../../../../package';
+// Test npm version
+//import Perfume from 'perfume.js';
 
-const perfume = new Perfume;
+// Test local dist version
+import Perfume from '../../../dist/es/perfume';
 
 @Component({
   selector: 'demo',

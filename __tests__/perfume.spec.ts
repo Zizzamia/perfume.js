@@ -8,16 +8,35 @@ describe("Perfume test", () => {
 
   beforeAll(() => {
     window.performance = {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
       now: Date.now,
+      // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
+      getEntriesByName: () => {
+        return [12345];
+      },
+      // https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark
+      mark: () => {
+      },
+      // https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure
+      measure: () => {
+      }
     };
   });
 
   beforeEach(() => {
-    perfume = new Perfume();
+    perfume = new Perfume;
   });
 
-  it("works if true is truthy", () => {
-    expect(true).toBeTruthy();
+  beforeEach(() => {
+    spyOn(console, 'log').and.callThrough();
+    spyOn(console, 'warn').and.callThrough();
+    spyOn(perfume, 'getFirstPaint').and.callThrough();
+    spyOn(perfume, 'log').and.callThrough();
+  });
+
+  it("should initialize correctly in the constructor", () => {
+    expect(perfume.metrics).toEqual({});
+    expect(perfume.logPrefix).toEqual("⚡️ Perfume.js:");
   });
 
   it("Perfume is instantiable", () => {
@@ -28,35 +47,111 @@ describe("Perfume test", () => {
     expect(perfume.supportsPerfNow).toBeDefined();
   });
 
+  describe("when calls supportsPerfNow()", () => {
+    it("should return true if the browser supports the Navigation Timing API", () => {
+      expect(perfume.supportsPerfNow).toEqual(true);
+    });
+  });
+
   it("has 'supportsPerfMark' method after initialization", () => {
     expect(perfume.supportsPerfMark).toBeDefined();
+  });
+
+  describe("when calls supportsPerfMark()", () => {
+    it("should return true if the browser supports the User Timing API", () => {
+      expect(perfume.supportsPerfMark).toEqual(true);
+    });
   });
 
   it("has 'getMeasurementForGivenName' method after initialization", () => {
     expect(perfume.getMeasurementForGivenName).toBeDefined();
   });
 
+  describe("when calls getMeasurementForGivenName()", () => {
+    it("should return the first PerformanceEntry objects for the given name", () => {
+      const value = perfume.getMeasurementForGivenName("metricName");
+      expect(value).toEqual(12345);
+    });
+  });
+
   it("has 'checkMetricName' method after initialization", () => {
     expect(perfume.checkMetricName).toBeDefined();
+  });
+
+  describe("when calls checkMetricName()", () => {
+    it("should return undefined when provide a metric name", () => {
+      const value = perfume.checkMetricName("metricName");
+      expect(value).toEqual(undefined);
+    });
   });
 
   it("has 'start' method after initialization", () => {
     expect(perfume.start).toBeDefined();
   });
 
+  describe("when calls start()", () => {
+    it("should not throw a console.warn if param is correct", () => {
+      perfume.start("metricName");
+      expect(global.console.warn).not.toHaveBeenCalled();
+    });
+  });
+
   it("has 'end' method after initialization", () => {
     expect(perfume.end).toBeDefined();
+  });
+
+  describe("when calls end()", () => {
+    it("should not throw a console.warn if param is correct", () => {
+      perfume.start("metricName");
+      perfume.end("metricName");
+      expect(global.console.warn).not.toHaveBeenCalled();
+    });
+
+    it("should not throw a console.warn if param is correct", () => {
+      perfume.end("metricName");
+      expect(global.console.warn).toHaveBeenCalled();
+    });
   });
 
   it("has 'getFirstPaint' method after initialization", () => {
     expect(perfume.getFirstPaint).toBeDefined();
   });
 
+  describe("when calls getFirstPaint()", () => {
+    it("should return null if the browser doesn't supports the Navigation Timing API", () => {
+      const performance = perfume.getFirstPaint();
+      expect(performance).toEqual(null);
+    });
+  });
+
   it("has 'firstPaint' method after initialization", () => {
     expect(perfume.firstPaint).toBeDefined();
   });
 
+  describe("when calls firstPaint()", () => {
+    it("should call getFirstPaint() after the first setTimeout", () => {
+      perfume.firstPaint();
+      setTimeout(() => {
+        expect(perfume.getFirstPaint).toHaveBeenCalled();
+      });
+    });
+
+    it("should call log() after the first setTimeout", () => {
+      perfume.firstPaint();
+      setTimeout(() => {
+        expect(perfume.log).toHaveBeenCalled();
+      });
+    });
+  });
+
   it("has 'log' method after initialization", () => {
     expect(perfume.log).toBeDefined();
+  });
+
+  describe("when calls log()", () => {
+    it("should call global.console.log()", () => {
+      perfume.log();
+      expect(global.console.log).toHaveBeenCalled();
+    });
   });
 });

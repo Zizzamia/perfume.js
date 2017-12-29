@@ -10,7 +10,7 @@ export default class Perfume {
 
   constructor() {
     this.metrics = {};
-    this.logPrefix = "⚡️ Perfume.js: ";
+    this.logPrefix = "⚡️ Perfume.js:";
 
     if (!this.supportsPerfNow) {
       throw Error(this.logPrefix + " Cannot be used in this browser.");
@@ -18,7 +18,7 @@ export default class Perfume {
   }
 
   /**
-   * True if the the browser supports the Navigation Timing API.
+   * True if the browser supports the Navigation Timing API.
    * @type {boolean}
    */
   get supportsPerfNow() {
@@ -26,7 +26,7 @@ export default class Perfume {
   }
 
   /**
-   * True if the the browser supports the User Timing API.
+   * True if the browser supports the User Timing API.
    * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
    * @type {boolean}
    */
@@ -36,7 +36,7 @@ export default class Perfume {
 
   /**
    * This assumes the user has made only one measurement for the given
-   * name. Return the first one found.
+   * name. Return the first PerformanceEntry objects for the given name.
    */
   public getMeasurementForGivenName(metricName: string) {
     return performance.getEntriesByName(metricName)[0];
@@ -81,7 +81,11 @@ export default class Perfume {
       global.console.warn(this.logPrefix, "Recording already started.");
       return;
     }
-    this.metrics[metricName].start = performance.now();
+    this.metrics[metricName] = {
+      start: performance.now(),
+      end: 0,
+      duration: 0
+    };
     if (this.supportsPerfMark) {
       performance.mark(`mark_${metricName}_start`);
     }

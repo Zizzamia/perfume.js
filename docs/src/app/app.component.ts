@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { Perfume } from '../../../package';
+// Test npm version
+//import Perfume from 'perfume.js';
+
+// Test local dist version
+import Perfume from '../../../dist/es/perfume';
 
 const perfume = new Perfume;
 
