@@ -43,7 +43,7 @@ const perfume = new Perfume();
 perfume.firstPaint(); // ⚡️ Perfume.js: firstPaint 1604 ms
 ```
 
-### NPM scripts
+## NPM scripts
 
  - `npm t`: Run test suite
  - `npm start`: Run `npm run build` in watch mode
