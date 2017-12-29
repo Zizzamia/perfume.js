@@ -9,7 +9,7 @@ cache:
 notifications:
   email: false
 node_js:
-  - node
+  - "8"
 script:
   - npm run test:prod && npm run build
 after_success:
