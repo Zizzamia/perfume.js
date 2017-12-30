@@ -16,6 +16,22 @@ export class AppComponent {
   constructor() { }
 
   ngOnInit() {
-  	perfume.firstPaint();
+    perfume.firstPaint();
+  }
+
+  fibonacci(num, memo = {}) {
+    if (memo[num]) {
+      return memo[num];
+    }
+    if (num <= 1) {
+      return 1;
+    }
+    return memo[num] = this.fibonacci(num - 1, memo) + this.fibonacci(num - 2, memo);
+  }
+
+  measureFibonacci() {
+    perfume.start('fibonacci');
+    this.fibonacci(400);
+    perfume.end('fibonacci', true);
   }
 }

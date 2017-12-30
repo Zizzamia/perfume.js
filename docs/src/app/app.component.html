@@ -1,2 +1,23 @@
-<header></header>
-<demo></demo>
+<div class="Layout">
+  <div class="Content">
+    <h1>Perfume.js</h1>
+    <p>A tiny JavaScript library for measuring Short/Long Script, First Meaningful Paint, TTI (Time to Interactivity), annotating them to the DevTools timeline and reporting the results to Google Analytics.</p>
+
+    <h2 class="Title">First Meaningful Paint</h2>
+    <p>Page load is a key aspect of how a user perceives the performance of your page. See Measure Performance with the RAIL Method for more information.</p>
+    <code>
+      const perfume = new Perfume();
+      perfume.firstPaint();
+    </code>
+    <p>Result: ⚡️ Perfume.js: firstPaint 1604 ms</p>
+
+    <h2 class="Title">Annotate metrics in the DevTools</h2>
+    <p>Performance.mark() is used to create an application-defined peformance entry in the browser's performance entry buffer.</p>
+    <button (click)="measureFibonacci()">Run Fibonacci</button>
+    <code>
+      const perfume = new Perfume();
+      perfume.mark();
+    </code>
+    <p>Result: ⚡️ Perfume.js: firstPaint 1604 ms</p>
+  </div>
+</div>

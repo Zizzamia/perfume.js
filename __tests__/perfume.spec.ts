@@ -76,14 +76,23 @@ describe("Perfume test", () => {
     });
   });
 
+  it("has 'getDurationByMetric' method after initialization", () => {
+    expect(perfume.getDurationByMetric).toBeDefined();
+  });
+
   it("has 'checkMetricName' method after initialization", () => {
     expect(perfume.checkMetricName).toBeDefined();
   });
 
   describe("when calls checkMetricName()", () => {
-    it("should return undefined when provide a metric name", () => {
+    it("should return 'true' when provided a metric name", () => {
       const value = perfume.checkMetricName("metricName");
-      expect(value).toEqual(undefined);
+      expect(value).toEqual(true);
+    });
+
+    it("should return 'false' when not provided a metric name", () => {
+      const value = perfume.checkMetricName();
+      expect(value).toEqual(false);
     });
   });
 
@@ -151,8 +160,18 @@ describe("Perfume test", () => {
   });
 
   describe("when calls log()", () => {
-    it("should call global.console.log()", () => {
+    it("should call global.console.warn() if params are not correct", () => {
       perfume.log();
+      expect(global.console.warn).toHaveBeenCalled();
+    });
+
+    it("should not call global.console.log() if params are not correct", () => {
+      perfume.log();
+      expect(global.console.log).not.toHaveBeenCalled();
+    });
+
+    it("should call global.console.log() if params are correct", () => {
+      perfume.log("metricName", 12345);
       expect(global.console.log).toHaveBeenCalled();
     });
   });
