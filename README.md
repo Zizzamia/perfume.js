@@ -1,4 +1,4 @@
-# Perfume.js v0.2.1
+# Perfume.js v0.2.2
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js)
 
 > Perfume is a tiny JavaScript library for measuring Short/Long Script, First Meaningful Paint, TTI (Time to Interactivity), annotating them to the DevTools timeline and reporting the results to Google Analytics.
@@ -60,7 +60,7 @@ Save the duration and print it out when/how you best desire.
 perfume.start('fibonacci');
 fibonacci(400);
 const duration = this.perfume.end('fibonacci');
-perfume.log('Custom logging', duration);
+perfume.log('Custom logging', duration); // ⚡️ Perfume.js: Custom logging 0.14 ms
 ```
 
 

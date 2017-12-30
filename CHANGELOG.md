@@ -1,3 +1,11 @@
+## 0.2.2 (2017-12-29)
+
+### Bug Fixes
+
+* **end:** fixed end() and getDurationByMetric() methods [#9](https://github.com/Zizzamia/perfume.js/issues/9)
+* **docs:** Annotate metrics in the DevTools [#10](https://github.com/Zizzamia/perfume.js/issues/10)
+
+
 ## 0.2.1 (2017-12-28)
 
 ### Bug Fixes
