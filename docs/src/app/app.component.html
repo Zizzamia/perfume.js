@@ -16,7 +16,9 @@
     <button (click)="measureFibonacci()">Run Fibonacci</button>
     <code>
       const perfume = new Perfume();
-      perfume.mark();
+      perfume.start('fibonacci');
+      this.fibonacci(400);
+      perfume.end('fibonacci', true);
     </code>
     <p>Result: ⚡️ Perfume.js: firstPaint 1604 ms</p>
   </div>

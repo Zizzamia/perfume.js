@@ -43,6 +43,16 @@ const perfume = new Perfume();
 perfume.firstPaint(); // ⚡️ Perfume.js: firstPaint 1604 ms
 ```
 
+#### Annotate metrics in the DevTools
+Performance.mark (User Timing API) is used to create an application-defined peformance entry in the browser's performance entry buffer.
+
+```javascript
+const perfume = new Perfume();
+perfume.start('fibonacci');
+this.fibonacci(400);
+perfume.end('fibonacci', true); // ⚡️ Perfume.js: fibonacci 0.42 ms
+```
+
 ## NPM scripts
 
  - `npm t`: Run test suite

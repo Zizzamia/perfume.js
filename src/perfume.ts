@@ -113,7 +113,7 @@ export default class Perfume {
     if (log) {
       this.log(metricName, duration);
     }
-    delete this.metrics[metricName]; 
+    delete this.metrics[metricName];
     return duration;
   }
 
