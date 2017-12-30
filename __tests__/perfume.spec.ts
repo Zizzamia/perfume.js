@@ -6,7 +6,12 @@ import Perfume from "../src/perfume";
 describe("Perfume test", () => {
   let perfume;
 
-  beforeAll(() => {
+  beforeEach(() => {
+    window.Date = {
+      now: () => {
+        return 23456;
+      },
+    };
     window.performance = {
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
       getEntriesByName: () => {
@@ -22,10 +27,10 @@ describe("Perfume test", () => {
       },
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
       now: Date.now,
+      timing: {
+        navigationStart: 12345,
+      },
     };
-  });
-
-  beforeEach(() => {
     perfume = new Perfume();
   });
 
@@ -131,8 +136,14 @@ describe("Perfume test", () => {
 
   describe("when calls getFirstPaint()", () => {
     it("should return null if the browser doesn't supports the Navigation Timing API", () => {
+      window.performance = null;
       const performance = perfume.getFirstPaint();
-      expect(performance).toEqual(null);
+      expect(performance).toEqual(0);
+    });
+
+    it("should return null if the browser doesn't supports the Navigation Timing API", () => {
+      const performance = perfume.getFirstPaint();
+      expect(performance).toEqual(11111);
     });
   });
 
