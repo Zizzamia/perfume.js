@@ -51,7 +51,7 @@ perfume.start('fibonacci');
 this.fibonacci(400);
 perfume.end('fibonacci', true); // ⚡️ Perfume.js: fibonacci 0.14 ms
 ```
-[![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)]
+![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
 
 #### Custom Logging
 Save the duration and print it out when and how it best meets your needs.
