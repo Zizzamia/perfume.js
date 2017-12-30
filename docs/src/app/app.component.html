@@ -5,21 +5,32 @@
 
     <h2 class="Title">First Meaningful Paint</h2>
     <p>Page load is a key aspect of how a user perceives the performance of your page. See Measure Performance with the RAIL Method for more information.</p>
-    <code>
+    <pre>
       const perfume = new Perfume();
       perfume.firstPaint();
-    </code>
-    <p>Result: ⚡️ Perfume.js: firstPaint 1604 ms</p>
+    </pre>
+    <p>Result: ⚡️ Perfume.js: firstPaint {{ perfume.firstPaintDuration.toFixed(2) }} ms</p>
 
     <h2 class="Title">Annotate metrics in the DevTools</h2>
     <p>Performance.mark() is used to create an application-defined peformance entry in the browser's performance entry buffer.</p>
     <button (click)="measureFibonacci()">Run Fibonacci</button>
-    <code>
+    <pre>
       const perfume = new Perfume();
       perfume.start('fibonacci');
-      this.fibonacci(400);
+      fibonacci(400);
       perfume.end('fibonacci', true);
-    </code>
-    <p>Result: ⚡️ Perfume.js: firstPaint 1604 ms</p>
+    </pre>
+    <p>Result: {{ logFibonacci }}</p>
+
+    <h2 class="Title">Custom Logging</h2>
+    <p>Save the duration and print it out when/how you best desire.</p>
+    <button (click)="customLogging()">Run custom logging</button>
+    <pre>
+      perfume.start('fibonacci');
+      fibonacci(400);
+      const duration = this.perfume.end('fibonacci');
+      perfume.log('Custom logging', duration);
+    </pre>
+    <p>Result: {{ logCustom }}</p>
   </div>
 </div>

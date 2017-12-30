@@ -7,16 +7,20 @@ import Perfume from '../../../dist/es/perfume';
 
 const perfume = new Perfume;
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
 export class AppComponent {
+  perfume: object;
   
-  constructor() { }
+  constructor() {
+    this.perfume = perfume;
+  }
 
   ngOnInit() {
-    perfume.firstPaint();
+    this.perfume.firstPaint();
   }
 
   fibonacci(num, memo = {}) {
@@ -30,8 +34,17 @@ export class AppComponent {
   }
 
   measureFibonacci() {
-    perfume.start('fibonacci');
+    this.perfume.start('fibonacci');
     this.fibonacci(400);
-    perfume.end('fibonacci', true);
+    const duration = this.perfume.end('fibonacci', true);
+    this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration.toFixed(2)} ms`;
+  }
+
+  customLogging() {
+    this.perfume.start('fibonacci');
+    this.fibonacci(400);
+    const duration = this.perfume.end('fibonacci');
+    this.perfume.log('Custom logging', duration);
+    this.logCustom = `⚡️ Perfume.js: Custom logging ${duration.toFixed(2)} ms`;
   }
 }

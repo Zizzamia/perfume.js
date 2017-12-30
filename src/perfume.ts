@@ -6,10 +6,12 @@ export default class Perfume {
     };
   };
   private logPrefix: string;
+  public firstPaintDuration: number;
 
   constructor() {
     this.metrics = {};
     this.logPrefix = "⚡️ Perfume.js:";
+    this.firstPaintDuration = 0;
 
     if (!this.supportsPerfNow) {
       throw Error(this.logPrefix + " Cannot be used in this browser.");
@@ -127,7 +129,7 @@ export default class Perfume {
         return Date.now() - navTiming.navigationStart;
       }
     }
-    return null;
+    return 0;
   }
 
   /**
@@ -136,9 +138,9 @@ export default class Perfume {
    */
   public firstPaint() {
     setTimeout(() => {
-      const fp = this.getFirstPaint();
-      if (fp) {
-        this.log("firstPaint", fp);
+      this.firstPaintDuration = this.getFirstPaint();
+      if (this.firstPaintDuration) {
+        this.log("firstPaint", this.firstPaintDuration);
       }
     });
   }
