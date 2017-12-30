@@ -1,4 +1,5 @@
 export default class Perfume {
+  public firstPaintDuration: number;
   private metrics: {
     [key: string]: {
       start: number;
@@ -6,12 +7,11 @@ export default class Perfume {
     };
   };
   private logPrefix: string;
-  public firstPaintDuration: number;
 
   constructor() {
+    this.firstPaintDuration = 0;
     this.metrics = {};
     this.logPrefix = "⚡️ Perfume.js:";
-    this.firstPaintDuration = 0;
 
     if (!this.supportsPerfNow) {
       throw Error(this.logPrefix + " Cannot be used in this browser.");

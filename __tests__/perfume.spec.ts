@@ -37,6 +37,7 @@ describe("Perfume test", () => {
   });
 
   it("should initialize correctly in the constructor", () => {
+    expect(perfume.firstPaintDuration).toEqual(0);
     expect(perfume.metrics).toEqual({});
     expect(perfume.logPrefix).toEqual("⚡️ Perfume.js:");
   });
