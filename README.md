@@ -54,7 +54,7 @@ perfume.end('fibonacci', true); // ⚡️ Perfume.js: fibonacci 0.14 ms
 [![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)]
 
 #### Custom Logging
-Save the duration and print it out when/how you best desire.
+Save the duration and print it out when and how it best meets your needs.
 
 ```javascript
 perfume.start('fibonacci');
@@ -81,10 +81,10 @@ perfume.log('Custom logging', duration); // ⚡️ Perfume.js: Custom logging 0.
 Made with ☕️ by [@zizzamia](https://twitter.com/zizzamia) and
 I want to thank some friends and projects for the work they did:
 
-- [Appmetrics.js](https://github.com/ebidel/appmetrics.js?files=1) to inspired me to start writing this library and give me some of the base ideas for the class architecture;
-- [Popper.js](https://github.com/FezVrasta/popper.js/) for having inspired me in writing my first library in typescript;
+- [Appmetrics.js](https://github.com/ebidel/appmetrics.js?files=1) for inspiring me to start writing this library and giving me some of the base ideas for the class architecture;
+- [Popper.js](https://github.com/FezVrasta/popper.js/) for having inspired me to write my first library in typescript;
 - [The Contributors](https://github.com/Zizzamia/perfume.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
-- **you** for the star you'll give to this project and for being so awesome to give this project a try 😄
+- **you** for the star you'll give this project 😉 and for supporting me by giving my project a try 😄
 
 
 
