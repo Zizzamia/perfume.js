@@ -3,34 +3,27 @@
     <h1>Perfume.js</h1>
     <p>A tiny JavaScript library for measuring Short/Long Script, First Meaningful Paint, TTI (Time to Interactivity), annotating them to the DevTools timeline and reporting the results to Google Analytics.</p>
 
-    <h2 class="Title">First Meaningful Paint</h2>
-    <p>Page load is a key aspect of how a user perceives the performance of your page. See Measure Performance with the RAIL Method for more information.</p>
-    <pre>
-      const perfume = new Perfume();
-      perfume.firstPaint();
-    </pre>
-    <p>Result: ⚡️ Perfume.js: firstPaint {{ perfume.firstPaintDuration.toFixed(2) }} ms</p>
+    <div>
+      <h2 class="Title">First Meaningful Paint</h2>
+      <p>Page load is a key aspect of how a user perceives the performance of your page. See Measure Performance with the RAIL Method for more information.</p>
+      <app-gist [gistId]="'Zizzamia/15e965213aa87a5588a6756fef612f45'"></app-gist>
+      <p>Result: ⚡️ Perfume.js: firstPaint {{ perfume.firstPaintDuration.toFixed(2) }} ms</p>
+    </div>
 
-    <h2 class="Title">Annotate metrics in the DevTools</h2>
-    <p>Performance.mark() is used to create an application-defined peformance entry in the browser's performance entry buffer.</p>
-    <button (click)="measureFibonacci()">Run Fibonacci</button>
-    <pre>
-      const perfume = new Perfume();
-      perfume.start('fibonacci');
-      fibonacci(400);
-      perfume.end('fibonacci', true);
-    </pre>
-    <p>Result: {{ logFibonacci }}</p>
+    <div>
+      <h2 class="Title">Annotate metrics in the DevTools</h2>
+      <p>Performance.mark() is used to create an application-defined peformance entry in the browser's performance entry buffer.</p>
+      <button (click)="measureFibonacci()">Run Fibonacci</button>
+      <app-gist [gistId]="'Zizzamia/e680d4f2f9f2bf9ba15b13207264f7bc'"></app-gist>
+      <p>Result: {{ logFibonacci }}</p>
+    </div>
 
-    <h2 class="Title">Custom Logging</h2>
-    <p>Save the duration and print it out when/how you best desire.</p>
-    <button (click)="customLogging()">Run custom logging</button>
-    <pre>
-      perfume.start('fibonacci');
-      fibonacci(400);
-      const duration = this.perfume.end('fibonacci');
-      perfume.log('Custom logging', duration);
-    </pre>
-    <p>Result: {{ logCustom }}</p>
+    <div>
+      <h2 class="Title">Custom Logging</h2>
+      <p>Save the duration and print it out when/how you best desire.</p>
+      <button (click)="customLogging()">Run custom logging</button>
+      <app-gist [gistId]="'Zizzamia/b16edc8b4052ac4186ebc62151de7dca'"></app-gist>
+      <p>Result: {{ logCustom }}</p>
+    </div>
   </div>
 </div>

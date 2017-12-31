@@ -39,17 +39,18 @@ Page load is a key aspect of how a user perceives the performance of your page. 
 
 ```javascript
 const perfume = new Perfume();
-perfume.firstPaint(); // ⚡️ Perfume.js: firstPaint 1604 ms
+perfume.firstPaint(); 
+// ⚡️ Perfume.js: firstPaint 601 ms
 ```
 
 #### Annotate metrics in the DevTools
 Performance.mark ([User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API)) is used to create an application-defined peformance entry in the browser's performance entry buffer.
 
 ```javascript
-const perfume = new Perfume();
 perfume.start('fibonacci');
-this.fibonacci(400);
-perfume.end('fibonacci', true); // ⚡️ Perfume.js: fibonacci 0.14 ms
+fibonacci(400);
+perfume.end('fibonacci', true); 
+// ⚡️ Perfume.js: fibonacci 0.14 ms
 ```
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
 
@@ -60,7 +61,8 @@ Save the duration and print it out when and how it best meets your needs.
 perfume.start('fibonacci');
 fibonacci(400);
 const duration = this.perfume.end('fibonacci');
-perfume.log('Custom logging', duration); // ⚡️ Perfume.js: Custom logging 0.14 ms
+perfume.log('Custom logging', duration); 
+// ⚡️ Perfume.js: Custom logging 0.14 ms
 ```
 
 
