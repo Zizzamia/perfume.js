@@ -1,25 +1,20 @@
 import { Component } from '@angular/core';
-// Test npm version
-//import Perfume from 'perfume.js';
 
-// Test local dist version
-import Perfume from '../../../dist/es/perfume';
-
-const perfume = new Perfume;
-
+import Perfume from 'perfume.js';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  perfume: object;
-  
-  constructor() {
-    this.perfume = perfume;
-  }
+  logCustom: string;
+  logFibonacci: string;
+  perfume: any;
 
-  ngOnInit() {
+  constructor() {
+  	const perfume = new Perfume;
+    this.perfume = perfume;
     this.perfume.firstPaint();
   }
 

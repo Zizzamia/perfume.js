@@ -23,8 +23,8 @@
     "@angular/router": "^5.0.0",
     "core-js": "^2.4.1",
     "rxjs": "^5.5.2",
-    "perfume.js": "^0.2.0",
-    "zone.js": "^0.8.19"
+    "zone.js": "^0.8.14",
+    "perfume.js": "^0.2.2"
   },
   "devDependencies": {
     "@angular/cli": "1.6.0",
