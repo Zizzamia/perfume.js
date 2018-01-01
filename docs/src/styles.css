@@ -1,26 +1,152 @@
 body {
-  background-color: #f9f9f9;
+  background-color: #FDFBFA;
   color: #141414;
-  font-weight: 300;
   margin: 0;
   padding: 0;
   text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+@font-face {
+  font-family: 'DancingScript';
+  src: url('assets/DancingScript-Regular-webfont.eot');
+  src: url('assets/DancingScript-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('assets/DancingScript-Regular-webfont.woff') format('woff'),
+       url('assets/DancingScript-Regular-webfont.ttf') format('truetype'),
+       url('assets/DancingScript-Regular-webfont.svg#DancingScriptOTRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+a {
+  color: #366fd1;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  line-height: 1.4;
+  margin: 1em 0 0.2em;
+  color: #8A7A75;
+}
+
+h1 {
+  margin: 6px 0 4px;
+  color: #F2DB77;
+  font-family: 'DancingScript', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 70px;
+  font-weight: 400;
+}
+
+h2 {
+  font-size: 1.8em;
+  margin: 0.7em 0 0.3em;
+}
+
+h3 {
+  font-size: 1.6em;
+  margin: 0.7em 0 0.38em;
+}
+
+h4 {
+  font-size: 1.4em;
+ margin: 0.7em 0 0.43em;
+}
+
+h5 {
+  font-size: 1.2em;
+  margin: 0.7em 0 0.5em;
+}
+
+h6 {
+  font-size: 1.1em;
+  margin: 1.4em 0 0.55em;
+}
+
+h1 + h1, h1 + h2, h1 + h3, h1 + h4, h1 + h5, h1 + h6,
+h2 + h1, h2 + h2, h2 + h3, h2 + h4, h2 + h5, h2 + h6,
+h3 + h1, h3 + h2, h3 + h3, h3 + h4, h3 + h5, h3 + h6,
+h4 + h1, h4 + h2, h4 + h3, h4 + h4, h4 + h5, h4 + h6,
+h5 + h1, h5 + h2, h5 + h3, h5 + h4, h5 + h5, h5 + h6,
+h6 + h1, h6 + h2, h6 + h3, h6 + h4, h6 + h5, h6 + h6 {
+  margin-top: 0;
+}
+
+blockquote,
+blockquote cite,
+ol,
+p,
+pre,
+ul {
+  margin: 0.6em 0;
+}
+
+blockquote {
+  border-left: 4px solid #bbb;
+  padding: 1px 14px;
+}
+
+blockquote cite {
+  display: block;
+}
+
+blockquote cite:before {
+  content: '— ';
+}
+
+ol ol,
+ul ul,
+ol ul,
+ul ol {
+  margin: 0;
+}
+
+ul {
+  list-style: disc;
+  padding: 0 0 0 26px;
+}
+
+ol {
+  list-style: decimal;
+}
+
+ol ul,
+ul ul {
+  padding: 0 0 0 18px;
+}
+
+ul ol,
+ol ol {
+  padding: 0 0 0 34px;
+}
+
+ul li,
+ol li {
+  margin: 5px 0;
+}
+
+strong, b {
+  font-weight: 400;
+}
+
+.Box {
+  margin: 40px 0;
+  text-align: left;
+}
+
+.Box--first {
+  margin: 0 0 60px;
 }
 
 .Title {
-  margin-top: 70px;
-  padding-top: 70px;
   position: relative;
-}
-
-.Title:before {
-  border-top: 4px solid #eaeaea;
-  content: ' ';
-  margin-left: -60px;
-  left: 50%;
-  position: absolute;
-  top: 0;
-  width: 120px;
 }
 
 .Layout .Content,
@@ -71,147 +197,38 @@ body {
   vertical-align: middle;
 }
 
-/*
- * BODY
- */
-body {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.6;
+.Demo {
+  width: 100%;
+  text-align: left;
 }
 
-/*
- * LINK
- */
-a {
-  color: #366fd1;
-  text-decoration: none;
+.Button {
+  display: inline-block;
+  background-color: #F5D7CD;
+  border-color: #DDBDB6;
+  color: #8A7A75;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 5px 12px;
+  margin-right: 20px;
+  font-size: 16px;
+  border-radius: .25rem;
+  cursor: pointer;
+  -webkit-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
-/*
- * TITLE
- */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 400;
-  line-height: 1.4;
-  margin: 1em 0 0.2em;
-}
-
-h1 {
-  font-size: 2.4em;
-  margin: 1em 0 0.25em;
-}
-
-h2 {
-  font-size: 2em;
-  margin: 1.1em 0 0.3em;
-}
-
-h3 {
-  font-size: 1.6em;
-  margin: 1.25em 0 0.38em;
-}
-
-h4 {
-  font-size: 1.4em;
-  margin: 1.3em 0 0.43em;
-}
-
-h5 {
-  font-size: 1.2em;
-  margin: 1.35em 0 0.5em;
-}
-
-h6 {
-  font-size: 1.1em;
-  margin: 1.4em 0 0.55em;
-}
-
-h1 + h1, h1 + h2, h1 + h3, h1 + h4, h1 + h5, h1 + h6,
-h2 + h1, h2 + h2, h2 + h3, h2 + h4, h2 + h5, h2 + h6,
-h3 + h1, h3 + h2, h3 + h3, h3 + h4, h3 + h5, h3 + h6,
-h4 + h1, h4 + h2, h4 + h3, h4 + h4, h4 + h5, h4 + h6,
-h5 + h1, h5 + h2, h5 + h3, h5 + h4, h5 + h5, h5 + h6,
-h6 + h1, h6 + h2, h6 + h3, h6 + h4, h6 + h5, h6 + h6 {
-  margin-top: 0;
-}
-
-/*
- * PARAGRAPH, BLOCKQUOTE, PRE, LIST
- */
-blockquote,
-blockquote cite,
-ol,
-p,
-pre,
-ul {
-  margin: 0.6em 0;
-}
-
-/*
- * BLOCKQUOTE
- */
-blockquote {
-  border-left: 4px solid #bbb;
-  padding: 1px 14px;
-}
-
-blockquote cite {
-  display: block;
-}
-
-blockquote cite:before {
-  content: '— ';
-}
-
-/*
- * LIST
- */
-ol ol,
-ul ul,
-ol ul,
-ul ol {
-  margin: 0;
-}
-
-ul {
-  list-style: disc;
-  padding: 0 0 0 26px;
-}
-
-ol {
-  list-style: decimal;
-}
-
-ol ul,
-ul ul {
-  padding: 0 0 0 18px;
-}
-
-ul ol,
-ol ol {
-  padding: 0 0 0 34px;
-}
-
-ul li,
-ol li {
-  margin: 5px 0;
-}
-
-body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 15px;
-  font-weight: 300;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 300;
-}
-
-strong, b {
-  font-weight: 400;
+.Button:hover {
+  color: #FDFBFA;
+  background-color: #F7E7A1;
+  border-color: #F2DB77;
 }

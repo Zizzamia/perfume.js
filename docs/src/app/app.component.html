@@ -1,29 +1,40 @@
 <div class="Layout">
   <div class="Content">
-    <h1>Perfume.js</h1>
-    <p>A tiny JavaScript library for measuring Short/Long Script, First Meaningful Paint, TTI (Time to Interactivity), annotating them to the DevTools timeline and reporting the results to Google Analytics.</p>
+    <div class="Box Box--first">
+      <h1>Perfume.js</h1>
+      <p>A tiny JavaScript library for <b>measuring</b> Short/Long Script, First Meaningful Paint, TTI (Time to Interactivity), <b>annotating</b> them to the DevTools timeline and reporting the results to <b>Google Analytics</b>.</p>
+      <a class="github-button" href="https://github.com/zizzamia/perfume.js" data-size="large" data-show-count="true" aria-label="Star zizzamia/perfume.js on GitHub">Star</a>
+    </div>
 
-    <div>
+    <div class="Box">
       <h2 class="Title">First Meaningful Paint</h2>
       <p>Page load is a key aspect of how a user perceives the performance of your page. See Measure Performance with the RAIL Method for more information.</p>
+      <p class="Demo">
+        Result: ⚡️ Perfume.js: firstPaint {{ perfume.firstPaintDuration.toFixed(2) }} ms
+      </p>
       <app-gist [gistId]="'Zizzamia/15e965213aa87a5588a6756fef612f45'"></app-gist>
-      <p>Result: ⚡️ Perfume.js: firstPaint {{ perfume.firstPaintDuration.toFixed(2) }} ms</p>
     </div>
 
-    <div>
+    <div class="Box">
       <h2 class="Title">Annotate metrics in the DevTools</h2>
       <p>Performance.mark() is used to create an application-defined peformance entry in the browser's performance entry buffer.</p>
-      <button (click)="measureFibonacci()">Run Fibonacci</button>
+      <p class="Demo">
+        <button class="Button" 
+        (click)="measureFibonacci()">Run Fibonacci</button>
+        <span>Result: {{ logFibonacci }}</span>
+      </p>
       <app-gist [gistId]="'Zizzamia/e680d4f2f9f2bf9ba15b13207264f7bc'"></app-gist>
-      <p>Result: {{ logFibonacci }}</p>
     </div>
 
-    <div>
+    <div class="Box">
       <h2 class="Title">Custom Logging</h2>
       <p>Save the duration and print it out when/how you best desire.</p>
-      <button (click)="customLogging()">Run custom logging</button>
+      <p class="Demo">
+        <button class="Button" 
+        (click)="customLogging()">Run custom logging</button>
+        <span>Result: {{ logCustom }}</span>
+      </p>
       <app-gist [gistId]="'Zizzamia/b16edc8b4052ac4186ebc62151de7dca'"></app-gist>
-      <p>Result: {{ logCustom }}</p>
     </div>
   </div>
 </div>
