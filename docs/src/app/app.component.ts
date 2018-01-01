@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 
-import Perfume from 'perfume.js';
+//import Perfume from 'perfume.js';
+
+import Perfume from '../../../src/perfume';
+
 
 @Component({
   selector: 'app-root',

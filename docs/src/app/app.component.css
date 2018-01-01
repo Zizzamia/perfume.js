@@ -1,0 +1,115 @@
+
+h1 {
+  margin: 6px 0 4px;
+  color: #F2DB77;
+  font-family: 'Dancing Script', cursive;
+  font-size: 70px;
+  font-weight: 400;
+}
+
+h2 {
+  font-size: 1.8em;
+  margin: 0.7em 0 0.3em;
+}
+
+h3 {
+  font-size: 1.6em;
+  margin: 0.7em 0 0.38em;
+}
+
+.Box {
+  margin: 40px 0;
+  text-align: left;
+}
+
+.Box--first {
+  margin: 0 0 60px;
+}
+
+.Title {
+  position: relative;
+}
+
+.Layout .Content,
+.Layout .Footer {
+  padding: 32px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.Layout .Footer {
+  padding-top: 0;
+}
+
+.Layout .Footer {
+  color: #636363;
+  font-size: 12px;
+  text-align: center;
+}
+
+.Picture {
+  border-radius: 250px;
+  margin-top: 30px;
+  width: 250px;
+}
+
+.Teapotio-logo,
+.Teapotio-symfonyLogo,
+.TwitterLogo,
+.PlanLogo {
+  margin: 15px 0;
+  width: 100px;
+}
+
+.Teapotio {
+  color: #343434;
+  font-size: 80px;
+  line-height: 1;
+}
+
+.Teapotio > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ExternalLinkIcon {
+  display: inline-block;
+  font-size: 2em;
+  vertical-align: middle;
+}
+
+.Demo {
+  width: 100%;
+  text-align: left;
+}
+
+.Button {
+  display: inline-block;
+  background-color: #F5D7CD;
+  border-color: #DDBDB6;
+  color: #8A7A75;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 5px 12px;
+  margin-right: 20px;
+  font-size: 16px;
+  border-radius: .25rem;
+  cursor: pointer;
+  -webkit-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+
+.Button:hover {
+  color: #FDFBFA;
+  background-color: #F7E7A1;
+  border-color: #F2DB77;
+}
