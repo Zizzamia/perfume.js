@@ -1,3 +1,10 @@
+## 0.2.3 (2017-12-31)
+
+### Features
+
+* **GA:** Init Google Analytics [#12](https://github.com/Zizzamia/perfume.js/issues/12)
+
+
 ## 0.2.2 (2017-12-29)
 
 ### Bug Fixes

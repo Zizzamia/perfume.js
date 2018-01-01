@@ -211,7 +211,9 @@ describe("Perfume test", () => {
 
     it("should not call global.console.warn() if googleAnalytics is enable and ga is present", () => {
       perfume.googleAnalytics.enable = true;
-      window.ga = () => {};
+      window.ga = () => {
+        return true;
+      };
       perfume.sendTiming("metricName", 123);
       expect(global.console.warn).not.toHaveBeenCalled();
     });
