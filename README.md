@@ -66,12 +66,12 @@ perfume.log('Custom logging', duration);
 ```
 
 #### Google Analytics
-To enable Perfume to send your measures to Google Analytics User timing, set the option `enable:true` and a custom `category:"name"`.
+To enable Perfume to send your measures to Google Analytics User timing, set the option `enable:true` and a custom [user timing variable](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar) `timingVar:"name"`.
 
 ```javascript
 const perfume = new Perfume();
 perfume.googleAnalytics.enable = true;
-perfume.googleAnalytics.category = "userId";
+perfume.googleAnalytics.timingVar = "userId";
 ```
 
 

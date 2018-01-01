@@ -5,7 +5,7 @@ declare global {
 export default class Perfume {
   public firstPaintDuration: number;
   public googleAnalytics: {
-    category: string;
+    timingVar: string;
     enable: boolean;
   };
   private metrics: {
@@ -19,7 +19,7 @@ export default class Perfume {
   constructor() {
     this.firstPaintDuration = 0;
     this.googleAnalytics = {
-      category: "name",
+      timingVar: "name",
       enable: false,
     };
     this.metrics = {};
@@ -179,7 +179,8 @@ export default class Perfume {
   }
 
   /**
-   * Sends the User timing measure to Google Analytics
+   * Sends the User timing measure to Google Analytics.
+   * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])
    * @param {string} metricName
    * @param {number} duration
    */
@@ -192,6 +193,6 @@ export default class Perfume {
       return;
     }
     const durationMs = duration.toFixed(2);
-    window.ga("send", "timing", this.googleAnalytics.category, metricName, durationMs);
+    window.ga("send", "timing", metricName, this.googleAnalytics.timingVar, durationMs);
   }
 }

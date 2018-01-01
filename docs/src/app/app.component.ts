@@ -16,7 +16,7 @@ export class AppComponent {
   constructor() {
   	const perfume = new Perfume();
     perfume.googleAnalytics.enable = true;
-    perfume.googleAnalytics.category = "userId";
+    perfume.googleAnalytics.timingVar = "userId";
     this.perfume = perfume;
     this.perfume.firstPaint();
   }

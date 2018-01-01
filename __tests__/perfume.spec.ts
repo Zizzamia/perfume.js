@@ -45,7 +45,7 @@ describe("Perfume test", () => {
   it("should initialize correctly in the constructor", () => {
     expect(perfume.firstPaintDuration).toEqual(0);
     expect(perfume.googleAnalytics).toEqual({
-      category: "name",
+      timingVar: "name",
       enable: false,
     });
     expect(perfume.metrics).toEqual({});
