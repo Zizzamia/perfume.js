@@ -24,7 +24,7 @@
     "core-js": "^2.4.1",
     "rxjs": "^5.5.2",
     "zone.js": "^0.8.14",
-    "perfume.js": "^0.2.3"
+    "perfume.js": "^0.2.4"
   },
   "devDependencies": {
     "@angular/cli": "1.6.0",
