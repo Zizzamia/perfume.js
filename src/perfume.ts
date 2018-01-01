@@ -5,8 +5,8 @@ declare global {
 export default class Perfume {
   public firstPaintDuration: number;
   public googleAnalytics: {
-    timingVar: string;
     enable: boolean;
+    timingVar: string;
   };
   private metrics: {
     [key: string]: {
@@ -19,8 +19,8 @@ export default class Perfume {
   constructor() {
     this.firstPaintDuration = 0;
     this.googleAnalytics = {
-      timingVar: "name",
       enable: false,
+      timingVar: "name",
     };
     this.metrics = {};
     this.logPrefix = "⚡️ Perfume.js:";
