@@ -55,7 +55,7 @@ perfume.end('fibonacci', true);
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
 
 #### Custom Logging
-Save the duration and print it out when and how it best meets your needs.
+Save the duration and print it out exactly the way you want it.
 
 ```javascript
 perfume.start('fibonacci');
