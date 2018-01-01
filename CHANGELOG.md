@@ -1,3 +1,10 @@
+## 0.2.4 (2017-12-31)
+
+### Bug Fixes
+
+* **GA:** Fixed window.ga type
+
+
 ## 0.2.3 (2017-12-31)
 
 ### Features

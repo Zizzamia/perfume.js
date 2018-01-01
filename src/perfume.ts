@@ -1,3 +1,7 @@
+declare global {
+  interface Window { ga: any; }
+}
+
 export default class Perfume {
   public firstPaintDuration: number;
   public googleAnalytics: {
@@ -188,6 +192,6 @@ export default class Perfume {
       return;
     }
     const durationMs = duration.toFixed(2);
-    ga("send", "timing", this.googleAnalytics.category, metricName, durationMs);
+    window.ga("send", "timing", this.googleAnalytics.category, metricName, durationMs);
   }
 }

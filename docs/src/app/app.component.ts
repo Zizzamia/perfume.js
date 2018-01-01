@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 
-//import Perfume from 'perfume.js';
-
-import Perfume from '../../../src/perfume';
+import Perfume from 'perfume.js';
 
 
 @Component({
