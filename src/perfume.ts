@@ -1,5 +1,9 @@
 export default class Perfume {
   public firstPaintDuration: number;
+  public googleAnalytics: {
+    category: string;
+    enable: boolean;
+  };
   private metrics: {
     [key: string]: {
       start: number;
@@ -10,6 +14,10 @@ export default class Perfume {
 
   constructor() {
     this.firstPaintDuration = 0;
+    this.googleAnalytics = {
+      category: "name",
+      enable: false,
+    };
     this.metrics = {};
     this.logPrefix = "⚡️ Perfume.js:";
 
@@ -38,6 +46,7 @@ export default class Perfume {
   /**
    * This assumes the user has made only one measurement for the given
    * name. Return the first PerformanceEntry objects for the given name.
+   * @param {string} metricName
    */
   public getMeasurementForGivenName(metricName: string) {
     return performance.getEntriesByName(metricName)[0];
@@ -47,6 +56,7 @@ export default class Perfume {
    * Get the duration of the timing metric or -1 if there a measurement has
    * not been made. Use User Timing API results if available, otherwise return
    * performance.now() fallback.
+   * @param {string} metricName
    */
   public getDurationByMetric(metricName: string) {
     if (this.supportsPerfMark) {
@@ -60,7 +70,7 @@ export default class Perfume {
   }
 
   /**
-   *
+   * @param {string} metricName
    */
   public checkMetricName(metricName: string) {
     if (metricName) {
@@ -71,7 +81,7 @@ export default class Perfume {
   }
 
   /**
-   *
+   * @param {string} metricName
    */
   public start(metricName: string) {
     if (!this.checkMetricName(metricName)) {
@@ -94,7 +104,8 @@ export default class Perfume {
   }
 
   /**
-   *
+   * @param {string} metricName
+   * @param {boolean} log
    */
   public end(metricName: string, log = false) {
     if (!this.checkMetricName(metricName)) {
@@ -116,6 +127,7 @@ export default class Perfume {
       this.log(metricName, duration);
     }
     delete this.metrics[metricName];
+    this.sendTiming(metricName, duration);
     return duration;
   }
 
@@ -142,11 +154,14 @@ export default class Perfume {
       if (this.firstPaintDuration) {
         this.log("firstPaint", this.firstPaintDuration);
       }
+      this.sendTiming("firstPaint", this.firstPaintDuration);
     });
   }
 
   /**
    * Coloring Text in Browser Console
+   * @param {string} metricName
+   * @param {number} duration
    */
   public log(metricName: string, duration: number) {
     if (!metricName || !duration) {
@@ -157,5 +172,22 @@ export default class Perfume {
     const style = "color: #ff6d00;font-size:12px;";
     const text = `%c ${this.logPrefix} ${metricName} ${durationMs} ms`;
     global.console.log(text, style);
+  }
+
+  /**
+   * Sends the User timing measure to Google Analytics
+   * @param {string} metricName
+   * @param {number} duration
+   */
+  private sendTiming(metricName: string, duration: number) {
+    if (!this.googleAnalytics.enable) {
+      return;
+    }
+    if (!window.ga) {
+      global.console.warn(this.logPrefix, "Google Analytics has not been loaded");
+      return;
+    }
+    const durationMs = duration.toFixed(2);
+    ga("send", "timing", this.googleAnalytics.category, metricName, durationMs);
   }
 }

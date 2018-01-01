@@ -7,6 +7,7 @@ describe("Perfume test", () => {
   let perfume;
 
   beforeEach(() => {
+    window.ga = undefined;
     window.Date = {
       now: () => {
         return 23456;
@@ -43,6 +44,10 @@ describe("Perfume test", () => {
 
   it("should initialize correctly in the constructor", () => {
     expect(perfume.firstPaintDuration).toEqual(0);
+    expect(perfume.googleAnalytics).toEqual({
+      category: "name",
+      enable: false,
+    });
     expect(perfume.metrics).toEqual({});
     expect(perfume.logPrefix).toEqual("⚡️ Perfume.js:");
   });
@@ -185,6 +190,30 @@ describe("Perfume test", () => {
     it("should call global.console.log() if params are correct", () => {
       perfume.log("metricName", 12345);
       expect(global.console.log).toHaveBeenCalled();
+    });
+  });
+
+  it("has 'sendTiming' method after initialization", () => {
+    expect(perfume.sendTiming).toBeDefined();
+  });
+
+  describe("when calls sendTiming()", () => {
+    it("should not call global.console.warn() if googleAnalytics is disable", () => {
+      perfume.sendTiming();
+      expect(global.console.warn).not.toHaveBeenCalled();
+    });
+
+    it("should call global.console.warn() if googleAnalytics is disable", () => {
+      perfume.googleAnalytics.enable = true;
+      perfume.sendTiming();
+      expect(global.console.warn).toHaveBeenCalled();
+    });
+
+    it("should not call global.console.warn() if googleAnalytics is enable and ga is present", () => {
+      perfume.googleAnalytics.enable = true;
+      window.ga = () => {};
+      perfume.sendTiming("metricName", 123);
+      expect(global.console.warn).not.toHaveBeenCalled();
     });
   });
 });
