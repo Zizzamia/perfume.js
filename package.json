@@ -1,6 +1,6 @@
 {
   "name": "perfume.js",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "",
   "keywords": [],
   "main": "dist/perfume.umd.js",
@@ -70,10 +70,10 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 64,
-        "functions": 92,
-        "lines": 82,
-        "statements": 82
+        "branches": 92,
+        "functions": 98,
+        "lines": 98,
+        "statements": 98
       }
     },
     "collectCoverage": true,
