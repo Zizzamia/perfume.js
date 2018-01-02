@@ -58,7 +58,8 @@ describe("Perfume test", () => {
   });
 
   it("should throw a console.warn if window.performance is not supported", () => {
-    perfume.supportsPerfNow = null;
+    window.performance = null;
+    perfume = new Perfume();
     expect(global.console.warn).toHaveBeenCalled();
   });
 

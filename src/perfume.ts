@@ -196,6 +196,9 @@ export default class Perfume {
   /**
    * Sends the User timing measure to Google Analytics.
    * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])
+   * timingCategory: metricName
+   * timingVar: googleAnalytics.timingVar
+   * timingValue: The value of duration rounded to the nearest integer
    * @param {string} metricName
    * @param {number} duration
    */
@@ -207,7 +210,7 @@ export default class Perfume {
       global.console.warn(this.logPrefix, "Google Analytics has not been loaded");
       return;
     }
-    const durationMs = duration.toFixed(2);
-    window.ga("send", "timing", metricName, this.googleAnalytics.timingVar, durationMs);
+    const durationInteger = Math.round(duration);
+    window.ga("send", "timing", metricName, this.googleAnalytics.timingVar, durationInteger);
   }
 }
