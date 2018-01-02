@@ -1,3 +1,10 @@
+## 0.2.6 (2018-1-2)
+
+### Bug Fixes
+
+* **GA:** Fixed timingValue
+
+
 ## 0.2.5 (2018-1-1)
 
 ### Bug Fixes
