@@ -16,7 +16,10 @@ describe("Perfume test", () => {
     window.performance = {
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
       getEntriesByName: () => {
-        return [12345];
+        return [{
+          duration: 12345,
+          entryType: "measure",
+        }];
       },
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark
       mark: () => {
@@ -38,8 +41,10 @@ describe("Perfume test", () => {
   beforeEach(() => {
     spyOn(console, "log").and.callThrough();
     spyOn(console, "warn").and.callThrough();
+    spyOn(perfume, "getMeasurementForGivenName").and.callThrough();
     spyOn(perfume, "getFirstPaint").and.callThrough();
     spyOn(perfume, "log").and.callThrough();
+    spyOn(perfume, "sendTiming").and.callThrough();
   });
 
   it("should initialize correctly in the constructor", () => {
@@ -50,6 +55,15 @@ describe("Perfume test", () => {
     });
     expect(perfume.metrics).toEqual({});
     expect(perfume.logPrefix).toEqual("⚡️ Perfume.js:");
+  });
+
+  it("should throw a console.warn if window.performance is not supported", () => {
+    perfume.supportsPerfNow = null;
+    expect(global.console.warn).toHaveBeenCalled();
+  });
+
+  it("should not throw a console.warn if window.performance is supported", () => {
+    expect(global.console.warn).not.toHaveBeenCalled();
   });
 
   it("Perfume is instantiable", () => {
@@ -83,12 +97,51 @@ describe("Perfume test", () => {
   describe("when calls getMeasurementForGivenName()", () => {
     it("should return the first PerformanceEntry objects for the given name", () => {
       const value = perfume.getMeasurementForGivenName("metricName");
-      expect(value).toEqual(12345);
+      expect(value).toEqual({
+        duration: 12345,
+        entryType: "measure",
+      });
     });
   });
 
   it("has 'getDurationByMetric' method after initialization", () => {
     expect(perfume.getDurationByMetric).toBeDefined();
+  });
+
+  describe("when calls getDurationByMetric()", () => {
+    it("should call getMeasurementForGivenName() if supportsPerfMark is true", () => {
+      perfume.metrics.metricName = {
+        end: 0,
+        start: perfume.performanceNow(),
+      };
+      perfume.getDurationByMetric("metricName");
+      expect(perfume.getMeasurementForGivenName).toHaveBeenCalled();
+    });
+
+    it("should return entry.duration when entryType is not measure", () => {
+      perfume.metrics.metricName = {
+        end: 0,
+        start: perfume.performanceNow(),
+      };
+      window.performance.getEntriesByName = () => {
+        return [{
+          duration: 12345,
+          entryType: "notMeasure",
+        }];
+      };
+      const value = perfume.getDurationByMetric("metricName");
+      expect(value).toEqual(12345);
+    });
+
+    it("should not call getMeasurementForGivenName() if supportsPerfMark is false", () => {
+      window.performance = null;
+      perfume.metrics.metricName = {
+        end: 0,
+        start: perfume.performanceNow(),
+      };
+      perfume.getDurationByMetric("metricName");
+      expect(perfume.getMeasurementForGivenName).not.toHaveBeenCalled();
+    });
   });
 
   it("has 'checkMetricName' method after initialization", () => {
@@ -107,14 +160,35 @@ describe("Perfume test", () => {
     });
   });
 
+  it("has 'performanceNow' method after initialization", () => {
+    expect(perfume.performanceNow).toBeDefined();
+  });
+
   it("has 'start' method after initialization", () => {
     expect(perfume.start).toBeDefined();
   });
 
   describe("when calls start()", () => {
+    it("should throw a console.warn if metricName is not passed", () => {
+      perfume.start();
+      expect(global.console.warn).toHaveBeenCalled();
+    });
+
     it("should not throw a console.warn if param is correct", () => {
       perfume.start("metricName");
       expect(global.console.warn).not.toHaveBeenCalled();
+    });
+
+    it("should throw a console.warn if window.performance is not supported", () => {
+      window.performance = null;
+      perfume.start("metricName");
+      expect(global.console.warn).toHaveBeenCalled();
+    });
+
+    it("should throw a console.warn if recording already started", () => {
+      perfume.start("metricName");
+      perfume.start("metricName");
+      expect(global.console.warn).toHaveBeenCalled();
     });
   });
 
@@ -123,15 +197,26 @@ describe("Perfume test", () => {
   });
 
   describe("when calls end()", () => {
+    it("should throw a console.warn if param is not correct", () => {
+      perfume.end();
+      expect(global.console.warn).toHaveBeenCalled();
+    });
+
     it("should not throw a console.warn if param is correct", () => {
       perfume.start("metricName");
       perfume.end("metricName");
       expect(global.console.warn).not.toHaveBeenCalled();
     });
 
-    it("should not throw a console.warn if param is correct", () => {
+    it("should throw a console.warn if param is correct and recording already stopped", () => {
       perfume.end("metricName");
       expect(global.console.warn).toHaveBeenCalled();
+    });
+
+    it("should call log() if log param is true", () => {
+      perfume.start("metricName");
+      perfume.end("metricName", true);
+      expect(perfume.log).toHaveBeenCalled();
     });
   });
 
@@ -157,18 +242,33 @@ describe("Perfume test", () => {
   });
 
   describe("when calls firstPaint()", () => {
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
     it("should call getFirstPaint() after the first setTimeout", () => {
       perfume.firstPaint();
-      setTimeout(() => {
-        expect(perfume.getFirstPaint).toHaveBeenCalled();
-      });
+      jest.runAllTimers();
+      expect(perfume.getFirstPaint).toHaveBeenCalled();
     });
 
     it("should call log() after the first setTimeout", () => {
       perfume.firstPaint();
-      setTimeout(() => {
-        expect(perfume.log).toHaveBeenCalled();
-      });
+      jest.runAllTimers();
+      expect(perfume.log).toHaveBeenCalled();
+    });
+
+    it("should call sendTiming() after the first setTimeout", () => {
+      perfume.firstPaint();
+      jest.runAllTimers();
+      expect(perfume.sendTiming).toHaveBeenCalled();
+    });
+
+    it("should perfume.firstPaintDuration be equal", () => {
+      perfume.firstPaint();
+      jest.runAllTimers();
+      expect(perfume.firstPaintDuration).toEqual(11111);
     });
   });
 

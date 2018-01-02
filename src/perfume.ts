@@ -26,7 +26,7 @@ export default class Perfume {
     this.logPrefix = "⚡️ Perfume.js:";
 
     if (!this.supportsPerfNow) {
-      throw Error(this.logPrefix + " Cannot be used in this browser.");
+      global.console.warn(this.logPrefix, "Cannot be used in this browser.");
     }
   }
 
@@ -85,6 +85,21 @@ export default class Perfume {
   }
 
   /**
+   * When performance API available:
+   * - Returns a DOMHighResTimeStamp, measured in milliseconds, accurate to five
+   *   thousandths of a millisecond (5 microseconds).
+   * Otherwise:
+   * - Unlike returns Date.now that is limited to one-millisecond resolution.
+   */
+  public performanceNow() {
+    if (this.supportsPerfMark) {
+      return window.performance.now();
+    } else {
+      return Date.now() / 1000;
+    }
+  }
+
+  /**
    * @param {string} metricName
    */
   public start(metricName: string) {
@@ -92,7 +107,7 @@ export default class Perfume {
       return;
     }
     if (!this.supportsPerfMark) {
-      global.console.warn(this.logPrefix, `Timeline won"t be marked for "${metricName}".`);
+      global.console.warn(this.logPrefix, `Timeline won't be marked for "${metricName}".`);
     }
     if (this.metrics[metricName]) {
       global.console.warn(this.logPrefix, "Recording already started.");
@@ -100,7 +115,7 @@ export default class Perfume {
     }
     this.metrics[metricName] = {
       end: 0,
-      start: performance.now(),
+      start: this.performanceNow(),
     };
     if (this.supportsPerfMark) {
       performance.mark(`mark_${metricName}_start`);
@@ -119,7 +134,7 @@ export default class Perfume {
       global.console.warn(this.logPrefix, "Recording already stopped.");
       return;
     }
-    this.metrics[metricName].end = performance.now();
+    this.metrics[metricName].end = this.performanceNow();
     if (this.supportsPerfMark) {
       const startMark = `mark_${metricName}_start`;
       const endMark = `mark_${metricName}_end`;
