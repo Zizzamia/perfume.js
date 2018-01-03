@@ -29,8 +29,8 @@ export default class Perfume {
    * True if the browser supports the Navigation Timing API.
    * @type {boolean}
    */
-  get supportsPerfNow() {
-    return Boolean(window.performance && performance.now);
+  get supportsPerfNow(): boolean {
+    return window.performance && performance.now ? true : false;
   }
 
   /**
@@ -38,8 +38,8 @@ export default class Perfume {
    * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
    * @type {boolean}
    */
-  get supportsPerfMark() {
-    return Boolean(window.performance && performance.mark);
+  get supportsPerfMark(): boolean {
+    return window.performance && performance.mark ? true : false;
   }
 
   /**
@@ -85,8 +85,9 @@ export default class Perfume {
    *   thousandths of a millisecond (5 microseconds).
    * Otherwise:
    * - Unlike returns Date.now that is limited to one-millisecond resolution.
+   * @type {number}
    */
-  private performanceNow() {
+  private performanceNow(): number {
     if (this.supportsPerfMark) {
       return window.performance.now();
     } else {
