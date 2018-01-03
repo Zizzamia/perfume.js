@@ -41,7 +41,12 @@ describe("Perfume test", () => {
   beforeEach(() => {
     spyOn(console, "log").and.callThrough();
     spyOn(console, "warn").and.callThrough();
+    spyOn(window.performance, "mark").and.callThrough();
+    spyOn(window.performance, "measure").and.callThrough();
+    spyOn(perfume, "mark").and.callThrough();
+    spyOn(perfume, "measure").and.callThrough();
     spyOn(perfume, "getMeasurementForGivenName").and.callThrough();
+    spyOn(perfume, "end").and.callThrough();
     spyOn(perfume, "getFirstPaint").and.callThrough();
     spyOn(perfume, "log").and.callThrough();
     spyOn(perfume, "sendTiming").and.callThrough();
@@ -165,6 +170,34 @@ describe("Perfume test", () => {
     expect(perfume.performanceNow).toBeDefined();
   });
 
+  it("has 'mark' method after initialization", () => {
+    expect(perfume.mark).toBeDefined();
+  });
+
+  describe("when calls mark()", () => {
+    it("should call window.performance.mark if the browser does supports the Mark Timing API", () => {
+      perfume.mark();
+      expect(window.performance.mark).toHaveBeenCalled();
+    });
+  });
+
+  it("has 'measure' method after initialization", () => {
+    expect(perfume.measure).toBeDefined();
+  });
+
+  describe("when calls measure()", () => {
+    it("should call window.performance.measure if the browser does supports the Mark Timing API", () => {
+      perfume.measure();
+      expect(window.performance.measure).toHaveBeenCalled();
+    });
+
+    it("should not call window.performance.measure if the browser doesn't supports the Mark Timing API", () => {
+      window.performance.mark = null;
+      perfume.measure();
+      expect(window.performance.measure).not.toHaveBeenCalled();
+    });
+  });
+
   it("has 'start' method after initialization", () => {
     expect(perfume.start).toBeDefined();
   });
@@ -214,10 +247,38 @@ describe("Perfume test", () => {
       expect(global.console.warn).toHaveBeenCalled();
     });
 
+    it("should call mark()", () => {
+      perfume.start("metricName");
+      perfume.end("metricName");
+      expect(perfume.mark).toHaveBeenCalled();
+    });
+
+    it("should call measure()", () => {
+      perfume.start("metricName");
+      perfume.end("metricName");
+      expect(perfume.measure).toHaveBeenCalled();
+    });
+
     it("should call log() if log param is true", () => {
       perfume.start("metricName");
       perfume.end("metricName", true);
       expect(perfume.log).toHaveBeenCalled();
+    });
+  });
+
+  it("has 'endPaint' method after initialization", () => {
+    expect(perfume.endPaint).toBeDefined();
+  });
+
+  describe("when calls endPaint()", () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    it("should call end() after the first setTimeout", () => {
+      perfume.endPaint();
+      jest.runAllTimers();
+      expect(perfume.end).toHaveBeenCalled();
     });
   });
 
@@ -226,13 +287,23 @@ describe("Perfume test", () => {
   });
 
   describe("when calls getFirstPaint()", () => {
-    it("should return null if the browser doesn't supports the Navigation Timing API", () => {
+    it("should return 0 if the browser doesn't supports the Navigation Timing API", () => {
       window.performance = null;
       const performance = perfume.getFirstPaint();
       expect(performance).toEqual(0);
     });
 
-    it("should return null if the browser doesn't supports the Navigation Timing API", () => {
+    it("should return 0 if PerformanceTiming.navigationStar is 0", () => {
+      window.performance = {
+        timing: {
+          navigationStart: 0,
+        },
+      };
+      const performance = perfume.getFirstPaint();
+      expect(performance).toEqual(0);
+    });
+
+    it("should return the firstPaint value if the browser supports the Navigation Timing API", () => {
       const performance = perfume.getFirstPaint();
       expect(performance).toEqual(11111);
     });
@@ -243,7 +314,6 @@ describe("Perfume test", () => {
   });
 
   describe("when calls firstPaint()", () => {
-
     beforeEach(() => {
       jest.useFakeTimers();
     });
@@ -258,6 +328,15 @@ describe("Perfume test", () => {
       perfume.firstPaint();
       jest.runAllTimers();
       expect(perfume.log).toHaveBeenCalled();
+    });
+
+    it("should call log() after the first setTimeout", () => {
+      perfume.getFirstPaint = () => {
+        return 0;
+      };
+      perfume.firstPaint();
+      jest.runAllTimers();
+      expect(perfume.log).not.toHaveBeenCalled();
     });
 
     it("should call sendTiming() after the first setTimeout", () => {

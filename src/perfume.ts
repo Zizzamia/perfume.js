@@ -101,6 +101,33 @@ export default class Perfume {
 
   /**
    * @param {string} metricName
+   * @param {string} type
+   */
+  public mark(metricName: string, type: string) {
+    if (!this.supportsPerfMark) {
+      return;
+    }
+    const mark = `mark_${metricName}_${type}`;
+    window.performance.mark(mark);
+  }
+
+  /**
+   * @param {string} metricName
+   * @param {string} startMark
+   * @param {string} endMark
+   */
+  public measure(metricName: string, startType: string, endType: string) {
+    if (!this.supportsPerfMark) {
+      return;
+    }
+    const startMark = `mark_${metricName}_${startType}`;
+    const endMark = `mark_${metricName}_${endType}`;
+    window.performance.measure(metricName, startMark, endMark);
+  }
+
+  /**
+   * Start performance measurement
+   * @param {string} metricName
    */
   public start(metricName: string) {
     if (!this.checkMetricName(metricName)) {
@@ -117,12 +144,11 @@ export default class Perfume {
       end: 0,
       start: this.performanceNow(),
     };
-    if (this.supportsPerfMark) {
-      performance.mark(`mark_${metricName}_start`);
-    }
+    this.mark(metricName, "start");
   }
 
   /**
+   * End performance measurement
    * @param {string} metricName
    * @param {boolean} log
    */
@@ -135,12 +161,8 @@ export default class Perfume {
       return;
     }
     this.metrics[metricName].end = this.performanceNow();
-    if (this.supportsPerfMark) {
-      const startMark = `mark_${metricName}_start`;
-      const endMark = `mark_${metricName}_end`;
-      performance.mark(endMark);
-      performance.measure(metricName, startMark, endMark);
-    }
+    this.mark(metricName, "end");
+    this.measure(metricName, "start", "end");
     const duration = this.getDurationByMetric(metricName);
     if (log) {
       this.log(metricName, duration);
@@ -151,7 +173,22 @@ export default class Perfume {
   }
 
   /**
+   * End performance measurement after first paint from the beging of it
+   * @param {string} metricName
+   * @param {boolean} log
+   */
+  public endPaint(metricName: string, log = false) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const duration = this.end(metricName, log);
+        resolve(duration);
+      });
+    });
+  }
+
+  /**
    * http://msdn.microsoft.com/ff974719
+   * https://developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming/navigationStart
    */
   public getFirstPaint() {
     if (performance) {
