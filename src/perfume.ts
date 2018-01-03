@@ -3,28 +3,23 @@ declare global {
 }
 
 export default class Perfume {
-  public firstPaintDuration: number;
+  public firstPaintDuration: number = 0;
   public googleAnalytics: {
     enable: boolean;
     timingVar: string;
+  } = {
+    enable: false,
+    timingVar: "name",
   };
   private metrics: {
     [key: string]: {
       start: number;
       end: number;
     };
-  };
-  private logPrefix: string;
+  } = {};
+  private logPrefix: string = "⚡️ Perfume.js:";
 
   constructor() {
-    this.firstPaintDuration = 0;
-    this.googleAnalytics = {
-      enable: false,
-      timingVar: "name",
-    };
-    this.metrics = {};
-    this.logPrefix = "⚡️ Perfume.js:";
-
     if (!this.supportsPerfNow) {
       global.console.warn(this.logPrefix, "Cannot be used in this browser.");
     }
@@ -52,7 +47,7 @@ export default class Perfume {
    * name. Return the first PerformanceEntry objects for the given name.
    * @param {string} metricName
    */
-  public getMeasurementForGivenName(metricName: string) {
+  private getMeasurementForGivenName(metricName: string) {
     return performance.getEntriesByName(metricName)[0];
   }
 
@@ -62,7 +57,7 @@ export default class Perfume {
    * performance.now() fallback.
    * @param {string} metricName
    */
-  public getDurationByMetric(metricName: string) {
+  private getDurationByMetric(metricName: string) {
     if (this.supportsPerfMark) {
       const entry = this.getMeasurementForGivenName(metricName);
       if (entry && entry.entryType !== "measure") {
@@ -76,7 +71,7 @@ export default class Perfume {
   /**
    * @param {string} metricName
    */
-  public checkMetricName(metricName: string) {
+  private checkMetricName(metricName: string) {
     if (metricName) {
       return true;
     }
@@ -91,7 +86,7 @@ export default class Perfume {
    * Otherwise:
    * - Unlike returns Date.now that is limited to one-millisecond resolution.
    */
-  public performanceNow() {
+  private performanceNow() {
     if (this.supportsPerfMark) {
       return window.performance.now();
     } else {
@@ -103,7 +98,7 @@ export default class Perfume {
    * @param {string} metricName
    * @param {string} type
    */
-  public mark(metricName: string, type: string) {
+  private mark(metricName: string, type: string) {
     if (!this.supportsPerfMark) {
       return;
     }
@@ -116,7 +111,7 @@ export default class Perfume {
    * @param {string} startMark
    * @param {string} endMark
    */
-  public measure(metricName: string, startType: string, endType: string) {
+  private measure(metricName: string, startType: string, endType: string) {
     if (!this.supportsPerfMark) {
       return;
     }
@@ -190,7 +185,7 @@ export default class Perfume {
    * http://msdn.microsoft.com/ff974719
    * https://developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming/navigationStart
    */
-  public getFirstPaint() {
+  private getFirstPaint() {
     if (performance) {
       const navTiming = performance.timing;
       if (navTiming && navTiming.navigationStart !== 0) {
