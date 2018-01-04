@@ -1,7 +1,7 @@
 // Angular & Third Party
 import { Component } from '@angular/core';
-// import Perfume from 'perfume.js';
-import Perfume from '../../../src/perfume';
+import Perfume from 'perfume.js';
+// import Perfume from '../../../src/perfume';
 
 declare const $: any;
 
@@ -14,14 +14,16 @@ export class AppComponent {
   logCustom: string;
   logFibonacci: string;
   logTogglePopover: string;
+  path: any;
   perfume: any;
 
   constructor() {
     const perfume = new Perfume();
     perfume.googleAnalytics.enable = true;
-    perfume.googleAnalytics.timingVar = "userId";
+    perfume.googleAnalytics.timingVar = 'userId';
     this.perfume = perfume;
     this.perfume.firstPaint();
+    this.path = window.location.href;
   }
 
   fibonacci(num, memo = {}) {
@@ -35,26 +37,26 @@ export class AppComponent {
   }
 
   measureFibonacci() {
-    this.perfume.start("fibonacci");
+    this.perfume.start('fibonacci');
     this.fibonacci(400);
-    const duration = this.perfume.end("fibonacci", true);
+    const duration = this.perfume.end('fibonacci', true);
     this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration.toFixed(2)} ms`;
   }
 
   togglePopover(element) {
-    this.perfume.start("togglePopover");
-    $(element).popover("toggle");
-    this.perfume.endPaint("togglePopover", true)
+    this.perfume.start('togglePopover');
+    $(element).popover('toggle');
+    this.perfume.endPaint('togglePopover', true)
     .then((duration) => {
       this.logTogglePopover = `⚡️ Perfume.js: togglePopover ${duration.toFixed(2)} ms`;
     });
   }
 
   customLogging() {
-    this.perfume.start("fibonacci");
+    this.perfume.start('fibonacci');
     this.fibonacci(400);
     const duration = this.perfume.end('fibonacci');
-    this.perfume.log("Custom logging", duration);
+    this.perfume.log('Custom logging', duration);
     this.logCustom = `⚡️ Perfume.js: Custom logging ${duration.toFixed(2)} ms`;
   }
 }

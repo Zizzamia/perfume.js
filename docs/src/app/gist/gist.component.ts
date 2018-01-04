@@ -1,24 +1,20 @@
-import { Component, Input, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-
+import { Component, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-gist',
   templateUrl: './gist.component.html',
   styleUrls: ['./gist.component.css']
 })
-export class GistComponent implements OnInit {
-	@ViewChild('iframe') iframe:ElementRef;
+export class GistComponent implements AfterViewInit {
+  @ViewChild('iframe') iframe: ElementRef;
   @Input() gistId;
 
   constructor() { }
 
-  ngOnInit() {
-  }
-
   ngAfterViewInit() {
     this.iframe.nativeElement.id = 'gist-' + this.gistId;
-    let doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentElement.contentWindow;
-    let content = `
+    const doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentElement.contentWindow;
+    const content = `
       <html>
         <head>
           <base target="_parent">

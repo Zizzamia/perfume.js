@@ -1,7 +1,7 @@
 # Perfume.js v0.3.0
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js)
 
-> Perfume is a tiny JavaScript library for measuring Short/Long Script, FCP (First Contentful Paint), CFM (Component First Paint), TTI ([Time to Interactive](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), annotating them to the DevTools timeline and reporting the results to Google Analytics.
+> Perfume is a tiny JavaScript library for measuring Short/Long Script, FCP ([First Contentful Paint](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint)), CFM (Component First Paint), TTI ([Time to Interactive](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), annotating them to the DevTools timeline and reporting the results to Google Analytics.
 
 
 ## Installing
