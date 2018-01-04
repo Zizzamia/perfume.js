@@ -35,9 +35,9 @@ import Perfume from 'node_modules/perfume.js/perfume.umd.js';
 ## Start measuring
 
 #### First Contentful Paint (FCP)
-These metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?
+This metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?
 
-**FP** marks the point when the browser renders the first bit of content from the DOM, which may be text, an image, SVG, or even a <canvas> element.
+**FCP** marks the point when the browser renders the first bit of content from the DOM, which may be text, an image, SVG, or even a <canvas> element.
 
 ```javascript
 const perfume = new Perfume();
@@ -46,7 +46,7 @@ perfume.firstPaint();
 ```
 
 #### Annotate metrics in the DevTools
-Performance.mark ([User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API)) is used to create an application-defined peformance entry in the browser's performance entry buffer.
+**Performance.mark** ([User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API)) is used to create an application-defined peformance entry in the browser's performance entry buffer.
 
 ```javascript
 perfume.start('fibonacci');
@@ -57,7 +57,7 @@ perfume.end('fibonacci', true);
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
 
 #### Component First Paint (CFP)
-These metric mark the point, immediately after creating a **new component**, when the browser renders pixels to the screen.
+This metric mark the point, immediately after creating a **new component**, when the browser renders pixels to the screen.
 
 ```javascript
 perfume.start('togglePopover');
@@ -112,4 +112,4 @@ I want to thank some friends and projects for the work they did:
 
 
 ## Copyright and license
-Code and documentation copyright 2017 **Leonardo Zizzamia**. Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
+Code and documentation copyright 2018 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
