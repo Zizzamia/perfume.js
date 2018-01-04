@@ -86,6 +86,7 @@ const perfume = new Perfume();
 perfume.googleAnalytics.enable = true;
 perfume.googleAnalytics.timingVar = "userId";
 ```
+![Performance Analytics](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-analytics.png)
 
 
 ## Develop
