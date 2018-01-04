@@ -1,3 +1,10 @@
+## 0.3.0 (2018-1-3)
+
+### Features
+
+* **endPaint:** Added endPaint() method [#13](https://github.com/Zizzamia/perfume.js/issues/13)
+
+
 ## 0.2.6 (2018-1-2)
 
 ### Bug Fixes
