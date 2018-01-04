@@ -1,7 +1,9 @@
+// Angular & Third Party
 import { Component } from '@angular/core';
+//import Perfume from 'perfume.js';
+import Perfume from '../../../src/perfume';
 
-import Perfume from 'perfume.js';
-
+declare const $: any;
 
 @Component({
   selector: 'app-root',
@@ -11,6 +13,7 @@ import Perfume from 'perfume.js';
 export class AppComponent {
   logCustom: string;
   logFibonacci: string;
+  logTogglePopover: string;
   perfume: any;
 
   constructor() {
@@ -36,6 +39,15 @@ export class AppComponent {
     this.fibonacci(400);
     const duration = this.perfume.end('fibonacci', true);
     this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration.toFixed(2)} ms`;
+  }
+
+  togglePopover(element) {
+    this.perfume.start('togglePopover');
+    $(element).popover('toggle');
+    this.perfume.endPaint('togglePopover', true)
+    .then((duration) => {
+      this.logTogglePopover = `⚡️ Perfume.js: togglePopover ${duration.toFixed(2)} ms`;
+    });
   }
 
   customLogging() {

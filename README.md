@@ -1,7 +1,7 @@
 # Perfume.js v0.2.6
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js)
 
-> Perfume is a tiny JavaScript library for measuring Short/Long Script, First Meaningful Paint, TTI (Time to Interactivity), annotating them to the DevTools timeline and reporting the results to Google Analytics.
+> Perfume is a tiny JavaScript library for measuring Short/Long Script, FCP (First Contentful Paint), CFM (Component First Paint), TTI ([Time to Interactive](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), annotating them to the DevTools timeline and reporting the results to Google Analytics.
 
 
 ## Installing
@@ -25,7 +25,7 @@ Additionally, you can import the transpiled modules from `dist/es` in case you h
 import Perfume from 'node_modules/perfume.js/dist/es/perfume';
 ```
 
-Universal Module Definition
+Universal Module Definition:
 
 ```javascript
 import Perfume from 'node_modules/perfume.js/perfume.umd.js';
@@ -34,8 +34,10 @@ import Perfume from 'node_modules/perfume.js/perfume.umd.js';
 
 ## Start measuring
 
-#### First Meaningful Paint
-Page load is a key aspect of how a user perceives the performance of your page. See Measure Performance with the [RAIL Method](https://developers.google.com/web/fundamentals/performance/rail) for more information.
+#### First Contentful Paint (FCP)
+These metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?
+
+**FP** marks the point when the browser renders the first bit of content from the DOM, which may be text, an image, SVG, or even a <canvas> element.
 
 ```javascript
 const perfume = new Perfume();
@@ -53,6 +55,17 @@ perfume.end('fibonacci', true);
 // ⚡️ Perfume.js: fibonacci 0.14 ms
 ```
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
+
+#### Component First Paint (CFP)
+These metric mark the point, immediately after creating a **new component**, when the browser renders pixels to the screen.
+
+```javascript
+perfume.start('togglePopover');
+$(element).popover('toggle');
+perfume.endPaint('togglePopover', true); 
+// ⚡️ Perfume.js: togglePopover 10.54 ms
+```
+![Performance CFP](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
 
 #### Custom Logging
 Save the duration and print it out exactly the way you want it.

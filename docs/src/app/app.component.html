@@ -2,13 +2,20 @@
   <div class="Content">
     <div class="Box Box--first">
       <h1>Perfume.js</h1>
-      <p>A tiny JavaScript library for <b>measuring</b> Short/Long Script, First Meaningful Paint, TTI (Time to Interactivity), <b>annotating</b> them to the DevTools timeline and reporting the results to <b>Google Analytics</b>.</p>
+      <p>A tiny JavaScript library for <b>measuring</b> Short/Long Script, FCP (<a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint" target="_blank">First Contentful Paint</a>), CFM (Component First Paint), TTI (<a href="https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive" target="_blank">Time to Interactive</a>), <b>annotating</b> them to the DevTools timeline and reporting the results to <b>Google Analytics</b>.</p>
       <a class="github-button" href="https://github.com/zizzamia/perfume.js" data-size="large" data-show-count="true" aria-label="Star zizzamia/perfume.js on GitHub">Star</a>
     </div>
 
     <div class="Box">
-      <h2 class="Title">First Meaningful Paint</h2>
-      <p>Page load is a key aspect of how a user perceives the performance of your page. See Measure Performance with the RAIL Method for more information.</p>
+      <h2 class="Title">Installing and Imports</h2>
+      <p>NPM <a href="https://www.npmjs.com/package/perfume.js" target="_blank">https://www.npmjs.com/package/perfume.js</a></p>
+      <app-gist [gistId]="'Zizzamia/6ab4c33d749ae74d240ebace2cf944f8'"></app-gist>
+    </div>
+
+    <div class="Box">
+      <h2 class="Title">First Contentful Paint (FCP)</h2>
+      <p>These metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?</p>
+      <p><b>FCP</b> marks the point when the browser renders anything that is visually different from what was on the screen prior to navigation.</p>
       <p class="Demo">
         Result: ⚡️ Perfume.js: firstPaint {{ perfume.firstPaintDuration.toFixed(2) }} ms
       </p>
@@ -17,13 +24,28 @@
 
     <div class="Box">
       <h2 class="Title">Annotate metrics in the DevTools</h2>
-      <p>Performance.mark() is used to create an application-defined peformance entry in the browser's performance entry buffer.</p>
+      <p><b>Performance.mark</b> (<a href="https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API" target="_blank">User Timing API</a>) is used to create an application-defined peformance entry in the browser's performance entry buffer.</p>
       <p class="Demo">
         <button class="Button" 
         (click)="measureFibonacci()">Run Fibonacci</button>
         <span>Result: {{ logFibonacci }}</span>
       </p>
       <app-gist [gistId]="'Zizzamia/e680d4f2f9f2bf9ba15b13207264f7bc'"></app-gist>
+      <img src="/assets/performance-mark.png" />
+    </div>
+
+    <div class="Box">
+      <h2 class="Title">Component First Paint (CFP)</h2>
+      <p>These metric mark the point, immediately after creating a <b>new component</b>, when the browser renders pixels to the screen.</p>
+      <p class="Demo">
+        <button type="button" class="Button"  #elBtn
+        data-toggle="popover" title="Popover" 
+        data-placement="top" data-content="And here's some amazing content."
+        (click)="togglePopover(elBtn)">Click to toggle popover</button>
+        <span>Result: {{ logTogglePopover }}</span>
+      </p>
+      <app-gist [gistId]="'Zizzamia/ee3ec5ab7bb04822ff7535d18c7d9e96'"></app-gist>
+      <img src="/assets/performance-cfp.png" />
     </div>
 
     <div class="Box">

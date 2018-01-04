@@ -26,6 +26,14 @@ h3 {
   margin: 0 0 60px;
 }
 
+.Box img {
+  width: 682px;
+  border: 1px solid #ccc;
+  margin: 0 auto;
+  display: block;
+  border-radius: 2px;
+}
+
 .Title {
   position: relative;
 }
