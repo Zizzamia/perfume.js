@@ -1,9 +1,39 @@
+import ttiPolyfill from "tti-polyfill";
+declare const PerformanceObserver: any;
+
 declare global {
-  interface Window { ga: any; }
+  interface Window {
+    ga: any;
+    __tti: {
+      e: any[];
+      o: {
+        observe: any;
+      };
+    };
+  }
+}
+
+/**
+ * Creates a PerformanceObserver instance and starts observing longtask entry types.
+ * Note: this snippet is a temporary workaround, until browsers implement level 2
+ * of the Performance Observer spec and include the "buffered" flag.
+ * https://w3c.github.io/performance-timeline/#dom-performanceobserverinit-buffered
+ */
+if ("PerformanceLongTaskTiming" in window) {
+  const g = window.__tti = {
+    e: [],
+    o: new PerformanceObserver((l: any) => {
+      g.e = g.e.concat(l.getEntries());
+    }),
+  };
+  g.o.observe({
+    entryTypes: ["longtask"],
+  });
 }
 
 export default class Perfume {
-  public firstPaintDuration: number = 0;
+  public firstContentfulPaintDuration: number = 0;
+  public timeToInteractiveDuration: number = 0;
   public googleAnalytics: {
     enable: boolean;
     timingVar: string;
@@ -107,14 +137,30 @@ export default class Perfume {
    * First Paint is essentially the paint after which
    * the biggest above-the-fold layout change has happened.
    */
-  public firstPaint() {
+  public firstContentfulPaint() {
     setTimeout(() => {
-      this.firstPaintDuration = this.getFirstPaint();
-      if (this.firstPaintDuration) {
-        this.log("firstPaint", this.firstPaintDuration);
+      this.firstContentfulPaintDuration = this.getFirstPaint();
+      if (this.firstContentfulPaintDuration) {
+        this.log("First Contentful Paint", this.firstContentfulPaintDuration);
       }
-      this.sendTiming("firstPaint", this.firstPaintDuration);
+      this.sendTiming("firstContentfulPaint", this.firstContentfulPaintDuration);
     });
+  }
+
+  /**
+   * The polyfill exposes a getFirstConsistentlyInteractive() method,
+   * which returns a promise that resolves with the TTI value.
+   *
+   * The getFirstConsistentlyInteractive() method accepts an optional
+   * startTime configuration option, allowing you to specify a lower bound
+   * for which you know your app cannot be interactive before.
+   * By default the polyfill uses DOMContentLoaded as the start time,
+   * but it's often more accurate to use something like the moment your hero elements
+   * are visible or the point when you know all your event listeners have been added.
+   */
+  public timeToInteractive() {
+    ttiPolyfill.getFirstConsistentlyInteractive()
+    .then(this.timeToInteractiveResolve.bind(this));
   }
 
   /**
@@ -224,6 +270,17 @@ export default class Perfume {
       }
     }
     return 0;
+  }
+
+  /**
+   * @param {number} timeToInteractive
+   */
+  private timeToInteractiveResolve(timeToInteractive: number) {
+    this.timeToInteractiveDuration = timeToInteractive;
+    if (this.timeToInteractiveDuration) {
+      this.log("Time to interactive", this.timeToInteractiveDuration);
+    }
+    this.sendTiming("timeToInteractive", this.timeToInteractiveDuration);
   }
 
   /**

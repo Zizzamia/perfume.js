@@ -8,8 +8,11 @@ h1 {
 }
 
 h2 {
-  font-size: 1.8em;
-  margin: 0.7em 0 0.3em;
+  padding: 0;
+  margin: 0 0 20px;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 40px;
 }
 
 h3 {
@@ -18,16 +21,21 @@ h3 {
 }
 
 .Box {
-  margin: 40px 0;
+  margin: 60px 0 40px;
   text-align: left;
 }
 
+.Box b {
+  font-weight: 600;
+}
+
 .Box--first {
+  font-family: 'Open Sans', sans-serif;
   margin: 0 0 60px;
 }
 
 .Box img {
-  width: 620px;
+  width: 680px;
   border: 1px solid #ccc;
   margin: 0 auto;
   display: block;
@@ -41,7 +49,7 @@ h3 {
 .Layout .Content,
 .Layout .Footer {
   padding: 32px;
-  max-width: 700px;
+  max-width: 760px;
   margin: 0 auto;
 }
 

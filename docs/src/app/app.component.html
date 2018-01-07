@@ -2,8 +2,21 @@
   <div class="Content">
     <div class="Box Box--first">
       <h1>Perfume.js</h1>
-      <p>A tiny JavaScript library for <b>measuring</b> Short/Long Script, FCP (<a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint" target="_blank">First Contentful Paint</a>), CFM (Component First Paint), TTI (<a href="https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive" target="_blank">Time to Interactive</a>), <b>annotating</b> them to the DevTools timeline and reporting the results to <b>Google Analytics</b>.</p>
+      <p>A JavaScript library for <b>measuring</b> Short and Long Script, <b>First Contentful Paint</b> (<a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint" target="_blank">FCP</a>), <b>Time to Interactive</b> (<a href="https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive" target="_blank">TTI</a>), <b>Component First Paint</b> (CFM), annotating them to the DevTools timeline and reporting the results to <b>Google Analytics</b>.</p>
       <a class="github-button" href="https://github.com/zizzamia/perfume.js" data-size="large" data-show-count="true" aria-label="Star zizzamia/perfume.js on GitHub">Star</a>
+    </div>
+    <div class="Box">
+      <h2 class="Title">User-centric performance metrics</h2>
+      <p>When a user navigates to a web page, they're typically looking for visual feedback to reassure them that everything is going to work as expected.</p>
+      <p>Is it happening? Is it useful? Is it usable? Is it delightful?<br />
+      To understand when a page delivers this feedback to its users, we've defined several new metrics:</p>
+      <ul>
+        <li>First Contentful Paint (FCP)</li>
+        <li>Time to Interactive (TTI)</li>
+        <li>Component First Paint (CFP)</li>
+      </ul>
+      <p>Luckily, with the addition of a few new browser APIs, measuring these metrics on real devices is finally possible without a lot of hacks or workarounds that can make performance worse.</p>
+      <p><b>Perfume</b> leverage these new APIs for measuring performance that matters! ⚡️ </p>
     </div>
 
     <div class="Box">
@@ -17,7 +30,21 @@
       <p>This metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?</p>
       <p><b>FCP</b> marks the point when the browser renders the first bit of content from the DOM, which may be text, an image, SVG, or even a element.</p>
       <p class="Demo">
-        Result: ⚡️ Perfume.js: firstPaint {{ perfume.firstPaintDuration.toFixed(2) }} ms
+        Result: ⚡️ Perfume.js: firstContentfulPaint {{ perfume.firstContentfulPaintDuration.toFixed(2) }} ms
+      </p>
+      <app-gist [gistId]="'Zizzamia/15e965213aa87a5588a6756fef612f45'"></app-gist>
+    </div>
+
+    <div class="Box">
+      <h2 class="Title">Time to Interactive (TTI)</h2>
+      <p>The metric marks the point at which your application is both visually rendered and capable of reliably responding to user input. An application could be unable to respond to user input for a couple of reasons:</p>
+      <ul>
+        <li>The JavaScript needed to make the components on the page work hasn't yet loaded;</li>
+        <li>There are long tasks blocking the main thread.</li>
+      </ul>
+      <p>The <b>TTI</b> metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle (free of long tasks). See the <a href="https://docs.google.com/document/d/1GGiI9-7KeY3TPqS3YT271upUVimo-XiL5mwWorDUD4c/preview#" target="_blank">metric definition</a> for in-depth implementation details.</p>
+      <p class="Demo">
+        Result: ⚡️ Perfume.js: Time to interactive {{ perfume.ttiDuration.toFixed(2) }} ms
       </p>
       <app-gist [gistId]="'Zizzamia/15e965213aa87a5588a6756fef612f45'"></app-gist>
     </div>

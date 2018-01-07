@@ -71,9 +71,9 @@
     "coverageThreshold": {
       "global": {
         "branches": 92,
-        "functions": 98,
-        "lines": 98,
-        "statements": 98
+        "functions": 94,
+        "lines": 96,
+        "statements": 96
       }
     },
     "collectCoverage": true,
@@ -100,5 +100,8 @@
     "tslint": "^5.4.3",
     "typescript": "^2.3.4",
     "validate-commit-msg": "^2.12.2"
+  },
+  "dependencies": {
+    "tti-polyfill": "^0.2.2"
   }
 }

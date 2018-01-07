@@ -1,7 +1,21 @@
 # Perfume.js v0.3.0
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js)
 
-> Perfume is a tiny JavaScript library for measuring Short/Long Script, FCP ([First Contentful Paint](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint)), CFM (Component First Paint), TTI ([Time to Interactive](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), annotating them to the DevTools timeline and reporting the results to Google Analytics.
+> Perfume is a JavaScript library for measuring Short and Long Script, First Contentful Paint ([FCP](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint)), Time to Interactive ([TTI](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.
+
+## User-centric performance metrics
+
+When a user navigates to a web page, they're typically looking for visual feedback to reassure them that everything is going to work as expected.
+
+Is it happening? Is it useful? Is it usable? Is it delightful?
+To understand when a page delivers this feedback to its users, we've defined several new metrics:
+- First Contentful Paint (FCP)
+- Time to Interactive (TTI)
+- Component First Paint (CFP)
+
+Luckily, with the addition of a few new browser APIs, measuring these metrics on real devices is finally possible without a lot of hacks or workarounds that can make performance worse.
+
+**Perfume** leverage these new APIs for measuring performance that matters! ⚡️
 
 
 ## Installing
@@ -41,8 +55,8 @@ This metric mark the point, immediately after navigation, when the browser rende
 
 ```javascript
 const perfume = new Perfume();
-perfume.firstPaint(); 
-// ⚡️ Perfume.js: firstPaint 601 ms
+perfume.firstContentfulPaint(); 
+// ⚡️ Perfume.js: First Contentful Paint 601 ms
 ```
 
 #### Annotate metrics in the DevTools
@@ -105,6 +119,7 @@ perfume.googleAnalytics.timingVar = "userId";
 Made with ☕️ by [@zizzamia](https://twitter.com/zizzamia) and
 I want to thank some friends and projects for the work they did:
 
+- [Leveraging the Performance Metrics that Most Affect User Experience](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics) for documenting this new User-centric performance metrics;
 - [Appmetrics.js](https://github.com/ebidel/appmetrics.js?files=1) for inspiring me to start writing this library and giving me some of the base ideas for the class architecture;
 - [Popper.js](https://github.com/FezVrasta/popper.js/) for having inspired me to write my first library in typescript;
 - [The Contributors](https://github.com/Zizzamia/perfume.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;

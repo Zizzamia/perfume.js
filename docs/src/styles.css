@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
   font-size: 17px;
   font-weight: 300;
   line-height: 1.6;
@@ -20,6 +20,7 @@ a:hover {
 }
 
 h1, h2 {
+  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   line-height: 1.4;
   margin: 1em 0 0.2em;
@@ -33,8 +34,9 @@ h1 {
 }
 
 h2 {
-  font-size: 1.8em;
-  margin: 0.7em 0 0.3em;
+  font-size: 1.7em;
+  font-weight: 400;
+  margin: 0.7em 0 0;
 }
 
 h1 + h1, h1 + h2,
@@ -48,7 +50,9 @@ ol,
 p,
 pre,
 ul {
-  margin: 0.6em 0;
+  font-size: 16px;
+  margin: 0 0 10px;
+  font-weight: 400;
 }
 
 strong, b {

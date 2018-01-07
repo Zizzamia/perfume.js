@@ -1,7 +1,7 @@
 // Angular & Third Party
 import { Component } from '@angular/core';
-import Perfume from 'perfume.js';
-// import Perfume from '../../../src/perfume';
+// import Perfume from 'perfume.js';
+import Perfume from '../../../src/perfume';
 
 declare const $: any;
 
@@ -23,6 +23,7 @@ export class AppComponent {
     perfume.googleAnalytics.timingVar = 'userId';
     this.perfume = perfume;
     this.perfume.firstPaint();
+    this.perfume.tti();
     this.path = window.location.href;
   }
 

@@ -13,7 +13,8 @@
     "declarationDir": "dist/types",
     "outDir": "dist/es",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "./types"
     ]
   },
   "include": [

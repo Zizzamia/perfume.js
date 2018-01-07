@@ -1,3 +1,4 @@
+import ttiPolyfill from "tti-polyfill";
 import Perfume from "../src/perfume";
 
 /**
@@ -43,6 +44,7 @@ describe("Perfume test", () => {
     spyOn(console, "warn").and.callThrough();
     spyOn(window.performance, "mark").and.callThrough();
     spyOn(window.performance, "measure").and.callThrough();
+    spyOn(ttiPolyfill, "getFirstConsistentlyInteractive").and.callThrough();
     spyOn(perfume, "mark").and.callThrough();
     spyOn(perfume, "measure").and.callThrough();
     spyOn(perfume, "getMeasurementForGivenName").and.callThrough();
@@ -53,7 +55,8 @@ describe("Perfume test", () => {
   });
 
   it("should initialize correctly in the constructor", () => {
-    expect(perfume.firstPaintDuration).toEqual(0);
+    expect(perfume.firstContentfulPaintDuration).toEqual(0);
+    expect(perfume.timeToInteractiveDuration).toEqual(0);
     expect(perfume.googleAnalytics).toEqual({
       enable: false,
       timingVar: "name",
@@ -180,23 +183,23 @@ describe("Perfume test", () => {
     });
   });
 
-  it("has 'firstPaint' method after initialization", () => {
-    expect(perfume.firstPaint).toBeDefined();
+  it("has 'firstContentfulPaint' method after initialization", () => {
+    expect(perfume.firstContentfulPaint).toBeDefined();
   });
 
-  describe("when calls firstPaint()", () => {
+  describe("when calls firstContentfulPaint()", () => {
     beforeEach(() => {
       jest.useFakeTimers();
     });
 
     it("should call getFirstPaint() after the first setTimeout", () => {
-      perfume.firstPaint();
+      perfume.firstContentfulPaint();
       jest.runAllTimers();
       expect(perfume.getFirstPaint).toHaveBeenCalled();
     });
 
     it("should call log() after the first setTimeout", () => {
-      perfume.firstPaint();
+      perfume.firstContentfulPaint();
       jest.runAllTimers();
       expect(perfume.log).toHaveBeenCalled();
     });
@@ -205,21 +208,32 @@ describe("Perfume test", () => {
       perfume.getFirstPaint = () => {
         return 0;
       };
-      perfume.firstPaint();
+      perfume.firstContentfulPaint();
       jest.runAllTimers();
       expect(perfume.log).not.toHaveBeenCalled();
     });
 
     it("should call sendTiming() after the first setTimeout", () => {
-      perfume.firstPaint();
+      perfume.firstContentfulPaint();
       jest.runAllTimers();
       expect(perfume.sendTiming).toHaveBeenCalled();
     });
 
-    it("should perfume.firstPaintDuration be equal", () => {
-      perfume.firstPaint();
+    it("should perfume.firstContentfulPaintDuration be equal", () => {
+      perfume.firstContentfulPaint();
       jest.runAllTimers();
-      expect(perfume.firstPaintDuration).toEqual(11111);
+      expect(perfume.firstContentfulPaintDuration).toEqual(11111);
+    });
+  });
+
+  it("has 'timeToInteractive' method after initialization", () => {
+    expect(perfume.timeToInteractive).toBeDefined();
+  });
+
+  describe("when calls timeToInteractive()", () => {
+    it("should call ttiPolyfill.getFirstConsistentlyInteractive()", () => {
+      perfume.timeToInteractive();
+      expect(ttiPolyfill.getFirstConsistentlyInteractive).toHaveBeenCalled();
     });
   });
 
@@ -367,9 +381,31 @@ describe("Perfume test", () => {
       expect(performance).toEqual(0);
     });
 
-    it("should return the firstPaint value if the browser supports the Navigation Timing API", () => {
+    it("should return the firstContentfulPaint value if the browser supports the Navigation Timing API", () => {
       const performance = perfume.getFirstPaint();
       expect(performance).toEqual(11111);
+    });
+  });
+
+  it("has 'timeToInteractiveResolve' method after initialization", () => {
+    expect(perfume.timeToInteractiveResolve).toBeDefined();
+  });
+
+  describe("when calls timeToInteractiveResolve()", () => {
+
+    it("should call log()", () => {
+      perfume.timeToInteractiveResolve(1);
+      expect(perfume.log).toHaveBeenCalled();
+    });
+
+    it("should call sendTiming()", () => {
+      perfume.timeToInteractiveResolve(1);
+      expect(perfume.sendTiming).toHaveBeenCalled();
+    });
+
+    it("should perfume.timeToInteractiveDuration be equal to 1", () => {
+      perfume.timeToInteractiveResolve(1);
+      expect(perfume.timeToInteractiveDuration).toEqual(1);
     });
   });
 
