@@ -3,6 +3,7 @@
 
 > Perfume is a JavaScript library for measuring Short and Long Script, First Contentful Paint ([FCP](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint)), Time to Interactive ([TTI](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.
 
+
 ## User-centric performance metrics
 
 When a user navigates to a web page, they're typically looking for visual feedback to reassure them that everything is going to work as expected.
@@ -48,7 +49,7 @@ import Perfume from 'node_modules/perfume.js/perfume.umd.js';
 
 ## Start measuring
 
-#### First Contentful Paint (FCP)
+### First Contentful Paint (FCP)
 This metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?
 
 **FCP** marks the point when the browser renders the first bit of content from the DOM, which may be text, an image, SVG, or even a <canvas> element.
@@ -56,10 +57,26 @@ This metric mark the point, immediately after navigation, when the browser rende
 ```javascript
 const perfume = new Perfume();
 perfume.firstContentfulPaint(); 
-// ⚡️ Perfume.js: First Contentful Paint 601 ms
+// ⚡️ Perfume.js: First Contentful Paint 2029.00 ms
 ```
 
-#### Annotate metrics in the DevTools
+
+### Time to Interactive (TTI)
+The metric marks the point at which your application is both visually rendered and capable of reliably responding to user input. An application could be unable to respond to user input for a couple of reasons:
+<ul>
+  <li>The JavaScript needed to make the components on the page work hasn't yet loaded;</li>
+  <li>There are long tasks blocking the main thread.</li>
+</ul>
+The **TTI** metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle (free of long tasks). See the [metric definition](https://docs.google.com/document/d/1GGiI9-7KeY3TPqS3YT271upUVimo-XiL5mwWorDUD4c/preview#) for in-depth implementation details.
+
+```javascript
+const perfume = new Perfume();
+perfume.timeToInteractive(); 
+// ⚡️ Perfume.js: Time to interactive 2452.07 ms
+```
+
+
+### Annotate metrics in the DevTools
 **Performance.mark** ([User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API)) is used to create an application-defined peformance entry in the browser's performance entry buffer.
 
 ```javascript
@@ -70,7 +87,8 @@ perfume.end('fibonacci', true);
 ```
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
 
-#### Component First Paint (CFP)
+
+### Component First Paint (CFP)
 This metric mark the point, immediately after creating a **new component**, when the browser renders pixels to the screen.
 
 ```javascript
@@ -81,7 +99,8 @@ perfume.endPaint('togglePopover', true);
 ```
 ![Performance CFP](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
 
-#### Custom Logging
+
+### Custom Logging
 Save the duration and print it out exactly the way you want it.
 
 ```javascript
@@ -92,7 +111,8 @@ perfume.log('Custom logging', duration);
 // ⚡️ Perfume.js: Custom logging 0.14 ms
 ```
 
-#### Google Analytics
+
+### Google Analytics
 To enable Perfume to send your measures to Google Analytics User timing, set the option `enable:true` and a custom [user timing variable](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar) `timingVar:"name"`.
 
 ```javascript
@@ -101,6 +121,7 @@ perfume.googleAnalytics.enable = true;
 perfume.googleAnalytics.timingVar = "userId";
 ```
 ![Performance Analytics](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-analytics.png)
+
 
 
 ## Develop
