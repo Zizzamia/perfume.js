@@ -22,8 +22,8 @@ export class AppComponent {
     perfume.googleAnalytics.enable = true;
     perfume.googleAnalytics.timingVar = 'userId';
     this.perfume = perfume;
-    this.perfume.firstPaint();
-    this.perfume.tti();
+    this.perfume.firstContentfulPaint();
+    this.perfume.timeToInteractive();
     this.path = window.location.href;
   }
 

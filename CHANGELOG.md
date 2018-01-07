@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 (2018-1-7)
+
+### Features
+
+* **tti:** Time to Interactive [#15](https://github.com/Zizzamia/perfume.js/issues/15)
+
+
 ## 0.3.0 (2018-1-3)
 
 ### Features

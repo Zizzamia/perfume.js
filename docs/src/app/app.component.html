@@ -30,7 +30,7 @@
       <p>This metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?</p>
       <p><b>FCP</b> marks the point when the browser renders the first bit of content from the DOM, which may be text, an image, SVG, or even a element.</p>
       <p class="Demo">
-        Result: ⚡️ Perfume.js: firstContentfulPaint {{ perfume.firstContentfulPaintDuration.toFixed(2) }} ms
+        Result: ⚡️ Perfume.js: First Contentful Paint {{ perfume.firstContentfulPaintDuration.toFixed(2) }} ms
       </p>
       <app-gist [gistId]="'Zizzamia/15e965213aa87a5588a6756fef612f45'"></app-gist>
     </div>
@@ -44,7 +44,7 @@
       </ul>
       <p>The <b>TTI</b> metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle (free of long tasks). See the <a href="https://docs.google.com/document/d/1GGiI9-7KeY3TPqS3YT271upUVimo-XiL5mwWorDUD4c/preview#" target="_blank">metric definition</a> for in-depth implementation details.</p>
       <p class="Demo">
-        Result: ⚡️ Perfume.js: Time to interactive {{ perfume.ttiDuration.toFixed(2) }} ms
+        Result: ⚡️ Perfume.js: Time to interactive {{ perfume.timeToInteractiveDuration.toFixed(2) }} ms
       </p>
       <app-gist [gistId]="'Zizzamia/15e965213aa87a5588a6756fef612f45'"></app-gist>
     </div>
