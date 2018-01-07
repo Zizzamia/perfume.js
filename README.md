@@ -18,6 +18,8 @@ Luckily, with the addition of a few new browser APIs, measuring these metrics on
 
 **Perfume** leverage these new APIs for measuring performance that matters! ⚡️
 
+![Performance Metrics load timeline](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perf-metrics-load-timeline.png)
+
 
 ## Installing
 
@@ -63,10 +65,8 @@ perfume.firstContentfulPaint();
 
 ### Time to Interactive (TTI)
 The metric marks the point at which your application is both visually rendered and capable of reliably responding to user input. An application could be unable to respond to user input for a couple of reasons:
-<ul>
-  <li>The JavaScript needed to make the components on the page work hasn't yet loaded;</li>
-  <li>There are long tasks blocking the main thread.</li>
-</ul>
+- The JavaScript needed to make the components on the page work hasn't yet loaded;
+- There are long tasks blocking the main thread.
 The **TTI** metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle (free of long tasks). See the [metric definition](https://docs.google.com/document/d/1GGiI9-7KeY3TPqS3YT271upUVimo-XiL5mwWorDUD4c/preview#) for in-depth implementation details.
 
 ```javascript
