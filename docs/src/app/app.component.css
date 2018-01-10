@@ -49,8 +49,9 @@ h3 {
 .Layout .Content,
 .Layout .Footer {
   padding: 32px;
-  max-width: 760px;
+  max-width: 780px;
   margin: 0 auto;
+  margin-right: 26%;
 }
 
 .Layout .Footer {
@@ -128,4 +129,40 @@ h3 {
   color: #FDFBFA;
   background-color: #F7E7A1;
   border-color: #F2DB77;
+}
+
+
+.nav {
+  font-family: 'Open Sans', sans-serif;
+  position: fixed;
+  top: 117px;
+  bottom: 0;
+  left: 50%;
+  z-index: 10;
+  margin-left: 256px;
+  max-width: 256px;
+  width: 25%;
+  padding: 20px;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: left;
+}
+.nav-links {
+  overflow-y: auto;
+}
+.nav-section-title {
+  color: #222;
+  font-size: 18px;
+  line-height: 22px;
+  padding: 5px 10px;
+}
+.nav a {
+  display: block;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+}
+.nav a:hover,
+.nav a.active {
+  background: #F2DB77;
+  border-left-color: #8A7A75;
 }

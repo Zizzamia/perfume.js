@@ -6,7 +6,9 @@
       <a class="github-button" href="https://github.com/zizzamia/perfume.js" data-size="large" data-show-count="true" aria-label="Star zizzamia/perfume.js on GitHub">Star</a>
     </div>
     <div class="Box">
-      <h2 class="Title">User-centric performance metrics</h2>
+      <h2 class="Title" id="/user-centric-metrics/">
+        User-centric performance metrics
+      </h2>
       <p>When a user navigates to a web page, they're typically looking for visual feedback to reassure them that everything is going to work as expected.</p>
       <p>Is it happening? Is it useful? Is it usable? Is it delightful?<br />
       To understand when a page delivers this feedback to its users, we've defined several new metrics:</p>
@@ -21,13 +23,13 @@
     </div>
 
     <div class="Box">
-      <h2 class="Title">Installing and Imports</h2>
+      <h2 class="Title" id="/installing-and-imports/">Installing and Imports</h2>
       <p>NPM <a href="https://www.npmjs.com/package/perfume.js" target="_blank">https://www.npmjs.com/package/perfume.js</a></p>
       <app-gist [gistId]="'Zizzamia/6ab4c33d749ae74d240ebace2cf944f8'"></app-gist>
     </div>
 
     <div class="Box">
-      <h2 class="Title">First Contentful Paint (FCP)</h2>
+      <h2 class="Title" id="first-contentful-paint">First Contentful Paint (FCP)</h2>
       <p>This metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?</p>
       <p><b>FCP</b> marks the point when the browser renders the first bit of content from the DOM, which may be text, an image, SVG, or even a element.</p>
       <p class="Demo">
@@ -37,7 +39,7 @@
     </div>
 
     <div class="Box">
-      <h2 class="Title">Time to Interactive (TTI)</h2>
+      <h2 class="Title" id="/time-to-interactive/">Time to Interactive (TTI)</h2>
       <p>The metric marks the point at which your application is both visually rendered and capable of reliably responding to user input. An application could be unable to respond to user input for a couple of reasons:</p>
       <ul>
         <li>The JavaScript needed to make the components on the page work hasn't yet loaded;</li>
@@ -51,7 +53,7 @@
     </div>
 
     <div class="Box">
-      <h2 class="Title">Annotate metrics in the DevTools</h2>
+      <h2 class="Title" id="/annotate-metrics/">Annotate metrics in the DevTools</h2>
       <p><b>Performance.mark</b> (<a href="https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API" target="_blank">User Timing API</a>) is used to create an application-defined peformance entry in the browser's performance entry buffer.</p>
       <p class="Demo">
         <button class="Button" 
@@ -62,7 +64,7 @@
       <img src="{{ path }}assets/performance-mark.png" />
     </div>
 
-    <div class="Box">
+    <div class="Box" id="/component-first-paint/">
       <h2 class="Title">Component First Paint (CFP)</h2>
       <p>This metric mark the point, immediately after creating a <b>new component</b>, when the browser renders pixels to the screen.</p>
       <p class="Demo">
@@ -77,7 +79,7 @@
     </div>
 
     <div class="Box">
-      <h2 class="Title">Custom Logging</h2>
+      <h2 class="Title" id="/custom-logging/">Custom Logging</h2>
       <p>Save the duration and print it out exactly the way you want it.</p>
       <p class="Demo">
         <button class="Button" 
@@ -88,15 +90,35 @@
     </div>
 
     <div class="Box">
-      <h2 class="Title">Google Analytics</h2>
+      <h2 class="Title" id="/google-analytics/">Google Analytics</h2>
       <p>To enable Perfume to send your measures to Google Analytics User timing, set the option <b>enable:true</b> and a custom <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar" target="_blank">user timing variable</a> <b>timingVar:"name"</b>.</p>
       <app-gist [gistId]="'Zizzamia/221227bf333b0f6304a89fcd4f7038c4'"></app-gist>
       <img src="{{ path }}assets/performance-analytics.png" />
     </div>
 
     <div class="Box">
-      <h2 class="Title">Copyright and license</h2>
+      <h2 class="Title" id="/copyright-and-license/">Copyright and license</h2>
       <p>Code and documentation copyright 2018 <a href="https://twitter.com/Zizzamia" target="_blank">Leonardo Zizzamia</a>. Code released under the <a href="https://github.com/Zizzamia/perfume.js/blob/master/LICENSE" target="_blank">MIT license</a>. Docs released under Creative Commons.</p>
     </div>
+  </div>
+  <div class="nav">
+    <div class="nav-links">
+      <a class="nav-section-title" 
+      href="#/user-centric-metrics/">User-centric metrics</a>
+      <a class="nav-section-title" 
+      href="#/installing-and-imports/">Installing and Imports</a>
+      <a class="nav-section-title" 
+      href="#/time-to-interactive/">Time to Interactive</a>
+      <a class="nav-section-title" 
+      href="#/annotate-metrics/">Annotate metrics</a>
+      <a class="nav-section-title" 
+      href="#/component-first-paint/">Component First Paint</a>
+      <a class="nav-section-title" 
+      href="#/custom-logging/">Custom Logging</a>
+      <a class="nav-section-title" 
+      href="#/google-analytics/">Google Analytics</a>
+      <a class="nav-section-title" 
+      href="#/copyright-and-licenses/">Copyright and licenses</a>
+    </div> 
   </div>
 </div>
