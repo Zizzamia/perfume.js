@@ -135,14 +135,14 @@ h3 {
 .nav {
   font-family: 'Open Sans', sans-serif;
   position: fixed;
-  top: 117px;
+  top: 48px;
   bottom: 0;
   left: 50%;
   z-index: 10;
-  margin-left: 256px;
+  margin-left: 290px;
   max-width: 256px;
-  width: 25%;
-  padding: 20px;
+  width: 18%;
+  padding: 0 0 0 20px;
   font-size: 14px;
   line-height: 18px;
   text-align: left;
@@ -152,8 +152,8 @@ h3 {
 }
 .nav-section-title {
   color: #222;
-  font-size: 18px;
-  line-height: 22px;
+  font-size: 16px;
+  line-height: 20px;
   padding: 5px 10px;
 }
 .nav a {
@@ -163,6 +163,6 @@ h3 {
 }
 .nav a:hover,
 .nav a.active {
-  background: #F2DB77;
-  border-left-color: #8A7A75;
+  background: rgba(246, 225, 113, 0.3);
+  border-left-color: rgba(227, 187, 180, 0.8);
 }

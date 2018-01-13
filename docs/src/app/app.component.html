@@ -103,22 +103,30 @@
   </div>
   <div class="nav">
     <div class="nav-links">
-      <a class="nav-section-title" 
-      href="#/user-centric-metrics/">User-centric metrics</a>
-      <a class="nav-section-title" 
-      href="#/installing-and-imports/">Installing and Imports</a>
-      <a class="nav-section-title" 
-      href="#/time-to-interactive/">Time to Interactive</a>
-      <a class="nav-section-title" 
-      href="#/annotate-metrics/">Annotate metrics</a>
-      <a class="nav-section-title" 
-      href="#/component-first-paint/">Component First Paint</a>
-      <a class="nav-section-title" 
-      href="#/custom-logging/">Custom Logging</a>
-      <a class="nav-section-title" 
-      href="#/google-analytics/">Google Analytics</a>
-      <a class="nav-section-title" 
-      href="#/copyright-and-licenses/">Copyright and licenses</a>
+      <a href="#/user-centric-metrics/" class="nav-section-title" 
+      [class.active]="navSelected === navOptions.userCentric"
+      (click)="activeNav(navOptions.userCentric)">User-centric metrics</a>
+      <a href="#/installing-and-imports/" class="nav-section-title" 
+      [class.active]="navSelected === navOptions.installing"
+      (click)="activeNav(navOptions.installing)">Installing and Imports</a>
+      <a href="#/time-to-interactive/" class="nav-section-title" 
+      [class.active]="navSelected === navOptions.tti"
+      (click)="activeNav(navOptions.tti)">Time to Interactive</a>
+      <a href="#/annotate-metrics/" class="nav-section-title" 
+      [class.active]="navSelected === navOptions.annotate"
+      (click)="activeNav(navOptions.annotate)">Annotate metrics</a>
+      <a href="#/component-first-paint/" class="nav-section-title" 
+      [class.active]="navSelected === navOptions.cfp"
+      (click)="activeNav(navOptions.cfp)">Component First Paint</a>
+      <a href="#/custom-logging/" class="nav-section-title" 
+      [class.active]="navSelected === navOptions.log"
+      (click)="activeNav(navOptions.log)">Custom Logging</a>
+      <a href="#/google-analytics/" class="nav-section-title" 
+      [class.active]="navSelected === navOptions.ga"
+      (click)="activeNav(navOptions.ga)">Google Analytics</a>
+      <a href="#/copyright-and-licenses/" class="nav-section-title" 
+      [class.active]="navSelected === navOptions.copyright"
+      (click)="activeNav(navOptions.copyright)">Copyright and licenses</a>
     </div> 
   </div>
 </div>

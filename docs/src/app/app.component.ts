@@ -16,15 +16,30 @@ export class AppComponent {
   logTogglePopover: string;
   path: any;
   perfume: any;
+  navOptions: object;
+  navSelected: string;
 
   constructor() {
+    // Perfume
     const perfume = new Perfume();
     perfume.googleAnalytics.enable = true;
-    perfume.googleAnalytics.timingVar = 'userId';
+    perfume.googleAnalytics.timingVar = "userId";
     this.perfume = perfume;
     this.perfume.firstContentfulPaint();
     this.perfume.timeToInteractive();
-    this.path = window.location.href;
+    this.path = window.location.href.split('#')[0];
+
+    // Component variables
+    this.navOptions = {
+      userCentric: "user-centric-metrics",
+      installing: "installing-and-imports",
+      tti: "time-to-interactive",
+      annotate: "annotate-metrics",
+      cfp: "component-first-paint",
+      log: "custom-logging",
+      ga: "google-analytics",
+      copyright: "copyright-and-licenses",
+    };
   }
 
   fibonacci(num, memo = {}) {
@@ -59,5 +74,9 @@ export class AppComponent {
     const duration = this.perfume.end('fibonacci');
     this.perfume.log('Custom logging', duration);
     this.logCustom = `⚡️ Perfume.js: Custom logging ${duration.toFixed(2)} ms`;
+  }
+
+  activeNav(selected) {
+    this.navSelected = selected;
   }
 }
