@@ -136,13 +136,12 @@ perfume.googleAnalytics.timingVar = "userId";
 
 
 
-## Credits
+## Credits and Specs
 Made with ☕️ by [@zizzamia](https://twitter.com/zizzamia) and
 I want to thank some friends and projects for the work they did:
 
 - [Leveraging the Performance Metrics that Most Affect User Experience](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics) for documenting this new User-centric performance metrics;
-- [Appmetrics.js](https://github.com/ebidel/appmetrics.js?files=1) for inspiring me to start writing this library and giving me some of the base ideas for the class architecture;
-- [Popper.js](https://github.com/FezVrasta/popper.js/) for having inspired me to write my first library in typescript;
+- [Performance Timeline Level 2](https://w3c.github.io/performance-timeline/) the definition of *PerformanceObserver* in that specification;
 - [The Contributors](https://github.com/Zizzamia/perfume.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
 - **you** for the star you'll give this project 😉 and for supporting me by giving my project a try 😄
 

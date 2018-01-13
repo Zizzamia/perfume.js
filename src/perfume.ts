@@ -1,5 +1,8 @@
 import ttiPolyfill from "tti-polyfill";
 declare const PerformanceObserver: any;
+declare interface PerformanceObserverEntryList {
+  getEntries: any;
+}
 
 declare global {
   interface Window {
@@ -73,6 +76,15 @@ export default class Perfume {
   }
 
   /**
+   * True if the browser supports the PerformanceObserver Interface.
+   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
+   * @type {boolean}
+   */
+  get supportsPerfObserver(): boolean {
+    return "PerformanceLongTaskTiming" in window;
+  }
+
+  /**
    * Start performance measurement
    * @param {string} metricName
    */
@@ -138,13 +150,12 @@ export default class Perfume {
    * the biggest above-the-fold layout change has happened.
    */
   public firstContentfulPaint() {
-    setTimeout(() => {
-      this.firstContentfulPaintDuration = this.getFirstPaint();
-      if (this.firstContentfulPaintDuration) {
-        this.log("First Contentful Paint", this.firstContentfulPaintDuration);
-      }
-      this.sendTiming("firstContentfulPaint", this.firstContentfulPaintDuration);
-    });
+    if (this.supportsPerfObserver) {
+      const observer = new PerformanceObserver(this.observeFirstContentfulPaint.bind(this));
+      observer.observe({entryTypes: ["paint"]});
+    } else {
+      this.timeFirstPaint();
+    }
   }
 
   /**
@@ -259,8 +270,22 @@ export default class Perfume {
   }
 
   /**
+   * PerformanceObserver subscribes to performance events as they happen
+   * and respond to them asynchronously.
+   * entry.name will be either 'first-paint' or 'first-contentful-paint'
+   * @param {object} entryList
+   */
+  private observeFirstContentfulPaint(entryList: PerformanceObserverEntryList) {
+    for (const entry of entryList.getEntries()) {
+      if (entry.name === "first-contentful-paint") {
+        this.logFCP(entry.startTime);
+      }
+    }
+  }
+
+  /**
    * http://msdn.microsoft.com/ff974719
-   * https://developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming/navigationStart
+   * developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming/navigationStart
    */
   private getFirstPaint() {
     if (performance) {
@@ -270,6 +295,26 @@ export default class Perfume {
       }
     }
     return 0;
+  }
+
+  /**
+   * Uses setTimeout to retrieve FCP
+   */
+  private timeFirstPaint() {
+    setTimeout(() => {
+      this.logFCP(this.getFirstPaint());
+    });
+  }
+
+  /**
+   * @param {number} duration
+   */
+  private logFCP(duration: number) {
+    this.firstContentfulPaintDuration = duration;
+    if (this.firstContentfulPaintDuration) {
+      this.log("First Contentful Paint", this.firstContentfulPaintDuration);
+    }
+    this.sendTiming("firstContentfulPaint", this.firstContentfulPaintDuration);
   }
 
   /**
