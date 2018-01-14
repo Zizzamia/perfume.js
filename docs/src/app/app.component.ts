@@ -1,7 +1,7 @@
 // Angular & Third Party
 import { Component } from '@angular/core';
-// import Perfume from 'perfume.js';
-import Perfume from '../../../src/perfume';
+import Perfume from 'perfume.js';
+// import Perfume from '../../../src/perfume';
 
 declare const $: any;
 
@@ -16,7 +16,9 @@ export class AppComponent {
   logTogglePopover: string;
   path: any;
   perfume: any;
-  navOptions: object;
+  navOptions: {
+    [keyof: string]: string
+  };
   navSelected: string;
 
   constructor() {
