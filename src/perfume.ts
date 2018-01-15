@@ -17,8 +17,8 @@ export default class Perfume {
       enable: boolean;
       timingVar: string;
     },
-    logging: boolean,
     logPrefix: string,
+    logging: boolean,
     timeToInteractive: boolean,
     timeToInteractiveCb?: any,
   } = {
@@ -27,9 +27,9 @@ export default class Perfume {
       enable: false,
       timingVar: "name",
     },
-    logging: true,
     logPrefix: "⚡️ Perfume.js:",
-    timeToInteractive: false
+    logging: true,
+    timeToInteractive: false,
   };
   public firstContentfulPaintDuration: number = 0;
   public timeToInteractiveDuration: number = 0;
@@ -39,8 +39,10 @@ export default class Perfume {
       end: number;
     };
   } = {};
+  private ttiPolyfill: any;
 
   constructor(options: any = {}) {
+    this.ttiPolyfill = ttiPolyfill;
     this.config = Object.assign({}, this.config, options);
     if (!this.supportsPerfNow) {
       global.console.warn(this.config.logPrefix, "Cannot be used in this browser.");
@@ -306,7 +308,7 @@ export default class Perfume {
    * are visible or the point when you know all your event listeners have been added.
    */
   private timeToInteractive(minValue: number) {
-    ttiPolyfill.getFirstConsistentlyInteractive({ minValue })
+    this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue })
     .then(this.timeToInteractiveResolve.bind(this));
   }
 

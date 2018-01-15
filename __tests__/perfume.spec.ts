@@ -1,4 +1,3 @@
-import ttiPolyfill from "tti-polyfill";
 import Perfume from "../src/perfume";
 
 /**
@@ -43,6 +42,13 @@ describe("Perfume test", () => {
       };
     };
     perfume = new Perfume();
+    perfume.ttiPolyfill = {
+      getFirstConsistentlyInteractive: () => {
+        return new Promise((resolve) => {
+          resolve();
+        });
+      },
+    };
   });
 
   beforeEach(() => {
@@ -50,7 +56,7 @@ describe("Perfume test", () => {
     spyOn(console, "warn").and.callThrough();
     spyOn(window.performance, "mark").and.callThrough();
     spyOn(window.performance, "measure").and.callThrough();
-    spyOn(ttiPolyfill, "getFirstConsistentlyInteractive").and.callThrough();
+    spyOn(perfume.ttiPolyfill, "getFirstConsistentlyInteractive").and.callThrough();
     spyOn(perfume, "end").and.callThrough();
     spyOn(perfume, "log").and.callThrough();
     spyOn(perfume, "getMeasurementForGivenName").and.callThrough();
@@ -63,6 +69,7 @@ describe("Perfume test", () => {
     spyOn(perfume, "getFirstPaint").and.callThrough();
     spyOn(perfume, "timeFirstPaint").and.callThrough();
     spyOn(perfume, "logFCP").and.callThrough();
+    spyOn(perfume, "timeToInteractive").and.callThrough();
     spyOn(perfume, "timeToInteractiveResolve").and.callThrough();
     spyOn(perfume, "sendTiming").and.callThrough();
   });
@@ -70,12 +77,12 @@ describe("Perfume test", () => {
   it("should initialize correctly in the constructor", () => {
     expect(perfume.firstContentfulPaintDuration).toEqual(0);
     expect(perfume.timeToInteractiveDuration).toEqual(0);
-    expect(perfume.googleAnalytics).toEqual({
+    expect(perfume.config.googleAnalytics).toEqual({
       enable: false,
       timingVar: "name",
     });
     expect(perfume.metrics).toEqual({});
-    expect(perfume.logPrefix).toEqual("⚡️ Perfume.js:");
+    expect(perfume.config.logPrefix).toEqual("⚡️ Perfume.js:");
   });
 
   it("should throw a console.warn if window.performance is not supported", () => {
@@ -355,14 +362,26 @@ describe("Perfume test", () => {
   });
 
   describe("when calls observeFirstContentfulPaint()", () => {
-    it("should call logFCP()", () => {
-      const entryList = {
+    let entryList;
+
+    beforeEach(() => {
+      entryList = {
         getEntries: () => {
           return [{ name: "first-contentful-paint", startTime: 1}];
         },
       };
+    });
+
+    it("should call logFCP()", () => {
+      perfume.config.firstContentfulPaint = true;
       perfume.observeFirstContentfulPaint(entryList);
       expect(perfume.logFCP).toHaveBeenCalled();
+    });
+
+    it("should call timeToInteractive()", () => {
+      perfume.config.timeToInteractive = true;
+      perfume.observeFirstContentfulPaint(entryList);
+      expect(perfume.timeToInteractive).toHaveBeenCalled();
     });
   });
 
@@ -438,6 +457,13 @@ describe("Perfume test", () => {
 
   describe("when calls timeToInteractiveResolve()", () => {
 
+    beforeEach(() => {
+      perfume.config.timeToInteractiveCb = () => {
+        return "";
+      };
+      spyOn(perfume.config, "timeToInteractiveCb").and.callThrough();
+    });
+
     it("should call log()", () => {
       perfume.timeToInteractiveResolve(1);
       expect(perfume.log).toHaveBeenCalled();
@@ -452,6 +478,11 @@ describe("Perfume test", () => {
       perfume.timeToInteractiveResolve(1);
       expect(perfume.timeToInteractiveDuration).toEqual(1);
     });
+
+    it("should call timeToInteractiveCb()", () => {
+      perfume.timeToInteractiveResolve(1);
+      expect(perfume.config.timeToInteractiveCb).toHaveBeenCalled();
+    });
   });
 
   it("has 'sendTiming' method after initialization", () => {
@@ -465,13 +496,13 @@ describe("Perfume test", () => {
     });
 
     it("should call global.console.warn() if googleAnalytics is disable", () => {
-      perfume.googleAnalytics.enable = true;
+      perfume.config.googleAnalytics.enable = true;
       perfume.sendTiming();
       expect(global.console.warn).toHaveBeenCalled();
     });
 
     it("should not call global.console.warn() if googleAnalytics is enable and ga is present", () => {
-      perfume.googleAnalytics.enable = true;
+      perfume.config.googleAnalytics.enable = true;
       window.ga = () => {
         return true;
       };
