@@ -11,8 +11,6 @@
 * **fcp:** Use PerformanceObserver for FCP [#18](https://github.com/Zizzamia/perfume.js/issues/18)
 
 
-# Changelog
-
 ## 0.4.0 (2018-1-7)
 
 ### Features
