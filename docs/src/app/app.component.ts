@@ -20,7 +20,6 @@ export class AppComponent {
     [keyof: string]: string
   };
   navSelected: string;
-  fibonacciResult: number;
   element: ElementRef;
 
   constructor(ElementRef: ElementRef, private ref: ChangeDetectorRef) {
