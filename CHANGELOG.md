@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.0 (2018-1-14)
+
+### Features
+
+* **config:** Pass config into constructor [#14](https://github.com/Zizzamia/perfume.js/issues/14)
+
+### Bug Fixes
+
+* **fcp:** Use PerformanceObserver for FCP [#18](https://github.com/Zizzamia/perfume.js/issues/18)
+
+
+# Changelog
+
 ## 0.4.0 (2018-1-7)
 
 ### Features

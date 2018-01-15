@@ -1,7 +1,7 @@
 // Angular & Third Party
 import { Component, ElementRef, ChangeDetectorRef } from '@angular/core';
-// import Perfume from 'perfume.js';
-import Perfume from '../../../src/perfume';
+import Perfume from 'perfume.js';
+// import Perfume from '../../../src/perfume';
 
 declare const $: any;
 
@@ -50,7 +50,7 @@ export class AppComponent {
       log: "custom-logging",
       ga: "google-analytics",
       options: "default-options",
-      copyright: "copyright-and-licenses",
+      copyright: "copyright-and-license",
     };
   }
 
