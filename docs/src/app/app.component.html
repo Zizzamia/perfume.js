@@ -2,7 +2,7 @@
   <div class="Content">
     <div class="Box Box--first">
       <img src="{{ path }}assets/perfume-logo-v0-4-0.png" class="perfume-logo" />
-      <h1>Perfume.js</h1>
+      <h1>Perfume.js {{ fibonacciResult }}</h1>
       <p>A JavaScript library for <b>measuring</b> Short and Long Script, <b>First Contentful Paint</b> (<a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint" target="_blank">FCP</a>), <b>Time to Interactive</b> (<a href="https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive" target="_blank">TTI</a>), <b>Component First Paint</b> (CFM), annotating them to the DevTools timeline and reporting the results to <b>Google Analytics</b>.</p>
       <a class="github-button" href="https://github.com/zizzamia/perfume.js" data-size="large" data-show-count="true" aria-label="Star zizzamia/perfume.js on GitHub">Star</a>
     </div>
@@ -98,9 +98,17 @@
     </div>
 
     <div class="Box">
+      <h2 class="Title" id="/default-options/">Default Options</h2>
+      <p>Default options provided to Perfume.js constructor.</p>
+      <app-gist [gistId]="'Zizzamia/1312530a3a680757604e0bf61fe33862'"></app-gist>
+    </div>
+
+    <div class="Box">
       <h2 class="Title" id="/copyright-and-license/">Copyright and license</h2>
       <p>Code and documentation copyright 2018 <a href="https://twitter.com/Zizzamia" target="_blank">Leonardo Zizzamia</a>. Code released under the <a href="https://github.com/Zizzamia/perfume.js/blob/master/LICENSE" target="_blank">MIT license</a>. Docs released under Creative Commons.</p>
     </div>
+
+    <div class="Box Fibonacci"></div>
   </div>
   <div class="nav">
     <div class="nav-links">
@@ -125,6 +133,9 @@
       <a href="#/google-analytics/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.ga"
       (click)="activeNav(navOptions.ga)">Google Analytics</a>
+      <a href="#/default-options/" class="nav-section-title" 
+      [class.active]="navSelected === navOptions.options"
+      (click)="activeNav(navOptions.options)">Default Options</a>
       <a href="#/copyright-and-licenses/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.copyright"
       (click)="activeNav(navOptions.copyright)">Copyright and licenses</a>

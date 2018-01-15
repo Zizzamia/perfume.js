@@ -1,7 +1,7 @@
 // Angular & Third Party
-import { Component } from '@angular/core';
-import Perfume from 'perfume.js';
-// import Perfume from '../../../src/perfume';
+import { Component, ElementRef, ChangeDetectorRef } from '@angular/core';
+// import Perfume from 'perfume.js';
+import Perfume from '../../../src/perfume';
 
 declare const $: any;
 
@@ -20,15 +20,24 @@ export class AppComponent {
     [keyof: string]: string
   };
   navSelected: string;
+  fibonacciResult: number;
+  element: ElementRef;
 
-  constructor() {
+  constructor(ElementRef: ElementRef, private ref: ChangeDetectorRef) {
+    this.element = ElementRef;
+
     // Perfume
-    const perfume = new Perfume();
-    perfume.googleAnalytics.enable = true;
-    perfume.googleAnalytics.timingVar = "userId";
-    this.perfume = perfume;
-    this.perfume.firstContentfulPaint();
-    this.perfume.timeToInteractive();
+    this.perfume = new Perfume({
+      firstContentfulPaint: true,
+      googleAnalytics: {
+        enable: true,
+        timingVar: "userId"
+      },
+      timeToInteractive: true,
+      timeToInteractiveCb: () => {
+        this.ref.detectChanges();
+      },
+    });
     this.path = window.location.href.split('#')[0];
 
     // Component variables
@@ -40,31 +49,69 @@ export class AppComponent {
       cfp: "component-first-paint",
       log: "custom-logging",
       ga: "google-analytics",
+      options: "default-options",
       copyright: "copyright-and-licenses",
     };
   }
 
-  fibonacci(num, memo = {}) {
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.runFibonacci(500);
+    }, 500);
+  }
+
+  runFibonacci(maxSequence: number) {
+    this.fibonacci(maxSequence, {}, true);
+    this.reverseFibonacciSequence(6);
+    $('.Fibonacci').empty();
+  }
+
+  fibonacci(num, memo = {}, append = false) {
     if (memo[num]) {
       return memo[num];
     }
     if (num <= 1) {
       return 1;
     }
-    return memo[num] = this.fibonacci(num - 1, memo) + this.fibonacci(num - 2, memo);
+    if (append) {
+      this.appendElSequence(num);
+    }
+    return memo[num] = this.fibonacci(num - 1, memo, append) + this.fibonacci(num - 2, memo, append);
+  }
+
+  appendElSequence(num) {
+    const elSequence = $(`<span class="Fibonacci-sequence">${num} </span>`);
+    elSequence.css({
+      color: '#'+Math.floor(Math.random()*16777215).toString(16)
+    });
+    elSequence.on('click', () => {
+      console.log('Lol');
+    });
+    $('.Fibonacci').append(elSequence);
+  }
+
+  reverseFibonacciSequence(reccurrence = 1) {
+    const $elFibonacci = $('.Fibonacci');
+    $elFibonacci.children().each(function(i,sequence) {
+      $elFibonacci.prepend(sequence)
+    });
+    reccurrence -= 1;
+    if (reccurrence > 0) {
+      this.reverseFibonacciSequence(reccurrence);
+    }
   }
 
   measureFibonacci() {
     this.perfume.start('fibonacci');
     this.fibonacci(400);
-    const duration = this.perfume.end('fibonacci', true);
+    const duration = this.perfume.end('fibonacci');
     this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration.toFixed(2)} ms`;
   }
 
   togglePopover(element) {
     this.perfume.start('togglePopover');
     $(element).popover('toggle');
-    this.perfume.endPaint('togglePopover', true)
+    this.perfume.endPaint('togglePopover')
     .then((duration) => {
       this.logTogglePopover = `⚡️ Perfume.js: togglePopover ${duration.toFixed(2)} ms`;
     });
@@ -75,7 +122,7 @@ export class AppComponent {
     this.fibonacci(400);
     const duration = this.perfume.end('fibonacci');
     this.perfume.log('Custom logging', duration);
-    this.logCustom = `⚡️ Perfume.js: Custom logging ${duration.toFixed(2)} ms`;
+    this.logCustom = `🍻 Beerjs: Custom logging ${duration.toFixed(2)} ms`;
   }
 
   activeNav(selected) {
