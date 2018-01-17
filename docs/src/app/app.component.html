@@ -112,31 +112,31 @@
   </div>
   <div class="nav">
     <div class="nav-links">
-      <a href="#/user-centric-metrics/" class="nav-section-title" 
+      <a href="{{ path }}#/user-centric-metrics/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.userCentric"
       (click)="activeNav(navOptions.userCentric)">User-centric metrics</a>
-      <a href="#/installing-and-imports/" class="nav-section-title" 
+      <a href="{{ path }}#/installing-and-imports/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.installing"
       (click)="activeNav(navOptions.installing)">Installing and Imports</a>
-      <a href="#/time-to-interactive/" class="nav-section-title" 
+      <a href="{{ path }}#/time-to-interactive/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.tti"
       (click)="activeNav(navOptions.tti)">Time to Interactive</a>
-      <a href="#/annotate-metrics/" class="nav-section-title" 
+      <a href="{{ path }}#/annotate-metrics/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.annotate"
       (click)="activeNav(navOptions.annotate)">Annotate metrics</a>
-      <a href="#/component-first-paint/" class="nav-section-title" 
+      <a href="{{ path }}#/component-first-paint/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.cfp"
       (click)="activeNav(navOptions.cfp)">Component First Paint</a>
-      <a href="#/custom-logging/" class="nav-section-title" 
+      <a href="{{ path }}#/custom-logging/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.log"
       (click)="activeNav(navOptions.log)">Custom Logging</a>
-      <a href="#/google-analytics/" class="nav-section-title" 
+      <a href="{{ path }}#/google-analytics/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.ga"
       (click)="activeNav(navOptions.ga)">Google Analytics</a>
-      <a href="#/default-options/" class="nav-section-title" 
+      <a href="{{ path }}#/default-options/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.options"
       (click)="activeNav(navOptions.options)">Default Options</a>
-      <a href="#/copyright-and-license/" class="nav-section-title" 
+      <a href="{{ path }}#/copyright-and-license/" class="nav-section-title" 
       [class.active]="navSelected === navOptions.copyright"
       (click)="activeNav(navOptions.copyright)">Copyright and licenses</a>
     </div> 
