@@ -169,3 +169,45 @@ p {
   background: rgba(246, 225, 113, 0.3);
   border-left-color: rgba(227, 187, 180, 0.8);
 }
+
+@media (max-width: 967px) {  /* medium screen */
+  .Layout .Content, 
+  .Layout .Footer {
+    margin: 0 auto;
+  }
+  .Box--first {
+    margin: 0 0 140px;
+  }
+  .nav {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {  /* medium screen */
+  .Layout .Content, 
+  .Layout .Footer {
+    margin: 0 auto;
+  }
+  .Box--first {
+    margin: 0 0 180px;
+  }
+  .nav {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {  /* small screen */
+  .Layout .Content, 
+  .Layout .Footer {
+    margin: 0 auto;
+  }
+  .Box--first {
+    margin: 0 0 400px;
+  }
+  .Box img {
+    width: 100%;
+  }
+  .nav {
+    display: none;
+  }
+}
