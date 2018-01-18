@@ -8,6 +8,14 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.layout__content a {
+  color: #CAA29B;
+}
+
+.layout__content a:hover {
+  color: #B08881;
+}
+
 .layout__nav {
   display: none;
   padding: 0 0 0 20px;
