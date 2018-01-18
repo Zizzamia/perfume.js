@@ -1,60 +1,179 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 body {
-  background-color: #FDFBFA;
-  color: #141414;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  text-align: center;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 17px;
-  font-weight: 300;
-  line-height: 1.6;
+  font-family: "Open Sans", sans-serif;
+}
+
+h3 {
+  font-size: 1.6em;
+  margin: 0.7em 0 0.38em;
+}
+
+p {
+  margin: 0;
+}
+
+p + p {
+  margin: 10px 0;
 }
 
 a {
-  color: #366fd1;
+  color: inherit;
+}
+
+b {
+  font-weight: 600;
+}
+
+img {
+  border: none;
+}
+
+/* App --------------------------------------------------------------------*/
+.layout {
+  height: 100vh;
+  margin: 0 auto;
+  padding: 10px 32px 32px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.layout__nav {
+  display: none;
+  padding: 0 0 0 20px;
+  font-size: 16px;
+  color: #222;
+}
+
+.layout__nav a {
+  display: block;
+  padding: 5px 10px;
+  border-left: 2px solid transparent;
+  line-height: 20px;
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
+.layout__nav a:hover,
+.layout__nav a.active {
+  background: rgba(246, 225, 113, 0.3);
+  border-left-color: rgba(227, 187, 180, 0.8);
 }
 
-h1, h2 {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 300;
-  line-height: 1.4;
-  margin: 1em 0 0.2em;
-  color: #8A7A75;
-}
-
-h1 {
-  margin: 6px 0 4px;
+.title {
+  margin: 0;
+  padding: 9px 0;
+  font-family: "Dancing Script", cursive;
   font-size: 70px;
   font-weight: 400;
+  text-align: center;
+  color: #f2db77;
 }
 
-h2 {
-  font-size: 1.7em;
+/* Box -----------------------------------------------------------------------*/
+.box {
+  overflow: hidden;
+  margin: 60px 0;
+  text-align: left;
+}
+
+.box--intro p {
+  line-height: 30px;
+}
+
+.box__title {
+  margin: 0;
+  padding: 0 0 20px;
+  font-size: 30px;
   font-weight: 400;
-  margin: 0.7em 0 0;
+  line-height: 40px;
 }
 
-h1 + h1, h1 + h2,
-h2 + h1, h2 + h2 {
-  margin-top: 0;
+.box__img {
+  width: 700px;
+  border: 1px solid #ccc;
+  margin: 0 auto;
+  display: block;
+  border-radius: 2px;
 }
 
-blockquote,
-blockquote cite,
-ol,
-p,
-pre,
-ul {
+.logo {
+  display: block;
+  width: 262px;
+  margin: auto;
+}
+
+.box__demo {
+  margin: 10px 0;
+  padding: 10px;
+  border-left: 2px solid rgba(227, 187, 180, 0.8);
+  border-radius: 2px;
+  background: rgba(246, 225, 113, 0.3);
+}
+
+.box__demo__btn {
+  transition: all 0.3s;
+
+  margin-right: 20px;
+  padding: 5px 12px;
+  border: 1px solid #ddbdb6;
+  border-radius: 0.25rem;
+  line-height: 1.25;
+  text-align: center;
+  font-weight: 500;
   font-size: 16px;
-  margin: 0 0 10px;
-  font-weight: 400;
+  cursor: pointer;
+  background: #f5d7cd;
+  color: #8a7a75;
 }
 
-strong, b {
-  font-weight: 400;
+.box__demo__btn:hover {
+  border-color: #f2db77;
+  background: #f7e7a1;
+  color: #fdfbfa;
+}
+
+.Teapotio-logo,
+.Teapotio-symfonyLogo,
+.TwitterLogo,
+.PlanLogo {
+  margin: 15px 0;
+  width: 100px;
+}
+
+@media (min-width: 640px) {
+  .logo {
+    float: left;
+  }
+
+  .title {
+    text-align: left;
+  }
+}
+
+@media (min-width: 960px) {
+  .layout {
+    display: flex;
+    justify-content: center;
+  }
+
+  .layout__nav {
+    flex-shrink: 0;
+
+    display: block;
+    position: sticky;
+    top: 10px;
+  }
+
+  .layout__content {
+    flex: 1;
+
+    max-width: 700px;
+  }
 }
