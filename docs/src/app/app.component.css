@@ -1,50 +1,65 @@
+.layout {
+  height: 100vh;
+  margin: 0 auto;
+  padding: 10px 32px 32px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 
-h1 {
-  margin: 4px 0 4px;
-padding: 9px 0 0 0;
-  color: #F2DB77;
-  font-family: 'Dancing Script', cursive;
-  font-size: 70px;
-  font-weight: 400;
+  -webkit-overflow-scrolling: touch;
 }
 
-h2 {
-  padding: 0;
-  margin: 0 8px 20px;
+.layout__nav {
+  display: none;
+  padding: 0 0 0 20px;
+  font-size: 16px;
+  color: #222;
+}
+
+.layout__nav a {
+  display: block;
+  padding: 5px 10px;
+  border-left: 2px solid transparent;
+  line-height: 20px;
+  text-decoration: none;
+}
+
+.layout__nav a:hover,
+.layout__nav a.active {
+  background: rgba(246, 225, 113, 0.3);
+  border-left-color: rgba(227, 187, 180, 0.8);
+}
+
+.title {
+  margin: 0;
+  padding: 9px 0;
+  font-family: "Dancing Script", cursive;
+  font-size: 70px;
+  font-weight: 400;
+  text-align: center;
+  color: #f2db77;
+}
+
+/* Box -----------------------------------------------------------------------*/
+.box {
+  overflow: hidden;
+  margin: 60px 0;
+  text-align: left;
+}
+
+.box--intro p {
+  margin: 10px 0;
+  line-height: 30px;
+}
+
+.box__title {
+  margin: 0;
+  padding: 0 0 20px;
   font-size: 30px;
   font-weight: 400;
   line-height: 40px;
 }
 
-h3 {
-  font-size: 1.6em;
-  margin: 0.7em 0 0.38em;
-}
-
-p {
-  margin: 0 10px 10px;
-}
-
-.Box {
-  margin: 60px 0 40px;
-  text-align: left;
-}
-
-.Box b {
-  font-weight: 600;
-}
-
-.Box--first {
-  font-family: 'Open Sans', sans-serif;
-  margin: 0 0 60px;
-  height: 330px;
-}
-
-.Box--first p {
-  line-height: 30px;
-}
-
-.Box img {
+.box__img {
   width: 700px;
   border: 1px solid #ccc;
   margin: 0 auto;
@@ -52,38 +67,40 @@ p {
   border-radius: 2px;
 }
 
-.Title {
-  position: relative;
-}
-
-.Box img.perfume-logo {
+.logo {
+  display: block;
   width: 262px;
-  border: none;
-  float: left;
+  margin: auto;
 }
 
-.Layout .Content,
-.Layout .Footer {
-  padding: 10px 32px 32px 32px;
-  max-width: 780px;
-  margin: 0 auto;
-  margin-right: 26%;
+.box__demo {
+  margin: 10px 0;
+  padding: 10px;
+  border-left: 2px solid rgba(227, 187, 180, 0.8);
+  border-radius: 2px;
+  background: rgba(246, 225, 113, 0.3);
 }
 
-.Layout .Footer {
-  padding-top: 0;
-}
+.box__demo__btn {
+  transition: all 0.3s;
 
-.Layout .Footer {
-  color: #636363;
-  font-size: 12px;
+  margin-right: 20px;
+  padding: 5px 12px;
+  border: 1px solid #ddbdb6;
+  border-radius: 0.25rem;
+  line-height: 1.25;
   text-align: center;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  background: #f5d7cd;
+  color: #8a7a75;
 }
 
-.Picture {
-  border-radius: 250px;
-  margin-top: 30px;
-  width: 250px;
+.box__demo__btn:hover {
+  border-color: #f2db77;
+  background: #f7e7a1;
+  color: #fdfbfa;
 }
 
 .Teapotio-logo,
@@ -94,120 +111,33 @@ p {
   width: 100px;
 }
 
-.Demo {
-  width: 697px;
-  text-align: left;
-  background: rgba(246, 225, 113, 0.3);
-  padding: 10px;
-  margin: 10px;
-  border-left: 2px solid rgba(227, 187, 180, 0.8);
-  border-radius: 2px;
-}
-
-.Button {
-  display: inline-block;
-  background-color: #F5D7CD;
-  border-color: #DDBDB6;
-  color: #8A7A75;
-  font-weight: 500;
-  line-height: 1.25;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid transparent;
-  padding: 5px 12px;
-  margin-right: 20px;
-  font-size: 16px;
-  border-radius: .25rem;
-  cursor: pointer;
-  -webkit-transition: all .3s ease-in-out;
-  -o-transition: all .3s ease-in-out;
-  transition: all .3s ease-in-out;
-}
-
-.Button:hover {
-  color: #FDFBFA;
-  background-color: #F7E7A1;
-  border-color: #F2DB77;
-}
-
-.nav {
-  font-family: 'Open Sans', sans-serif;
-  position: fixed;
-  top: 48px;
-  bottom: 0;
-  left: 50%;
-  z-index: 10;
-  margin-left: 290px;
-  max-width: 256px;
-  width: 18%;
-  padding: 0 0 0 20px;
-  font-size: 14px;
-  line-height: 18px;
-  text-align: left;
-}
-.nav-links {
-  overflow-y: auto;
-}
-.nav-section-title {
-  color: #222;
-  font-size: 16px;
-  line-height: 20px;
-  padding: 5px 10px;
-}
-.nav a {
-  display: block;
-  text-decoration: none;
-  border-left: 2px solid transparent;
-}
-.nav a:hover,
-.nav a.active {
-  background: rgba(246, 225, 113, 0.3);
-  border-left-color: rgba(227, 187, 180, 0.8);
-}
-
-@media (max-width: 967px) {  /* medium screen */
-  .Layout .Content, 
-  .Layout .Footer {
-    margin: 0 auto;
+@media (min-width: 640px) {
+  .logo {
+    float: left;
   }
-  .Box--first {
-    margin: 0 0 140px;
-  }
-  .nav {
-    display: none;
+
+  .title {
+    text-align: left;
   }
 }
 
-@media (max-width: 860px) {  /* medium screen */
-  .Layout .Content, 
-  .Layout .Footer {
-    margin: 0 auto;
+@media (min-width: 960px) {
+  .layout {
+    display: flex;
+    justify-content: center;
   }
-  .Box--first {
-    margin: 0 0 180px;
-  }
-  .nav {
-    display: none;
-  }
-}
 
-@media (max-width: 600px) {  /* small screen */
-  .Layout .Content, 
-  .Layout .Footer {
-    margin: 0 auto;
+  .layout__nav {
+    flex-shrink: 0;
+
+    display: block;
+    position: sticky;
+    top: 10px;
   }
-  .Box--first {
-    margin: 0 0 400px;
-  }
-  .Box img {
-    width: 100%;
-  }
-  .nav {
-    display: none;
+
+  .layout__content {
+    flex: 1;
+
+    max-width: 700px;
   }
 }

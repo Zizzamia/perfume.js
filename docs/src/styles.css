@@ -1,60 +1,46 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html, body {
+  height: 100%;
+}
+
 body {
-  background-color: #FDFBFA;
-  color: #141414;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  text-align: center;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 17px;
-  font-weight: 300;
-  line-height: 1.6;
+  font-family: "Open Sans", sans-serif;
+}
+
+h3 {
+  font-size: 1.6em;
+  margin: 0.7em 0 0.38em;
+}
+
+p {
+  margin: 0;
+}
+
+p + p {
+  margin: 10px 0;
 }
 
 a {
-  color: #366fd1;
-  text-decoration: none;
+  color: inherit;
 }
 
-a:hover {
-  text-decoration: underline;
+b {
+  font-weight: 600;
 }
 
-h1, h2 {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 300;
-  line-height: 1.4;
-  margin: 1em 0 0.2em;
-  color: #8A7A75;
+img {
+  border: none;
 }
 
-h1 {
-  margin: 6px 0 4px;
-  font-size: 70px;
-  font-weight: 400;
-}
-
-h2 {
-  font-size: 1.7em;
-  font-weight: 400;
-  margin: 0.7em 0 0;
-}
-
-h1 + h1, h1 + h2,
-h2 + h1, h2 + h2 {
-  margin-top: 0;
-}
-
-blockquote,
-blockquote cite,
-ol,
-p,
-pre,
-ul {
-  font-size: 16px;
-  margin: 0 0 10px;
-  font-weight: 400;
-}
-
-strong, b {
-  font-weight: 400;
+.ng-version {
+  position: relative;
+  z-index: 0;
 }
