@@ -89,13 +89,7 @@ export default class Performance {
    * @param {any} cb
    */
   public initPerformanceObserver(cb: any) {
-    const observer = new PerformanceObserver((entryList: PerformanceObserverEntryList) => {
-      for (const entry of entryList.getEntries()) {
-        if (entry.name === "first-contentful-paint") {
-          cb(entry);
-        }
-      }
-    });
+    const observer = new PerformanceObserver(this.performanceObserverCb.bind(this, cb));
     observer.observe({entryTypes: ["paint"]});
   }
 
@@ -111,5 +105,17 @@ export default class Performance {
       }
     }
     return 0;
+  }
+
+  /**
+   * @param {any} cb
+   * @param {PerformanceObserverEntryList} entryList
+   */
+  private performanceObserverCb(cb: any, entryList: PerformanceObserverEntryList) {
+    for (const entry of entryList.getEntries()) {
+      if (entry.name === "first-contentful-paint") {
+        cb(entry);
+      }
+    }
   }
 }

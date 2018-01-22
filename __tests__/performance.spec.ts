@@ -7,7 +7,6 @@ describe("Performance test", () => {
   let service;
 
   beforeEach(() => {
-    window.ga = undefined;
     window.Date = {
       now: () => {
         return 23456;
@@ -49,6 +48,7 @@ describe("Performance test", () => {
     spyOn(console, "warn").and.callThrough();
     spyOn(window.performance, "mark").and.callThrough();
     spyOn(window.performance, "measure").and.callThrough();
+    spyOn(window, "PerformanceObserver").and.callThrough();
     spyOn(service, "getMeasurementForGivenName").and.callThrough();
     spyOn(service, "performanceNow").and.callThrough();
     spyOn(service, "mark").and.callThrough();
@@ -140,6 +140,17 @@ describe("Performance test", () => {
     });
   });
 
+  it("has 'initPerformanceObserver' method after initialization", () => {
+    expect(service.initPerformanceObserver).toBeDefined();
+  });
+
+  describe("when calls initPerformanceObserver()", () => {
+    it("should call window.PerformanceObserver", () => {
+      service.initPerformanceObserver();
+      expect(window.PerformanceObserver).toHaveBeenCalled();
+    });
+  });
+  
   it("has 'getFirstPaint' method after initialization", () => {
     expect(service.getFirstPaint).toBeDefined();
   });
@@ -164,6 +175,22 @@ describe("Performance test", () => {
     it("should return the firstContentfulPaint value if the browser supports the Navigation Timing API", () => {
       const performance = service.getFirstPaint();
       expect(performance).toEqual(11111);
+    });
+  });
+
+  it("has 'performanceObserverCb' method after initialization", () => {
+    expect(service.performanceObserverCb).toBeDefined();
+  });
+
+  describe("when calls performanceObserverCb()", () => {
+    it("should call callback", () => {
+      const entryList = {
+        getEntries: () => {
+          return [{ name: "first-contentful-paint", startTime: 1}];
+        },
+      };
+      service.performanceObserverCb(service.getFirstPaint, entryList);
+      expect(service.getFirstPaint).toHaveBeenCalled();
     });
   });
 });
