@@ -1,16 +1,14 @@
 import ttiPolyfill from "tti-polyfill";
-declare const PerformanceObserver: any;
-declare interface PerformanceObserverEntryList {
-  getEntries: any;
-}
+import Performance from "./performance";
 
+declare const PerformanceObserver: any;
 declare global {
   interface Window {
     ga: any;
   }
 }
 
-export default class Perfume {
+export default class Perfume extends Performance {
   public config: {
     firstContentfulPaint: boolean,
     googleAnalytics: {
@@ -42,38 +40,13 @@ export default class Perfume {
   private ttiPolyfill: any;
 
   constructor(options: any = {}) {
+    super();
     this.ttiPolyfill = ttiPolyfill;
     this.config = Object.assign({}, this.config, options);
     if (!this.supportsPerfNow) {
       global.console.warn(this.config.logPrefix, "Cannot be used in this browser.");
     }
     this.firstContentfulPaint();
-  }
-
-  /**
-   * True if the browser supports the Navigation Timing API.
-   * @type {boolean}
-   */
-  get supportsPerfNow(): boolean {
-    return window.performance && performance.now ? true : false;
-  }
-
-  /**
-   * True if the browser supports the User Timing API.
-   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
-   * @type {boolean}
-   */
-  get supportsPerfMark(): boolean {
-    return window.performance && performance.mark ? true : false;
-  }
-
-  /**
-   * True if the browser supports the PerformanceObserver Interface.
-   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
-   * @type {boolean}
-   */
-  get supportsPerfObserver(): boolean {
-    return "PerformanceLongTaskTiming" in window;
   }
 
   /**
@@ -152,12 +125,14 @@ export default class Perfume {
   }
 
   /**
-   * This assumes the user has made only one measurement for the given
-   * name. Return the first PerformanceEntry objects for the given name.
    * @param {string} metricName
    */
-  private getMeasurementForGivenName(metricName: string) {
-    return performance.getEntriesByName(metricName)[0];
+  private checkMetricName(metricName: string) {
+    if (metricName) {
+      return true;
+    }
+    global.console.warn(this.config.logPrefix, "Please provide a metric name");
+    return false;
   }
 
   /**
@@ -178,102 +153,27 @@ export default class Perfume {
   }
 
   /**
-   * @param {string} metricName
-   */
-  private checkMetricName(metricName: string) {
-    if (metricName) {
-      return true;
-    }
-    global.console.warn(this.config.logPrefix, "Please provide a metric name");
-    return false;
-  }
-
-  /**
-   * When performance API available:
-   * - Returns a DOMHighResTimeStamp, measured in milliseconds, accurate to five
-   *   thousandths of a millisecond (5 microseconds).
-   * Otherwise:
-   * - Unlike returns Date.now that is limited to one-millisecond resolution.
-   * @type {number}
-   */
-  private performanceNow(): number {
-    if (this.supportsPerfMark) {
-      return window.performance.now();
-    } else {
-      return Date.now() / 1000;
-    }
-  }
-
-  /**
-   * @param {string} metricName
-   * @param {string} type
-   */
-  private mark(metricName: string, type: string) {
-    if (!this.supportsPerfMark) {
-      return;
-    }
-    const mark = `mark_${metricName}_${type}`;
-    window.performance.mark(mark);
-  }
-
-  /**
-   * @param {string} metricName
-   * @param {string} startMark
-   * @param {string} endMark
-   */
-  private measure(metricName: string, startType: string, endType: string) {
-    if (!this.supportsPerfMark) {
-      return;
-    }
-    const startMark = `mark_${metricName}_${startType}`;
-    const endMark = `mark_${metricName}_${endType}`;
-    window.performance.measure(metricName, startMark, endMark);
-  }
-
-  /**
    * First Paint is essentially the paint after which
    * the biggest above-the-fold layout change has happened.
    */
   private firstContentfulPaint() {
     if (this.supportsPerfObserver) {
-      const observer = new PerformanceObserver(this.observeFirstContentfulPaint.bind(this));
-      observer.observe({entryTypes: ["paint"]});
+      this.initPerformanceObserver(this.observeFirstContentfulPaint(this));
     } else {
       this.timeFirstPaint();
     }
   }
 
   /**
-   * PerformanceObserver subscribes to performance events as they happen
-   * and respond to them asynchronously.
-   * entry.name will be either 'first-paint' or 'first-contentful-paint'
-   * @param {object} entryList
+   * @param {object} entry
    */
-  private observeFirstContentfulPaint(entryList: PerformanceObserverEntryList) {
-    for (const entry of entryList.getEntries()) {
-      if (entry.name === "first-contentful-paint") {
-        if (this.config.firstContentfulPaint) {
-          this.logFCP(entry.startTime);
-        }
-        if (this.config.timeToInteractive) {
-          this.timeToInteractive(entry.startTime);
-        }
-      }
+  private observeFirstContentfulPaint(entry: any) {
+    if (this.config.firstContentfulPaint) {
+      this.logFCP(entry.startTime);
     }
-  }
-
-  /**
-   * http://msdn.microsoft.com/ff974719
-   * developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming/navigationStart
-   */
-  private getFirstPaint() {
-    if (performance) {
-      const navTiming = performance.timing;
-      if (navTiming && navTiming.navigationStart !== 0) {
-        return Date.now() - navTiming.navigationStart;
-      }
+    if (this.config.timeToInteractive) {
+      this.timeToInteractive(entry.startTime);
     }
-    return 0;
   }
 
   /**
