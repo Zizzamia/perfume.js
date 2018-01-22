@@ -150,7 +150,7 @@ describe("Performance test", () => {
       expect(window.PerformanceObserver).toHaveBeenCalled();
     });
   });
-  
+
   it("has 'getFirstPaint' method after initialization", () => {
     expect(service.getFirstPaint).toBeDefined();
   });
