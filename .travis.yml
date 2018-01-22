@@ -1,4 +1,9 @@
 language: node_js
+node_js:
+  - "8"
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH="$HOME/.yarn/bin:$PATH"
 branches:
   only:
     - master
@@ -8,9 +13,12 @@ cache:
     - node_modules
 notifications:
   email: false
-node_js:
-  - "8"
+addons:
+  code_climate:
+    repo_token: 1bbf623b0428bdadf89c0e0db78d37de3fe9f5c80be4188a85c7098cf32228b5
 script:
   - npm run test:prod && npm run build
 after_success:
+  - yarn global add codeclimate-test-reporter
   - npm run report-coverage
+  - codeclimate-test-reporter < ./coverage/lcov.info
