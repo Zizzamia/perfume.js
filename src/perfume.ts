@@ -1,5 +1,7 @@
 import ttiPolyfill from "tti-polyfill";
+import PerformImpl from "./performance-impl";
 import Performance from "./performance";
+import EmulatedPerformance from "./emulated-performance";
 
 declare const PerformanceObserver: any;
 declare global {
@@ -8,7 +10,7 @@ declare global {
   }
 }
 
-export default class Perfume extends Performance {
+export default class Perfume {
   public config: {
     firstContentfulPaint: boolean,
     googleAnalytics: {
@@ -38,27 +40,24 @@ export default class Perfume extends Performance {
     };
   } = {};
   private ttiPolyfill: any;
+  private perf: any;
 
   constructor(options: any = {}) {
-    super();
     this.ttiPolyfill = ttiPolyfill;
     this.config = Object.assign({}, this.config, options);
-    if (!this.supportsPerfNow) {
-      global.console.warn(this.config.logPrefix, "Cannot be used in this browser.");
-    }
-    this.firstContentfulPaint();
+    this.perf = Performance.supported() ? new Performance() : new EmulatedPerformance();
+    this.perf.config = this.config;
+    this.perf.firstContentfulPaint();
   }
 
   /**
    * Start performance measurement
+   *
    * @param {string} metricName
    */
   public start(metricName: string) {
     if (!this.checkMetricName(metricName)) {
       return;
-    }
-    if (!this.supportsPerfMark) {
-      global.console.warn(this.config.logPrefix, `Timeline won't be marked for "${metricName}".`);
     }
     if (this.metrics[metricName]) {
       global.console.warn(this.config.logPrefix, "Recording already started.");
@@ -66,13 +65,14 @@ export default class Perfume extends Performance {
     }
     this.metrics[metricName] = {
       end: 0,
-      start: this.performanceNow(),
+      start: this.perf.now(),
     };
-    this.mark(metricName, "start");
+    this.perf.mark(metricName, "start");
   }
 
   /**
    * End performance measurement
+   *
    * @param {string} metricName
    */
   public end(metricName: string) {
@@ -83,10 +83,9 @@ export default class Perfume extends Performance {
       global.console.warn(this.config.logPrefix, "Recording already stopped.");
       return;
     }
-    this.metrics[metricName].end = this.performanceNow();
-    this.mark(metricName, "end");
-    this.measure(metricName, "start", "end");
-    const duration = this.getDurationByMetric(metricName);
+    this.metrics[metricName].end = this.perf.now();
+    this.perf.mark(metricName, "end");
+    const duration = this.perf.measure(metricName, this.metrics);
     if (this.config.logging) {
       this.log(metricName, duration);
     }
@@ -97,6 +96,7 @@ export default class Perfume extends Performance {
 
   /**
    * End performance measurement after first paint from the beging of it
+   *
    * @param {string} metricName
    */
   public endPaint(metricName: string) {
@@ -110,6 +110,7 @@ export default class Perfume extends Performance {
 
   /**
    * Coloring Text in Browser Console
+   *
    * @param {string} metricName
    * @param {number} duration
    */
@@ -136,56 +137,6 @@ export default class Perfume extends Performance {
   }
 
   /**
-   * Get the duration of the timing metric or -1 if there a measurement has
-   * not been made. Use User Timing API results if available, otherwise return
-   * performance.now() fallback.
-   * @param {string} metricName
-   */
-  private getDurationByMetric(metricName: string) {
-    if (this.supportsPerfMark) {
-      const entry = this.getMeasurementForGivenName(metricName);
-      if (entry && entry.entryType !== "measure") {
-        return entry.duration;
-      }
-    }
-    const duration = this.metrics[metricName].end - this.metrics[metricName].start;
-    return duration || -1;
-  }
-
-  /**
-   * First Paint is essentially the paint after which
-   * the biggest above-the-fold layout change has happened.
-   */
-  private firstContentfulPaint() {
-    if (this.supportsPerfObserver) {
-      this.initPerformanceObserver(this.observeFirstContentfulPaint(this));
-    } else {
-      this.timeFirstPaint();
-    }
-  }
-
-  /**
-   * @param {object} entry
-   */
-  private observeFirstContentfulPaint(entry: any) {
-    if (this.config.firstContentfulPaint) {
-      this.logFCP(entry.startTime);
-    }
-    if (this.config.timeToInteractive) {
-      this.timeToInteractive(entry.startTime);
-    }
-  }
-
-  /**
-   * Uses setTimeout to retrieve FCP
-   */
-  private timeFirstPaint() {
-    setTimeout(() => {
-      this.logFCP(this.getFirstPaint());
-    });
-  }
-
-  /**
    * @param {number} duration
    */
   private logFCP(duration: number) {
@@ -194,36 +145,6 @@ export default class Perfume extends Performance {
       this.log("First Contentful Paint", this.firstContentfulPaintDuration);
     }
     this.sendTiming("firstContentfulPaint", this.firstContentfulPaintDuration);
-  }
-
-  /**
-   * The polyfill exposes a getFirstConsistentlyInteractive() method,
-   * which returns a promise that resolves with the TTI value.
-   *
-   * The getFirstConsistentlyInteractive() method accepts an optional
-   * startTime configuration option, allowing you to specify a lower bound
-   * for which you know your app cannot be interactive before.
-   * By default the polyfill uses DOMContentLoaded as the start time,
-   * but it's often more accurate to use something like the moment your hero elements
-   * are visible or the point when you know all your event listeners have been added.
-   */
-  private timeToInteractive(minValue: number) {
-    this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue })
-    .then(this.timeToInteractiveResolve.bind(this));
-  }
-
-  /**
-   * @param {number} timeToInteractive
-   */
-  private timeToInteractiveResolve(timeToInteractive: number) {
-    this.timeToInteractiveDuration = timeToInteractive;
-    if (this.timeToInteractiveDuration) {
-      this.log("Time to interactive", this.timeToInteractiveDuration);
-    }
-    if (this.config.timeToInteractiveCb) {
-      this.config.timeToInteractiveCb(timeToInteractive);
-    }
-    this.sendTiming("timeToInteractive", this.timeToInteractiveDuration);
   }
 
   /**
