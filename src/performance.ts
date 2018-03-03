@@ -1,12 +1,12 @@
+import ttiPolyfill from "tti-polyfill";
 import PerformImpl from "./performance-impl";
+
 declare const PerformanceObserver: any;
 declare interface PerformanceObserverEntryList {
   getEntries: any;
 }
 
 export default class Performance implements PerformImpl {
-  config: any;
-
   /**
    * True if the browser supports the Navigation Timing API,
    * User Timing API and the PerformanceObserver Interface.
@@ -15,11 +15,28 @@ export default class Performance implements PerformImpl {
    *
    * @type {boolean}
    */
-  static supported(): boolean {
+  public static supported(): boolean {
     return window.performance
-           && performance.now ? true : false
-           && performance.mark ? true : false
-           && "PerformanceLongTaskTiming" in window;
+           && !!performance.now
+           && !!performance.mark;
+  }
+
+  /**
+   * True if the browser supports the PerformanceLongTaskTiming interface.
+   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming
+   *
+   * @type {boolean}
+   */
+  public static supportedLongTask(): boolean {
+    return "PerformanceLongTaskTiming" in window;
+  }
+
+  public timeToInteractiveDuration: number = 0;
+  public config: any;
+  private ttiPolyfill: any;
+
+  constructor() {
+    this.ttiPolyfill = ttiPolyfill;
   }
 
   /**
@@ -59,9 +76,10 @@ export default class Performance implements PerformImpl {
    * PerformanceObserver subscribes to performance events as they happen
    * and respond to them asynchronously.
    * entry.name will be either 'first-paint' or 'first-contentful-paint'
+   *
+   * @param {any} cb
    */
-  public firstContentfulPaint() {
-    const cb = this.observeFirstContentfulPaint(this);
+  public firstContentfulPaint(cb: any) {
     const observer = new PerformanceObserver(this.performanceObserverCb.bind(this, cb));
     observer.observe({entryTypes: ["paint"]});
   }
@@ -96,22 +114,10 @@ export default class Performance implements PerformImpl {
    * @param {PerformanceObserverEntryList} entryList
    */
   private performanceObserverCb(cb: any, entryList: PerformanceObserverEntryList) {
-    for (const entry of entryList.getEntries()) {
-      if (entry.name === "first-contentful-paint") {
-        cb(entry);
+    for (const performancePaintTiming of entryList.getEntries()) {
+      if (performancePaintTiming.name === "first-contentful-paint") {
+        cb(performancePaintTiming);
       }
-    }
-  }
-
-  /**
-   * @param {object} entry
-   */
-  private observeFirstContentfulPaint(entry: any) {
-    if (this.config.firstContentfulPaint) {
-      this.logFCP(entry.startTime);
-    }
-    if (this.config.timeToInteractive) {
-      this.timeToInteractive(entry.startTime);
     }
   }
 
@@ -125,23 +131,11 @@ export default class Performance implements PerformImpl {
    * By default the polyfill uses DOMContentLoaded as the start time,
    * but it's often more accurate to use something like the moment your hero elements
    * are visible or the point when you know all your event listeners have been added.
+   *
+   * @param {number} minValue
+   * @param {any} cb
    */
-  private timeToInteractive(minValue: number) {
-    this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue })
-    .then(this.timeToInteractiveResolve.bind(this));
-  }
-
-  /**
-   * @param {number} timeToInteractive
-   */
-  private timeToInteractiveResolve(timeToInteractive: number) {
-    this.timeToInteractiveDuration = timeToInteractive;
-    if (this.timeToInteractiveDuration) {
-      this.log("Time to interactive", this.timeToInteractiveDuration);
-    }
-    if (this.config.timeToInteractiveCb) {
-      this.config.timeToInteractiveCb(timeToInteractive);
-    }
-    this.sendTiming("timeToInteractive", this.timeToInteractiveDuration);
+  private timeToInteractive(minValue: number, cb: any) {
+    this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue }).then(cb);
   }
 }

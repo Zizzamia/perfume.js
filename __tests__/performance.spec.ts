@@ -7,11 +7,6 @@ describe("Performance test", () => {
   let service;
 
   beforeEach(() => {
-    window.Date = {
-      now: () => {
-        return 23456;
-      },
-    };
     window.performance = {
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
       getEntriesByName: () => {
@@ -41,6 +36,13 @@ describe("Performance test", () => {
       };
     };
     service = new Performance();
+    service.ttiPolyfill = {
+      getFirstConsistentlyInteractive: () => {
+        return new Promise((resolve) => {
+          resolve();
+        });
+      },
+    };
   });
 
   beforeEach(() => {
@@ -48,54 +50,100 @@ describe("Performance test", () => {
     spyOn(console, "warn").and.callThrough();
     spyOn(window.performance, "mark").and.callThrough();
     spyOn(window.performance, "measure").and.callThrough();
+    spyOn(window.performance, "now").and.callThrough();
     spyOn(window, "PerformanceObserver").and.callThrough();
-    spyOn(service, "getMeasurementForGivenName").and.callThrough();
-    spyOn(service, "performanceNow").and.callThrough();
+    spyOn(Performance, "supported").and.callThrough();
+    spyOn(Performance, "supportedLongTask").and.callThrough();
+    spyOn(service.ttiPolyfill, "getFirstConsistentlyInteractive").and.callThrough();
+    spyOn(service, "now").and.callThrough();
     spyOn(service, "mark").and.callThrough();
     spyOn(service, "measure").and.callThrough();
-    spyOn(service, "getFirstPaint").and.callThrough();
+    spyOn(service, "firstContentfulPaint").and.callThrough();
+    spyOn(service, "getDurationByMetric").and.callThrough();
+    spyOn(service, "getMeasurementForGivenName").and.callThrough();
+    spyOn(service, "performanceObserverCb").and.callThrough();
+    spyOn(service, "timeToInteractive").and.callThrough();
   });
 
-  it("should not throw a console.warn if window.performance is supported", () => {
-    expect(global.console.warn).not.toHaveBeenCalled();
-  });
-
-  it("Performance is instantiable", () => {
-    expect(service).toBeInstanceOf(Performance);
-  });
-
-  it("has 'supportsPerfNow' method after initialization", () => {
-    expect(service.supportsPerfNow).toBeDefined();
-  });
-
-  describe("when calls supportsPerfNow()", () => {
+  describe("when calls supported()", () => {
     it("should return true if the browser supports the Navigation Timing API", () => {
-      expect(service.supportsPerfNow).toEqual(true);
+      expect(Performance.supported()).toEqual(true);
+    });
+
+    it("should return false if the browser doesn't supports performance.mark", () => {
+      window.performance.mark = undefined;
+      expect(Performance.supported()).toEqual(false);
+    });
+
+    it("should return false if the browser doesn't supports performance.now", () => {
+      window.performance.mark = () => {
+        return 1;
+      };
+      window.performance.now = undefined;
+      expect(Performance.supported()).toEqual(false);
     });
   });
 
-  it("has 'supportsPerfMark' method after initialization", () => {
-    expect(service.supportsPerfMark).toBeDefined();
-  });
-
-  describe("when calls supportsPerfMark()", () => {
-    it("should return true if the browser supports the User Timing API", () => {
-      expect(service.supportsPerfMark).toEqual(true);
+  describe("when calls now()", () => {
+    it("should call window.performance.now", () => {
+      service.now();
+      expect(window.performance.now.calls.count()).toEqual(1);
     });
   });
 
-  it("has 'supportsPerfObserver' method after initialization", () => {
-    expect(service.supportsPerfObserver).toBeDefined();
-  });
-
-  describe("when calls supportsPerfObserver()", () => {
-    it("should return true if the browser supports the PerformanceObserver Interface", () => {
-      expect(service.supportsPerfObserver).toEqual(true);
+  describe("when calls mark()", () => {
+    it("should call window.performance.mark with the correct argument", () => {
+      service.mark("fibonacci");
+      expect(window.performance.mark.calls.count()).toEqual(1);
+      expect(window.performance.mark).toHaveBeenCalledWith("mark_fibonacci_undefined");
     });
   });
 
-  it("has 'getMeasurementForGivenName' method after initialization", () => {
-    expect(service.getMeasurementForGivenName).toBeDefined();
+  describe("when calls measure()", () => {
+    it("should call window.performance.measure with the correct arguments", () => {
+      service.measure("fibonacci");
+      const start = "mark_fibonacci_start";
+      const end = "mark_fibonacci_end";
+      expect(window.performance.measure.calls.count()).toEqual(1);
+      expect(window.performance.measure).toHaveBeenCalledWith("fibonacci", start, end);
+    });
+
+    it("should call getDurationByMetric with the correct arguments", () => {
+      service.measure("fibonacci", {});
+      expect(service.getDurationByMetric.calls.count()).toEqual(1);
+      expect(service.getDurationByMetric).toHaveBeenCalledWith("fibonacci", {});
+    });
+  });
+
+  describe("when calls firstContentfulPaint()", () => {
+    it("should call initPerformanceObserver()", () => {
+      service.firstContentfulPaint();
+      expect(window.PerformanceObserver.calls.count()).toEqual(1);
+    });
+  });
+
+  describe("when calls getDurationByMetric()", () => {
+    it("should return entry.duration when entryType is not measure", () => {
+      window.performance.getEntriesByName = () => {
+        return [{
+          duration: 12345,
+          entryType: "notMeasure",
+        }];
+      };
+      const value = service.getDurationByMetric("metricName");
+      expect(value).toEqual(12345);
+    });
+
+    it("should return -1 when entryType is a measure", () => {
+      window.performance.getEntriesByName = () => {
+        return [{
+          duration: 12345,
+          entryType: "measure",
+        }];
+      };
+      const value = service.getDurationByMetric("metricName");
+      expect(value).toEqual(-1);
+    });
   });
 
   describe("when calls getMeasurementForGivenName()", () => {
@@ -108,89 +156,42 @@ describe("Performance test", () => {
     });
   });
 
-  it("has 'performanceNow' method after initialization", () => {
-    expect(service.performanceNow).toBeDefined();
-  });
-
-  it("has 'mark' method after initialization", () => {
-    expect(service.mark).toBeDefined();
-  });
-
-  describe("when calls mark()", () => {
-    it("should call window.performance.mark if the browser does supports the Mark Timing API", () => {
-      service.mark();
-      expect(window.performance.mark).toHaveBeenCalled();
-    });
-  });
-
-  it("has 'measure' method after initialization", () => {
-    expect(service.measure).toBeDefined();
-  });
-
-  describe("when calls measure()", () => {
-    it("should call window.performance.measure if the browser does supports the Mark Timing API", () => {
-      service.measure();
-      expect(window.performance.measure).toHaveBeenCalled();
-    });
-
-    it("should not call window.performance.measure if the browser doesn't supports the Mark Timing API", () => {
-      window.performance.mark = null;
-      service.measure();
-      expect(window.performance.measure).not.toHaveBeenCalled();
-    });
-  });
-
-  it("has 'initPerformanceObserver' method after initialization", () => {
-    expect(service.initPerformanceObserver).toBeDefined();
-  });
-
-  describe("when calls initPerformanceObserver()", () => {
-    it("should call window.PerformanceObserver", () => {
-      service.initPerformanceObserver();
-      expect(window.PerformanceObserver).toHaveBeenCalled();
-    });
-  });
-
-  it("has 'getFirstPaint' method after initialization", () => {
-    expect(service.getFirstPaint).toBeDefined();
-  });
-
-  describe("when calls getFirstPaint()", () => {
-    it("should return 0 if the browser doesn't supports the Navigation Timing API", () => {
-      window.performance = null;
-      const performance = service.getFirstPaint();
-      expect(performance).toEqual(0);
-    });
-
-    it("should return 0 if PerformanceTiming.navigationStar is 0", () => {
-      window.performance = {
-        timing: {
-          navigationStart: 0,
-        },
-      };
-      const performance = service.getFirstPaint();
-      expect(performance).toEqual(0);
-    });
-
-    it("should return the firstContentfulPaint value if the browser supports the Navigation Timing API", () => {
-      const performance = service.getFirstPaint();
-      expect(performance).toEqual(11111);
-    });
-  });
-
-  it("has 'performanceObserverCb' method after initialization", () => {
-    expect(service.performanceObserverCb).toBeDefined();
-  });
-
   describe("when calls performanceObserverCb()", () => {
-    it("should call callback", () => {
+    it("should call callback with the correct argument", () => {
       const entryList = {
         getEntries: () => {
           return [{ name: "first-contentful-paint", startTime: 1}];
         },
       };
-      service.performanceObserverCb(service.getFirstPaint, entryList);
-      expect(service.getFirstPaint).toHaveBeenCalled();
+      service.callback = () => {
+        return 1;
+      };
+      spyOn(service, "callback").and.callThrough();
+      service.performanceObserverCb(service.callback, entryList);
+      expect(service.callback.calls.count()).toEqual(1);
+      expect(service.callback).toHaveBeenCalledWith({ name: "first-contentful-paint", startTime: 1});
+    });
+
+    it("should not call callback when name is not first-contentful-paint", () => {
+      const entryList = {
+        getEntries: () => {
+          return [{ name: "first-paint", startTime: 1}];
+        },
+      };
+      service.callback = () => {
+        return 1;
+      };
+      spyOn(service, "callback").and.callThrough();
+      service.performanceObserverCb(service.callback, entryList);
+      expect(service.callback).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when calls timeToInteractive()", () => {
+    it("should call ttiPolyfill with the correct argument", () => {
+      service.timeToInteractive(10);
+      expect(service.ttiPolyfill.getFirstConsistentlyInteractive.calls.count()).toEqual(1);
+      expect(service.ttiPolyfill.getFirstConsistentlyInteractive).toHaveBeenCalledWith({ minValue: 10 });
     });
   });
 });

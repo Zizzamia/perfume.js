@@ -1,9 +1,7 @@
-import ttiPolyfill from "tti-polyfill";
-import PerformImpl from "./performance-impl";
-import Performance from "./performance";
 import EmulatedPerformance from "./emulated-performance";
+import Performance from "./performance";
+import PerformImpl from "./performance-impl";
 
-declare const PerformanceObserver: any;
 declare global {
   interface Window {
     ga: any;
@@ -39,15 +37,17 @@ export default class Perfume {
       end: number;
     };
   } = {};
-  private ttiPolyfill: any;
   private perf: any;
 
   constructor(options: any = {}) {
-    this.ttiPolyfill = ttiPolyfill;
     this.config = Object.assign({}, this.config, options);
+
+    // Init performance implementation
     this.perf = Performance.supported() ? new Performance() : new EmulatedPerformance();
     this.perf.config = this.config;
-    this.perf.firstContentfulPaint();
+
+    // Init First Contentful Paint
+    this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
   }
 
   /**
@@ -137,13 +137,39 @@ export default class Perfume {
   }
 
   /**
+   * @param {object} entry
+   */
+  private firstContentfulPaintCb(entry: any) {
+    if (this.config.firstContentfulPaint) {
+      this.logFCP(entry.startTime);
+    }
+    if (Performance.supported()
+        && Performance.supportedLongTask()
+        && this.config.timeToInteractive) {
+      this.perf.timeToInteractive(entry.startTime, this.timeToInteractiveCb.bind(this));
+    }
+  }
+
+  /**
+   * @param {number} timeToInteractive
+   */
+  private timeToInteractiveCb(timeToInteractive: number) {
+    this.timeToInteractiveDuration = timeToInteractive;
+    if (this.timeToInteractiveDuration) {
+      this.log("Time to interactive", this.timeToInteractiveDuration);
+    }
+    if (this.config.timeToInteractiveCb) {
+      this.config.timeToInteractiveCb(this.timeToInteractiveDuration);
+    }
+    this.sendTiming("timeToInteractive", this.timeToInteractiveDuration);
+  }
+
+  /**
    * @param {number} duration
    */
   private logFCP(duration: number) {
     this.firstContentfulPaintDuration = duration;
-    if (this.firstContentfulPaintDuration) {
-      this.log("First Contentful Paint", this.firstContentfulPaintDuration);
-    }
+    this.log("First Contentful Paint", this.firstContentfulPaintDuration);
     this.sendTiming("firstContentfulPaint", this.firstContentfulPaintDuration);
   }
 
