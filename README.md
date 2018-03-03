@@ -1,6 +1,6 @@
 <a href="http://zizzamia.github.io/perfume/"><img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v0-5-0.png" align="left" width="262" /></a>
 
-# [Perfume.js v0.5.0](http://zizzamia.github.io/perfume/)
+# [Perfume.js v0.6.0](http://zizzamia.github.io/perfume/)
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage)
 
 > Perfume is a JavaScript library for measuring Short and Long Script, First Contentful Paint ([FCP](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint)), Time to Interactive ([TTI](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.
@@ -91,7 +91,7 @@ const perfume = new Perfume({
 ```javascript
 perfume.start('fibonacci');
 fibonacci(400);
-perfume.end('fibonacci'); 
+perfume.end('fibonacci');
 // ⚡️ Perfume.js: fibonacci 0.14 ms
 ```
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
@@ -103,7 +103,7 @@ This metric mark the point, immediately after creating a **new component**, when
 ```javascript
 perfume.start('togglePopover');
 $(element).popover('toggle');
-perfume.endPaint('togglePopover'); 
+perfume.endPaint('togglePopover');
 // ⚡️ Perfume.js: togglePopover 10.54 ms
 ```
 ![Performance CFP](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
@@ -119,7 +119,7 @@ const perfume = new Perfume({
 perfume.start('fibonacci');
 fibonacci(400);
 const duration = this.perfume.end('fibonacci');
-perfume.log('Custom logging', duration); 
+perfume.log('Custom logging', duration);
 // 🍻 Beerjs: Custom logging 0.14 ms
 ```
 

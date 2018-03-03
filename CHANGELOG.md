@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0 (2018-3-3)
+
+### Bug Fixes
+
+* **test:** Increased cross-browser tests and separate the native logic from the emulated version [#24c8996](https://github.com/Zizzamia/perfume.js/commit/24c8996fa894e64e928b84ec680e2fa61df4aa99) [#22](https://github.com/Zizzamia/perfume.js/issues/22).
+
+
 ## 0.5.0 (2018-1-14)
 
 ### Features
