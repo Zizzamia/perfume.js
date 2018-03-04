@@ -90,9 +90,9 @@ const perfume = new Perfume({
 
 ```javascript
 perfume.start('fibonacci');
-fibonacci(800);
+fibonacci(400);
 perfume.end('fibonacci');
-// ⚡️ Perfume.js: fibonacci 0.30 ms
+// ⚡️ Perfume.js: fibonacci 0.14 ms
 ```
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
 
@@ -117,10 +117,10 @@ const perfume = new Perfume({
   logPrefix: "🍻 Beerjs:"
 });
 perfume.start('fibonacci');
-fibonacci(800);
+fibonacci(400);
 const duration = this.perfume.end('fibonacci');
 perfume.log('Custom logging', duration);
-// 🍻 Beerjs: Custom logging 0.30 ms
+// 🍻 Beerjs: Custom logging 0.14 ms
 ```
 
 
