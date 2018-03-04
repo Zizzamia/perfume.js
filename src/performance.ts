@@ -93,7 +93,7 @@ export default class Performance implements PerformImpl {
    */
   private getDurationByMetric(metricName: string, metrics: any) {
     const entry = this.getMeasurementForGivenName(metricName);
-    if (entry && entry.entryType !== "measure") {
+    if (entry && entry.entryType === "measure") {
       return entry.duration;
     }
     return -1;

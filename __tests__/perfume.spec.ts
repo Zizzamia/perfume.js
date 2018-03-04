@@ -97,7 +97,7 @@ describe("Perfume test", () => {
       perfume.start("metricName");
       perfume.end("metricName", true);
       expect(perfume.log.calls.count()).toEqual(1);
-      expect(perfume.log).toHaveBeenCalledWith("metricName", -1);
+      expect(perfume.log).toHaveBeenCalledWith("metricName", 12345);
     });
 
     it("should not call log() when logging is false", () => {

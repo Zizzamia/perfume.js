@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.1 (2018-3-3)
+
+### Bug Fixes
+
+* **start/end:** Fixed Performance.getDurationByMetric method
+
+
 ## 0.6.0 (2018-3-3)
 
 ### Bug Fixes

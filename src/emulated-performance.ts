@@ -1,5 +1,7 @@
 import PerformImpl from "./performance-impl";
 
+declare global {}
+
 interface PerformancePaintTiming {
   name: string;
   entryType: string;

@@ -131,7 +131,7 @@ describe("Performance test", () => {
         }];
       };
       const value = service.getDurationByMetric("metricName");
-      expect(value).toEqual(12345);
+      expect(value).toEqual(-1);
     });
 
     it("should return -1 when entryType is a measure", () => {
@@ -142,7 +142,7 @@ describe("Performance test", () => {
         }];
       };
       const value = service.getDurationByMetric("metricName");
-      expect(value).toEqual(-1);
+      expect(value).toEqual(12345);
     });
   });
 
