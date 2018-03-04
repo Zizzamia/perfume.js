@@ -100,13 +100,13 @@ export default class Performance implements PerformImpl {
   }
 
   /**
-   * This assumes the user has made only one measurement for the given
-   * name. Return the first PerformanceEntry objects for the given name.
+   * Return the last PerformanceEntry objects for the given name.
    *
    * @param {string} metricName
    */
   private getMeasurementForGivenName(metricName: string) {
-    return window.performance.getEntriesByName(metricName)[0];
+    const entries = window.performance.getEntriesByName(metricName);
+    return entries[entries.length - 1];
   }
 
   /**

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.2 (2018-3-3)
+
+### Bug Fixes
+
+* **measure:** Fixed getMeasurementForGivenName return value
+
+
 ## 0.6.1 (2018-3-3)
 
 ### Bug Fixes

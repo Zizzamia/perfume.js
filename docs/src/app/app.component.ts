@@ -1,7 +1,7 @@
 // Angular & Third Party
 import { Component, ElementRef, ChangeDetectorRef } from '@angular/core';
-import Perfume from 'perfume.js';
-// import Perfume from '../../../src/perfume';
+// import Perfume from 'perfume.js';
+import Perfume from '../../../src/perfume';
 
 declare const $: any;
 
@@ -102,7 +102,7 @@ export class AppComponent {
 
   measureFibonacci() {
     this.perfume.start('fibonacci');
-    this.fibonacci(400);
+    this.fibonacci(800);
     const duration = this.perfume.end('fibonacci');
     this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration.toFixed(2)} ms`;
   }
@@ -118,7 +118,7 @@ export class AppComponent {
 
   customLogging() {
     this.perfume.start('fibonacci');
-    this.fibonacci(400);
+    this.fibonacci(800);
     const duration = this.perfume.end('fibonacci');
     this.perfume.log('Custom logging', duration);
     this.logCustom = `🍻 Beerjs: Custom logging ${duration.toFixed(2)} ms`;

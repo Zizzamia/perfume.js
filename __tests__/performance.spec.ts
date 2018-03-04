@@ -13,6 +13,9 @@ describe("Performance test", () => {
         return [{
           duration: 12345,
           entryType: "measure",
+        }, {
+          duration: 12346,
+          entryType: "measure",
         }];
       },
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark
@@ -139,10 +142,13 @@ describe("Performance test", () => {
         return [{
           duration: 12345,
           entryType: "measure",
+        }, {
+          duration: 12346,
+          entryType: "measure",
         }];
       };
       const value = service.getDurationByMetric("metricName");
-      expect(value).toEqual(12345);
+      expect(value).toEqual(12346);
     });
   });
 
@@ -150,7 +156,7 @@ describe("Performance test", () => {
     it("should return the first PerformanceEntry objects for the given name", () => {
       const value = service.getMeasurementForGivenName("metricName");
       expect(value).toEqual({
-        duration: 12345,
+        duration: 12346,
         entryType: "measure",
       });
     });
