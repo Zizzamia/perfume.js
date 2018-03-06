@@ -27,7 +27,7 @@ export default class EmulatedPerformance implements PerformImpl {
    * @param {string} type
    */
   public mark(metricName: string, type: string) {
-    global.console.warn(this.config.logPrefix, `Timeline won't be marked for "${metricName}".`);
+    // Timeline won't be marked
   }
 
   /**
@@ -60,7 +60,7 @@ export default class EmulatedPerformance implements PerformImpl {
    */
   private getDurationByMetric(metricName: string, metrics: any) {
     const duration = metrics[metricName].end - metrics[metricName].start;
-    return duration || -1;
+    return duration || 0;
   }
 
   /**

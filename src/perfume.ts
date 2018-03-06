@@ -38,6 +38,7 @@ export default class Perfume {
     };
   } = {};
   private perf: any;
+  private perfEmulated: any;
 
   constructor(options: any = {}) {
     this.config = Object.assign({}, this.config, options);
@@ -47,7 +48,12 @@ export default class Perfume {
     this.perf.config = this.config;
 
     // Init First Contentful Paint
-    this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
+    if (Performance.supportedPerformanceObserver()) {
+      this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
+    } else {
+      this.perfEmulated = new EmulatedPerformance();
+      this.perfEmulated.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
+    }
   }
 
   /**
@@ -115,8 +121,8 @@ export default class Perfume {
    * @param {number} duration
    */
   public log(metricName: string, duration: number) {
-    if (!metricName || !duration) {
-      global.console.warn(this.config.logPrefix, "Please provide a metric name and the duration value");
+    if (!metricName) {
+      global.console.warn(this.config.logPrefix, "Please provide a metric name");
       return;
     }
     const durationMs = duration.toFixed(2);
@@ -144,6 +150,7 @@ export default class Perfume {
       this.logFCP(entry.startTime);
     }
     if (Performance.supported()
+        && Performance.supportedPerformanceObserver()
         && Performance.supportedLongTask()
         && this.config.timeToInteractive) {
       this.perf.timeToInteractive(entry.startTime, this.timeToInteractiveCb.bind(this));

@@ -145,7 +145,7 @@ describe("Perfume test", () => {
   describe("when calls log()", () => {
     it("should call global.console.warn() if params are not correct", () => {
       perfume.log();
-      const text = "Please provide a metric name and the duration value";
+      const text = "Please provide a metric name";
       expect(global.console.warn.calls.count()).toEqual(1);
       expect(global.console.warn).toHaveBeenCalledWith(perfume.config.logPrefix, text);
     });
@@ -187,6 +187,7 @@ describe("Perfume test", () => {
       };
       perfume.config.firstContentfulPaint = true;
       perfume.config.timeToInteractive = true;
+      window.chrome = true;
     });
 
     it("should call logFCP() with the correct arguments", () => {

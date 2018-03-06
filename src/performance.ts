@@ -1,15 +1,25 @@
 import ttiPolyfill from "tti-polyfill";
 import PerformImpl from "./performance-impl";
 
+declare global {
+  interface Window {
+    chrome: any;
+  }
+}
 declare const PerformanceObserver: any;
 declare interface PerformanceObserverEntryList {
   getEntries: any;
+  getEntriesByName: any;
+  getEntriesByType: any;
 }
 
 export default class Performance implements PerformImpl {
+
   /**
    * True if the browser supports the Navigation Timing API,
    * User Timing API and the PerformanceObserver Interface.
+   * In Safari, the User Timing API (performance.mark()) is not available,
+   * so the DevTools timeline will not be annotated with marks.
    * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
    * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
    *
@@ -19,6 +29,17 @@ export default class Performance implements PerformImpl {
     return window.performance
            && !!performance.now
            && !!performance.mark;
+  }
+
+  /**
+   * For now only Chrome fully support the PerformanceObserver interface
+   * and the entryType "paint".
+   * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
+   *
+   * @type {boolean}
+   */
+  public static supportedPerformanceObserver(): boolean {
+    return window.chrome;
   }
 
   /**
@@ -34,6 +55,7 @@ export default class Performance implements PerformImpl {
   public timeToInteractiveDuration: number = 0;
   public config: any;
   private ttiPolyfill: any;
+  private perfObserver: any;
 
   constructor() {
     this.ttiPolyfill = ttiPolyfill;
@@ -63,7 +85,7 @@ export default class Performance implements PerformImpl {
    * @param {object} metrics
    * @param {string} endMark
    */
-  public measure(metricName: string, metrics: object): number {
+  public measure(metricName: string, metrics: object): any {
     const startMark = `mark_${metricName}_start`;
     const endMark = `mark_${metricName}_end`;
     window.performance.measure(metricName, startMark, endMark);
@@ -79,9 +101,9 @@ export default class Performance implements PerformImpl {
    *
    * @param {any} cb
    */
-  public firstContentfulPaint(cb: any) {
-    const observer = new PerformanceObserver(this.performanceObserverCb.bind(this, cb));
-    observer.observe({entryTypes: ["paint"]});
+  public firstContentfulPaint(cb: any): any {
+    this.perfObserver = new PerformanceObserver(this.performanceObserverCb.bind(this, cb));
+    this.perfObserver.observe({entryTypes: ["paint"]});
   }
 
   /**
@@ -114,10 +136,13 @@ export default class Performance implements PerformImpl {
    * @param {PerformanceObserverEntryList} entryList
    */
   private performanceObserverCb(cb: any, entryList: PerformanceObserverEntryList) {
-    for (const performancePaintTiming of entryList.getEntries()) {
-      if (performancePaintTiming.name === "first-contentful-paint") {
-        cb(performancePaintTiming);
-      }
+    const entries = entryList.getEntries()
+    .filter((performancePaintTiming: any) => {
+      return performancePaintTiming.name === "first-contentful-paint";
+    });
+    if (entries.length) {
+      cb(entries[0]);
+      this.perfObserver.disconnect();
     }
   }
 

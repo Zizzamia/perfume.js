@@ -39,13 +39,8 @@ describe("Emulated performance test", () => {
     });
   });
 
-  describe("when calls mark()", () => {
-    it("should call global.console.warn with the correct arguments", () => {
-      service.mark("fibonacci");
-      const text = "Timeline won't be marked for \"fibonacci\".";
-      expect(global.console.warn.calls.count()).toEqual(1);
-      expect(global.console.warn).toHaveBeenCalledWith(service.config.logPrefix, text);
-    });
+  it('has "mark" method ', () => {
+    expect(service.mark).toBeDefined();
   });
 
   describe("when calls measure()", () => {
@@ -96,7 +91,7 @@ describe("Emulated performance test", () => {
         },
       };
       const duration = service.getDurationByMetric("age", metrics);
-      expect(duration).toEqual(-1);
+      expect(duration).toEqual(0);
     });
   });
 

@@ -172,6 +172,11 @@ describe("Performance test", () => {
       service.callback = () => {
         return 1;
       };
+      service.perfObserver = {
+        disconnect: () => {
+          return true;
+        },
+      };
       spyOn(service, "callback").and.callThrough();
       service.performanceObserverCb(service.callback, entryList);
       expect(service.callback.calls.count()).toEqual(1);
