@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.3 (2018-3-5)
+
+### Bug Fixes
+
+* **start/end:** Fixed support performance.measure in Safari
+
+
 ## 0.6.2 (2018-3-3)
 
 ### Bug Fixes
