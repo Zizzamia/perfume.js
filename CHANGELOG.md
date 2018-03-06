@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.4 (2018-3-5)
+
+### Bug Fixes
+
+* **uglify:** minify generated bundle
+
+
 ## 0.6.3 (2018-3-5)
 
 ### Bug Fixes
