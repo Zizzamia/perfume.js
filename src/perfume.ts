@@ -1,3 +1,9 @@
+/*!
+ * Perfume.js v0.6.3 (http://zizzamia.github.io/perfume)
+ * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
+ * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
+ * @license
+ */
 import EmulatedPerformance from "./emulated-performance";
 import Performance from "./performance";
 import PerformImpl from "./performance-impl";

@@ -1,11 +1,12 @@
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import sourceMaps from 'rollup-plugin-sourcemaps'
-import camelCase from 'lodash.camelcase'
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+import sourceMaps from 'rollup-plugin-sourcemaps';
+import uglify from 'rollup-plugin-uglify';
+import camelCase from 'lodash.camelcase';
 
-const pkg = require('./package.json')
+const pkg = require('./package.json');
 
-const libraryName = 'perfume'
+const libraryName = 'perfume';
 
 export default {
   input: `dist/es/${libraryName}.js`,
@@ -29,5 +30,17 @@ export default {
 
     // Resolve source maps to the original source
     sourceMaps(),
+    uglify({
+      output: {
+        comments: function(node, comment) {
+          const text = comment.value;
+          const type = comment.type;
+          if (type == "comment2") {
+            // multiline comment
+            return /@preserve|@license|@cc_on/i.test(text);
+          }
+        }
+      }
+    }),
   ],
 }
