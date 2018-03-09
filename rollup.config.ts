@@ -6,13 +6,12 @@ import camelCase from 'lodash.camelcase';
 
 const pkg = require('./package.json');
 
-const libraryName = 'perfume';
-
 export default {
-  input: `dist/es/${libraryName}.js`,
+  input: `dist/es/perfume.js`,
   output: [
-    { file: pkg.main, name: camelCase(libraryName), format: 'umd' },
     { file: pkg.module, format: 'es' },
+    { file: pkg.iife, name: 'perfume', format: 'iife' },
+    { file: pkg.main, name: 'perfume.umd', format: 'umd' },
   ],
   sourcemap: true,
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')

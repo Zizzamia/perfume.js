@@ -20,6 +20,7 @@
     "web-performance-reports",
     "webperf"
   ],
+  "iife": "dist/perfume.iife.js",
   "main": "dist/perfume.umd.js",
   "module": "dist/perfume.es5.js",
   "typings": "dist/types/perfume.d.ts",
