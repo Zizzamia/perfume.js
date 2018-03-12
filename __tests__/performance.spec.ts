@@ -177,24 +177,11 @@ describe("Performance test", () => {
           return true;
         },
       };
+      service.config = {};
       spyOn(service, "callback").and.callThrough();
       service.performanceObserverCb(service.callback, entryList);
       expect(service.callback.calls.count()).toEqual(1);
-      expect(service.callback).toHaveBeenCalledWith({ name: "first-contentful-paint", startTime: 1});
-    });
-
-    it("should not call callback when name is not first-contentful-paint", () => {
-      const entryList = {
-        getEntries: () => {
-          return [{ name: "first-paint", startTime: 1}];
-        },
-      };
-      service.callback = () => {
-        return 1;
-      };
-      spyOn(service, "callback").and.callThrough();
-      service.performanceObserverCb(service.callback, entryList);
-      expect(service.callback).not.toHaveBeenCalled();
+      expect(service.callback).toHaveBeenCalledWith([{ name: "first-contentful-paint", startTime: 1}]);
     });
   });
 

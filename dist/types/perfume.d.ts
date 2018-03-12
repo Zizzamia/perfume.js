@@ -5,6 +5,7 @@ declare global  {
 }
 export default class Perfume {
     config: {
+        firstPaint: boolean;
         firstContentfulPaint: boolean;
         googleAnalytics: {
             enable: boolean;
@@ -15,6 +16,7 @@ export default class Perfume {
         timeToInteractive: boolean;
         timeToInteractiveCb?: any;
     };
+    firstPaintDuration: number;
     firstContentfulPaintDuration: number;
     timeToInteractiveDuration: number;
     private metrics;
@@ -53,7 +55,7 @@ export default class Perfume {
     /**
      * @param {object} entry
      */
-    private firstContentfulPaintCb(entry);
+    private firstContentfulPaintCb(entries);
     /**
      * @param {number} timeToInteractive
      */
@@ -61,7 +63,7 @@ export default class Perfume {
     /**
      * @param {number} duration
      */
-    private logFCP(duration);
+    private logFCP(duration, logText, metricName);
     /**
      * Sends the User timing measure to Google Analytics.
      * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])

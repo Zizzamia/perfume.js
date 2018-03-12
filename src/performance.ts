@@ -136,14 +136,14 @@ export default class Performance implements PerformImpl {
    * @param {PerformanceObserverEntryList} entryList
    */
   private performanceObserverCb(cb: any, entryList: PerformanceObserverEntryList) {
-    const entries = entryList.getEntries()
-    .filter((performancePaintTiming: any) => {
-      return performancePaintTiming.name === "first-contentful-paint";
+    const entries = entryList.getEntries();
+    cb(entries);
+    entries.forEach((performancePaintTiming: any) => {
+      if (this.config.firstContentfulPaint
+          && performancePaintTiming.name === "first-contentful-paint") {
+        this.perfObserver.disconnect();
+      }
     });
-    if (entries.length) {
-      cb(entries[0]);
-      this.perfObserver.disconnect();
-    }
   }
 
   /**

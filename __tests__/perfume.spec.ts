@@ -177,33 +177,33 @@ describe("Perfume test", () => {
   });
 
   describe("when calls firstContentfulPaintCb()", () => {
-    let entry;
+    let entries;
 
     beforeEach(() => {
       spyOn(perfume.perf, "timeToInteractive").and.callThrough();
-      entry = {
+      entries = [{
         name: "first-contentful-paint",
         startTime: 1,
-      };
+      }];
       perfume.config.firstContentfulPaint = true;
       perfume.config.timeToInteractive = true;
       window.chrome = true;
     });
 
     it("should call logFCP() with the correct arguments", () => {
-      perfume.firstContentfulPaintCb(entry);
+      perfume.firstContentfulPaintCb(entries);
       expect(perfume.logFCP.calls.count()).toEqual(1);
-      expect(perfume.logFCP).toHaveBeenCalledWith(1);
+      expect(perfume.logFCP).toHaveBeenCalledWith(1, "First Contentful Paint", "firstContentfulPaint");
     });
 
     it("should not call logFCP() when firstContentfulPaint is false", () => {
       perfume.config.firstContentfulPaint = false;
-      perfume.firstContentfulPaintCb(entry);
+      perfume.firstContentfulPaintCb(entries);
       expect(perfume.logFCP).not.toHaveBeenCalled();
     });
 
     it("should call timeToInteractive()", () => {
-      perfume.firstContentfulPaintCb(entry);
+      perfume.firstContentfulPaintCb(entries);
       expect(perfume.perf.timeToInteractive.calls.count()).toEqual(1);
     });
   });
@@ -242,19 +242,19 @@ describe("Perfume test", () => {
 
   describe("when calls logFCP()", () => {
     it("should call log() with the correct arguments", () => {
-      perfume.logFCP(1);
+      perfume.logFCP(1, "First Contentful Paint", "firstContentfulPaint");
       expect(perfume.log.calls.count()).toEqual(1);
       expect(perfume.log).toHaveBeenCalledWith("First Contentful Paint", perfume.firstContentfulPaintDuration);
     });
 
     it("should call sendTiming() with the correct arguments", () => {
-      perfume.logFCP(1);
+      perfume.logFCP(1, "First Contentful Paint", "firstContentfulPaint");
       expect(perfume.sendTiming.calls.count()).toEqual(1);
       expect(perfume.sendTiming).toHaveBeenCalledWith("firstContentfulPaint", perfume.firstContentfulPaintDuration);
     });
 
     it("should perfume.firstContentfulPaintDuration be equal to duration", () => {
-      perfume.logFCP(1);
+      perfume.logFCP(1, "First Contentful Paint", "firstContentfulPaint");
       expect(perfume.firstContentfulPaintDuration).toEqual(1);
     });
   });

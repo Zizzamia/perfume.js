@@ -16,6 +16,7 @@ declare global {
 
 export default class Perfume {
   public config: {
+    firstPaint: boolean,
     firstContentfulPaint: boolean,
     googleAnalytics: {
       enable: boolean;
@@ -26,6 +27,7 @@ export default class Perfume {
     timeToInteractive: boolean,
     timeToInteractiveCb?: any,
   } = {
+    firstPaint: false,
     firstContentfulPaint: false,
     googleAnalytics: {
       enable: false,
@@ -35,6 +37,7 @@ export default class Perfume {
     logging: true,
     timeToInteractive: false,
   };
+  public firstPaintDuration: number = 0;
   public firstContentfulPaintDuration: number = 0;
   public timeToInteractiveDuration: number = 0;
   private metrics: {
@@ -72,7 +75,7 @@ export default class Perfume {
       return;
     }
     if (this.metrics[metricName]) {
-      global.console.warn(this.config.logPrefix, "Recording already started.");
+      window.console.warn(this.config.logPrefix, "Recording already started.");
       return;
     }
     this.metrics[metricName] = {
@@ -92,7 +95,7 @@ export default class Perfume {
       return;
     }
     if (!this.metrics[metricName]) {
-      global.console.warn(this.config.logPrefix, "Recording already stopped.");
+      window.console.warn(this.config.logPrefix, "Recording already stopped.");
       return;
     }
     this.metrics[metricName].end = this.perf.now();
@@ -128,13 +131,13 @@ export default class Perfume {
    */
   public log(metricName: string, duration: number) {
     if (!metricName) {
-      global.console.warn(this.config.logPrefix, "Please provide a metric name");
+      window.console.warn(this.config.logPrefix, "Please provide a metric name");
       return;
     }
     const durationMs = duration.toFixed(2);
     const style = "color: #ff6d00;font-size:12px;";
     const text = `%c ${this.config.logPrefix} ${metricName} ${durationMs} ms`;
-    global.console.log(text, style);
+    window.console.log(text, style);
   }
 
   /**
@@ -144,22 +147,34 @@ export default class Perfume {
     if (metricName) {
       return true;
     }
-    global.console.warn(this.config.logPrefix, "Please provide a metric name");
+    window.console.warn(this.config.logPrefix, "Please provide a metric name");
     return false;
   }
 
   /**
    * @param {object} entry
    */
-  private firstContentfulPaintCb(entry: any) {
-    if (this.config.firstContentfulPaint) {
-      this.logFCP(entry.startTime);
-    }
+  private firstContentfulPaintCb(entries: any) {
+    let firstContentfulPaintDuration;
+    entries.forEach((performancePaintTiming: any) => {
+      if (this.config.firstPaint
+          && performancePaintTiming.name === "first-paint") {
+        this.logFCP(performancePaintTiming.startTime, "First Paint", "firstPaint");
+      }
+      if (this.config.firstContentfulPaint
+          && performancePaintTiming.name === "first-contentful-paint") {
+        this.logFCP(performancePaintTiming.startTime, "First Contentful Paint", "firstContentfulPaint");
+      }
+      if (performancePaintTiming.name === "first-contentful-paint") {
+        firstContentfulPaintDuration = performancePaintTiming.startTime;
+      }
+    });
     if (Performance.supported()
         && Performance.supportedPerformanceObserver()
         && Performance.supportedLongTask()
-        && this.config.timeToInteractive) {
-      this.perf.timeToInteractive(entry.startTime, this.timeToInteractiveCb.bind(this));
+        && this.config.timeToInteractive
+        && firstContentfulPaintDuration) {
+      this.perf.timeToInteractive(firstContentfulPaintDuration, this.timeToInteractiveCb.bind(this));
     }
   }
 
@@ -180,10 +195,15 @@ export default class Perfume {
   /**
    * @param {number} duration
    */
-  private logFCP(duration: number) {
-    this.firstContentfulPaintDuration = duration;
-    this.log("First Contentful Paint", this.firstContentfulPaintDuration);
-    this.sendTiming("firstContentfulPaint", this.firstContentfulPaintDuration);
+  private logFCP(duration: number, logText: string, metricName: string) {
+    if (metricName === "firstPaint") {
+      this.firstPaintDuration = duration;
+    }
+    if (metricName === "firstContentfulPaint") {
+      this.firstContentfulPaintDuration = duration;
+    }
+    this.log(logText, duration);
+    this.sendTiming(metricName, duration);
   }
 
   /**
@@ -200,7 +220,7 @@ export default class Perfume {
       return;
     }
     if (!window.ga) {
-      global.console.warn(this.config.logPrefix, "Google Analytics has not been loaded");
+      window.console.warn(this.config.logPrefix, "Google Analytics has not been loaded");
       return;
     }
     const durationInteger = Math.round(duration);

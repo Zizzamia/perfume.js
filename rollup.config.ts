@@ -29,17 +29,17 @@ export default {
 
     // Resolve source maps to the original source
     sourceMaps(),
-    uglify({
-      output: {
-        comments: function(node, comment) {
-          const text = comment.value;
-          const type = comment.type;
-          if (type == "comment2") {
-            // multiline comment
-            return /@preserve|@license|@cc_on/i.test(text);
-          }
-        }
-      }
-    }),
+    //uglify({
+    //  output: {
+    //    comments: function(node, comment) {
+    //      const text = comment.value;
+    //      const type = comment.type;
+    //      if (type == "comment2") {
+    //        // multiline comment
+    //        return /@preserve|@license|@cc_on/i.test(text);
+    //      }
+    //    }
+    //  }
+    //}),
   ],
 }

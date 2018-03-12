@@ -109,14 +109,15 @@ var Performance = /** @class */ (function () {
      * @param {PerformanceObserverEntryList} entryList
      */
     Performance.prototype.performanceObserverCb = function (cb, entryList) {
-        var entries = entryList.getEntries()
-            .filter(function (performancePaintTiming) {
-            return performancePaintTiming.name === "first-contentful-paint";
+        var _this = this;
+        var entries = entryList.getEntries();
+        cb(entries);
+        entries.forEach(function (performancePaintTiming) {
+            if (_this.config.firstContentfulPaint
+                && performancePaintTiming.name === "first-contentful-paint") {
+                _this.perfObserver.disconnect();
+            }
         });
-        if (entries.length) {
-            cb(entries[0]);
-            this.perfObserver.disconnect();
-        }
     };
     /**
      * The polyfill exposes a getFirstConsistentlyInteractive() method,

@@ -1,7 +1,7 @@
 // Angular & Third Party
 import { Component, ElementRef, ChangeDetectorRef } from '@angular/core';
-import Perfume from 'perfume.js';
-// import Perfume from '../../../src/perfume';
+// import Perfume from 'perfume.js';
+import Perfume from '../../../src/perfume';
 
 declare const $: any;
 
@@ -27,6 +27,7 @@ export class AppComponent {
 
     // Perfume
     this.perfume = new Perfume({
+      firstPaint: true,
       firstContentfulPaint: true,
       googleAnalytics: {
         enable: true,
