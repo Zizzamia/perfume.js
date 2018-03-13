@@ -3,7 +3,7 @@
 # [Perfume.js v0.6.5](http://zizzamia.github.io/perfume/)
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](http://img.badgesize.io/Zizzamia/perfume.js/master/dist/perfume.umd.js?compression=gzip&label=JS+gzip+size)](https://github.com/Zizzamia/perfume.js/blob/master/dist/perfume.umd.js)
 
-> Perfume is a JavaScript library for measuring Short and Long Script, First Contentful Paint ([FCP](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint)), Time to Interactive ([TTI](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.
+> Perfume is a JavaScript library for measuring Short and Long Script, First (Contentful) Paint ([FP/FCP](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint)), Time to Interactive ([TTI](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.
 
 <br />
 <br />
@@ -17,6 +17,7 @@ When a user navigates to a web page, they're typically looking for visual feedba
 
 Is it happening? Is it useful? Is it usable? Is it delightful?
 To understand when a page delivers this feedback to its users, we've defined several new metrics:
+- First Paint (FC)
 - First Contentful Paint (FCP)
 - Time to Interactive (TTI)
 - Component First Paint (CFP)
