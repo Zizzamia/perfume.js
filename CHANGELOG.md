@@ -1,10 +1,17 @@
 # Changelog
 
+## 0.6.5 (2018-3-12)
+
+### Bug Fixes
+
+* **feat:** Init FirstPaint metric
+
+
 ## 0.6.4 (2018-3-5)
 
 ### Bug Fixes
 
-* **uglify:** minify generated bundle
+* **uglify:** Minify generated bundle
 
 
 ## 0.6.3 (2018-3-5)

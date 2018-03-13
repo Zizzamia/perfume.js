@@ -143,6 +143,7 @@ Default options provided to Perfume.js constructor.
 
 ```javascript
 const options = {
+  firstPaint: false,
   firstContentfulPaint: false,
   googleAnalytics: {
     enable: false,
