@@ -182,9 +182,13 @@ describe("Perfume test", () => {
     beforeEach(() => {
       spyOn(perfume.perf, "timeToInteractive").and.callThrough();
       entries = [{
+        name: "first-paint",
+        startTime: 1,
+      }, {
         name: "first-contentful-paint",
         startTime: 1,
       }];
+      perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
       perfume.config.timeToInteractive = true;
       window.chrome = true;
@@ -192,11 +196,13 @@ describe("Perfume test", () => {
 
     it("should call logFCP() with the correct arguments", () => {
       perfume.firstContentfulPaintCb(entries);
-      expect(perfume.logFCP.calls.count()).toEqual(1);
+      expect(perfume.logFCP.calls.count()).toEqual(2);
+      expect(perfume.logFCP).toHaveBeenCalledWith(1, "First Paint", "firstPaint");
       expect(perfume.logFCP).toHaveBeenCalledWith(1, "First Contentful Paint", "firstContentfulPaint");
     });
 
-    it("should not call logFCP() when firstContentfulPaint is false", () => {
+    it("should not call logFCP() when firstPaint and firstContentfulPaint is false", () => {
+      perfume.config.firstPaint = false;
       perfume.config.firstContentfulPaint = false;
       perfume.firstContentfulPaintCb(entries);
       expect(perfume.logFCP).not.toHaveBeenCalled();

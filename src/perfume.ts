@@ -16,8 +16,8 @@ declare global {
 
 export default class Perfume {
   public config: {
-    firstPaint: boolean,
     firstContentfulPaint: boolean,
+    firstPaint: boolean,
     googleAnalytics: {
       enable: boolean;
       timingVar: string;
@@ -27,8 +27,8 @@ export default class Perfume {
     timeToInteractive: boolean,
     timeToInteractiveCb?: any,
   } = {
-    firstPaint: false,
     firstContentfulPaint: false,
+    firstPaint: false,
     googleAnalytics: {
       enable: false,
       timingVar: "name",

@@ -247,8 +247,8 @@ var Perfume = /** @class */ (function () {
     function Perfume(options) {
         if (options === void 0) { options = {}; }
         this.config = {
-            firstPaint: false,
             firstContentfulPaint: false,
+            firstPaint: false,
             googleAnalytics: {
                 enable: false,
                 timingVar: "name",

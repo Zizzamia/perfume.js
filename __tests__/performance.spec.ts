@@ -163,12 +163,9 @@ describe("Performance test", () => {
   });
 
   describe("when calls performanceObserverCb()", () => {
-    it("should call callback with the correct argument", () => {
-      const entryList = {
-        getEntries: () => {
-          return [{ name: "first-contentful-paint", startTime: 1}];
-        },
-      };
+    let entryList;
+
+    beforeEach(() => {
       service.callback = () => {
         return 1;
       };
@@ -177,11 +174,26 @@ describe("Performance test", () => {
           return true;
         },
       };
+      entryList = {
+        getEntries: () => {
+          return [{ name: "first-contentful-paint", startTime: 1}];
+        },
+      };
       service.config = {};
       spyOn(service, "callback").and.callThrough();
+      spyOn(service.perfObserver, "disconnect").and.callThrough();
+    });
+
+    it("should call callback with the correct argument", () => {
       service.performanceObserverCb(service.callback, entryList);
       expect(service.callback.calls.count()).toEqual(1);
       expect(service.callback).toHaveBeenCalledWith([{ name: "first-contentful-paint", startTime: 1}]);
+    });
+
+    it("should call perfObserver.disconnect", () => {
+      service.config.firstContentfulPaint = true;
+      service.performanceObserverCb(service.callback, entryList);
+      expect(service.perfObserver.disconnect.calls.count()).toEqual(1);
     });
   });
 
