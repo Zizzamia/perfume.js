@@ -98,23 +98,23 @@ describe("Emulated performance test", () => {
   describe("when calls getFirstPaint()", () => {
     it("should return 0 if PerformanceTiming.navigationStar is 0", () => {
       const performance = service.getFirstPaint();
-      expect(performance).toEqual({
+      expect(performance).toEqual([{
         duration: 0,
         entryType: "paint",
         name: "first-contentful-paint",
         startTime: 0,
-      });
+      }]);
     });
 
     it("should return performancePaintTiming", () => {
       window.performance.timing.navigationStart = 240;
       const performance = service.getFirstPaint();
-      expect(performance).toEqual({
+      expect(performance).toEqual([{
         duration: 0,
         entryType: "paint",
         name: "first-contentful-paint",
         startTime: 760,
-      });
+      }]);
     });
   });
 });

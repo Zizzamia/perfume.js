@@ -69,7 +69,7 @@ export default class EmulatedPerformance implements PerformImpl {
    *
    * @param {PerformancePaintTiming} performancePaintTiming
    */
-  private getFirstPaint(): PerformancePaintTiming {
+  private getFirstPaint(): PerformancePaintTiming[] {
     const navTiming = window.performance.timing;
     const performancePaintTiming = {
       duration: 0,
@@ -80,6 +80,6 @@ export default class EmulatedPerformance implements PerformImpl {
     if (navTiming && navTiming.navigationStart !== 0) {
       performancePaintTiming.startTime = Date.now() - navTiming.navigationStart;
     }
-    return performancePaintTiming;
+    return [performancePaintTiming];
   }
 }

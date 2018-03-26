@@ -195,6 +195,18 @@ describe("Performance test", () => {
       service.performanceObserverCb(service.callback, entryList);
       expect(service.perfObserver.disconnect.calls.count()).toEqual(1);
     });
+
+    describe("when entries is empty", () => {
+      it("should not call perfObserver.disconnect ", () => {
+        entryList = {
+          getEntries: () => {
+            return [];
+          },
+        };
+        service.performanceObserverCb(service.callback, entryList);
+        expect(service.perfObserver.disconnect.calls.count()).toEqual(0);
+      });
+    });
   });
 
   describe("when calls timeToInteractive()", () => {
