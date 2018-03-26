@@ -65,7 +65,7 @@ var EmulatedPerformance = /** @class */ (function () {
         if (navTiming && navTiming.navigationStart !== 0) {
             performancePaintTiming.startTime = Date.now() - navTiming.navigationStart;
         }
-        return performancePaintTiming;
+        return [performancePaintTiming];
     };
     return EmulatedPerformance;
 }());

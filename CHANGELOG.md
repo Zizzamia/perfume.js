@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.6 (2018-3-25)
+
+### Bug Fixes
+
+* **fix:** emulated performance getFirstPaint() passes array of entries
+
+
 ## 0.6.5 (2018-3-12)
 
 ### Bug Fixes
