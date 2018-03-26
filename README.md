@@ -1,4 +1,4 @@
-<a href="http://zizzamia.github.io/perfume/"><img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v0-6-5.png" align="left" width="262" /></a>
+<a href="http://zizzamia.github.io/perfume/"><img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v0-6-6.png" align="left" width="262" /></a>
 
 # [Perfume.js v0.6.6](http://zizzamia.github.io/perfume/)
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](http://img.badgesize.io/Zizzamia/perfume.js/master/dist/perfume.umd.js?compression=gzip&label=JS+gzip+size)](https://github.com/Zizzamia/perfume.js/blob/master/dist/perfume.umd.js)
