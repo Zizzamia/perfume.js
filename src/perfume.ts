@@ -74,7 +74,7 @@ export default class Perfume {
   /**
    * @return {Promise<number>}
    */
-  public waitUntilTimeToInteractive(): Promise<number> {
+  public observeTimeToInteractive(): Promise<number> {
     return this.timeToInteractivePromise;
   }
 
