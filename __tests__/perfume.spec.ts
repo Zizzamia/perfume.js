@@ -6,6 +6,11 @@ import Perfume from "../src/perfume";
 describe("Perfume test", () => {
   let perfume;
 
+  const mock = {
+    reject: (x) => x,
+    resolve: (x) => x,
+  };
+
   beforeEach(() => {
     window.ga = undefined;
     window.performance = {
@@ -214,7 +219,7 @@ describe("Perfume test", () => {
     });
 
     it("should call logFCP() with the correct arguments", () => {
-      perfume.firstContentfulPaintCb(entries);
+      perfume.firstContentfulPaintCb(entries, mock.resolve, mock.reject);
       expect(perfume.logFCP.calls.count()).toEqual(2);
       expect(perfume.logFCP).toHaveBeenCalledWith(1, "First Paint", "firstPaint");
       expect(perfume.logFCP).toHaveBeenCalledWith(1, "First Contentful Paint", "firstContentfulPaint");
@@ -223,12 +228,12 @@ describe("Perfume test", () => {
     it("should not call logFCP() when firstPaint and firstContentfulPaint is false", () => {
       perfume.config.firstPaint = false;
       perfume.config.firstContentfulPaint = false;
-      perfume.firstContentfulPaintCb(entries);
+      perfume.firstContentfulPaintCb(entries, mock.resolve, mock.reject);
       expect(perfume.logFCP).not.toHaveBeenCalled();
     });
 
     it("should call timeToInteractive()", () => {
-      perfume.firstContentfulPaintCb(entries);
+      perfume.firstContentfulPaintCb(entries, mock.resolve, mock.reject);
       expect(perfume.perf.timeToInteractive.calls.count()).toEqual(1);
     });
   });
