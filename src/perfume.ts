@@ -59,12 +59,12 @@ export default class Perfume {
     this.timeToInteractivePromise = new Promise((resolve, reject) => {
       // Init First Contentful Paint
       if (Performance.supportedPerformanceObserver()) {
-        this.perf.firstContentfulPaint((entries) => {
+        this.perf.firstContentfulPaint((entries: any[]) => {
           this.firstContentfulPaintCb(entries, resolve, reject);
         });
       } else {
         this.perfEmulated = new EmulatedPerformance();
-        this.perfEmulated.firstContentfulPaint((entries) => {
+        this.perfEmulated.firstContentfulPaint((entries: any[]) => {
           this.firstContentfulPaintCb(entries, resolve, reject);
         });
       }
@@ -189,7 +189,7 @@ export default class Perfume {
         && Performance.supportedLongTask()
         && this.config.timeToInteractive
         && firstContentfulPaintDuration) {
-      this.perf.timeToInteractive(firstContentfulPaintDuration).then((time) => {
+      this.perf.timeToInteractive(firstContentfulPaintDuration).then((time: number) => {
         resolve(time);
         this.timeToInteractiveCb(time);
       }).catch(reject);
