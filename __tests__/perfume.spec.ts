@@ -40,7 +40,7 @@ describe("Perfume test", () => {
     perfume.perf.ttiPolyfill = {
       getFirstConsistentlyInteractive: () => {
         return new Promise((resolve) => {
-          resolve();
+          resolve(10);
         });
       },
     };
@@ -58,6 +58,25 @@ describe("Perfume test", () => {
     spyOn(perfume, "timeToInteractiveCb").and.callThrough();
     spyOn(perfume, "logFCP").and.callThrough();
     spyOn(perfume, "sendTiming").and.callThrough();
+  });
+
+  describe("when calls waitUntilTimeToInteractive()", () => {
+    const instance = new Perfume({timeToInteractive: true});
+    instance.perf.timeToInteractive = (n) => new Promise((resolve) => resolve(n));
+    window.chrome = true;
+
+    it("should be a promise", (done) => {
+      const promise = instance.waitUntilTimeToInteractive();
+      expect(promise).toBeInstanceOf(Promise);
+      done();
+    });
+
+    it("should resolve tti on chrome", (done) => {
+      instance.waitUntilTimeToInteractive().then((time) => {
+        expect(typeof time).toBe("number");
+        done();
+      });
+    });
   });
 
   describe("when calls start()", () => {
