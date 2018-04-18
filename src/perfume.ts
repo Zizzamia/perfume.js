@@ -40,6 +40,7 @@ export default class Perfume {
   public firstPaintDuration: number = 0;
   public firstContentfulPaintDuration: number = 0;
   public timeToInteractiveDuration: number = 0;
+  private timeToInteractivePromise: Promise<number>;
   private metrics: {
     [key: string]: {
       start: number;
@@ -55,14 +56,26 @@ export default class Perfume {
     // Init performance implementation
     this.perf = Performance.supported() ? new Performance() : new EmulatedPerformance();
     this.perf.config = this.config;
+    this.timeToInteractivePromise = new Promise((resolve, reject) => {
+      // Init First Contentful Paint
+      if (Performance.supportedPerformanceObserver()) {
+        this.perf.firstContentfulPaint((entries) => {
+          this.firstContentfulPaintCb(entries, resolve, reject);
+        });
+      } else {
+        this.perfEmulated = new EmulatedPerformance();
+        this.perfEmulated.firstContentfulPaint((entries) => {
+          this.firstContentfulPaintCb(entries, resolve, reject);
+        });
+      }
+    });
+  }
 
-    // Init First Contentful Paint
-    if (Performance.supportedPerformanceObserver()) {
-      this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
-    } else {
-      this.perfEmulated = new EmulatedPerformance();
-      this.perfEmulated.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
-    }
+  /**
+   * @return {Promise<number>}
+   */
+  public waitUntilTimeToInteractive(): Promise<number> {
+    return this.timeToInteractivePromise;
   }
 
   /**
@@ -152,9 +165,11 @@ export default class Perfume {
   }
 
   /**
-   * @param {object} entry
+   * @param {Array<PerformancePaintTiming>} entries
+   * @param {(value: any) => void} resolve
+   * @param {(error: any) => void} reject
    */
-  private firstContentfulPaintCb(entries: any) {
+  private firstContentfulPaintCb(entries: any[], resolve: (value: any) => void, reject: (error: any) => void) {
     let firstContentfulPaintDuration;
     entries.forEach((performancePaintTiming: any) => {
       if (this.config.firstPaint
@@ -174,7 +189,10 @@ export default class Perfume {
         && Performance.supportedLongTask()
         && this.config.timeToInteractive
         && firstContentfulPaintDuration) {
-      this.perf.timeToInteractive(firstContentfulPaintDuration, this.timeToInteractiveCb.bind(this));
+      this.perf.timeToInteractive(firstContentfulPaintDuration).then((time) => {
+        resolve(time);
+        this.timeToInteractiveCb(time);
+      }).catch(reject);
     }
   }
 

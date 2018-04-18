@@ -158,9 +158,9 @@ export default class Performance implements PerformImpl {
    * are visible or the point when you know all your event listeners have been added.
    *
    * @param {number} minValue
-   * @param {any} cb
+   * @return {Promise<number>}
    */
-  private timeToInteractive(minValue: number, cb: any) {
-    this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue }).then(cb);
+  private timeToInteractive(minValue: number): Promise<number> {
+    return this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue });
   }
 }
