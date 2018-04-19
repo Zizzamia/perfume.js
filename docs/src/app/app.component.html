@@ -69,7 +69,7 @@
         (free of long tasks). See the
         <a href="https://docs.google.com/document/d/1GGiI9-7KeY3TPqS3YT271upUVimo-XiL5mwWorDUD4c/preview#" target="_blank">metric definition</a> for in-depth implementation details.</p>
       <p class="box__demo">
-        Result: ⚡️ Perfume.js: Time to interactive {{ perfume.timeToInteractiveDuration.toFixed(2) }} ms
+        Result: ⚡️ Perfume.js: Time to interactive {{ (perfume.observeTimeToInteractive() | async)?.toFixed(2) }} ms
       </p>
       <app-gist [gistId]="'Zizzamia/9c971fb35b898871953cc272924ce58d'"></app-gist>
     </div>
