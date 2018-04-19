@@ -50,6 +50,9 @@ export default class Perfume {
   private perfEmulated: any;
 
   constructor(options: any = {}) {
+    this.firstContentfulPaintCb = this.firstContentfulPaintCb.bind(this);
+    this.timeToInteractiveCb    = this.timeToInteractiveCb.bind(this);
+
     this.config = Object.assign({}, this.config, options);
 
     // Init performance implementation
@@ -58,10 +61,10 @@ export default class Perfume {
 
     // Init First Contentful Paint
     if (Performance.supportedPerformanceObserver()) {
-      this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
+      this.perf.firstContentfulPaint(this.firstContentfulPaintCb);
     } else {
       this.perfEmulated = new EmulatedPerformance();
-      this.perfEmulated.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
+      this.perfEmulated.firstContentfulPaint();
     }
   }
 
@@ -174,7 +177,7 @@ export default class Perfume {
         && Performance.supportedLongTask()
         && this.config.timeToInteractive
         && firstContentfulPaintDuration) {
-      this.perf.timeToInteractive(firstContentfulPaintDuration, this.timeToInteractiveCb.bind(this));
+      this.perf.timeToInteractive(firstContentfulPaintDuration, this.timeToInteractiveCb);
     }
   }
 

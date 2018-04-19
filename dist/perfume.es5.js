@@ -255,17 +255,19 @@ var Perfume = /** @class */ (function () {
         this.firstContentfulPaintDuration = 0;
         this.timeToInteractiveDuration = 0;
         this.metrics = {};
+        this.firstContentfulPaintCb = this.firstContentfulPaintCb.bind(this);
+        this.timeToInteractiveCb = this.timeToInteractiveCb.bind(this);
         this.config = Object.assign({}, this.config, options);
         // Init performance implementation
         this.perf = Performance.supported() ? new Performance() : new EmulatedPerformance();
         this.perf.config = this.config;
         // Init First Contentful Paint
         if (Performance.supportedPerformanceObserver()) {
-            this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
+            this.perf.firstContentfulPaint(this.firstContentfulPaintCb);
         }
         else {
             this.perfEmulated = new EmulatedPerformance();
-            this.perfEmulated.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
+            this.perfEmulated.firstContentfulPaint();
         }
     }
     /**
@@ -374,7 +376,7 @@ var Perfume = /** @class */ (function () {
             && Performance.supportedLongTask()
             && this.config.timeToInteractive
             && firstContentfulPaintDuration) {
-            this.perf.timeToInteractive(firstContentfulPaintDuration, this.timeToInteractiveCb.bind(this));
+            this.perf.timeToInteractive(firstContentfulPaintDuration, this.timeToInteractiveCb);
         }
     };
     /**
