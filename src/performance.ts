@@ -1,4 +1,4 @@
-import ttiPolyfill from "tti-polyfill";
+import * as ttiPolyfill from "tti-polyfill";
 import PerformImpl from "./performance-impl";
 import { Metrics, PerfumeConfig } from "./perfume";
 
