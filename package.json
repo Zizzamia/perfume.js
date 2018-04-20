@@ -48,7 +48,7 @@
     "commit": "git-cz",
     "commitmsg": "validate-commit-msg",
     "precommit": "lint-staged",
-    "prepush": "npm run test:prod && npm run build"
+    "prepush": "npm run test:prod"
   },
   "lint-staged": {
     "{src,__tests__}/**/*.ts": [
@@ -88,10 +88,10 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 92,
-        "functions": 92,
-        "lines": 96,
-        "statements": 96
+        "branches": 96,
+        "functions": 95,
+        "lines": 99,
+        "statements": 99
       }
     },
     "collectCoverage": true,
