@@ -59,8 +59,7 @@ export default class Perfume {
   constructor(options: any = {}) {
     this.config = Object.assign({}, this.config, options) as PerfumeConfig;
     // Init performance implementation
-    this.perf = Performance.supported() ? new Performance() : new EmulatedPerformance();
-    this.perf.config = this.config;
+    this.perf = Performance.supported() ? new Performance(this.config) : new EmulatedPerformance(this.config);
     this.timeToInteractivePromise = new Promise((resolve, reject) => {
       // Init First Contentful Paint
       if (Performance.supportedPerformanceObserver()) {
@@ -68,7 +67,7 @@ export default class Perfume {
           this.firstContentfulPaintCb(entries, resolve, reject);
         });
       } else {
-        this.perfEmulated = new EmulatedPerformance();
+        this.perfEmulated = new EmulatedPerformance(this.config);
         this.perfEmulated.firstContentfulPaint((entries: any[]) => {
           this.firstContentfulPaintCb(entries, resolve, reject);
         });

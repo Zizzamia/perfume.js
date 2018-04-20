@@ -2,11 +2,6 @@ import ttiPolyfill from 'tti-polyfill';
 import PerformImpl from './performance-impl';
 import {Metrics, PerfumeConfig} from './perfume';
 
-declare global {
-  interface Window {
-    chrome: any;
-  }
-}
 declare const PerformanceObserver: any;
 
 declare interface PerformanceObserverEntryList {
@@ -41,7 +36,7 @@ export default class Performance implements PerformImpl {
    * @return {boolean}
    */
   public static supportedPerformanceObserver(): boolean {
-    return window.chrome;
+    return (window as any).chrome;
   }
 
   /**
@@ -55,11 +50,10 @@ export default class Performance implements PerformImpl {
   }
 
   public timeToInteractiveDuration: number = 0;
-  public config: PerfumeConfig;
   private ttiPolyfill: any;
   private perfObserver: any;
 
-  constructor() {
+  constructor(public config: PerfumeConfig) {
     this.ttiPolyfill = ttiPolyfill;
   }
 

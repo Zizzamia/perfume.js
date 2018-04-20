@@ -9,7 +9,9 @@ interface PerformancePaintTiming {
 }
 
 export default class EmulatedPerformance implements PerformImpl {
-  public config: PerfumeConfig;
+
+  constructor(public config: PerfumeConfig) {
+  }
 
   /**
    * When performance API is not available
