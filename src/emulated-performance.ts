@@ -1,6 +1,5 @@
 import PerformImpl from "./performance-impl";
-
-declare global {}
+import { Metrics, PerfumeConfig } from "./perfume";
 
 interface PerformancePaintTiming {
   name: string;
@@ -10,13 +9,13 @@ interface PerformancePaintTiming {
 }
 
 export default class EmulatedPerformance implements PerformImpl {
-  public config: any;
+  public config: PerfumeConfig;
 
   /**
    * When performance API is not available
    * returns Date.now that is limited to one-millisecond resolution.
    *
-   * @type {number}
+   * @return {number}
    */
   public now(): number {
     return Date.now() / 1000;
@@ -26,15 +25,16 @@ export default class EmulatedPerformance implements PerformImpl {
    * @param {string} metricName
    * @param {string} type
    */
-  public mark(metricName: string, type: string) {
+  public mark(metricName: string, type: string): void {
     // Timeline won't be marked
   }
 
   /**
    * @param {string} metricName
-   * @param {object} metrics
+   * @param {Metrics} metrics
+   * @return {number}
    */
-  public measure(metricName: string, metrics: object): number {
+  public measure(metricName: string, metrics: Metrics): number {
     return this.getDurationByMetric(metricName, metrics);
   }
 
@@ -43,9 +43,9 @@ export default class EmulatedPerformance implements PerformImpl {
    * the biggest above-the-fold layout change has happened.
    * Uses setTimeout to retrieve FCP
    *
-   * @param {any} cb
+   * @param {(entries: any[]) => void} cb
    */
-  public firstContentfulPaint(cb: any) {
+  public firstContentfulPaint(cb: (entries: any[]) => void): void {
     setTimeout(() => {
       cb(this.getFirstPaint());
     });
@@ -56,9 +56,10 @@ export default class EmulatedPerformance implements PerformImpl {
    * not been made by now() fallback.
    *
    * @param {string} metricName
-   * @param {metrics} any
+   * @param {Metrics} metrics
+   * @return {number}
    */
-  private getDurationByMetric(metricName: string, metrics: any) {
+  private getDurationByMetric(metricName: string, metrics: Metrics): number {
     const duration = metrics[metricName].end - metrics[metricName].start;
     return duration || 0;
   }
@@ -67,11 +68,11 @@ export default class EmulatedPerformance implements PerformImpl {
    * http://msdn.microsoft.com/ff974719
    * developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming/navigationStart
    *
-   * @param {PerformancePaintTiming} performancePaintTiming
+   * @return {PerformancePaintTiming[]}
    */
   private getFirstPaint(): PerformancePaintTiming[] {
     const navTiming = window.performance.timing;
-    const performancePaintTiming = {
+    const performancePaintTiming: PerformancePaintTiming = {
       duration: 0,
       entryType: "paint",
       name: "first-contentful-paint",

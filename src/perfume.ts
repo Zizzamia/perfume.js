@@ -6,7 +6,26 @@
  */
 import EmulatedPerformance from "./emulated-performance";
 import Performance from "./performance";
-import PerformImpl from "./performance-impl";
+
+export interface PerfumeConfig {
+  firstContentfulPaint: boolean;
+  firstPaint: boolean;
+  googleAnalytics: {
+    enable: boolean;
+    timingVar: string;
+  };
+  logPrefix: string;
+  logging: boolean;
+  timeToInteractive: boolean;
+  timeToInteractiveCb?: any;
+}
+
+export interface Metrics {
+  [key: string]: {
+    start: number;
+    end: number;
+  };
+}
 
 declare global {
   interface Window {
@@ -15,18 +34,7 @@ declare global {
 }
 
 export default class Perfume {
-  public config: {
-    firstContentfulPaint: boolean,
-    firstPaint: boolean,
-    googleAnalytics: {
-      enable: boolean;
-      timingVar: string;
-    },
-    logPrefix: string,
-    logging: boolean,
-    timeToInteractive: boolean,
-    timeToInteractiveCb?: any,
-  } = {
+  public config: PerfumeConfig = {
     firstContentfulPaint: false,
     firstPaint: false,
     googleAnalytics: {
@@ -40,29 +48,40 @@ export default class Perfume {
   public firstPaintDuration: number = 0;
   public firstContentfulPaintDuration: number = 0;
   public timeToInteractiveDuration: number = 0;
-  private metrics: {
-    [key: string]: {
-      start: number;
-      end: number;
-    };
-  } = {};
-  private perf: any;
-  private perfEmulated: any;
+  private metrics: Metrics = {};
+  private perf: Performance | EmulatedPerformance;
+  private perfEmulated: EmulatedPerformance;
+  private readonly timeToInteractivePromise: Promise<number>;
 
+  /**
+   * @constructor
+   * @param options
+   */
   constructor(options: any = {}) {
-    this.config = Object.assign({}, this.config, options);
-
+    this.config = Object.assign({}, this.config, options) as PerfumeConfig;
     // Init performance implementation
     this.perf = Performance.supported() ? new Performance() : new EmulatedPerformance();
     this.perf.config = this.config;
+    this.timeToInteractivePromise = new Promise((resolve, reject) => {
+      // Init First Contentful Paint
+      if (Performance.supportedPerformanceObserver()) {
+        this.perf.firstContentfulPaint((entries: any[]) => {
+          this.firstContentfulPaintCb(entries, resolve, reject);
+        });
+      } else {
+        this.perfEmulated = new EmulatedPerformance();
+        this.perfEmulated.firstContentfulPaint((entries: any[]) => {
+          this.firstContentfulPaintCb(entries, resolve, reject);
+        });
+      }
+    });
+  }
 
-    // Init First Contentful Paint
-    if (Performance.supportedPerformanceObserver()) {
-      this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
-    } else {
-      this.perfEmulated = new EmulatedPerformance();
-      this.perfEmulated.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
-    }
+  /**
+   * @return {Promise<number>}
+   */
+  public observeTimeToInteractive(): Promise<number> {
+    return this.timeToInteractivePromise;
   }
 
   /**
@@ -70,7 +89,7 @@ export default class Perfume {
    *
    * @param {string} metricName
    */
-  public start(metricName: string) {
+  public start(metricName: string): void {
     if (!this.checkMetricName(metricName)) {
       return;
     }
@@ -89,8 +108,9 @@ export default class Perfume {
    * End performance measurement
    *
    * @param {string} metricName
+   * @return {void|number}
    */
-  public end(metricName: string) {
+  public end(metricName: string): void | number {
     if (!this.checkMetricName(metricName)) {
       return;
     }
@@ -113,9 +133,10 @@ export default class Perfume {
    * End performance measurement after first paint from the beging of it
    *
    * @param {string} metricName
+   * @return {Promise<number>}
    */
-  public endPaint(metricName: string) {
-    return new Promise((resolve, reject) => {
+  public endPaint(metricName: string): Promise<void|number> {
+    return new Promise((resolve) => {
       setTimeout(() => {
         const duration = this.end(metricName);
         resolve(duration);
@@ -129,7 +150,7 @@ export default class Perfume {
    * @param {string} metricName
    * @param {number} duration
    */
-  public log(metricName: string, duration: number) {
+  public log(metricName: string, duration: number): void {
     if (!metricName) {
       window.console.warn(this.config.logPrefix, "Please provide a metric name");
       return;
@@ -142,8 +163,9 @@ export default class Perfume {
 
   /**
    * @param {string} metricName
+   * @return {boolean}
    */
-  private checkMetricName(metricName: string) {
+  private checkMetricName(metricName: string): boolean {
     if (metricName) {
       return true;
     }
@@ -152,9 +174,11 @@ export default class Perfume {
   }
 
   /**
-   * @param {object} entry
+   * @param {Array<PerformancePaintTiming>} entries
+   * @param {(value: any) => void} resolve
+   * @param {(error: any) => void} reject
    */
-  private firstContentfulPaintCb(entries: any) {
+  private firstContentfulPaintCb(entries: any[], resolve: (value: any) => void, reject: (error: any) => void): void {
     let firstContentfulPaintDuration;
     entries.forEach((performancePaintTiming: any) => {
       if (this.config.firstPaint
@@ -174,14 +198,17 @@ export default class Perfume {
         && Performance.supportedLongTask()
         && this.config.timeToInteractive
         && firstContentfulPaintDuration) {
-      this.perf.timeToInteractive(firstContentfulPaintDuration, this.timeToInteractiveCb.bind(this));
+      (this.perf as Performance).timeToInteractive(firstContentfulPaintDuration).then((time: number) => {
+        resolve(time);
+        this.timeToInteractiveCb(time);
+      }).catch(reject);
     }
   }
 
   /**
    * @param {number} timeToInteractive
    */
-  private timeToInteractiveCb(timeToInteractive: number) {
+  private timeToInteractiveCb(timeToInteractive: number): void {
     this.timeToInteractiveDuration = timeToInteractive;
     if (this.timeToInteractiveDuration) {
       this.log("Time to interactive", this.timeToInteractiveDuration);
@@ -194,8 +221,10 @@ export default class Perfume {
 
   /**
    * @param {number} duration
+   * @param {string} logText
+   * @param {string} metricName
    */
-  private logFCP(duration: number, logText: string, metricName: string) {
+  private logFCP(duration: number, logText: string, metricName: string): void {
     if (metricName === "firstPaint") {
       this.firstPaintDuration = duration;
     }
@@ -215,7 +244,7 @@ export default class Perfume {
    * @param {string} metricName
    * @param {number} duration
    */
-  private sendTiming(metricName: string, duration: number) {
+  private sendTiming(metricName: string, duration: number): void {
     if (!this.config.googleAnalytics.enable) {
       return;
     }

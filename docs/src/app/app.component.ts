@@ -1,5 +1,5 @@
 // Angular & Third Party
-import { Component, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import Perfume from 'perfume.js';
 // import Perfume from '../../../src/perfume';
 
@@ -10,7 +10,7 @@ declare const $: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   logCustom: string;
   logFibonacci: string;
   logTogglePopover: string;
@@ -20,11 +20,8 @@ export class AppComponent {
     [keyof: string]: string
   };
   navSelected: string;
-  element: ElementRef;
 
-  constructor(ElementRef: ElementRef, private ref: ChangeDetectorRef) {
-    this.element = ElementRef;
-
+  constructor() {
     // Perfume
     this.perfume = new Perfume({
       firstPaint: true,
@@ -34,9 +31,6 @@ export class AppComponent {
         timingVar: "userId"
       },
       timeToInteractive: true,
-      timeToInteractiveCb: () => {
-        this.ref.detectChanges();
-      },
     });
     this.path = window.location.href.split('#')[0];
 

@@ -1,5 +1,6 @@
-import ttiPolyfill from "tti-polyfill";
+import * as ttiPolyfill from "tti-polyfill";
 import PerformImpl from "./performance-impl";
+import { Metrics, PerfumeConfig } from "./perfume";
 
 declare global {
   interface Window {
@@ -23,7 +24,7 @@ export default class Performance implements PerformImpl {
    * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
    * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
    *
-   * @type {boolean}
+   * @return {boolean}
    */
   public static supported(): boolean {
     return window.performance
@@ -36,7 +37,7 @@ export default class Performance implements PerformImpl {
    * and the entryType "paint".
    * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
    *
-   * @type {boolean}
+   * @return {boolean}
    */
   public static supportedPerformanceObserver(): boolean {
     return window.chrome;
@@ -46,14 +47,14 @@ export default class Performance implements PerformImpl {
    * True if the browser supports the PerformanceLongTaskTiming interface.
    * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming
    *
-   * @type {boolean}
+   * @return {boolean}
    */
   public static supportedLongTask(): boolean {
     return "PerformanceLongTaskTiming" in window;
   }
 
   public timeToInteractiveDuration: number = 0;
-  public config: any;
+  public config: PerfumeConfig;
   private ttiPolyfill: any;
   private perfObserver: any;
 
@@ -65,7 +66,7 @@ export default class Performance implements PerformImpl {
    * When performance API available
    * returns a DOMHighResTimeStamp, measured in milliseconds, accurate to five
    * thousandths of a millisecond (5 microseconds).
-   * @type {number}
+   * @return {number}
    */
   public now(): number {
     return window.performance.now();
@@ -75,20 +76,20 @@ export default class Performance implements PerformImpl {
    * @param {string} metricName
    * @param {string} type
    */
-  public mark(metricName: string, type: string) {
+  public mark(metricName: string, type: string): void {
     const mark = `mark_${metricName}_${type}`;
-    window.performance.mark(mark);
+    (window.performance.mark as any)(mark);
   }
 
   /**
    * @param {string} metricName
-   * @param {object} metrics
-   * @param {string} endMark
+   * @param {Metrics} metrics
+   * @return {number}
    */
-  public measure(metricName: string, metrics: object): any {
+  public measure(metricName: string, metrics: Metrics): number {
     const startMark = `mark_${metricName}_start`;
     const endMark = `mark_${metricName}_end`;
-    window.performance.measure(metricName, startMark, endMark);
+    (window.performance.measure as any)(metricName, startMark, endMark);
     return this.getDurationByMetric(metricName, metrics);
   }
 
@@ -99,51 +100,11 @@ export default class Performance implements PerformImpl {
    * and respond to them asynchronously.
    * entry.name will be either 'first-paint' or 'first-contentful-paint'
    *
-   * @param {any} cb
+   * @param {(entries: any[]) => void} cb
    */
-  public firstContentfulPaint(cb: any): any {
+  public firstContentfulPaint(cb: (entries: any[]) => void): void {
     this.perfObserver = new PerformanceObserver(this.performanceObserverCb.bind(this, cb));
     this.perfObserver.observe({entryTypes: ["paint"]});
-  }
-
-  /**
-   * Get the duration of the timing metric or -1 if there a measurement has
-   * not been made by the User Timing API
-   *
-   * @param {string} metricName
-   * @param {any} metrics
-   */
-  private getDurationByMetric(metricName: string, metrics: any) {
-    const entry = this.getMeasurementForGivenName(metricName);
-    if (entry && entry.entryType === "measure") {
-      return entry.duration;
-    }
-    return -1;
-  }
-
-  /**
-   * Return the last PerformanceEntry objects for the given name.
-   *
-   * @param {string} metricName
-   */
-  private getMeasurementForGivenName(metricName: string) {
-    const entries = window.performance.getEntriesByName(metricName);
-    return entries[entries.length - 1];
-  }
-
-  /**
-   * @param {any} cb
-   * @param {PerformanceObserverEntryList} entryList
-   */
-  private performanceObserverCb(cb: any, entryList: PerformanceObserverEntryList) {
-    const entries = entryList.getEntries();
-    cb(entries);
-    entries.forEach((performancePaintTiming: any) => {
-      if (this.config.firstContentfulPaint
-          && performancePaintTiming.name === "first-contentful-paint") {
-        this.perfObserver.disconnect();
-      }
-    });
   }
 
   /**
@@ -158,9 +119,51 @@ export default class Performance implements PerformImpl {
    * are visible or the point when you know all your event listeners have been added.
    *
    * @param {number} minValue
-   * @param {any} cb
+   * @return {Promise<number>}
    */
-  private timeToInteractive(minValue: number, cb: any) {
-    this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue }).then(cb);
+  public timeToInteractive(minValue: number): Promise<number> {
+    return this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue });
+  }
+
+  /**
+   * Get the duration of the timing metric or -1 if there a measurement has
+   * not been made by the User Timing API
+   *
+   * @param {string} metricName
+   * @param {Metrics} metrics
+   * @return {number}
+   */
+  private getDurationByMetric(metricName: string, metrics: Metrics): number {
+    const entry = this.getMeasurementForGivenName(metricName);
+    if (entry && entry.entryType === "measure") {
+      return entry.duration;
+    }
+    return -1;
+  }
+
+  /**
+   * Return the last PerformanceEntry objects for the given name.
+   *
+   * @param {string} metricName
+   */
+  private getMeasurementForGivenName(metricName: string): PerformanceEntry {
+    const entries = (window.performance as any).getEntriesByName(metricName);
+    return entries[entries.length - 1];
+  }
+
+  /**
+   * @param {(entries: PerformanceEntry[]) => void} cb
+   * @param {PerformanceObserverEntryList} entryList
+   */
+  private performanceObserverCb(
+    cb: (entries: PerformanceEntry[]) => void, entryList: PerformanceObserverEntryList): void {
+    const entries = entryList.getEntries();
+    cb(entries);
+    entries.forEach((performancePaintTiming: any) => {
+      if (this.config.firstContentfulPaint
+          && performancePaintTiming.name === "first-contentful-paint") {
+        this.perfObserver.disconnect();
+      }
+    });
   }
 }

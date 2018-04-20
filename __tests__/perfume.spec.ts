@@ -6,6 +6,11 @@ import Perfume from "../src/perfume";
 describe("Perfume test", () => {
   let perfume;
 
+  const mock = {
+    reject: (x) => x,
+    resolve: (x) => x,
+  };
+
   beforeEach(() => {
     window.ga = undefined;
     window.performance = {
@@ -40,7 +45,7 @@ describe("Perfume test", () => {
     perfume.perf.ttiPolyfill = {
       getFirstConsistentlyInteractive: () => {
         return new Promise((resolve) => {
-          resolve();
+          resolve(10);
         });
       },
     };
@@ -58,6 +63,25 @@ describe("Perfume test", () => {
     spyOn(perfume, "timeToInteractiveCb").and.callThrough();
     spyOn(perfume, "logFCP").and.callThrough();
     spyOn(perfume, "sendTiming").and.callThrough();
+  });
+
+  describe("when calls observeTimeToInteractive()", () => {
+    const instance = new Perfume({timeToInteractive: true});
+    instance.perf.timeToInteractive = (n) => new Promise((resolve) => resolve(n));
+    window.chrome = true;
+
+    it("should be a promise", (done) => {
+      const promise = instance.observeTimeToInteractive();
+      expect(promise).toBeInstanceOf(Promise);
+      done();
+    });
+
+    it("should resolve tti on chrome", (done) => {
+      instance.observeTimeToInteractive().then((time) => {
+        expect(typeof time).toBe("number");
+        done();
+      });
+    });
   });
 
   describe("when calls start()", () => {
@@ -195,7 +219,7 @@ describe("Perfume test", () => {
     });
 
     it("should call logFCP() with the correct arguments", () => {
-      perfume.firstContentfulPaintCb(entries);
+      perfume.firstContentfulPaintCb(entries, mock.resolve, mock.reject);
       expect(perfume.logFCP.calls.count()).toEqual(2);
       expect(perfume.logFCP).toHaveBeenCalledWith(1, "First Paint", "firstPaint");
       expect(perfume.logFCP).toHaveBeenCalledWith(1, "First Contentful Paint", "firstContentfulPaint");
@@ -204,12 +228,12 @@ describe("Perfume test", () => {
     it("should not call logFCP() when firstPaint and firstContentfulPaint is false", () => {
       perfume.config.firstPaint = false;
       perfume.config.firstContentfulPaint = false;
-      perfume.firstContentfulPaintCb(entries);
+      perfume.firstContentfulPaintCb(entries, mock.resolve, mock.reject);
       expect(perfume.logFCP).not.toHaveBeenCalled();
     });
 
     it("should call timeToInteractive()", () => {
-      perfume.firstContentfulPaintCb(entries);
+      perfume.firstContentfulPaintCb(entries, mock.resolve, mock.reject);
       expect(perfume.perf.timeToInteractive.calls.count()).toEqual(1);
     });
   });
