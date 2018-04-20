@@ -76,7 +76,7 @@ const perfume = new Perfume({
 The metric marks the point at which your application is both visually rendered and capable of reliably responding to user input. An application could be unable to respond to user input for a couple of reasons:
 - The JavaScript needed to make the components on the page work hasn't yet loaded;
 - There are long tasks blocking the main thread.
-The **TTI** metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle (free of long tasks). See the [metric definition](https://docs.google.com/document/d/1GGiI9-7KeY3TPqS3YT271upUVimo-XiL5mwWorDUD4c/preview#) for in-depth implementation details.
+The **TTI** metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle (free of long tasks).
 
 ```javascript
 const perfume = new Perfume({
