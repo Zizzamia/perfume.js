@@ -17,7 +17,6 @@ export interface PerfumeConfig {
   logPrefix: string;
   logging: boolean;
   timeToInteractive: boolean;
-  timeToInteractiveCb?: any;
 }
 
 export interface Metrics {
@@ -212,9 +211,6 @@ export default class Perfume {
     this.timeToInteractiveDuration = timeToInteractive;
     if (this.timeToInteractiveDuration) {
       this.log("Time to interactive", this.timeToInteractiveDuration);
-    }
-    if (this.config.timeToInteractiveCb) {
-      this.config.timeToInteractiveCb(this.timeToInteractiveDuration);
     }
     this.sendTiming("timeToInteractive", this.timeToInteractiveDuration);
   }

@@ -239,13 +239,6 @@ describe("Perfume test", () => {
   });
 
   describe("when calls timeToInteractiveCb()", () => {
-    beforeEach(() => {
-      perfume.config.timeToInteractiveCb = () => {
-        return "";
-      };
-      spyOn(perfume.config, "timeToInteractiveCb").and.callThrough();
-    });
-
     it("should call log() with the correct arguments", () => {
       perfume.timeToInteractiveCb(1);
       expect(perfume.log.calls.count()).toEqual(1);
@@ -261,12 +254,6 @@ describe("Perfume test", () => {
     it("should perfume.timeToInteractiveDuration be equal to 1", () => {
       perfume.timeToInteractiveCb(1);
       expect(perfume.timeToInteractiveDuration).toEqual(1);
-    });
-
-    it("should call timeToInteractiveCb()", () => {
-      perfume.timeToInteractiveCb(1);
-      expect(perfume.config.timeToInteractiveCb.calls.count()).toEqual(1);
-      expect(perfume.config.timeToInteractiveCb).toHaveBeenCalledWith(perfume.timeToInteractiveDuration);
     });
   });
 
