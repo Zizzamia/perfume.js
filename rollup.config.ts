@@ -1,17 +1,17 @@
-import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import resolve from 'rollup-plugin-node-resolve';
 import sourceMaps from 'rollup-plugin-sourcemaps';
 //import uglify from 'rollup-plugin-uglify';
 import pkg from './package.json';
 
-const ensureArray = maybeArr => Array.isArray(maybeArr) ? maybeArr : [maybeArr]
+const ensureArray = maybeArr => Array.isArray(maybeArr) ? maybeArr : [maybeArr];
 
-const createConfig = ({ output, includeExternals = false } = {}) => ({
+const createConfig = ({output, includeExternals = false} = {}) => ({
   input: `dist/es/perfume.js`,
   output: ensureArray(output).map(format => Object.assign(
     {},
     format,
-    { sourcemap: true },
+    {sourcemap: true},
   )),
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: includeExternals
@@ -23,6 +23,7 @@ const createConfig = ({ output, includeExternals = false } = {}) => ({
   plugins: [
     // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
     commonjs(),
+
     // Allow node_modules resolution, so you can use 'external' to control
     // which external modules to include in the bundle
     // https://github.com/rollup/rollup-plugin-node-resolve#usage
@@ -30,7 +31,8 @@ const createConfig = ({ output, includeExternals = false } = {}) => ({
 
     // Resolve source maps to the original source
     sourceMaps(),
-    //uglify({
+
+    // uglify({
     //  output: {
     //    comments: function(node, comment) {
     //      const text = comment.value;
@@ -41,23 +43,23 @@ const createConfig = ({ output, includeExternals = false } = {}) => ({
     //      }
     //    }
     //  }
-    //}),
+    // }),
   ],
 })
 
 export default [
   createConfig({
     output: [
-      { file: pkg.module, format: 'es' },
-      { file: pkg.main, format: 'cjs' }
+      {file: pkg.module, format: 'es'},
+      {file: pkg.main, format: 'cjs'},
     ],
   }),
   createConfig({
-    output: { file: pkg.iife, name: 'perfume', format: 'iife' },
+    output: {file: pkg.iife, name: 'Perfume', format: 'iife'},
     includeExternals: true,
   }),
   createConfig({
-    output: { file: pkg.unpkg, name: 'perfume.umd', format: 'umd' },
+    output: {file: pkg.unpkg, name: 'Perfume', format: 'umd'},
     includeExternals: true,
   }),
-]
+];
