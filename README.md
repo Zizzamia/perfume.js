@@ -3,7 +3,7 @@
 # [Perfume.js v0.6.6](http://zizzamia.github.io/perfume/)
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](http://img.badgesize.io/Zizzamia/perfume.js/master/dist/perfume.umd.js?compression=gzip&label=JS+gzip+size)](https://github.com/Zizzamia/perfume.js/blob/master/dist/perfume.umd.js)
 
-> Perfume is a JavaScript library for measuring Short and Long Script, First (Contentful) Paint ([FP/FCP](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint)), Time to Interactive ([TTI](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive)), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.
+> Perfume is a JavaScript library for measuring Short and Long Script, First (Contentful) Paint ([FP/FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f)), Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c)), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.
 
 <br />
 <br />
@@ -59,7 +59,7 @@ import Perfume from 'node_modules/perfume.js/perfume.umd.js';
 
 ## Start measuring
 
-### First Contentful Paint (FCP)
+### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 This metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?
 
 **FCP** marks the point when the browser renders the first bit of content from the DOM, which may be text, an image, SVG, or even a <canvas> element.
@@ -72,7 +72,7 @@ const perfume = new Perfume({
 ```
 
 
-### Time to Interactive (TTI)
+### Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c))
 The metric marks the point at which your application is both visually rendered and capable of reliably responding to user input. An application could be unable to respond to user input for a couple of reasons:
 - The JavaScript needed to make the components on the page work hasn't yet loaded;
 - There are long tasks blocking the main thread.

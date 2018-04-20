@@ -5,9 +5,9 @@
       <h1 class="title">Perfume.js</h1>
       <p>A JavaScript library for
         <b>measuring</b> Short and Long Script,
-        <b>First (Contentful) Paint</b> (<a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint"
+        <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f"
           target="_blank">FP/FCP</a>),
-        <b>Time to Interactive</b> (<a href="https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive" target="_blank">TTI</a>),
+        <b>Time to Interactive</b> (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>),
         <b>Component First Paint</b> (CFM), annotating them to the DevTools timeline and reporting the results to
         <b>Google Analytics</b>.
       </p>
@@ -44,7 +44,7 @@
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="first-contentful-paint">First Contentful Paint (FCP)</h2>
+      <h2 class="box__title" id="first-contentful-paint">First Contentful Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FCP</a>)</h2>
       <p>This metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important
         to the user because it answers the question: is it happening?</p>
       <p>
@@ -57,7 +57,7 @@
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="/time-to-interactive/">Time to Interactive (TTI)</h2>
+      <h2 class="box__title" id="/time-to-interactive/">Time to Interactive (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>)</h2>
       <p>The metric marks the point at which your application is both visually rendered and capable of reliably responding to
         user input. An application could be unable to respond to user input for a couple of reasons:</p>
       <ul>
@@ -66,8 +66,7 @@
       </ul>
       <p>The
         <b>TTI</b> metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle
-        (free of long tasks). See the
-        <a href="https://docs.google.com/document/d/1GGiI9-7KeY3TPqS3YT271upUVimo-XiL5mwWorDUD4c/preview#" target="_blank">metric definition</a> for in-depth implementation details.</p>
+        (free of long tasks).</p>
       <p class="box__demo">
         Result: ⚡️ Perfume.js: Time to interactive {{ (perfume.observeTimeToInteractive() | async)?.toFixed(2) || 0 }} ms
       </p>
