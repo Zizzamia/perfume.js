@@ -49,7 +49,7 @@ export default class Perfume {
   public timeToInteractiveDuration: number = 0;
   private metrics: Metrics = {};
   private perf: Performance | EmulatedPerformance;
-  private perfEmulated: EmulatedPerformance;
+  private perfEmulated?: EmulatedPerformance;
   private readonly timeToInteractivePromise: Promise<number>;
 
   /**
