@@ -1,9 +1,13 @@
-import { Metrics } from "./perfume";
+import {Metrics, PerfumeConfig} from './perfume';
 
 export default interface PerformImpl {
-  config: any;
+  config: PerfumeConfig;
+
   now(): number;
+
   mark(metricName: string, type: string): any;
+
   measure(metricName: string, metrics: Metrics): number;
+
   firstContentfulPaint(cb: any): any;
 }

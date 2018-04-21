@@ -1,5 +1,5 @@
-import PerformImpl from "./performance-impl";
-import { Metrics, PerfumeConfig } from "./perfume";
+import PerformImpl from './performance-impl';
+import {Metrics, PerfumeConfig} from './perfume';
 
 interface PerformancePaintTiming {
   name: string;
@@ -74,8 +74,8 @@ export default class EmulatedPerformance implements PerformImpl {
     const navTiming = window.performance.timing;
     const performancePaintTiming: PerformancePaintTiming = {
       duration: 0,
-      entryType: "paint",
-      name: "first-contentful-paint",
+      entryType: 'paint',
+      name: 'first-contentful-paint',
       startTime: 0,
     };
     if (navTiming && navTiming.navigationStart !== 0) {
