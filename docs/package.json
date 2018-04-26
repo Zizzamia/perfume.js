@@ -12,25 +12,25 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^5.2.9",
-    "@angular/common": "^5.2.9",
-    "@angular/compiler": "^5.2.9",
-    "@angular/core": "^5.2.9",
-    "@angular/forms": "^5.2.9",
-    "@angular/http": "^5.2.9",
-    "@angular/platform-browser": "^5.2.9",
-    "@angular/platform-browser-dynamic": "^5.2.9",
-    "@angular/router": "^5.2.9",
+    "@angular/animations": "6.0.0-rc.5",
+    "@angular/common": ">=6.0.0-rc.5 <=6.0.0-rc.5",
+    "@angular/compiler": ">=6.0.0-rc.5 <=6.0.0-rc.5",
+    "@angular/core": ">=6.0.0-rc.5 <=6.0.0-rc.5",
+    "@angular/forms": "6.0.0-rc.5",
+    "@angular/http": "6.0.0-rc.5",
+    "@angular/platform-browser": ">=6.0.0-rc.5 <=6.0.0-rc.5",
+    "@angular/platform-browser-dynamic": "6.0.0-rc.5",
+    "@angular/router": "6.0.0-rc.5",
     "core-js": "^2.4.1",
     "perfume.js": "^0.6.6",
     "tti-polyfill": "^0.2.2",
-    "rxjs": "^5.5.2",
-    "zone.js": "^0.8.20"
+    "rxjs": "^6.0.0",
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@angular/cli": "1.7.3",
-    "@angular/compiler-cli": "^5.2.9",
-    "@angular/language-service": "^5.2.9",
+    "@angular/cli": "6.0.0-rc.6",
+    "@angular/compiler-cli": "6.0.0-rc.5",
+    "@angular/language-service": "6.0.0-rc.5",
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
@@ -46,6 +46,7 @@
     "protractor": "~5.1.2",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
-    "typescript": "~2.4.2"
+    "typescript": "2.7.2",
+    "@angular-devkit/build-angular": "~0.5.0"
   }
 }
