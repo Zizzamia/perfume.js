@@ -1,7 +1,7 @@
 import PerformImpl from './performance-impl';
 import { Metrics, PerfumeConfig } from './perfume';
 
-interface PerformancePaintTiming {
+export interface PerformancePaintTiming {
   name: string;
   entryType: string;
   startTime: number;

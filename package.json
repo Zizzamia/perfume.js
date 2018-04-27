@@ -71,6 +71,7 @@
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "testPathIgnorePatterns": [
+      "/__tests__/_mock.ts",
       "/docs/",
       "/node_modules/"
     ],
@@ -95,8 +96,7 @@
         "statements": 99
       }
     },
-    "collectCoverage": true,
-    "mapCoverage": true
+    "collectCoverage": true
   },
   "devDependencies": {
     "@types/jest": "^21.1.0",
