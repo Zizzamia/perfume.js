@@ -1,21 +1,22 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import sourceMaps from 'rollup-plugin-sourcemaps';
-import uglify from 'rollup-plugin-uglify';
-import camelCase from 'lodash.camelcase';
+//import uglify from 'rollup-plugin-uglify';
+import pkg from './package.json';
 
-const pkg = require('./package.json');
+const ensureArray = maybeArr => Array.isArray(maybeArr) ? maybeArr : [maybeArr]
 
-export default {
+const createConfig = ({ output, includeExternals = false } = {}) => ({
   input: `dist/es/perfume.js`,
-  output: [
-    { file: pkg.module, format: 'es' },
-    { file: pkg.iife, name: 'perfume', format: 'iife' },
-    { file: pkg.main, name: 'perfume.umd', format: 'umd' },
-  ],
-  sourcemap: true,
+  output: ensureArray(output).map(format => Object.assign(
+    {},
+    format,
+    { sourcemap: true },
+  )),
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
-  external: [],
+  external: includeExternals
+    ? []
+    : [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
   watch: {
     include: 'dist/es/**',
   },
@@ -42,4 +43,21 @@ export default {
     //  }
     //}),
   ],
-}
+})
+
+export default [
+  createConfig({
+    output: [
+      { file: pkg.module, format: 'es' },
+      { file: pkg.main, format: 'cjs' }
+    ],
+  }),
+  createConfig({
+    output: { file: pkg.iife, name: 'perfume', format: 'iife' },
+    includeExternals: true,
+  }),
+  createConfig({
+    output: { file: pkg.unpkg, name: 'perfume.umd', format: 'umd' },
+    includeExternals: true,
+  }),
+]
