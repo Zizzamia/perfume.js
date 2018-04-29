@@ -4,16 +4,16 @@ import Perfume from '../src/perfume';
  * Perfume test
  */
 describe('Perfume test', () => {
-  let perfume: Perfume;
+  let perfume: any;
 
   const mock = {
-    reject: (x) => x,
-    resolve: (x) => x,
+    reject: (x: any) => x,
+    resolve: (x: any) => x,
   };
 
   beforeEach(() => {
     window.ga = undefined;
-    window.performance = {
+    (window as any).performance = {
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
       getEntriesByName: () => {
         return [{
@@ -35,8 +35,8 @@ describe('Perfume test', () => {
         navigationStart: 12345,
       },
     };
-    window.PerformanceLongTaskTiming = {};
-    window.PerformanceObserver = function PerformanceObserver() {
+    (window as any).PerformanceLongTaskTiming = {};
+    (window as any).PerformanceObserver = function PerformanceObserver() {
       this.observe = () => {
         return {};
       };
@@ -67,8 +67,8 @@ describe('Perfume test', () => {
 
   describe('when calls observeTimeToInteractive()', () => {
     const instance = new Perfume({timeToInteractive: true});
-    instance.perf.timeToInteractive = (n) => new Promise((resolve) => resolve(n));
-    window.chrome = true;
+    (instance as any).perf.timeToInteractive = (n: any) => new Promise((resolve) => resolve(n));
+    (window as any).chrome = true;
 
     it('should be a promise', (done) => {
       const promise = instance.observeTimeToInteractive();
@@ -87,7 +87,7 @@ describe('Perfume test', () => {
   describe('when calls start()', () => {
     it('should throw a console.warn if metricName is not passed', () => {
       perfume.start();
-      expect(global.console.warn.calls.count()).toEqual(1);
+      expect((global.console.warn as any).calls.count()).toEqual(1);
       expect(global.console.warn).toHaveBeenCalledWith('⚡️ Perfume.js:', 'Please provide a metric name');
     });
 
@@ -99,7 +99,7 @@ describe('Perfume test', () => {
     it('should throw a console.warn if recording already started', () => {
       perfume.start('metricName');
       perfume.start('metricName');
-      expect(global.console.warn.calls.count()).toEqual(1);
+      expect((global.console.warn as any).calls.count()).toEqual(1);
       expect(global.console.warn).toHaveBeenCalledWith('⚡️ Perfume.js:', 'Recording already started.');
     });
   });
@@ -107,13 +107,13 @@ describe('Perfume test', () => {
   describe('when calls end()', () => {
     it('should throw a console.warn if param is not correct', () => {
       perfume.end();
-      expect(global.console.warn.calls.count()).toEqual(1);
+      expect((global.console.warn as any).calls.count()).toEqual(1);
       expect(global.console.warn).toHaveBeenCalledWith('⚡️ Perfume.js:', 'Please provide a metric name');
     });
 
     it('should throw a console.warn if param is correct and recording already stopped', () => {
       perfume.end('metricName');
-      expect(global.console.warn.calls.count()).toEqual(1);
+      expect((global.console.warn as any).calls.count()).toEqual(1);
       expect(global.console.warn).toHaveBeenCalledWith('⚡️ Perfume.js:', 'Recording already stopped.');
     });
 
@@ -170,7 +170,7 @@ describe('Perfume test', () => {
     it('should call global.console.warn() if params are not correct', () => {
       perfume.log();
       const text = 'Please provide a metric name';
-      expect(global.console.warn.calls.count()).toEqual(1);
+      expect((global.console.warn as any).calls.count()).toEqual(1);
       expect(global.console.warn).toHaveBeenCalledWith(perfume.config.logPrefix, text);
     });
 
@@ -183,7 +183,7 @@ describe('Perfume test', () => {
       perfume.log('metricName', 12345);
       const text = '%c ⚡️ Perfume.js: metricName 12345.00 ms';
       const style = 'color: #ff6d00;font-size:12px;';
-      expect(global.console.log.calls.count()).toEqual(1);
+      expect((global.console.log as any).calls.count()).toEqual(1);
       expect(global.console.log).toHaveBeenCalledWith(text, style);
     });
   });
@@ -201,7 +201,7 @@ describe('Perfume test', () => {
   });
 
   describe('when calls firstContentfulPaintCb()', () => {
-    let entries;
+    let entries: any;
 
     beforeEach(() => {
       spyOn(perfume.perf, 'timeToInteractive').and.callThrough();
@@ -215,7 +215,7 @@ describe('Perfume test', () => {
       perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
       perfume.config.timeToInteractive = true;
-      window.chrome = true;
+      (window as any).chrome = true;
     });
 
     it('should call logFCP() with the correct arguments', () => {
@@ -286,7 +286,7 @@ describe('Perfume test', () => {
       perfume.config.googleAnalytics.enable = true;
       perfume.sendTiming();
       const text = 'Google Analytics has not been loaded';
-      expect(global.console.warn.calls.count()).toEqual(1);
+      expect((global.console.warn as any).calls.count()).toEqual(1);
       expect(global.console.warn).toHaveBeenCalledWith(perfume.config.logPrefix, text);
     });
 

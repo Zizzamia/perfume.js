@@ -4,23 +4,22 @@ import EmulatedPerformance from '../src/emulated-performance';
  * Emulated performance test
  */
 describe('Emulated performance test', () => {
-  let service: EmulatedPerformance;
+  let service: any;
 
   beforeEach(() => {
-    window.Date = {
+    (window as any).Date = {
       now: () => {
         return 1000;
       },
     };
-    window.performance = {
+    (window as any).performance = {
       timing: {
         navigationStart: 0,
       },
     };
-    service = new EmulatedPerformance();
-    service.config = {
+    service = new EmulatedPerformance({
       logPrefix: '',
-    };
+    } as any);
   });
 
   beforeEach(() => {
@@ -107,7 +106,7 @@ describe('Emulated performance test', () => {
     });
 
     it('should return performancePaintTiming', () => {
-      window.performance.timing.navigationStart = 240;
+      (window.performance as any).timing.navigationStart = 240;
       const performance = service.getFirstPaint();
       expect(performance).toEqual([{
         duration: 0,

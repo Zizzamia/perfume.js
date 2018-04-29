@@ -4,10 +4,10 @@ import Performance from '../src/performance';
  * Performance test
  */
 describe('Performance test', () => {
-  let service: Performance;
+  let service: any;
 
   beforeEach(() => {
-    window.performance = {
+    (window as any).performance = {
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
       getEntriesByName: () => {
         return [{
@@ -32,14 +32,14 @@ describe('Performance test', () => {
         navigationStart: 12345,
       },
     };
-    window.PerformanceLongTaskTiming = {};
-    window.PerformanceObserver = function PerformanceObserver() {
+    (window as any).PerformanceLongTaskTiming = {};
+    (window as any).PerformanceObserver = function PerformanceObserver() {
       this.observe = () => {
         return {};
       };
     }
     ;
-    service = new Performance();
+    service = new Performance({} as any);
     service.ttiPolyfill = {
       getFirstConsistentlyInteractive: () => {
         return new Promise((resolve) => {
@@ -52,10 +52,10 @@ describe('Performance test', () => {
   beforeEach(() => {
     spyOn(console, 'log').and.callThrough();
     spyOn(console, 'warn').and.callThrough();
-    spyOn(window.performance, 'mark').and.callThrough();
-    spyOn(window.performance, 'measure').and.callThrough();
-    spyOn(window.performance, 'now').and.callThrough();
-    spyOn(window, 'PerformanceObserver').and.callThrough();
+    spyOn((window as any).performance, 'mark').and.callThrough();
+    spyOn((window as any).performance, 'measure').and.callThrough();
+    spyOn((window as any).performance, 'now').and.callThrough();
+    spyOn((window as any), 'PerformanceObserver').and.callThrough();
     spyOn(Performance, 'supported').and.callThrough();
     spyOn(Performance, 'supportedLongTask').and.callThrough();
     spyOn(service.ttiPolyfill, 'getFirstConsistentlyInteractive').and.callThrough();
@@ -75,41 +75,41 @@ describe('Performance test', () => {
     });
 
     it('should return false if the browser doesn\'t supports performance.mark', () => {
-      window.performance.mark = undefined;
+      (window as any).performance.mark = undefined;
       expect(Performance.supported()).toEqual(false);
     });
 
     it('should return false if the browser doesn\'t supports performance.now', () => {
-      window.performance.mark = () => {
+      (window as any).performance.mark = () => {
         return 1;
       };
-      window.performance.now = undefined;
+      (window as any).performance.now = undefined;
       expect(Performance.supported()).toEqual(false);
     });
   });
 
   describe('when calls now()', () => {
-    it('should call window.performance.now', () => {
+    it('should call (window as any).performance.now', () => {
       service.now();
-      expect(window.performance.now.calls.count()).toEqual(1);
+      expect((window as any).performance.now.calls.count()).toEqual(1);
     });
   });
 
   describe('when calls mark()', () => {
-    it('should call window.performance.mark with the correct argument', () => {
+    it('should call (window as any).performance.mark with the correct argument', () => {
       service.mark('fibonacci');
-      expect(window.performance.mark.calls.count()).toEqual(1);
-      expect(window.performance.mark).toHaveBeenCalledWith('mark_fibonacci_undefined');
+      expect((window as any).performance.mark.calls.count()).toEqual(1);
+      expect((window as any).performance.mark).toHaveBeenCalledWith('mark_fibonacci_undefined');
     });
   });
 
   describe('when calls measure()', () => {
-    it('should call window.performance.measure with the correct arguments', () => {
+    it('should call (window as any).performance.measure with the correct arguments', () => {
       service.measure('fibonacci');
       const start = 'mark_fibonacci_start';
       const end = 'mark_fibonacci_end';
-      expect(window.performance.measure.calls.count()).toEqual(1);
-      expect(window.performance.measure).toHaveBeenCalledWith('fibonacci', start, end);
+      expect((window as any).performance.measure.calls.count()).toEqual(1);
+      expect((window as any).performance.measure).toHaveBeenCalledWith('fibonacci', start, end);
     });
 
     it('should call getDurationByMetric with the correct arguments', () => {
@@ -122,13 +122,13 @@ describe('Performance test', () => {
   describe('when calls firstContentfulPaint()', () => {
     it('should call initPerformanceObserver()', () => {
       service.firstContentfulPaint();
-      expect(window.PerformanceObserver.calls.count()).toEqual(1);
+      expect((window as any).PerformanceObserver.calls.count()).toEqual(1);
     });
   });
 
   describe('when calls getDurationByMetric()', () => {
     it('should return entry.duration when entryType is not measure', () => {
-      window.performance.getEntriesByName = () => {
+      (window as any).performance.getEntriesByName = () => {
         return [{
           duration: 12345,
           entryType: 'notMeasure',
@@ -139,7 +139,7 @@ describe('Performance test', () => {
     });
 
     it('should return -1 when entryType is a measure', () => {
-      window.performance.getEntriesByName = () => {
+      (window as any).performance.getEntriesByName = () => {
         return [{
           duration: 12345,
           entryType: 'measure',
@@ -164,7 +164,7 @@ describe('Performance test', () => {
   });
 
   describe('when calls performanceObserverCb()', () => {
-    let entryList;
+    let entryList: any;
 
     beforeEach(() => {
       service.callback = () => {
