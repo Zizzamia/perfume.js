@@ -1,12 +1,16 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import sourceMaps from 'rollup-plugin-sourcemaps';
-//import uglify from 'rollup-plugin-uglify';
+import uglify from 'rollup-plugin-uglify';
 import pkg from './package.json';
 
 const ensureArray = maybeArr => Array.isArray(maybeArr) ? maybeArr : [maybeArr]
 
-const createConfig = ({ output, includeExternals = false } = {}) => ({
+const createConfig = ({
+  output,
+  includeExternals = false,
+  min = false,
+} = {}) => ({
   input: `dist/es/perfume.js`,
   output: ensureArray(output).map(format => Object.assign(
     {},
@@ -30,19 +34,19 @@ const createConfig = ({ output, includeExternals = false } = {}) => ({
 
     // Resolve source maps to the original source
     sourceMaps(),
-    //uglify({
-    //  output: {
-    //    comments: function(node, comment) {
-    //      const text = comment.value;
-    //      const type = comment.type;
-    //      if (type == "comment2") {
-    //        // multiline comment
-    //        return /@preserve|@license|@cc_on/i.test(text);
-    //      }
-    //    }
-    //  }
-    //}),
-  ],
+    min && uglify({
+      output: {
+        comments: function(node, comment) {
+          const { text, type } = comment;
+
+          if (type == "comment2") {
+            // multiline comment
+            return /@preserve|@license|@cc_on/i.test(text);
+          }
+        }
+      }
+    }),
+  ].filter(Boolean),
 })
 
 export default [
@@ -59,5 +63,6 @@ export default [
   createConfig({
     output: { file: pkg.unpkg, name: 'perfume.umd', format: 'umd' },
     includeExternals: true,
+    min: true,
   }),
 ]
