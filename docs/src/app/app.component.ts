@@ -28,7 +28,7 @@ export class AppComponent implements AfterViewInit {
       firstContentfulPaint: true,
       googleAnalytics: {
         enable: true,
-        timingVar: "userId"
+        timingVar: 'userId',
       },
       timeToInteractive: true,
     });
@@ -36,15 +36,15 @@ export class AppComponent implements AfterViewInit {
 
     // Component variables
     this.navOptions = {
-      userCentric: "user-centric-metrics",
-      installing: "installing-and-imports",
-      tti: "time-to-interactive",
-      annotate: "annotate-metrics",
-      cfp: "component-first-paint",
-      log: "custom-logging",
-      ga: "google-analytics",
-      options: "default-options",
-      copyright: "copyright-and-license",
+      userCentric: 'user-centric-metrics',
+      installing: 'installing-and-imports',
+      tti: 'time-to-interactive',
+      annotate: 'annotate-metrics',
+      cfp: 'component-first-paint',
+      log: 'custom-logging',
+      ga: 'google-analytics',
+      options: 'default-options',
+      copyright: 'copyright-and-license',
     };
   }
 
@@ -76,7 +76,7 @@ export class AppComponent implements AfterViewInit {
   appendElSequence(num) {
     const elSequence = $(`<span class="Fibonacci-sequence">${num} </span>`);
     elSequence.css({
-      color: '#'+Math.floor(Math.random()*16777215).toString(16)
+      color: '#' + Math.floor(Math.random() * 16777215).toString(16)
     });
     elSequence.on('click', () => {
       console.log('Lol');
@@ -86,8 +86,8 @@ export class AppComponent implements AfterViewInit {
 
   reverseFibonacciSequence(reccurrence = 1) {
     const $elFibonacci = $('.Fibonacci');
-    $elFibonacci.children().each(function(i,sequence) {
-      $elFibonacci.prepend(sequence)
+    $elFibonacci.children().each((i, sequence) => {
+      $elFibonacci.prepend(sequence);
     });
     reccurrence -= 1;
     if (reccurrence > 0) {
