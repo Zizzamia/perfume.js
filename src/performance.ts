@@ -1,13 +1,9 @@
-import * as ttiPolyfill from "tti-polyfill";
-import PerformImpl from "./performance-impl";
-import { Metrics, PerfumeConfig } from "./perfume";
+import ttiPolyfill from 'tti-polyfill';
+import PerformImpl from './performance-impl';
+import {Metrics, PerfumeConfig} from './perfume';
 
-declare global {
-  interface Window {
-    chrome: any;
-  }
-}
 declare const PerformanceObserver: any;
+
 declare interface PerformanceObserverEntryList {
   getEntries: any;
   getEntriesByName: any;
@@ -28,8 +24,8 @@ export default class Performance implements PerformImpl {
    */
   public static supported(): boolean {
     return window.performance
-           && !!performance.now
-           && !!performance.mark;
+      && !!performance.now
+      && !!performance.mark;
   }
 
   /**
@@ -40,7 +36,7 @@ export default class Performance implements PerformImpl {
    * @return {boolean}
    */
   public static supportedPerformanceObserver(): boolean {
-    return window.chrome;
+    return (window as any).chrome;
   }
 
   /**
@@ -50,15 +46,14 @@ export default class Performance implements PerformImpl {
    * @return {boolean}
    */
   public static supportedLongTask(): boolean {
-    return "PerformanceLongTaskTiming" in window;
+    return 'PerformanceLongTaskTiming' in window;
   }
 
   public timeToInteractiveDuration: number = 0;
-  public config: PerfumeConfig;
   private ttiPolyfill: any;
   private perfObserver: any;
 
-  constructor() {
+  constructor(public config: PerfumeConfig) {
     this.ttiPolyfill = ttiPolyfill;
   }
 
@@ -104,7 +99,7 @@ export default class Performance implements PerformImpl {
    */
   public firstContentfulPaint(cb: (entries: any[]) => void): void {
     this.perfObserver = new PerformanceObserver(this.performanceObserverCb.bind(this, cb));
-    this.perfObserver.observe({entryTypes: ["paint"]});
+    this.perfObserver.observe({entryTypes: ['paint']});
   }
 
   /**
@@ -122,7 +117,7 @@ export default class Performance implements PerformImpl {
    * @return {Promise<number>}
    */
   public timeToInteractive(minValue: number): Promise<number> {
-    return this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue });
+    return this.ttiPolyfill.getFirstConsistentlyInteractive({minValue});
   }
 
   /**
@@ -135,7 +130,7 @@ export default class Performance implements PerformImpl {
    */
   private getDurationByMetric(metricName: string, metrics: Metrics): number {
     const entry = this.getMeasurementForGivenName(metricName);
-    if (entry && entry.entryType === "measure") {
+    if (entry && entry.entryType === 'measure') {
       return entry.duration;
     }
     return -1;
@@ -161,7 +156,7 @@ export default class Performance implements PerformImpl {
     cb(entries);
     entries.forEach((performancePaintTiming: any) => {
       if (this.config.firstContentfulPaint
-          && performancePaintTiming.name === "first-contentful-paint") {
+        && performancePaintTiming.name === 'first-contentful-paint') {
         this.perfObserver.disconnect();
       }
     });

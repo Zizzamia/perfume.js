@@ -117,8 +117,8 @@
     "rollup-plugin-uglify": "^3.0.0",
     "ts-jest": "^22.0.0",
     "ts-node": "^4.0.1",
-    "tslint": "^5.4.3",
-    "typescript": "^2.3.4",
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.3",
     "validate-commit-msg": "^2.12.2"
   },
   "dependencies": {
