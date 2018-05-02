@@ -9,7 +9,6 @@
 <br />
 <br />
 <br />
-<br />
 
 ## User-centric performance metrics
 
@@ -33,7 +32,7 @@ Luckily, with the addition of a few new browser APIs, measuring these metrics on
 
 npm (https://www.npmjs.com/package/perfume.js):
 
-    npm install perfume.js --save
+    npm install perfume.js --save-dev
 
 
 ## Importing library
