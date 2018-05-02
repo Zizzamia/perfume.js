@@ -7,32 +7,27 @@
 
   -webkit-overflow-scrolling: touch;
 }
-
-.layout__content a {
+.layout-content a {
   color: #CAA29B;
 }
-
-.layout__content a:hover {
+.layout-content a:hover {
   color: #B08881;
 }
-
-.layout__nav {
+.layout-nav {
   display: none;
   padding: 0 0 0 20px;
   font-size: 16px;
   color: #222;
 }
-
-.layout__nav a {
+.layout-nav a {
   display: block;
   padding: 5px 10px;
   border-left: 2px solid transparent;
   line-height: 20px;
   text-decoration: none;
 }
-
-.layout__nav a:hover,
-.layout__nav a.active {
+.layout-nav a:hover,
+.layout-nav a.active {
   background: rgba(246, 225, 113, 0.3);
   border-left-color: rgba(227, 187, 180, 0.8);
 }
@@ -53,21 +48,21 @@
   margin: 60px 0;
   text-align: left;
 }
-
+.box--intro {
+  margin: 0 0 40px !important;
+}
 .box--intro p {
   margin: 10px 0;
   line-height: 30px;
 }
-
-.box__title {
+.box-title {
   margin: 0;
   padding: 0 0 20px;
   font-size: 30px;
   font-weight: 400;
   line-height: 40px;
 }
-
-.box__img {
+.box-img {
   width: 700px;
   border: 1px solid #ccc;
   margin: 0 auto;
@@ -81,15 +76,14 @@
   margin: auto;
 }
 
-.box__demo {
+.box-demo {
   margin: 10px 0;
   padding: 10px;
   border-left: 2px solid rgba(227, 187, 180, 0.8);
   border-radius: 2px;
   background: rgba(246, 225, 113, 0.3);
 }
-
-.box__demo__btn {
+.box-demo-btn {
   transition: all 0.3s;
 
   margin-right: 20px;
@@ -104,8 +98,7 @@
   background: #f5d7cd;
   color: #8a7a75;
 }
-
-.box__demo__btn:hover {
+.box-demo-btn:hover {
   border-color: #f2db77;
   background: #f7e7a1;
   color: #fdfbfa;
@@ -117,6 +110,14 @@
 .PlanLogo {
   margin: 15px 0;
   width: 100px;
+}
+
+.layout-nav-links {
+
+}
+
+.layout-nav-people {
+
 }
 
 @media (min-width: 640px) {
@@ -135,7 +136,7 @@
     justify-content: center;
   }
 
-  .layout__nav {
+  .layout-nav {
     flex-shrink: 0;
 
     display: block;
@@ -143,7 +144,7 @@
     top: 10px;
   }
 
-  .layout__content {
+  .layout-content {
     flex: 1;
 
     max-width: 700px;

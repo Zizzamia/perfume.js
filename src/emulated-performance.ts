@@ -1,5 +1,5 @@
 import PerformImpl from './performance-impl';
-import {Metrics, PerfumeConfig} from './perfume';
+import { Metrics, PerfumeConfig } from './perfume';
 
 interface PerformancePaintTiming {
   name: string;

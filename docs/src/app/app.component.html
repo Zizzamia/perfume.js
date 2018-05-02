@@ -1,7 +1,9 @@
 <div class="layout">
-  <div class="layout__content">
+  <div class="layout-content">
     <div class="box box--intro" id="/home/">
-      <img class="logo" src="{{ path }}assets/perfume-logo-v0-6-6.png" alt="logo" />
+      <a href="https://github.com/zizzamia/perfume.js" target="_blank">
+        <img class="logo" src="{{ path }}assets/perfume-logo-v0-6-6.png" alt="logo" />
+      </a>
       <h1 class="title">Perfume.js</h1>
       <p>A JavaScript library for
         <b>measuring</b> Short and Long Script,
@@ -11,11 +13,16 @@
         <b>Component First Paint</b> (CFM), annotating them to the DevTools timeline and reporting the results to
         <b>Google Analytics</b>.
       </p>
-      <a class="github-button" href="https://github.com/zizzamia/perfume.js" data-size="large" data-show-count="true" aria-label="Star zizzamia/perfume.js on GitHub">Star</a>
+      <a class="github-button" href="https://github.com/zizzamia/perfume.js"
+      data-size="large" data-show-count="true"
+      aria-label="Star zizzamia/perfume.js on GitHub">Star</a>
+      <a href="https://twitter.com/zizzamia?ref_src=twsrc%5Etfw"
+      class="twitter-follow-button" data-size="large"
+      data-show-count="true">Follow @zizzamia</a>
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="/user-centric-metrics/">
+      <h2 class="box-title" id="/user-centric-metrics/">
         User-centric performance metrics
       </h2>
       <p>When a user navigates to a web page, they're typically looking for visual feedback to reassure them that everything
@@ -32,11 +39,11 @@
         a lot of hacks or workarounds that can make performance worse.</p>
       <p>
         <b>Perfume</b> leverage these new APIs for measuring performance that matters! ⚡️ </p>
-      <img class="box__img" src="{{ path }}assets/perf-metrics-load-timeline.png" />
+      <img class="box-img" src="{{ path }}assets/perf-metrics-load-timeline.png" />
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="/installing-and-imports/">Installing and Imports</h2>
+      <h2 class="box-title" id="/installing-and-imports/">Installing and Imports</h2>
       <p>NPM
         <a href="https://www.npmjs.com/package/perfume.js" target="_blank">https://www.npmjs.com/package/perfume.js</a>
       </p>
@@ -44,20 +51,20 @@
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="first-contentful-paint">First Contentful Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FCP</a>)</h2>
+      <h2 class="box-title" id="first-contentful-paint">First Contentful Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FCP</a>)</h2>
       <p>This metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important
         to the user because it answers the question: is it happening?</p>
       <p>
         <b>FCP</b> marks the point when the browser renders the first bit of content from the DOM, which may be text, an image,
         SVG, or even a element.</p>
-      <p class="box__demo">
+      <p class="box-demo">
         Result: ⚡️ Perfume.js: First Contentful Paint {{ perfume.firstContentfulPaintDuration.toFixed(2) }} ms
       </p>
       <app-gist [gistId]="'Zizzamia/15e965213aa87a5588a6756fef612f45'"></app-gist>
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="/time-to-interactive/">Time to Interactive (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>)</h2>
+      <h2 class="box-title" id="/time-to-interactive/">Time to Interactive (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>)</h2>
       <p>The metric marks the point at which your application is both visually rendered and capable of reliably responding to
         user input. An application could be unable to respond to user input for a couple of reasons:</p>
       <ul>
@@ -67,68 +74,70 @@
       <p>The
         <b>TTI</b> metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle
         (free of long tasks).</p>
-      <p class="box__demo">
+      <p class="box-demo">
         Result: ⚡️ Perfume.js: Time to interactive {{ (perfume.observeTimeToInteractive() | async)?.toFixed(2) || 0 }} ms
       </p>
       <app-gist [gistId]="'Zizzamia/9c971fb35b898871953cc272924ce58d'"></app-gist>
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="/annotate-metrics/">Annotate metrics in the DevTools</h2>
+      <h2 class="box-title" id="/annotate-metrics/">Annotate metrics in the DevTools</h2>
       <p>
         <b>Performance.mark</b> (
         <a href="https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API" target="_blank">User Timing API</a>) is used to create an application-defined peformance entry in the browser's performance entry
         buffer.
       </p>
-      <p class="box__demo">
-        <button class="box__demo__btn" (click)="measureFibonacci()">Run Fibonacci</button>
+      <p class="box-demo">
+        <button class="box-demo-btn" (click)="measureFibonacci()">Run Fibonacci</button>
         <span>Result: {{ logFibonacci }}</span>
       </p>
       <app-gist [gistId]="'Zizzamia/e680d4f2f9f2bf9ba15b13207264f7bc'"></app-gist>
-      <img class="box__img" src="{{ path }}assets/performance-mark.png" />
+      <img class="box-img" src="{{ path }}assets/performance-mark.png" />
     </div>
 
     <div class="box" id="/component-first-paint/">
-      <h2 class="box__title">Component First Paint (CFP)</h2>
+      <h2 class="box-title">Component First Paint (CFP)</h2>
       <p>This metric mark the point, immediately after creating a
         <b>new component</b>, when the browser renders pixels to the screen.</p>
-      <p class="box__demo">
-        <button class="box__demo__btn" #elBtn data-toggle="popover" title="Popover" data-placement="top" data-content="And here's some amazing content."
-          (click)="togglePopover(elBtn)">Click to toggle popover</button>
+      <p class="box-demo">
+        <button type="button" #p="ngbPopover" class="box-demo-btn"
+        placement="top" ngbPopover triggers="manual"
+        popoverTitle="And here's some amazing content."
+        (click)="togglePopover()">Click to toggle popover</button>
         <span>Result: {{ logTogglePopover }}</span>
       </p>
       <app-gist [gistId]="'Zizzamia/ee3ec5ab7bb04822ff7535d18c7d9e96'"></app-gist>
-      <img class="box__img" src="{{ path }}assets/performance-cfp.png" />
+      <img class="box-img" src="{{ path }}assets/performance-cfp.png" />
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="/custom-logging/">Custom Logging</h2>
+      <h2 class="box-title" id="/custom-logging/">Custom Logging</h2>
       <p>Save the duration and print it out exactly the way you want it.</p>
-      <p class="box__demo">
-        <button class="box__demo__btn" (click)="customLogging()">Run custom logging</button>
+      <p class="box-demo">
+        <button class="box-demo-btn" (click)="customLogging()">Run custom logging</button>
         <span>Result: {{ logCustom }}</span>
       </p>
       <app-gist [gistId]="'Zizzamia/b16edc8b4052ac4186ebc62151de7dca'"></app-gist>
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="/google-analytics/">Google Analytics</h2>
+      <h2 class="box-title" id="/google-analytics/">Google Analytics</h2>
       <p>To enable Perfume to send your measures to Google Analytics User timing, set the option
         <b>enable:true</b> and a custom
         <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar" target="_blank">user timing variable</a>
         <b>timingVar:"name"</b>.</p>
       <app-gist [gistId]="'Zizzamia/221227bf333b0f6304a89fcd4f7038c4'"></app-gist>
-      <img class="box__img" src="{{ path }}assets/performance-analytics.png" />
+      <img class="box-img" src="{{ path }}assets/performance-analytics.png" />
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="/default-options/">Default Options</h2>
+      <h2 class="box-title" id="/default-options/">Default Options</h2>
       <p>Default options provided to Perfume.js constructor.</p>
       <app-gist [gistId]="'Zizzamia/1312530a3a680757604e0bf61fe33862'"></app-gist>
     </div>
 
     <div class="box">
-      <h2 class="box__title" id="/copyright-and-license/">Copyright and license</h2>
+      <h2 class="box-title" id="/copyright-and-license/">Copyright and license</h2>
       <p>Code and documentation copyright 2018
         <a href="https://twitter.com/Zizzamia" target="_blank">Leonardo Zizzamia</a>. Code released under the
         <a href="https://github.com/Zizzamia/perfume.js/blob/master/LICENSE" target="_blank">MIT license</a>. Docs released under Creative Commons.</p>
@@ -136,18 +145,38 @@
 
     <div class="box Fibonacci"></div>
   </div>
-  <div class="layout__nav">
-    <div class="nav-links">
-      <a href="{{ path }}#/home/" [class.active]="navSelected === navOptions.home" (click)="activeNav(navOptions.home)">Home</a>
-      <a href="{{ path }}#/user-centric-metrics/" [class.active]="navSelected === navOptions.userCentric" (click)="activeNav(navOptions.userCentric)">User-centric metrics</a>
-      <a href="{{ path }}#/installing-and-imports/" [class.active]="navSelected === navOptions.installing" (click)="activeNav(navOptions.installing)">Installing and Imports</a>
-      <a href="{{ path }}#/time-to-interactive/" [class.active]="navSelected === navOptions.tti" (click)="activeNav(navOptions.tti)">Time to Interactive</a>
-      <a href="{{ path }}#/annotate-metrics/" [class.active]="navSelected === navOptions.annotate" (click)="activeNav(navOptions.annotate)">Annotate metrics</a>
-      <a href="{{ path }}#/component-first-paint/" [class.active]="navSelected === navOptions.cfp" (click)="activeNav(navOptions.cfp)">Component First Paint</a>
-      <a href="{{ path }}#/custom-logging/" [class.active]="navSelected === navOptions.log" (click)="activeNav(navOptions.log)">Custom Logging</a>
-      <a href="{{ path }}#/google-analytics/" [class.active]="navSelected === navOptions.ga" (click)="activeNav(navOptions.ga)">Google Analytics</a>
-      <a href="{{ path }}#/default-options/" [class.active]="navSelected === navOptions.options" (click)="activeNav(navOptions.options)">Default Options</a>
-      <a href="{{ path }}#/copyright-and-license/" [class.active]="navSelected === navOptions.copyright" (click)="activeNav(navOptions.copyright)">Copyright and licenses</a>
+  <div class="layout-nav">
+    <div class="layout-nav-links">
+      <a href="{{ path }}#/home/"
+      [class.active]="navSelected === navOptions.home"
+      (click)="activeNav(navOptions.home)">Home</a>
+      <a href="{{ path }}#/user-centric-metrics/"
+      [class.active]="navSelected === navOptions.userCentric"
+      (click)="activeNav(navOptions.userCentric)">User-centric metrics</a>
+      <a href="{{ path }}#/installing-and-imports/"
+      [class.active]="navSelected === navOptions.installing"
+      (click)="activeNav(navOptions.installing)">Installing and Imports</a>
+      <a href="{{ path }}#/time-to-interactive/"
+      [class.active]="navSelected === navOptions.tti"
+      (click)="activeNav(navOptions.tti)">Time to Interactive</a>
+      <a href="{{ path }}#/annotate-metrics/"
+      [class.active]="navSelected === navOptions.annotate"
+      (click)="activeNav(navOptions.annotate)">Annotate metrics</a>
+      <a href="{{ path }}#/component-first-paint/"
+      [class.active]="navSelected === navOptions.cfp"
+      (click)="activeNav(navOptions.cfp)">Component First Paint</a>
+      <a href="{{ path }}#/custom-logging/"
+      [class.active]="navSelected === navOptions.log"
+      (click)="activeNav(navOptions.log)">Custom Logging</a>
+      <a href="{{ path }}#/google-analytics/"
+      [class.active]="navSelected === navOptions.ga"
+      (click)="activeNav(navOptions.ga)">Google Analytics</a>
+      <a href="{{ path }}#/default-options/"
+      [class.active]="navSelected === navOptions.options"
+      (click)="activeNav(navOptions.options)">Default Options</a>
+      <a href="{{ path }}#/copyright-and-license/"
+      [class.active]="navSelected === navOptions.copyright"
+      (click)="activeNav(navOptions.copyright)">Copyright and licenses</a>
     </div>
   </div>
 </div>

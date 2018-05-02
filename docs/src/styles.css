@@ -9,9 +9,11 @@ html, body {
 }
 
 body {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  background-color: #fffeff;
+  box-sizing: border-box;
+  color: #5E5252;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -43,4 +45,11 @@ img {
 .ng-version {
   position: relative;
   z-index: 0;
+}
+
+.popover-header {
+  margin: 0 !important;
+}
+.popover-body {
+  display: none;
 }

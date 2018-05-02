@@ -1,9 +1,9 @@
 // Angular & Third Party
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import * as $ from 'jquery';
 import Perfume from 'perfume.js';
-// import Perfume from '../../../src/perfume';
-
-declare const $: any;
+// import Perfume from '../../../../perfume.js';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +20,8 @@ export class AppComponent implements AfterViewInit {
     [keyof: string]: string
   };
   navSelected: string;
+
+  @ViewChild('p') public popover: NgbPopover;
 
   constructor() {
     // Perfume
@@ -102,9 +104,13 @@ export class AppComponent implements AfterViewInit {
     this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration.toFixed(2)} ms`;
   }
 
-  togglePopover(element) {
+  togglePopover() {
     this.perfume.start('togglePopover');
-    $(element).popover('toggle');
+    const isOpen = this.popover.isOpen();
+    this.popover.close();
+    if (!isOpen) {
+      this.popover.open();
+    }
     this.perfume.endPaint('togglePopover')
     .then((duration) => {
       this.logTogglePopover = `⚡️ Perfume.js: togglePopover ${duration.toFixed(2)} ms`;

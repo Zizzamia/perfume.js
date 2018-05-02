@@ -1,6 +1,6 @@
 import ttiPolyfill from 'tti-polyfill';
 import PerformImpl from './performance-impl';
-import {Metrics, PerfumeConfig} from './perfume';
+import { Metrics, PerfumeConfig } from './perfume';
 
 declare const PerformanceObserver: any;
 
@@ -117,7 +117,7 @@ export default class Performance implements PerformImpl {
    * @return {Promise<number>}
    */
   public timeToInteractive(minValue: number): Promise<number> {
-    return this.ttiPolyfill.getFirstConsistentlyInteractive({minValue});
+    return this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue });
   }
 
   /**

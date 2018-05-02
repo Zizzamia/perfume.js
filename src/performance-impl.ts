@@ -1,4 +1,4 @@
-import {Metrics, PerfumeConfig} from './perfume';
+import { Metrics, PerfumeConfig } from './perfume';
 
 export default interface PerformImpl {
   config: PerfumeConfig;
