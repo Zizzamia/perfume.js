@@ -1,24 +1,24 @@
-import Perfume from "../src/perfume";
+import Perfume from '../src/perfume';
 
 /**
  * Perfume test
  */
-describe("Perfume test", () => {
-  let perfume;
+describe('Perfume test', () => {
+  let perfume: any;
 
   const mock = {
-    reject: (x) => x,
-    resolve: (x) => x,
+    reject: (x: any) => x,
+    resolve: (x: any) => x,
   };
 
   beforeEach(() => {
     window.ga = undefined;
-    window.performance = {
+    (window as any).performance = {
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
       getEntriesByName: () => {
         return [{
           duration: 12345,
-          entryType: "measure",
+          entryType: 'measure',
         }];
       },
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark
@@ -35,8 +35,8 @@ describe("Perfume test", () => {
         navigationStart: 12345,
       },
     };
-    window.PerformanceLongTaskTiming = {};
-    window.PerformanceObserver = function() {
+    (window as any).PerformanceLongTaskTiming = {};
+    (window as any).PerformanceObserver = function PerformanceObserver() {
       this.observe = () => {
         return {};
       };
@@ -52,250 +52,250 @@ describe("Perfume test", () => {
   });
 
   beforeEach(() => {
-    spyOn(console, "log").and.callThrough();
-    spyOn(console, "warn").and.callThrough();
-    spyOn(perfume, "start").and.callThrough();
-    spyOn(perfume, "end").and.callThrough();
-    spyOn(perfume, "endPaint").and.callThrough();
-    spyOn(perfume, "log").and.callThrough();
-    spyOn(perfume, "checkMetricName").and.callThrough();
-    spyOn(perfume, "firstContentfulPaintCb").and.callThrough();
-    spyOn(perfume, "timeToInteractiveCb").and.callThrough();
-    spyOn(perfume, "logFCP").and.callThrough();
-    spyOn(perfume, "sendTiming").and.callThrough();
+    spyOn(console, 'log').and.callThrough();
+    spyOn(console, 'warn').and.callThrough();
+    spyOn(perfume, 'start').and.callThrough();
+    spyOn(perfume, 'end').and.callThrough();
+    spyOn(perfume, 'endPaint').and.callThrough();
+    spyOn(perfume, 'log').and.callThrough();
+    spyOn(perfume, 'checkMetricName').and.callThrough();
+    spyOn(perfume, 'firstContentfulPaintCb').and.callThrough();
+    spyOn(perfume, 'timeToInteractiveCb').and.callThrough();
+    spyOn(perfume, 'logFCP').and.callThrough();
+    spyOn(perfume, 'sendTiming').and.callThrough();
   });
 
-  describe("when calls observeTimeToInteractive()", () => {
+  describe('when calls observeTimeToInteractive()', () => {
     const instance = new Perfume({timeToInteractive: true});
-    instance.perf.timeToInteractive = (n) => new Promise((resolve) => resolve(n));
-    window.chrome = true;
+    (instance as any).perf.timeToInteractive = (n: any) => new Promise((resolve) => resolve(n));
+    (window as any).chrome = true;
 
-    it("should be a promise", (done) => {
+    it('should be a promise', (done) => {
       const promise = instance.observeTimeToInteractive();
       expect(promise).toBeInstanceOf(Promise);
       done();
     });
 
-    it("should resolve tti on chrome", (done) => {
+    it('should resolve tti on chrome', (done) => {
       instance.observeTimeToInteractive().then((time) => {
-        expect(typeof time).toBe("number");
+        expect(typeof time).toBe('number');
         done();
       });
     });
   });
 
-  describe("when calls start()", () => {
-    it("should throw a console.warn if metricName is not passed", () => {
+  describe('when calls start()', () => {
+    it('should throw a console.warn if metricName is not passed', () => {
       perfume.start();
-      expect(global.console.warn.calls.count()).toEqual(1);
-      expect(global.console.warn).toHaveBeenCalledWith("⚡️ Perfume.js:", "Please provide a metric name");
+      expect((global.console.warn as any).calls.count()).toEqual(1);
+      expect(global.console.warn).toHaveBeenCalledWith('⚡️ Perfume.js:', 'Please provide a metric name');
     });
 
-    it("should not throw a console.warn if param is correct", () => {
-      perfume.start("metricName");
+    it('should not throw a console.warn if param is correct', () => {
+      perfume.start('metricName');
       expect(global.console.warn).not.toHaveBeenCalled();
     });
 
-    it("should throw a console.warn if recording already started", () => {
-      perfume.start("metricName");
-      perfume.start("metricName");
-      expect(global.console.warn.calls.count()).toEqual(1);
-      expect(global.console.warn).toHaveBeenCalledWith("⚡️ Perfume.js:", "Recording already started.");
+    it('should throw a console.warn if recording already started', () => {
+      perfume.start('metricName');
+      perfume.start('metricName');
+      expect((global.console.warn as any).calls.count()).toEqual(1);
+      expect(global.console.warn).toHaveBeenCalledWith('⚡️ Perfume.js:', 'Recording already started.');
     });
   });
 
-  describe("when calls end()", () => {
-    it("should throw a console.warn if param is not correct", () => {
+  describe('when calls end()', () => {
+    it('should throw a console.warn if param is not correct', () => {
       perfume.end();
-      expect(global.console.warn.calls.count()).toEqual(1);
-      expect(global.console.warn).toHaveBeenCalledWith("⚡️ Perfume.js:", "Please provide a metric name");
+      expect((global.console.warn as any).calls.count()).toEqual(1);
+      expect(global.console.warn).toHaveBeenCalledWith('⚡️ Perfume.js:', 'Please provide a metric name');
     });
 
-    it("should throw a console.warn if param is correct and recording already stopped", () => {
-      perfume.end("metricName");
-      expect(global.console.warn.calls.count()).toEqual(1);
-      expect(global.console.warn).toHaveBeenCalledWith("⚡️ Perfume.js:", "Recording already stopped.");
+    it('should throw a console.warn if param is correct and recording already stopped', () => {
+      perfume.end('metricName');
+      expect((global.console.warn as any).calls.count()).toEqual(1);
+      expect(global.console.warn).toHaveBeenCalledWith('⚡️ Perfume.js:', 'Recording already stopped.');
     });
 
-    it("should call log() if log param is true", () => {
-      perfume.start("metricName");
-      perfume.end("metricName", true);
+    it('should call log() if log param is true', () => {
+      perfume.start('metricName');
+      perfume.end('metricName', true);
       expect(perfume.log.calls.count()).toEqual(1);
-      expect(perfume.log).toHaveBeenCalledWith("metricName", 12345);
+      expect(perfume.log).toHaveBeenCalledWith('metricName', 12345);
     });
 
-    it("should not call log() when logging is false", () => {
+    it('should not call log() when logging is false', () => {
       perfume.config.logging = false;
-      perfume.start("metricName");
-      perfume.end("metricName", true);
+      perfume.start('metricName');
+      perfume.end('metricName', true);
       expect(perfume.log).not.toHaveBeenCalled();
     });
   });
 
-  describe("when calls start() and end()", () => {
+  describe('when calls start() and end()', () => {
     beforeEach(() => {
-      spyOn(perfume.perf, "mark").and.callThrough();
-      spyOn(perfume.perf, "measure").and.callThrough();
-      perfume.start("metricName");
-      perfume.end("metricName");
+      spyOn(perfume.perf, 'mark').and.callThrough();
+      spyOn(perfume.perf, 'measure').and.callThrough();
+      perfume.start('metricName');
+      perfume.end('metricName');
     });
 
-    it("should not throw a console.warn if param is correct", () => {
+    it('should not throw a console.warn if param is correct', () => {
       expect(global.console.warn).not.toHaveBeenCalled();
     });
 
-    it("should call perf.mark() twice with the correct arguments", () => {
+    it('should call perf.mark() twice with the correct arguments', () => {
       expect(perfume.perf.mark.calls.count()).toEqual(2);
     });
 
-    it("should call perf.measure() with the correct arguments", () => {
+    it('should call perf.measure() with the correct arguments', () => {
       expect(perfume.perf.measure.calls.count()).toEqual(1);
-      expect(perfume.perf.measure).toHaveBeenCalledWith("metricName", {});
+      expect(perfume.perf.measure).toHaveBeenCalledWith('metricName', {});
     });
   });
 
-  describe("when calls endPaint()", () => {
+  describe('when calls endPaint()', () => {
     beforeEach(() => {
       jest.useFakeTimers();
     });
 
-    it("should call end() after the first setTimeout", () => {
+    it('should call end() after the first setTimeout', () => {
       perfume.endPaint();
       jest.runAllTimers();
       expect(perfume.end.calls.count()).toEqual(1);
     });
   });
 
-  describe("when calls log()", () => {
-    it("should call global.console.warn() if params are not correct", () => {
+  describe('when calls log()', () => {
+    it('should call global.console.warn() if params are not correct', () => {
       perfume.log();
-      const text = "Please provide a metric name";
-      expect(global.console.warn.calls.count()).toEqual(1);
+      const text = 'Please provide a metric name';
+      expect((global.console.warn as any).calls.count()).toEqual(1);
       expect(global.console.warn).toHaveBeenCalledWith(perfume.config.logPrefix, text);
     });
 
-    it("should not call global.console.log() if params are not correct", () => {
+    it('should not call global.console.log() if params are not correct', () => {
       perfume.log();
       expect(global.console.log).not.toHaveBeenCalled();
     });
 
-    it("should call global.console.log() if params are correct", () => {
-      perfume.log("metricName", 12345);
-      const text = "%c ⚡️ Perfume.js: metricName 12345.00 ms";
-      const style = "color: #ff6d00;font-size:12px;";
-      expect(global.console.log.calls.count()).toEqual(1);
+    it('should call global.console.log() if params are correct', () => {
+      perfume.log('metricName', 12345);
+      const text = '%c ⚡️ Perfume.js: metricName 12345.00 ms';
+      const style = 'color: #ff6d00;font-size:12px;';
+      expect((global.console.log as any).calls.count()).toEqual(1);
       expect(global.console.log).toHaveBeenCalledWith(text, style);
     });
   });
 
-  describe("when calls checkMetricName()", () => {
-    it("should return 'true' when provided a metric name", () => {
-      const value = perfume.checkMetricName("metricName");
+  describe('when calls checkMetricName()', () => {
+    it('should return \'true\' when provided a metric name', () => {
+      const value = perfume.checkMetricName('metricName');
       expect(value).toEqual(true);
     });
 
-    it("should return 'false' when not provided a metric name", () => {
+    it('should return \'false\' when not provided a metric name', () => {
       const value = perfume.checkMetricName();
       expect(value).toEqual(false);
     });
   });
 
-  describe("when calls firstContentfulPaintCb()", () => {
-    let entries;
+  describe('when calls firstContentfulPaintCb()', () => {
+    let entries: any;
 
     beforeEach(() => {
-      spyOn(perfume.perf, "timeToInteractive").and.callThrough();
+      spyOn(perfume.perf, 'timeToInteractive').and.callThrough();
       entries = [{
-        name: "first-paint",
+        name: 'first-paint',
         startTime: 1,
       }, {
-        name: "first-contentful-paint",
+        name: 'first-contentful-paint',
         startTime: 1,
       }];
       perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
       perfume.config.timeToInteractive = true;
-      window.chrome = true;
+      (window as any).chrome = true;
     });
 
-    it("should call logFCP() with the correct arguments", () => {
+    it('should call logFCP() with the correct arguments', () => {
       perfume.firstContentfulPaintCb(entries, mock.resolve, mock.reject);
       expect(perfume.logFCP.calls.count()).toEqual(2);
-      expect(perfume.logFCP).toHaveBeenCalledWith(1, "First Paint", "firstPaint");
-      expect(perfume.logFCP).toHaveBeenCalledWith(1, "First Contentful Paint", "firstContentfulPaint");
+      expect(perfume.logFCP).toHaveBeenCalledWith(1, 'First Paint', 'firstPaint');
+      expect(perfume.logFCP).toHaveBeenCalledWith(1, 'First Contentful Paint', 'firstContentfulPaint');
     });
 
-    it("should not call logFCP() when firstPaint and firstContentfulPaint is false", () => {
+    it('should not call logFCP() when firstPaint and firstContentfulPaint is false', () => {
       perfume.config.firstPaint = false;
       perfume.config.firstContentfulPaint = false;
       perfume.firstContentfulPaintCb(entries, mock.resolve, mock.reject);
       expect(perfume.logFCP).not.toHaveBeenCalled();
     });
 
-    it("should call timeToInteractive()", () => {
+    it('should call timeToInteractive()', () => {
       perfume.firstContentfulPaintCb(entries, mock.resolve, mock.reject);
       expect(perfume.perf.timeToInteractive.calls.count()).toEqual(1);
     });
   });
 
-  describe("when calls timeToInteractiveCb()", () => {
-    it("should call log() with the correct arguments", () => {
+  describe('when calls timeToInteractiveCb()', () => {
+    it('should call log() with the correct arguments', () => {
       perfume.timeToInteractiveCb(1);
       expect(perfume.log.calls.count()).toEqual(1);
-      expect(perfume.log).toHaveBeenCalledWith("Time to interactive", perfume.timeToInteractiveDuration);
+      expect(perfume.log).toHaveBeenCalledWith('Time to interactive', perfume.timeToInteractiveDuration);
     });
 
-    it("should call sendTiming() with the correct arguments", () => {
+    it('should call sendTiming() with the correct arguments', () => {
       perfume.timeToInteractiveCb(1);
       expect(perfume.sendTiming.calls.count()).toEqual(1);
-      expect(perfume.sendTiming).toHaveBeenCalledWith("timeToInteractive", perfume.timeToInteractiveDuration);
+      expect(perfume.sendTiming).toHaveBeenCalledWith('timeToInteractive', perfume.timeToInteractiveDuration);
     });
 
-    it("should perfume.timeToInteractiveDuration be equal to 1", () => {
+    it('should perfume.timeToInteractiveDuration be equal to 1', () => {
       perfume.timeToInteractiveCb(1);
       expect(perfume.timeToInteractiveDuration).toEqual(1);
     });
   });
 
-  describe("when calls logFCP()", () => {
-    it("should call log() with the correct arguments", () => {
-      perfume.logFCP(1, "First Contentful Paint", "firstContentfulPaint");
+  describe('when calls logFCP()', () => {
+    it('should call log() with the correct arguments', () => {
+      perfume.logFCP(1, 'First Contentful Paint', 'firstContentfulPaint');
       expect(perfume.log.calls.count()).toEqual(1);
-      expect(perfume.log).toHaveBeenCalledWith("First Contentful Paint", perfume.firstContentfulPaintDuration);
+      expect(perfume.log).toHaveBeenCalledWith('First Contentful Paint', perfume.firstContentfulPaintDuration);
     });
 
-    it("should call sendTiming() with the correct arguments", () => {
-      perfume.logFCP(1, "First Contentful Paint", "firstContentfulPaint");
+    it('should call sendTiming() with the correct arguments', () => {
+      perfume.logFCP(1, 'First Contentful Paint', 'firstContentfulPaint');
       expect(perfume.sendTiming.calls.count()).toEqual(1);
-      expect(perfume.sendTiming).toHaveBeenCalledWith("firstContentfulPaint", perfume.firstContentfulPaintDuration);
+      expect(perfume.sendTiming).toHaveBeenCalledWith('firstContentfulPaint', perfume.firstContentfulPaintDuration);
     });
 
-    it("should perfume.firstContentfulPaintDuration be equal to duration", () => {
-      perfume.logFCP(1, "First Contentful Paint", "firstContentfulPaint");
+    it('should perfume.firstContentfulPaintDuration be equal to duration', () => {
+      perfume.logFCP(1, 'First Contentful Paint', 'firstContentfulPaint');
       expect(perfume.firstContentfulPaintDuration).toEqual(1);
     });
   });
 
-  describe("when calls sendTiming()", () => {
-    it("should not call global.console.warn() if googleAnalytics is disable", () => {
+  describe('when calls sendTiming()', () => {
+    it('should not call global.console.warn() if googleAnalytics is disable', () => {
       perfume.sendTiming();
       expect(global.console.warn).not.toHaveBeenCalled();
     });
 
-    it("should call global.console.warn() if googleAnalytics is disable with the correct arguments", () => {
+    it('should call global.console.warn() if googleAnalytics is disable with the correct arguments', () => {
       perfume.config.googleAnalytics.enable = true;
       perfume.sendTiming();
-      const text = "Google Analytics has not been loaded";
-      expect(global.console.warn.calls.count()).toEqual(1);
+      const text = 'Google Analytics has not been loaded';
+      expect((global.console.warn as any).calls.count()).toEqual(1);
       expect(global.console.warn).toHaveBeenCalledWith(perfume.config.logPrefix, text);
     });
 
-    it("should not call global.console.warn() if googleAnalytics is enable and ga is present", () => {
+    it('should not call global.console.warn() if googleAnalytics is enable and ga is present', () => {
       perfume.config.googleAnalytics.enable = true;
       window.ga = () => {
         return true;
       };
-      perfume.sendTiming("metricName", 123);
+      perfume.sendTiming('metricName', 123);
       expect(global.console.warn).not.toHaveBeenCalled();
     });
   });

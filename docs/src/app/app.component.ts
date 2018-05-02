@@ -1,9 +1,9 @@
 // Angular & Third Party
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import * as $ from 'jquery';
 import Perfume from 'perfume.js';
-// import Perfume from '../../../src/perfume';
-
-declare const $: any;
+// import Perfume from '../../../../perfume.js';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +21,8 @@ export class AppComponent implements AfterViewInit {
   };
   navSelected: string;
 
+  @ViewChild('p') public popover: NgbPopover;
+
   constructor() {
     // Perfume
     this.perfume = new Perfume({
@@ -28,7 +30,7 @@ export class AppComponent implements AfterViewInit {
       firstContentfulPaint: true,
       googleAnalytics: {
         enable: true,
-        timingVar: "userId"
+        timingVar: 'userId',
       },
       timeToInteractive: true,
     });
@@ -36,15 +38,15 @@ export class AppComponent implements AfterViewInit {
 
     // Component variables
     this.navOptions = {
-      userCentric: "user-centric-metrics",
-      installing: "installing-and-imports",
-      tti: "time-to-interactive",
-      annotate: "annotate-metrics",
-      cfp: "component-first-paint",
-      log: "custom-logging",
-      ga: "google-analytics",
-      options: "default-options",
-      copyright: "copyright-and-license",
+      userCentric: 'user-centric-metrics',
+      installing: 'installing-and-imports',
+      tti: 'time-to-interactive',
+      annotate: 'annotate-metrics',
+      cfp: 'component-first-paint',
+      log: 'custom-logging',
+      ga: 'google-analytics',
+      options: 'default-options',
+      copyright: 'copyright-and-license',
     };
   }
 
@@ -76,7 +78,7 @@ export class AppComponent implements AfterViewInit {
   appendElSequence(num) {
     const elSequence = $(`<span class="Fibonacci-sequence">${num} </span>`);
     elSequence.css({
-      color: '#'+Math.floor(Math.random()*16777215).toString(16)
+      color: '#' + Math.floor(Math.random() * 16777215).toString(16)
     });
     elSequence.on('click', () => {
       console.log('Lol');
@@ -86,8 +88,8 @@ export class AppComponent implements AfterViewInit {
 
   reverseFibonacciSequence(reccurrence = 1) {
     const $elFibonacci = $('.Fibonacci');
-    $elFibonacci.children().each(function(i,sequence) {
-      $elFibonacci.prepend(sequence)
+    $elFibonacci.children().each((i, sequence) => {
+      $elFibonacci.prepend(sequence);
     });
     reccurrence -= 1;
     if (reccurrence > 0) {
@@ -102,9 +104,13 @@ export class AppComponent implements AfterViewInit {
     this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration.toFixed(2)} ms`;
   }
 
-  togglePopover(element) {
+  togglePopover() {
     this.perfume.start('togglePopover');
-    $(element).popover('toggle');
+    const isOpen = this.popover.isOpen();
+    this.popover.close();
+    if (!isOpen) {
+      this.popover.open();
+    }
     this.perfume.endPaint('togglePopover')
     .then((duration) => {
       this.logTogglePopover = `⚡️ Perfume.js: togglePopover ${duration.toFixed(2)} ms`;
