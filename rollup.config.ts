@@ -7,10 +7,10 @@ import pkg from './package.json';
 const ensureArray = (maybeArr) =>
   Array.isArray(maybeArr) ? maybeArr : [maybeArr];
 
-const createConfig = ({output, includeExternals = false, min = false}) => {
+const createConfig = ({ output, includeExternals = false, min = false }) => {
   const minify = min && uglify({
     output: {
-      comments(node, {text, type}) {
+      comments(node, { text, type }) {
         if (type === 'comment2') {
           // multiline comment
           return /@preserve|@license|@cc_on/i.test(text);
@@ -31,7 +31,7 @@ const createConfig = ({output, includeExternals = false, min = false}) => {
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {}),
     ],
-    watch: {include: 'dist/es/**'},
+    watch: { include: 'dist/es/**' },
     plugins: [
       // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
       commonjs(),
@@ -47,33 +47,33 @@ const createConfig = ({output, includeExternals = false, min = false}) => {
 export default [
   createConfig({
     output: [
-      {file: pkg.module, format: 'es'},
-      {file: pkg.main, format: 'cjs'},
+      { file: pkg.module, format: 'es' },
+      { file: pkg.main, format: 'cjs' },
     ],
   }),
   createConfig({
-    output: {file: 'dist/perfume.es5.min.js', format: 'es'},
+    output: { file: 'dist/perfume.es5.min.js', format: 'es' },
     min: true,
   }),
   createConfig({
-    output: {file: 'dist/perfume.min.js', format: 'cjs'},
+    output: { file: 'dist/perfume.min.js', format: 'cjs' },
     min: true,
   }),
   createConfig({
-    output: {file: pkg.iife, format: 'iife'},
+    output: { file: pkg.iife, format: 'iife' },
     includeExternals: true,
   }),
   createConfig({
-    output: {file: 'dist/perfume.iife.min.js', format: 'iife'},
+    output: { file: 'dist/perfume.iife.min.js', format: 'iife' },
     includeExternals: true,
     min: true,
   }),
   createConfig({
-    output: {file: pkg.unpkg, format: 'umd'},
+    output: { file: pkg.unpkg, format: 'umd' },
     includeExternals: true,
   }),
   createConfig({
-    output: {file: 'dist/perfume.umd.min.js', format: 'umd'},
+    output: { file: 'dist/perfume.umd.min.js', format: 'umd' },
     includeExternals: true,
     min: true,
   }),
