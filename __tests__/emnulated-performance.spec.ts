@@ -8,6 +8,7 @@ describe('EmulatedPerformance', () => {
 
   beforeEach(() => {
     service = new EmulatedPerformance({...mock.defaultPerfumeConfig, logPrefix: ''});
+    mock.performance();
   });
 
   afterEach(() => {
@@ -74,11 +75,8 @@ describe('EmulatedPerformance', () => {
   });
 
   describe('.getFirstPaint()', () => {
-    beforeEach(() => {
-      (window as any).performance = mock.performance;
-    });
-
-    it('should return 0 if PerformanceTiming.navigationStar is 0', () => {
+    it('should return 0 if PerformanceTiming.navigationStart is 0', () => {
+      (window.performance as any).timing = {navigationStart: 0};
       const performance: PerformancePaintTiming = service.getFirstPaint();
       expect(performance).toEqual([{
         duration: 0,
