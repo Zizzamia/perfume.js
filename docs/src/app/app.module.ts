@@ -6,18 +6,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Componentes
 import { AppComponent } from './app.component';
-import { GistComponent } from './gist/gist.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    GistComponent
-  ],
-  imports: [
-    BrowserModule,
-    NgbModule.forRoot()
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, NgbModule.forRoot()],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
