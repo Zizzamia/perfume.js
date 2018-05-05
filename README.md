@@ -12,18 +12,12 @@
 
 ## User-centric performance metrics
 
-When a user navigates to a web page, they're typically looking for visual feedback to reassure them that everything is going to work as expected.
+**Perfume** leverage the latest W3C Performance Drafts (like PerformanceObserver), for measuring performance that matters! ⚡️
 
-Is it happening? Is it useful? Is it usable? Is it delightful?
-To understand when a page delivers this feedback to its users, we've defined several new metrics:
-- First Paint (FC)
+- First Paint (FP)
 - First Contentful Paint (FCP)
 - Time to Interactive (TTI)
 - Component First Paint (CFP)
-
-Luckily, with the addition of a few new browser APIs, measuring these metrics on real devices is finally possible without a lot of hacks or workarounds that can make performance worse.
-
-**Perfume** leverage these new APIs for measuring performance that matters! ⚡️
 
 ![Performance Metrics load timeline](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perf-metrics-load-timeline.png)
 
@@ -58,10 +52,19 @@ import Perfume from 'node_modules/perfume.js/perfume.umd.js';
 
 ## Start measuring
 
-### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-This metric mark the point, immediately after navigation, when the browser renders pixels to the screen. This is important to the user because it answers the question: is it happening?
+### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+**FP** is the exact time the browser renders anything as visually different from what was on the screen before navigation, e.g. a background change after a long blank white screen time.
 
-**FCP** marks the point when the browser renders the first bit of content from the DOM, which may be text, an image, SVG, or even a <canvas> element.
+```javascript
+const perfume = new Perfume({
+  firstPaint: true
+});
+// ⚡️ Perfume.js: First Paint 1482.00 ms
+```
+
+### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+**FCP** is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.
+
 
 ```javascript
 const perfume = new Perfume({
