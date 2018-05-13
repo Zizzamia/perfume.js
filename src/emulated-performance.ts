@@ -9,9 +9,7 @@ export interface PerformancePaintTiming {
 }
 
 export default class EmulatedPerformance implements PerformImpl {
-
-  constructor(public config: PerfumeConfig) {
-  }
+  constructor(public config: PerfumeConfig) {}
 
   /**
    * When performance API is not available
@@ -78,7 +76,7 @@ export default class EmulatedPerformance implements PerformImpl {
       duration: 0,
       entryType: 'paint',
       name: 'first-contentful-paint',
-      startTime: 0,
+      startTime: 0
     };
     if (navTiming && navTiming.navigationStart !== 0) {
       performancePaintTiming.startTime = Date.now() - navTiming.navigationStart;

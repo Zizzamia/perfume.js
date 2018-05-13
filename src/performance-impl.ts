@@ -10,4 +10,4 @@ export default interface PerformImpl {
   measure(metricName: string, metrics: Metrics): number;
 
   firstContentfulPaint(cb: any): any;
-}
+};

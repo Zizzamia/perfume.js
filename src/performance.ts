@@ -11,7 +11,6 @@ declare interface PerformanceObserverEntryList {
 }
 
 export default class Performance implements PerformImpl {
-
   /**
    * True if the browser supports the Navigation Timing API,
    * User Timing API and the PerformanceObserver Interface.
@@ -23,9 +22,7 @@ export default class Performance implements PerformImpl {
    * @return {boolean}
    */
   public static supported(): boolean {
-    return window.performance
-      && !!performance.now
-      && !!performance.mark;
+    return window.performance && !!performance.now && !!performance.mark;
   }
 
   /**
@@ -99,7 +96,7 @@ export default class Performance implements PerformImpl {
    */
   public firstContentfulPaint(cb: (entries: any[]) => void): void {
     this.perfObserver = new PerformanceObserver(this.performanceObserverCb.bind(this, cb));
-    this.perfObserver.observe({entryTypes: ['paint']});
+    this.perfObserver.observe({ entryTypes: ['paint'] });
   }
 
   /**
@@ -151,12 +148,16 @@ export default class Performance implements PerformImpl {
    * @param {PerformanceObserverEntryList} entryList
    */
   private performanceObserverCb(
-    cb: (entries: PerformanceEntry[]) => void, entryList: PerformanceObserverEntryList): void {
+    cb: (entries: PerformanceEntry[]) => void,
+    entryList: PerformanceObserverEntryList
+  ): void {
     const entries = entryList.getEntries();
     cb(entries);
     entries.forEach((performancePaintTiming: any) => {
-      if (this.config.firstContentfulPaint
-        && performancePaintTiming.name === 'first-contentful-paint') {
+      if (
+        this.config.firstContentfulPaint &&
+        performancePaintTiming.name === 'first-contentful-paint'
+      ) {
         this.perfObserver.disconnect();
       }
     });

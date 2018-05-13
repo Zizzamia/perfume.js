@@ -38,11 +38,11 @@ export default class Perfume {
     firstPaint: false,
     googleAnalytics: {
       enable: false,
-      timingVar: 'name',
+      timingVar: 'name'
     },
     logPrefix: '⚡️ Perfume.js:',
     logging: true,
-    timeToInteractive: false,
+    timeToInteractive: false
   };
   public firstPaintDuration: number = 0;
   public firstContentfulPaintDuration: number = 0;
@@ -59,7 +59,9 @@ export default class Perfume {
   constructor(options: any = {}) {
     this.config = Object.assign({}, this.config, options) as PerfumeConfig;
     // Init performance implementation
-    this.perf = Performance.supported() ? new Performance(this.config) : new EmulatedPerformance(this.config);
+    this.perf = Performance.supported()
+      ? new Performance(this.config)
+      : new EmulatedPerformance(this.config);
     this.timeToInteractivePromise = new Promise((resolve, reject) => {
       // Init First Contentful Paint
       if (Performance.supportedPerformanceObserver()) {
@@ -97,7 +99,7 @@ export default class Perfume {
     }
     this.metrics[metricName] = {
       end: 0,
-      start: this.perf.now(),
+      start: this.perf.now()
     };
     this.perf.mark(metricName, 'start');
   }
@@ -134,7 +136,7 @@ export default class Perfume {
    * @return {Promise<number>}
    */
   public endPaint(metricName: string): Promise<void | number> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(() => {
         const duration = this.end(metricName);
         resolve(duration);
@@ -176,30 +178,44 @@ export default class Perfume {
    * @param {(value: any) => void} resolve
    * @param {(error: any) => void} reject
    */
-  private firstContentfulPaintCb(entries: any[], resolve: (value: any) => void, reject: (error: any) => void): void {
+  private firstContentfulPaintCb(
+    entries: any[],
+    resolve: (value: any) => void,
+    reject: (error: any) => void
+  ): void {
     let firstContentfulPaintDuration;
     entries.forEach((performancePaintTiming: any) => {
-      if (this.config.firstPaint
-        && performancePaintTiming.name === 'first-paint') {
+      if (this.config.firstPaint && performancePaintTiming.name === 'first-paint') {
         this.logFCP(performancePaintTiming.startTime, 'First Paint', 'firstPaint');
       }
-      if (this.config.firstContentfulPaint
-        && performancePaintTiming.name === 'first-contentful-paint') {
-        this.logFCP(performancePaintTiming.startTime, 'First Contentful Paint', 'firstContentfulPaint');
+      if (
+        this.config.firstContentfulPaint &&
+        performancePaintTiming.name === 'first-contentful-paint'
+      ) {
+        this.logFCP(
+          performancePaintTiming.startTime,
+          'First Contentful Paint',
+          'firstContentfulPaint'
+        );
       }
       if (performancePaintTiming.name === 'first-contentful-paint') {
         firstContentfulPaintDuration = performancePaintTiming.startTime;
       }
     });
-    if (Performance.supported()
-      && Performance.supportedPerformanceObserver()
-      && Performance.supportedLongTask()
-      && this.config.timeToInteractive
-      && firstContentfulPaintDuration) {
-      (this.perf as Performance).timeToInteractive(firstContentfulPaintDuration).then((time: number) => {
-        resolve(time);
-        this.timeToInteractiveCb(time);
-      }).catch(reject);
+    if (
+      Performance.supported() &&
+      Performance.supportedPerformanceObserver() &&
+      Performance.supportedLongTask() &&
+      this.config.timeToInteractive &&
+      firstContentfulPaintDuration
+    ) {
+      (this.perf as Performance)
+        .timeToInteractive(firstContentfulPaintDuration)
+        .then((time: number) => {
+          resolve(time);
+          this.timeToInteractiveCb(time);
+        })
+        .catch(reject);
     }
   }
 
