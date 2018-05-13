@@ -1,102 +1,83 @@
-import EmulatedPerformance from '../src/emulated-performance';
+import EmulatedPerformance, {PerformancePaintTiming} from '../src/emulated-performance';
+import {Metrics} from '../src/perfume';
+import mock from './_mock';
 
-/**
- * Emulated performance test
- */
-describe('Emulated performance test', () => {
-  let service: any;
-
-  beforeEach(() => {
-    (window as any).Date = {
-      now: () => {
-        return 1000;
-      },
-    };
-    (window as any).performance = {
-      timing: {
-        navigationStart: 0,
-      },
-    };
-    service = new EmulatedPerformance({
-      logPrefix: '',
-    } as any);
-  });
+describe('EmulatedPerformance', () => {
+  let service: EmulatedPerformance | any;
+  let spy: jest.SpyInstance;
 
   beforeEach(() => {
-    spyOn(global.console, 'warn').and.callThrough();
-    spyOn(service, 'now').and.callThrough();
-    spyOn(service, 'mark').and.callThrough();
-    spyOn(service, 'measure').and.callThrough();
-    spyOn(service, 'firstContentfulPaint').and.callThrough();
-    spyOn(service, 'getDurationByMetric').and.callThrough();
-    spyOn(service, 'getFirstPaint').and.callThrough();
+    service = new EmulatedPerformance({...mock.defaultPerfumeConfig, logPrefix: ''});
+    mock.performance();
   });
 
-  describe('when calls now()', () => {
+  afterEach(() => {
+    if (spy) {
+      spy.mockReset();
+      spy.mockRestore();
+    }
+  });
+
+  describe('.now()', () => {
     it('should return Date.now() / 1000', () => {
+      (window as any).Date = mock.Date;
       expect(service.now()).toEqual(1);
     });
   });
 
-  it('has "mark" method ', () => {
-    expect(service.mark).toBeDefined();
-  });
-
-  describe('when calls measure()', () => {
-    it('should call getDurationByMetric() with the correct arguments', () => {
-      const metrics = {
-        age: {
-          end: 2018,
-          start: 1987,
-        },
-      };
-      service.measure('age', metrics);
-      expect(service.getDurationByMetric.calls.count()).toEqual(1);
-      expect(service.getDurationByMetric).toHaveBeenCalledWith('age', metrics);
+  describe('.mark()', () => {
+    it('should has "mark" method ', () => {
+      expect(service.mark).toBeDefined();
     });
   });
 
-  describe('when calls firstContentfulPaint()', () => {
+  describe('.measure()', () => {
+    it('should call getDurationByMetric() with the correct arguments', () => {
+      const metrics: Metrics = {
+        age: {end: 2018, start: 1987},
+      };
+      spy = jest.spyOn(service, 'getDurationByMetric');
+      service.measure('age', metrics);
+      expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls.length).toBe(1);
+      expect(spy).toHaveBeenCalledWith('age', metrics);
+    });
+  });
+
+  describe('.firstContentfulPaint()', () => {
     beforeEach(() => {
       jest.useFakeTimers();
     });
 
     it('should call getFirstPaint() after the setTimeout', () => {
-      service.firstContentfulPaint(() => {
-        return 1;
-      });
+      spy = jest.spyOn(service, 'getFirstPaint');
+      service.firstContentfulPaint(() => 1);
       jest.runAllTimers();
-      expect(service.getFirstPaint.calls.count()).toEqual(1);
+      expect(spy.mock.calls.length).toEqual(1);
+      jest.clearAllTimers();
     });
   });
 
-  describe('when calls getDurationByMetric()', () => {
+  describe('.getDurationByMetric()', () => {
     it('should return the duration', () => {
-      const metrics = {
-        age: {
-          end: 2018,
-          start: 1987,
-        },
-      };
-      const duration = service.getDurationByMetric('age', metrics);
+      const duration = service.getDurationByMetric('age', {
+        age: {end: 2018, start: 1987},
+      } as Metrics);
       expect(duration).toEqual(31);
     });
 
     it('should return the -1 when duration is 0', () => {
-      const metrics = {
-        age: {
-          end: 2018,
-          start: 2018,
-        },
-      };
-      const duration = service.getDurationByMetric('age', metrics);
+      const duration = service.getDurationByMetric('age', {
+        age: {end: 2018, start: 2018},
+      } as Metrics);
       expect(duration).toEqual(0);
     });
   });
 
-  describe('when calls getFirstPaint()', () => {
-    it('should return 0 if PerformanceTiming.navigationStar is 0', () => {
-      const performance = service.getFirstPaint();
+  describe('.getFirstPaint()', () => {
+    it('should return 0 if PerformanceTiming.navigationStart is 0', () => {
+      (window.performance as any).timing = {navigationStart: 0};
+      const performance: PerformancePaintTiming = service.getFirstPaint();
       expect(performance).toEqual([{
         duration: 0,
         entryType: 'paint',
@@ -106,8 +87,8 @@ describe('Emulated performance test', () => {
     });
 
     it('should return performancePaintTiming', () => {
-      (window.performance as any).timing.navigationStart = 240;
-      const performance = service.getFirstPaint();
+      (window.performance as any).timing = {navigationStart: 240};
+      const performance: PerformancePaintTiming = service.getFirstPaint();
       expect(performance).toEqual([{
         duration: 0,
         entryType: 'paint',
