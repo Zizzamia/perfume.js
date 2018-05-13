@@ -2,8 +2,8 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import * as $ from 'jquery';
-// import Perfume from 'perfume.js';
-import Perfume from '../../../../perfume.js';
+import Perfume from 'perfume.js';
+// import Perfume from '../../../../perfume.js';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +11,8 @@ import Perfume from '../../../../perfume.js';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements AfterViewInit {
+  @ViewChild('p') public popover: NgbPopover;
+  // Component
   logCustom: string;
   logFibonacci: string;
   logTogglePopover: string;
@@ -20,8 +22,6 @@ export class AppComponent implements AfterViewInit {
     [keyof: string]: string;
   };
   navSelected: string;
-
-  @ViewChild('p') public popover: NgbPopover;
 
   constructor() {
     // Perfume
@@ -81,9 +81,6 @@ export class AppComponent implements AfterViewInit {
     const elSequence = $(`<span class="Fibonacci-sequence">${num} </span>`);
     elSequence.css({
       color: '#' + Math.floor(Math.random() * 16777215).toString(16)
-    });
-    elSequence.on('click', () => {
-      console.log('Lol');
     });
     $('.Fibonacci').append(elSequence);
   }
