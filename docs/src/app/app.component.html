@@ -68,7 +68,7 @@ npm install perfume.js --save-dev
       <p>FP is the exact time the browser renders anything as visually different from what was
       on the screen before navigation, e.g. a background change after a long blank white screen time.</p>
       <p class="box-demo">
-        Result: ⚡️ Perfume.js: First Contentful Paint {{ perfume.firstContentfulPaintDuration.toFixed(2) }} ms
+        ⚡️ Perfume.js: First Contentful Paint {{ perfume.firstPaintDuration.toFixed(2) }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -90,7 +90,7 @@ npm install perfume.js --save-dev
       <h2 class="box-title" id="first-contentful-paint">First Contentful Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FCP</a>)</h2>
       <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
       <p class="box-demo">
-        Result: ⚡️ Perfume.js: First Contentful Paint {{ perfume.firstContentfulPaintDuration.toFixed(2) }} ms
+        ⚡️ Perfume.js: First Contentful Paint {{ perfume.firstContentfulPaintDuration.toFixed(2) }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -120,7 +120,7 @@ npm install perfume.js --save-dev
         <b>TTI</b> metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle
         (free of long tasks).</p>
       <p class="box-demo">
-        Result: ⚡️ Perfume.js: Time to interactive {{ (perfume.observeTimeToInteractive() | async)?.toFixed(2) || 0 }} ms
+        ⚡️ Perfume.js: Time to interactive {{ (perfume.observeTimeToInteractive() | async)?.toFixed(2) || 0 }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -147,7 +147,7 @@ npm install perfume.js --save-dev
       </p>
       <p class="box-demo">
         <button class="box-demo-btn" (click)="measureFibonacci()">Run Fibonacci</button>
-        <span>Result: {{ logFibonacci }}</span>
+        <span>{{ logFibonacci }}</span>
       </p>
       <div class="box-code js">
         <table>
@@ -175,7 +175,7 @@ perfume.<span class="violet">end</span>('fibonacci');
         placement="top" ngbPopover triggers="manual"
         popoverTitle="And here's some amazing content."
         (click)="togglePopover()">Click to toggle popover</button>
-        <span>Result: {{ logTogglePopover }}</span>
+        <span>{{ logTogglePopover }}</span>
       </p>
       <div class="box-code js">
         <table>
@@ -199,7 +199,7 @@ perfume.<span class="violet">endPaint</span>('togglePopover');
       <p>Save the duration and print it out exactly the way you want it.</p>
       <p class="box-demo">
         <button class="box-demo-btn" (click)="customLogging()">Run custom logging</button>
-        <span>Result: {{ logCustom }}</span>
+        <span>{{ logCustom }}</span>
       </p>
       <div class="box-code js">
         <table>
@@ -207,14 +207,14 @@ perfume.<span class="violet">endPaint</span>('togglePopover');
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  logPrefix<span class="red">:</span> "🍹 HayesValleyJS"
+  logPrefix<span class="red">:</span> "🍹 HayesValley.js"
 {{'}'}});
 
 perfume.<span class="blue">start</span>('fibonacci');
 <span class="violet">fibonacci</span>(<span class="blue">400</span>);
 <span class="red">const</span> duration <span class="red">=</span> perfume.<span class="violet">end</span>('fibonacci');
 perfume.<span class="violet">log</span>('Custom logging', duration);
-<span class="gray">// Custom logging 0.14 ms</span></pre>
+<span class="gray">// 🍹 HayesValley.js: Custom logging 0.14 ms</span></pre>
               </td>
             </tr>
           </tbody>
@@ -274,6 +274,29 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
     </div>
 
     <div class="box">
+      <h2 class="box-title" id="/utilities/">Utilities</h2>
+      <p>Perfume.js expose some methods and properties which may be useful to people extending the library.</p>
+      <div class="box-code js">
+        <table>
+          <tbody>
+            <tr>
+              <td class="code">
+                <pre><span class="gray">// First Paint value</span>
+perfume.firstPaintDuration;
+
+<span class="gray">// First Contentful Paint value</span>
+perfume.firstContentfulPaintDuration;
+
+<span class="gray">// Time To Interactive value (Async)</span>
+perfume.<span class="blue">observeTimeToInteractive</span>();</pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box">
       <h2 class="box-title" id="/copyright-and-license/">Copyright and license</h2>
       <p>Code and documentation copyright 2018
         <a href="https://twitter.com/Zizzamia" target="_blank">Leonardo Zizzamia</a>. Code released under the
@@ -311,6 +334,9 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
       <a href="{{ path }}#/default-options/"
       [class.active]="navSelected === navOptions.options"
       (click)="activeNav(navOptions.options)">Default Options</a>
+      <a href="{{ path }}#/default-options/"
+      [class.active]="navSelected === navOptions.utilities"
+      (click)="activeNav(navOptions.utilities)">Utilities</a>
       <a href="{{ path }}#/copyright-and-license/"
       [class.active]="navSelected === navOptions.copyright"
       (click)="activeNav(navOptions.copyright)">Copyright and licenses</a>

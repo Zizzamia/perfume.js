@@ -17,7 +17,7 @@ export class AppComponent implements AfterViewInit {
   path: any;
   perfume: any;
   navOptions: {
-    [keyof: string]: string
+    [keyof: string]: string;
   };
   navSelected: string;
 
@@ -30,9 +30,9 @@ export class AppComponent implements AfterViewInit {
       firstContentfulPaint: true,
       googleAnalytics: {
         enable: true,
-        timingVar: 'userId',
+        timingVar: 'userId'
       },
-      timeToInteractive: true,
+      timeToInteractive: true
     });
     this.path = window.location.href.split('#')[0];
 
@@ -46,7 +46,8 @@ export class AppComponent implements AfterViewInit {
       log: 'custom-logging',
       ga: 'google-analytics',
       options: 'default-options',
-      copyright: 'copyright-and-license',
+      utilities: 'utilities',
+      copyright: 'copyright-and-license'
     };
   }
 
@@ -72,7 +73,8 @@ export class AppComponent implements AfterViewInit {
     if (append) {
       this.appendElSequence(num);
     }
-    return memo[num] = this.fibonacci(num - 1, memo, append) + this.fibonacci(num - 2, memo, append);
+    return (memo[num] =
+      this.fibonacci(num - 1, memo, append) + this.fibonacci(num - 2, memo, append));
   }
 
   appendElSequence(num) {
@@ -111,8 +113,7 @@ export class AppComponent implements AfterViewInit {
     if (!isOpen) {
       this.popover.open();
     }
-    this.perfume.endPaint('togglePopover')
-    .then((duration) => {
+    this.perfume.endPaint('togglePopover').then(duration => {
       this.logTogglePopover = `⚡️ Perfume.js: togglePopover ${duration.toFixed(2)} ms`;
     });
   }
@@ -122,7 +123,7 @@ export class AppComponent implements AfterViewInit {
     this.fibonacci(800);
     const duration = this.perfume.end('fibonacci');
     this.perfume.log('Custom logging', duration);
-    this.logCustom = `🍻 Beerjs: Custom logging ${duration.toFixed(2)} ms`;
+    this.logCustom = `🍹 HayesValley.js: Custom logging ${duration.toFixed(2)} ms`;
   }
 
   activeNav(selected) {
