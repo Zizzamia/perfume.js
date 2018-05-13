@@ -1,7 +1,8 @@
 {
   "name": "perfume.js",
   "version": "0.7.0",
-  "description": "JavaScript library for measuring Short and Long Script, First Contentful Paint (FCP), Time to Interactive (TTI), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.",
+  "description":
+    "JavaScript library for measuring Short and Long Script, First Contentful Paint (FCP), Time to Interactive (TTI), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.",
   "keywords": [
     "performance-metrics",
     "google-analytics",
@@ -25,9 +26,7 @@
   "module": "dist/perfume.es5.js",
   "unpkg": "dist/perfume.umd.min.js",
   "typings": "dist/types/perfume.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "author": "Leonardo Zizzamia",
   "repository": {
     "type": "git",
@@ -52,9 +51,7 @@
     "prepush": "npm run test:prod"
   },
   "lint-staged": {
-    "{src,__tests__}/**/*.ts": [
-      "git add"
-    ]
+    "{src,__tests__}/**/*.ts": ["git add"]
   },
   "config": {
     "commitizen": {
@@ -62,7 +59,8 @@
     },
     "validate-commit-msg": {
       "types": "conventional-commit-types",
-      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+      "helpMessage":
+        "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
     }
   },
   "jest": {
@@ -70,29 +68,17 @@
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "testPathIgnorePatterns": [
-      "/__tests__/_mock.ts",
-      "/docs/",
-      "/node_modules/"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "testPathIgnorePatterns": ["/__tests__/_mock.ts", "/docs/", "/node_modules/"],
+    "moduleFileExtensions": ["ts", "tsx", "js"],
     "globals": {
       "window": true
     },
-    "coveragePathIgnorePatterns": [
-      "/docs/",
-      "/node_modules/",
-      "/test/"
-    ],
+    "coveragePathIgnorePatterns": ["/docs/", "/node_modules/", "/test/"],
     "coverageThreshold": {
       "global": {
         "branches": 96,
-        "functions": 95,
-        "lines": 99,
+        "functions": 97,
+        "lines": 100,
         "statements": 99
       }
     },

@@ -1,12 +1,13 @@
 {
   "defaultSeverity": "error",
-  "extends": [
-    "tslint:recommended"
-  ],
+  "extends": ["tslint:recommended"],
   "rules": {
+    "arrow-parens": false,
     "interface-name": [true, "never-prefix"],
     "object-literal-sort-keys": false,
     "quotemark": [true, "single"],
+    "semicolon": false,
+    "trailing-comma": false,
     "no-implicit-dependencies": [true, "dev"]
   }
 }
