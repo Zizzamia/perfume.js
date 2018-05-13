@@ -2,7 +2,11 @@
   <div class="layout-content">
     <div class="box box--intro" id="/home/">
       <a href="https://github.com/zizzamia/perfume.js" target="_blank">
-        <img class="logo" src="{{ path }}assets/perfume-logo-v0-7-0.png" alt="logo" />
+        <picture class="logo">
+          <source src="{{ path }}assets/perfume-logo-v0-7-0.webp" type="image/webp" />
+          <source src="{{ path }}assets/perfume-logo-v0-7-0.png" type="image/jpeg" />
+          <img src="{{ path }}assets/perfume-logo-v0-7-0.png" alt="Perfume.js logo" />
+        </picture>
       </a>
       <h1 class="title">Perfume.js</h1>
       <p>A JavaScript library for <b>measuring</b> Short and Long Script, <br />
@@ -34,7 +38,11 @@
         <li>Time to Interactive (TTI)</li>
         <li>Component First Paint (CFP)</li>
       </ul>
-      <img class="box-img" src="{{ path }}assets/perf-metrics-load-timeline.png" />
+      <picture class="box-img">
+        <source src="{{ path }}assets/perf-metrics-load-timeline.webp" type="image/webp" />
+        <source src="{{ path }}assets/perf-metrics-load-timeline.png" type="image/jpeg" />
+        <img src="{{ path }}assets/perf-metrics-load-timeline.png" alt="Performance Timeline" />
+      </picture>
     </div>
 
     <div class="box">
@@ -163,7 +171,11 @@ perfume.<span class="violet">end</span>('fibonacci');
           </tbody>
         </table>
       </div>
-      <img class="box-img" src="{{ path }}assets/performance-mark.png" />
+      <picture class="box-img">
+        <source src="{{ path }}assets/performance-mark.webp" type="image/webp" />
+        <source src="{{ path }}assets/performance-mark.png" type="image/jpeg" />
+        <img src="{{ path }}assets/performance-mark.png" alt="Annotate metrics in the DevTools" />
+      </picture>
     </div>
 
     <div class="box" id="/component-first-paint/">
@@ -191,7 +203,11 @@ perfume.<span class="violet">endPaint</span>('togglePopover');
           </tbody>
         </table>
       </div>
-      <img class="box-img" src="{{ path }}assets/performance-cfp.png" />
+      <picture class="box-img">
+        <source src="{{ path }}assets/performance-cfp.webp" type="image/webp" />
+        <source src="{{ path }}assets/performance-cfp.png" type="image/jpeg" />
+        <img src="{{ path }}assets/performance-cfp.png" alt="Annotate Component First Paint (CFP)" />
+      </picture>
     </div>
 
     <div class="box">
@@ -244,7 +260,11 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
           </tbody>
         </table>
       </div>
-      <img class="box-img" src="{{ path }}assets/performance-analytics.png" />
+      <picture class="box-img">
+        <source src="{{ path }}assets/performance-analytics.webp" type="image/webp" />
+        <source src="{{ path }}assets/performance-analytics.png" type="image/jpeg" />
+        <img src="{{ path }}assets/performance-analytics.png" alt="Google Analytics User timing" />
+      </picture>
     </div>
 
     <div class="box">
