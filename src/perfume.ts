@@ -154,7 +154,7 @@ export default class Perfume {
   }
 
   private firstContentfulPaintCb(
-    entries: Array<any>,
+    entries: any[],
     resolve: (value: any) => void,
     reject: (error: any) => void
   ): void {
