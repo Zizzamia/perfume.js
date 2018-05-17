@@ -1,18 +1,18 @@
 export default {
   Date: {
-    now: () => 1000,
+    now: () => 1000
   },
   Promise: {
     reject: (x: any) => x,
-    resolve: (x: any) => x,
+    resolve: (x: any) => x
   },
   performance: () => {
     delete (window as any).performance;
     const performance = {
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
       getEntriesByName: () => [
-        {duration: 12345, entryType: 'measure'},
-        {duration: 12346, entryType: 'measure'},
+        { duration: 12345, entryType: 'measure' },
+        { duration: 12346, entryType: 'measure' }
       ],
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark
       mark: () => 12345,
@@ -20,13 +20,13 @@ export default {
       measure: () => 12345,
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
       now: Date.now,
-      timing: {navigationStart: 12345},
+      timing: { navigationStart: 12345 }
     };
     Object.defineProperty(window, 'performance', {
       configurable: true,
       enumerable: true,
       value: performance,
-      writable: true,
+      writable: true
     });
   },
   PerformanceLongTaskTiming: {},
@@ -35,27 +35,25 @@ export default {
       (this as any).observe = () => ({});
     }
   },
-  timeToInteractive: (n: any) => new Promise((resolve) => resolve(n)),
+  timeToInteractive: (n: any) => new Promise(resolve => resolve(n)),
   ttiPolyfill: {
     getFirstConsistentlyInteractive: (n: number) => {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         resolve(n);
       });
-    },
+    }
   },
   defaultPerfumeConfig: {
     firstContentfulPaint: false,
     firstPaint: false,
     googleAnalytics: {
       enable: false,
-      timingVar: 'name',
+      timingVar: 'name'
     },
     logPrefix: '⚡️ Perfume.js:',
     logging: true,
     timeToInteractive: false,
+    warning: false
   },
-  entries: [
-    {name: 'first-paint', startTime: 1},
-    {name: 'first-contentful-paint', startTime: 1},
-  ],
+  entries: [{ name: 'first-paint', startTime: 1 }, { name: 'first-contentful-paint', startTime: 1 }]
 };

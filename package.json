@@ -76,10 +76,10 @@
     "coveragePathIgnorePatterns": ["/docs/", "/node_modules/", "/test/"],
     "coverageThreshold": {
       "global": {
-        "branches": 96,
+        "branches": 98,
         "functions": 97,
         "lines": 100,
-        "statements": 99
+        "statements": 100
       }
     },
     "collectCoverage": true

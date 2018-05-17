@@ -17,6 +17,7 @@ export interface PerfumeConfig {
   logPrefix: string;
   logging: boolean;
   timeToInteractive: boolean;
+  warning: boolean;
 }
 
 export interface Metrics {
@@ -42,7 +43,8 @@ export default class Perfume {
     },
     logPrefix: '⚡️ Perfume.js:',
     logging: true,
-    timeToInteractive: false
+    timeToInteractive: false,
+    warning: false
   };
   public firstPaintDuration: number = 0;
   public firstContentfulPaintDuration: number = 0;
@@ -52,10 +54,6 @@ export default class Perfume {
   private perfEmulated?: EmulatedPerformance;
   private readonly timeToInteractivePromise: Promise<number>;
 
-  /**
-   * @constructor
-   * @param options
-   */
   constructor(options: any = {}) {
     this.config = Object.assign({}, this.config, options) as PerfumeConfig;
     // Init performance implementation
@@ -77,24 +75,19 @@ export default class Perfume {
     });
   }
 
-  /**
-   * @return {Promise<number>}
-   */
   public observeTimeToInteractive(): Promise<number> {
     return this.timeToInteractivePromise;
   }
 
   /**
    * Start performance measurement
-   *
-   * @param {string} metricName
    */
   public start(metricName: string): void {
     if (!this.checkMetricName(metricName)) {
       return;
     }
     if (this.metrics[metricName]) {
-      window.console.warn(this.config.logPrefix, 'Recording already started.');
+      this.logWarn(this.config.logPrefix, 'Recording already started.');
       return;
     }
     this.metrics[metricName] = {
@@ -106,16 +99,13 @@ export default class Perfume {
 
   /**
    * End performance measurement
-   *
-   * @param {string} metricName
-   * @return {void|number}
    */
   public end(metricName: string): void | number {
     if (!this.checkMetricName(metricName)) {
       return;
     }
     if (!this.metrics[metricName]) {
-      window.console.warn(this.config.logPrefix, 'Recording already stopped.');
+      this.logWarn(this.config.logPrefix, 'Recording already stopped.');
       return;
     }
     this.metrics[metricName].end = this.perf.now();
@@ -131,9 +121,6 @@ export default class Perfume {
 
   /**
    * End performance measurement after first paint from the beging of it
-   *
-   * @param {string} metricName
-   * @return {Promise<number>}
    */
   public endPaint(metricName: string): Promise<void | number> {
     return new Promise(resolve => {
@@ -146,13 +133,10 @@ export default class Perfume {
 
   /**
    * Coloring Text in Browser Console
-   *
-   * @param {string} metricName
-   * @param {number} duration
    */
   public log(metricName: string, duration: number): void {
     if (!metricName) {
-      window.console.warn(this.config.logPrefix, 'Please provide a metric name');
+      this.logWarn(this.config.logPrefix, 'Please provide a metric name');
       return;
     }
     const durationMs = duration.toFixed(2);
@@ -161,25 +145,16 @@ export default class Perfume {
     window.console.log(text, style);
   }
 
-  /**
-   * @param {string} metricName
-   * @return {boolean}
-   */
   private checkMetricName(metricName: string): boolean {
     if (metricName) {
       return true;
     }
-    window.console.warn(this.config.logPrefix, 'Please provide a metric name');
+    this.logWarn(this.config.logPrefix, 'Please provide a metric name');
     return false;
   }
 
-  /**
-   * @param {Array<PerformancePaintTiming>} entries
-   * @param {(value: any) => void} resolve
-   * @param {(error: any) => void} reject
-   */
   private firstContentfulPaintCb(
-    entries: any[],
+    entries: Array<any>,
     resolve: (value: any) => void,
     reject: (error: any) => void
   ): void {
@@ -219,9 +194,6 @@ export default class Perfume {
     }
   }
 
-  /**
-   * @param {number} timeToInteractive
-   */
   private timeToInteractiveCb(timeToInteractive: number): void {
     this.timeToInteractiveDuration = timeToInteractive;
     if (this.timeToInteractiveDuration) {
@@ -230,11 +202,6 @@ export default class Perfume {
     this.sendTiming('timeToInteractive', this.timeToInteractiveDuration);
   }
 
-  /**
-   * @param {number} duration
-   * @param {string} logText
-   * @param {string} metricName
-   */
   private logFCP(duration: number, logText: string, metricName: string): void {
     if (metricName === 'firstPaint') {
       this.firstPaintDuration = duration;
@@ -252,18 +219,23 @@ export default class Perfume {
    * timingCategory: metricName
    * timingVar: googleAnalytics.timingVar
    * timingValue: The value of duration rounded to the nearest integer
-   * @param {string} metricName
-   * @param {number} duration
    */
   private sendTiming(metricName: string, duration: number): void {
     if (!this.config.googleAnalytics.enable) {
       return;
     }
     if (!window.ga) {
-      window.console.warn(this.config.logPrefix, 'Google Analytics has not been loaded');
+      this.logWarn(this.config.logPrefix, 'Google Analytics has not been loaded');
       return;
     }
     const durationInteger = Math.round(duration);
     window.ga('send', 'timing', metricName, this.config.googleAnalytics.timingVar, durationInteger);
+  }
+
+  private logWarn(prefix: string, message: string) {
+    if (!this.config.warning) {
+      return;
+    }
+    window.console.warn(prefix, message);
   }
 }
