@@ -119,13 +119,13 @@ Save the duration and print it out exactly the way you want it.
 
 ```javascript
 const perfume = new Perfume({
-  logPrefix: '🍻 Beerjs:'
+  logPrefix: '🍹 HayesValley.js:'
 });
 perfume.start('fibonacci');
 fibonacci(400);
 const duration = this.perfume.end('fibonacci');
 perfume.log('Custom logging', duration);
-// 🍻 Beerjs: Custom logging 0.14 ms
+// 🍹 HayesValley.js: Custom logging 0.14 ms
 ```
 
 ### Google Analytics
