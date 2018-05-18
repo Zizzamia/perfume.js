@@ -5,6 +5,7 @@
 ### Feat
 
 * **feat:** added generic analytics platform support [#24](https://github.com/Zizzamia/perfume.js/issues/24)
+* **feat:** Added warning option [#34](https://github.com/Zizzamia/perfume.js/issues/34)
 
 ## 0.7.0 (2018-5-12)
 
