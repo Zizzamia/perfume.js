@@ -1,6 +1,6 @@
 {
     "name": "docs",
-    "version": "0.0.0",
+    "version": "0.7.1",
     "license": "MIT",
     "scripts": {
         "ng": "ng",
@@ -23,7 +23,7 @@
         "@angular/router": "6.0.2",
         "@ng-bootstrap/ng-bootstrap": "^2.0.0",
         "core-js": "^2.4.1",
-        "perfume.js": "^0.7.0",
+        "perfume.js": "^0.7.1",
         "rxjs": "^6.1.0",
         "tti-polyfill": "^0.2.2",
         "zone.js": "^0.8.26"

@@ -30,13 +30,14 @@ describe('Perfume', () => {
       expect(instance.config).toEqual({
         firstContentfulPaint: false,
         firstPaint: false,
+        timeToInteractive: false,
+        analyticsLogger: undefined,
         googleAnalytics: {
           enable: false,
           timingVar: 'name'
         },
         logPrefix: '⚡️ Perfume.js:',
         logging: true,
-        timeToInteractive: false,
         warning: false
       });
     });
@@ -186,9 +187,9 @@ describe('Perfume', () => {
       expect(value).toEqual(true);
     });
 
-    it('should call logWarn  when not provided a metric name', () => {
+    it('should call logWarn when not provided a metric name', () => {
       spy = jest.spyOn(perfume, 'logWarn');
-      const value = (perfume as any).checkMetricName();
+      (perfume as any).checkMetricName();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, 'Please provide a metric name');
     });
@@ -292,6 +293,16 @@ describe('Perfume', () => {
   });
 
   describe('.sendTiming()', () => {
+    it('should call analyticsLogger() if analyticsLogger is defined', () => {
+      perfume.config.analyticsLogger = (metricName, duration) => {
+        // console.log(metricName, duration);
+      };
+      spy = jest.spyOn(perfume.config, 'analyticsLogger');
+      (perfume as any).sendTiming('metricName', 123);
+      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith('metricName', 123);
+    });
+
     it('should not call global.logWarn() if googleAnalytics is disable', () => {
       spy = jest.spyOn(perfume, 'logWarn');
       (perfume as any).sendTiming();

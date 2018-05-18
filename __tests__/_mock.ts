@@ -46,13 +46,14 @@ export default {
   defaultPerfumeConfig: {
     firstContentfulPaint: false,
     firstPaint: false,
+    timeToInteractive: false,
+    analyticsLogger: undefined,
     googleAnalytics: {
       enable: false,
       timingVar: 'name'
     },
     logPrefix: '⚡️ Perfume.js:',
     logging: true,
-    timeToInteractive: false,
     warning: false
   },
   entries: [{ name: 'first-paint', startTime: 1 }, { name: 'first-contentful-paint', startTime: 1 }]

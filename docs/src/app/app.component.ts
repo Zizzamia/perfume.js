@@ -28,11 +28,14 @@ export class AppComponent implements AfterViewInit {
     this.perfume = new Perfume({
       firstPaint: true,
       firstContentfulPaint: true,
+      timeToInteractive: true,
+      analyticsLogger: (metricName, duration) => {
+        console.log('Analytics Logger', metricName, duration);
+      },
       googleAnalytics: {
         enable: true,
         timingVar: 'userId'
-      },
-      timeToInteractive: true
+      }
     });
     this.path = window.location.href.split('#')[0];
 
@@ -45,6 +48,7 @@ export class AppComponent implements AfterViewInit {
       cfp: 'component-first-paint',
       log: 'custom-logging',
       ga: 'google-analytics',
+      as: 'analytics-support',
       options: 'default-options',
       utilities: 'utilities',
       copyright: 'copyright-and-license'

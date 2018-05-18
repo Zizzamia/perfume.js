@@ -143,6 +143,18 @@ const perfume = new Perfume({
 
 ![Performance Analytics](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-analytics.png)
 
+### Generic analytics platform support
+
+Configurable analytics callback to use Perfume.js with any platform.
+
+```javascript
+const perfume = new Perfume({
+  analyticsLogger: (metricName, duration) => {
+    myAnalyticsTool.track(metricName, duration);
+  })
+});
+```
+
 ### Default Options
 
 Default options provided to Perfume.js constructor.
@@ -151,13 +163,15 @@ Default options provided to Perfume.js constructor.
 const options = {
   firstPaint: false,
   firstContentfulPaint: false,
+  timeToInteractive: false,
+  analyticsLogger: undefined,
   googleAnalytics: {
     enable: false,
     timingVar: 'name'
   },
   logging: true,
   logPrefix: '⚡️ Perfume.js:',
-  timeToInteractive: false
+  warning: false
 };
 ```
 

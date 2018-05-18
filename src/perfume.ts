@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v0.7.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v0.7.1 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -10,13 +10,14 @@ import Performance from './performance';
 export interface PerfumeConfig {
   firstContentfulPaint: boolean;
   firstPaint: boolean;
+  timeToInteractive: boolean;
+  analyticsLogger: any;
   googleAnalytics: {
     enable: boolean;
     timingVar: string;
   };
   logPrefix: string;
   logging: boolean;
-  timeToInteractive: boolean;
   warning: boolean;
 }
 
@@ -37,13 +38,14 @@ export default class Perfume {
   public config: PerfumeConfig = {
     firstContentfulPaint: false,
     firstPaint: false,
+    timeToInteractive: false,
+    analyticsLogger: undefined,
     googleAnalytics: {
       enable: false,
       timingVar: 'name'
     },
     logPrefix: '⚡️ Perfume.js:',
     logging: true,
-    timeToInteractive: false,
     warning: false
   };
   public firstPaintDuration: number = 0;
@@ -53,6 +55,7 @@ export default class Perfume {
   private perf: Performance | EmulatedPerformance;
   private perfEmulated?: EmulatedPerformance;
   private readonly timeToInteractivePromise: Promise<number>;
+  private logMetric = 'Please provide a metric name';
 
   constructor(options: any = {}) {
     this.config = Object.assign({}, this.config, options) as PerfumeConfig;
@@ -136,7 +139,7 @@ export default class Perfume {
    */
   public log(metricName: string, duration: number): void {
     if (!metricName) {
-      this.logWarn(this.config.logPrefix, 'Please provide a metric name');
+      this.logWarn(this.config.logPrefix, this.logMetric);
       return;
     }
     const durationMs = duration.toFixed(2);
@@ -149,7 +152,7 @@ export default class Perfume {
     if (metricName) {
       return true;
     }
-    this.logWarn(this.config.logPrefix, 'Please provide a metric name');
+    this.logWarn(this.config.logPrefix, this.logMetric);
     return false;
   }
 
@@ -221,6 +224,9 @@ export default class Perfume {
    * timingValue: The value of duration rounded to the nearest integer
    */
   private sendTiming(metricName: string, duration: number): void {
+    if (this.config.analyticsLogger) {
+      this.config.analyticsLogger(metricName, duration);
+    }
     if (!this.config.googleAnalytics.enable) {
       return;
     }
@@ -232,7 +238,7 @@ export default class Perfume {
     window.ga('send', 'timing', metricName, this.config.googleAnalytics.timingVar, durationInteger);
   }
 
-  private logWarn(prefix: string, message: string) {
+  private logWarn(prefix: string, message: string): void {
     if (!this.config.warning) {
       return;
     }

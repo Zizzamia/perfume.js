@@ -3,9 +3,9 @@
     <div class="box box--intro" id="/home/">
       <a href="https://github.com/zizzamia/perfume.js" target="_blank">
         <picture class="logo">
-          <source srcset="{{ path }}assets/perfume-logo-v0-7-0.webp" type="image/webp" />
-          <source srcset="{{ path }}assets/perfume-logo-v0-7-0.png" type="image/jpeg" />
-          <img src="{{ path }}assets/perfume-logo-v0-7-0.png" alt="Perfume.js logo" />
+          <source srcset="{{ path }}assets/perfume-logo-v0-7-1.webp" type="image/webp" />
+          <source srcset="{{ path }}assets/perfume-logo-v0-7-1.png" type="image/jpeg" />
+          <img src="{{ path }}assets/perfume-logo-v0-7-1.png" alt="Perfume.js logo" />
         </picture>
       </a>
       <h1 class="title">Perfume.js</h1>
@@ -243,7 +243,8 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
       <p>To enable Perfume to send your measures to Google Analytics User timing, set the option
         <b>enable:true</b> and a custom
         <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar" target="_blank">user timing variable</a>
-        <b>timingVar:"name"</b>.</p>
+        <b>timingVar:"name"</b>.
+      </p>
       <div class="box-code js">
         <table>
           <tbody>
@@ -268,6 +269,26 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
     </div>
 
     <div class="box">
+      <h2 class="box-title" id="/analytics-support/">Generic analytics platform support</h2>
+      <p>Configurable analytics callback to use Perfume.js with any platform.</p>
+      <div class="box-code js">
+        <table>
+          <tbody>
+            <tr>
+              <td class="code">
+                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
+  <span class="violet">analyticsLogger</span><span class="red">:</span> (metricName, duration) => {{'{'}}
+    myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
+  {{'}'}})
+{{'}'}});</pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box">
       <h2 class="box-title" id="/default-options/">Default Options</h2>
       <p>Default options provided to Perfume.js constructor.</p>
       <div class="box-code js">
@@ -279,6 +300,7 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
   firstPaint<span class="red">:</span> <span class="blue">false</span>
   firstContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
   timeToInteractive<span class="red">:</span> <span class="blue">false</span>,
+  analyticsLogger<span class="red">:</span> <span class="blue">undefined</span>,
   googleAnalytics<span class="red">:</span> {{'{'}}
     enable<span class="red">:</span> <span class="blue">false</span>,
     timingVar<span class="red">:</span> "name"
@@ -352,6 +374,9 @@ perfume.<span class="blue">observeTimeToInteractive</span>();</pre>
       <a href="{{ path }}#/google-analytics/"
       [class.active]="navSelected === navOptions.ga"
       (click)="activeNav(navOptions.ga)">Google Analytics</a>
+      <a href="{{ path }}#/analytics-support/"
+      [class.active]="navSelected === navOptions.as"
+      (click)="activeNav(navOptions.as)">Analytics Support</a>
       <a href="{{ path }}#/default-options/"
       [class.active]="navSelected === navOptions.options"
       (click)="activeNav(navOptions.options)">Default Options</a>
