@@ -101,21 +101,13 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalledWith('⚡️ Perfume.js:', 'Recording already stopped.');
     });
 
-    it('should call log() when logging is true', () => {
+    it('should call log() with correct params', () => {
       spy = jest.spyOn(perfume, 'log');
       perfume.config.logging = true;
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith('metricName', 12346);
-    });
-
-    it('should not call log() when logging is false', () => {
-      spy = jest.spyOn(perfume, 'log');
-      perfume.config.logging = false;
-      perfume.start('metricName');
-      perfume.end('metricName');
-      expect(spy).not.toHaveBeenCalled();
     });
   });
 
@@ -157,6 +149,23 @@ describe('Perfume', () => {
   });
 
   describe('.log()', () => {
+    it('should not call window.console.log() if logging is disabled', () => {
+      perfume.config.logging = false;
+      spy = jest.spyOn(window.console, 'log');
+      perfume.log('', 0);
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should call window.console.log() if logging is enabled', () => {
+      perfume.config.logging = true;
+      spy = jest.spyOn(window.console, 'log');
+      perfume.log('metricName', 12345);
+      const text = '%c ⚡️ Perfume.js: metricName 12345.00 ms';
+      const style = 'color: #ff6d00;font-size:12px;';
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(text, style);
+    });
+
     it('should call logWarn if params are not correct', () => {
       spy = jest.spyOn(perfume, 'logWarn');
       perfume.log('', 0);
@@ -172,6 +181,7 @@ describe('Perfume', () => {
     });
 
     it('should call window.console.log() if params are correct', () => {
+      perfume.config.logging = true;
       spy = jest.spyOn(window.console, 'log');
       perfume.log('metricName', 12345);
       const text = '%c ⚡️ Perfume.js: metricName 12345.00 ms';
