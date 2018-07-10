@@ -114,9 +114,7 @@ export default class Perfume {
     this.metrics[metricName].end = this.perf.now();
     this.perf.mark(metricName, 'end');
     const duration = this.perf.measure(metricName, this.metrics);
-    if (this.config.logging) {
-      this.log(metricName, duration);
-    }
+    this.log(metricName, duration);
     delete this.metrics[metricName];
     this.sendTiming(metricName, duration);
     return duration;
@@ -138,6 +136,9 @@ export default class Perfume {
    * Coloring Text in Browser Console
    */
   public log(metricName: string, duration: number): void {
+    if (!this.config.logging) {
+      return;
+    }
     if (!metricName) {
       this.logWarn(this.config.logPrefix, this.logMetric);
       return;
@@ -239,7 +240,7 @@ export default class Perfume {
   }
 
   private logWarn(prefix: string, message: string): void {
-    if (!this.config.warning) {
+    if (!this.config.warning || !this.config.logging) {
       return;
     }
     window.console.warn(prefix, message);
