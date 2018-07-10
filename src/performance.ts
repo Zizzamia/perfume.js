@@ -29,7 +29,7 @@ export default class Performance implements PerformImpl {
    * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
    */
   public static supportedPerformanceObserver(): boolean {
-    return (window as any).chrome;
+    return (window as any).chrome && 'PerformanceObserver' in window;
   }
 
   /**

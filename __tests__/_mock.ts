@@ -1,3 +1,4 @@
+const entries = [{ name: 'first-paint', startTime: 1 }, { name: 'first-contentful-paint', startTime: 1 }];
 export default {
   Date: {
     now: () => 1000
@@ -31,8 +32,11 @@ export default {
   },
   PerformanceLongTaskTiming: {},
   PerformanceObserver: class {
-    constructor() {
-      (this as any).observe = () => ({});
+    constructor(cb) {
+      (this as any).observe = () => {
+        cb({ getEntries: () => entries });
+        return {};
+      };
     }
   },
   timeToInteractive: (n: any) => new Promise(resolve => resolve(n)),
@@ -56,5 +60,5 @@ export default {
     logging: true,
     warning: false
   },
-  entries: [{ name: 'first-paint', startTime: 1 }, { name: 'first-contentful-paint', startTime: 1 }]
+  entries
 };
