@@ -23,7 +23,7 @@
     "@angular/router": "6.0.9",
     "@ng-bootstrap/ng-bootstrap": "^2.0.0",
     "core-js": "^2.4.1",
-    "perfume.js": "^0.7.1",
+    "perfume.js": "^0.8.0",
     "rxjs": "^6.2.1",
     "tti-polyfill": "^0.2.2",
     "zone.js": "^0.8.26"
