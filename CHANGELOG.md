@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 (2018-7-11)
+
+### Bug Fixes
+
+* **fix:** 'PerformanceObserver is undefined' on Edge [#37](https://github.com/Zizzamia/perfume.js/pull/37)
+* **fix:** All console logging is now disabled when the `config.logging` flag is set to false [#35](https://github.com/Zizzamia/perfume.js/issues/35)
+* **build:** export library with the same name for all bundles [#32](https://github.com/Zizzamia/perfume.js/pull/32)
+
 ## 0.7.1 (2018-5-17)
 
 ### Feat
