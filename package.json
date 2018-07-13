@@ -102,7 +102,7 @@
     "@types/jest": "^23.1.4",
     "@types/node": "^8.0.0",
     "colors": "^1.1.2",
-    "commitizen": "^2.9.6",
+    "commitizen": "^2.10.1",
     "coveralls": "^3.0.1",
     "cz-conventional-changelog": "^2.0.0",
     "husky": "^0.14.0",
