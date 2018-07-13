@@ -1,4 +1,4 @@
-<a href="http://zizzamia.github.io/perfume/"><img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v0-7-1.png" align="left" width="262" /></a>
+<a href="http://zizzamia.github.io/perfume/"><img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v0-8-0.png" align="left" width="262" /></a>
 
 # [Perfume.js v0.8.0](http://zizzamia.github.io/perfume/)
 
