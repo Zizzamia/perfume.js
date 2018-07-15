@@ -20,10 +20,10 @@
     "web-performance-reports",
     "webperf"
   ],
-  "iife": "dist/perfume.iife.js",
-  "main": "dist/perfume.js",
-  "module": "dist/perfume.es5.js",
-  "unpkg": "dist/perfume.umd.js",
+  "iife": "dist/perfume.iife.min.js",
+  "main": "dist/perfume.min.js",
+  "module": "dist/perfume.es5.min.js",
+  "unpkg": "dist/perfume.umd.min.js",
   "typings": "dist/types/perfume.d.ts",
   "files": [
     "dist"
