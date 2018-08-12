@@ -1,17 +1,17 @@
-// Angular & Third Party
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import * as $ from 'jquery';
-import Perfume from 'perfume.js';
-// import Perfume from '../../../../perfume.js';
+// import Perfume from 'perfume.js';
+import Perfume from '../../../../perfume.js';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.less']
+  styleUrls: ['./app.component.less'],
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild('p') public popover: NgbPopover;
+  @ViewChild('p')
+  public popover: NgbPopover;
   // Component
   logCustom: string;
   logFibonacci: string;
@@ -34,8 +34,8 @@ export class AppComponent implements AfterViewInit {
       },
       googleAnalytics: {
         enable: true,
-        timingVar: 'userId'
-      }
+        timingVar: 'userId',
+      },
     });
     this.path = window.location.href.split('#')[0];
 
@@ -51,7 +51,7 @@ export class AppComponent implements AfterViewInit {
       as: 'analytics-support',
       options: 'default-options',
       utilities: 'utilities',
-      copyright: 'copyright-and-license'
+      copyright: 'copyright-and-license',
     };
   }
 
@@ -78,13 +78,14 @@ export class AppComponent implements AfterViewInit {
       this.appendElSequence(num);
     }
     return (memo[num] =
-      this.fibonacci(num - 1, memo, append) + this.fibonacci(num - 2, memo, append));
+      this.fibonacci(num - 1, memo, append) +
+      this.fibonacci(num - 2, memo, append));
   }
 
   appendElSequence(num) {
     const elSequence = $(`<span class="Fibonacci-sequence">${num} </span>`);
     elSequence.css({
-      color: '#' + Math.floor(Math.random() * 16777215).toString(16)
+      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
     });
     $('.Fibonacci').append(elSequence);
   }
@@ -115,7 +116,9 @@ export class AppComponent implements AfterViewInit {
       this.popover.open();
     }
     this.perfume.endPaint('togglePopover').then(duration => {
-      this.logTogglePopover = `⚡️ Perfume.js: togglePopover ${duration.toFixed(2)} ms`;
+      this.logTogglePopover = `⚡️ Perfume.js: togglePopover ${duration.toFixed(
+        2,
+      )} ms`;
     });
   }
 
@@ -124,7 +127,9 @@ export class AppComponent implements AfterViewInit {
     this.fibonacci(800);
     const duration = this.perfume.end('fibonacci');
     this.perfume.log('Custom logging', duration);
-    this.logCustom = `🍹 HayesValley.js: Custom logging ${duration.toFixed(2)} ms`;
+    this.logCustom = `🍹 HayesValley.js: Custom logging ${duration.toFixed(
+      2,
+    )} ms`;
   }
 
   activeNav(selected) {
