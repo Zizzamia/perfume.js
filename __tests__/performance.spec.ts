@@ -6,7 +6,7 @@ describe('Performance', () => {
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
-    service = new Performance({...mock.defaultPerfumeConfig});
+    service = new Performance({ ...mock.defaultPerfumeConfig });
     service.ttiPolyfill = mock.ttiPolyfill;
     mock.performance();
     (window as any).PerformanceLongTaskTiming = mock.PerformanceLongTaskTiming;
@@ -25,12 +25,12 @@ describe('Performance', () => {
       expect(Performance.supported()).toEqual(true);
     });
 
-    it('should return false if the browser doesn\'t supports performance.mark', () => {
+    it('should return false if the browser does not supports performance.mark', () => {
       delete window.performance.mark;
       expect(Performance.supported()).toEqual(false);
     });
 
-    it('should return false if the browser doesn\'t supports performance.now', () => {
+    it('should return false if the browser does not supports performance.now', () => {
       window.performance.mark = () => 1;
       delete window.performance.now;
       expect(Performance.supported()).toEqual(false);
@@ -95,7 +95,9 @@ describe('Performance', () => {
 
   describe('.getDurationByMetric()', () => {
     it('should return entry.duration when entryType is not measure', () => {
-      window.performance.getEntriesByName = () => [{duration: 12345, entryType: 'notMeasure'}];
+      window.performance.getEntriesByName = () => [
+        { duration: 12345, entryType: 'notMeasure' },
+      ];
       const value = service.getDurationByMetric('metricName');
       expect(value).toEqual(-1);
     });
@@ -109,21 +111,23 @@ describe('Performance', () => {
   describe('.getMeasurementForGivenName()', () => {
     it('should return the first PerformanceEntry objects for the given name', () => {
       const value = service.getMeasurementForGivenName('metricName');
-      expect(value).toEqual({duration: 12346, entryType: 'measure'});
+      expect(value).toEqual({ duration: 12346, entryType: 'measure' });
     });
   });
 
   describe('.performanceObserverCb()', () => {
-    const entry = {name: 'first-contentful-paint', startTime: 1};
+    const entry = { name: 'first-contentful-paint', startTime: 1 };
 
     beforeEach(() => {
       service.callback = () => 1;
-      service.perfObserver = {disconnect: () => true};
+      service.perfObserver = { disconnect: () => true };
     });
 
     it('should call callback with the correct argument', () => {
       spy = jest.spyOn(service, 'callback');
-      service.performanceObserverCb(service.callback, {getEntries: () => [entry]});
+      service.performanceObserverCb(service.callback, {
+        getEntries: () => [entry],
+      });
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith([entry]);
@@ -132,14 +136,16 @@ describe('Performance', () => {
     it('should call perfObserver.disconnect', () => {
       spy = jest.spyOn(service.perfObserver, 'disconnect');
       service.config.firstContentfulPaint = true;
-      service.performanceObserverCb(service.callback, {getEntries: () => [entry]});
+      service.performanceObserverCb(service.callback, {
+        getEntries: () => [entry],
+      });
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
     });
 
     it('should not call perfObserver.disconnect when entries is empty', () => {
       spy = jest.spyOn(service.perfObserver, 'disconnect');
-      service.performanceObserverCb(service.callback, {getEntries: () => []});
+      service.performanceObserverCb(service.callback, { getEntries: () => [] });
       expect(spy).not.toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(0);
     });
@@ -150,7 +156,7 @@ describe('Performance', () => {
       spy = jest.spyOn(service.ttiPolyfill, 'getFirstConsistentlyInteractive');
       service.timeToInteractive(10).catch(console.error);
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({minValue: 10});
+      expect(spy).toHaveBeenCalledWith({ minValue: 10 });
     });
 
     it('should be a promise', () => {

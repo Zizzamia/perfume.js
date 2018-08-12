@@ -1,6 +1,6 @@
 {
-  "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
+  "extends": ["tslint:recommended", "tslint-config-airbnb", "tslint-config-prettier"],
+  "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
     "arrow-parens": false,
     "array-type": [true, "array-simple"],
@@ -33,7 +33,6 @@
     "ordered-imports": [true],
     "prefer-array-literal": false,
     "prettier": true,
-    "quotemark": [true, "single"],
     "variable-name": [
       true,
       "check-format",

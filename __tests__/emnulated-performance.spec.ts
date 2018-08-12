@@ -1,5 +1,7 @@
-import EmulatedPerformance, {PerformancePaintTiming} from '../src/emulated-performance';
-import {Metrics} from '../src/perfume';
+import EmulatedPerformance, {
+  IPerformancePaintTiming,
+} from '../src/emulated-performance';
+import { IMetrics } from '../src/perfume';
 import mock from './_mock';
 
 describe('EmulatedPerformance', () => {
@@ -7,7 +9,10 @@ describe('EmulatedPerformance', () => {
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
-    service = new EmulatedPerformance({...mock.defaultPerfumeConfig, logPrefix: ''});
+    service = new EmulatedPerformance({
+      ...mock.defaultPerfumeConfig,
+      logPrefix: '',
+    });
     mock.performance();
   });
 
@@ -33,8 +38,8 @@ describe('EmulatedPerformance', () => {
 
   describe('.measure()', () => {
     it('should call getDurationByMetric() with the correct arguments', () => {
-      const metrics: Metrics = {
-        age: {end: 2018, start: 1987},
+      const metrics: IMetrics = {
+        age: { end: 2018, start: 1987 },
       };
       spy = jest.spyOn(service, 'getDurationByMetric');
       service.measure('age', metrics);
@@ -61,40 +66,44 @@ describe('EmulatedPerformance', () => {
   describe('.getDurationByMetric()', () => {
     it('should return the duration', () => {
       const duration = service.getDurationByMetric('age', {
-        age: {end: 2018, start: 1987},
-      } as Metrics);
+        age: { end: 2018, start: 1987 },
+      } as IMetrics);
       expect(duration).toEqual(31);
     });
 
     it('should return the -1 when duration is 0', () => {
       const duration = service.getDurationByMetric('age', {
-        age: {end: 2018, start: 2018},
-      } as Metrics);
+        age: { end: 2018, start: 2018 },
+      } as IMetrics);
       expect(duration).toEqual(0);
     });
   });
 
   describe('.getFirstPaint()', () => {
     it('should return 0 if PerformanceTiming.navigationStart is 0', () => {
-      (window.performance as any).timing = {navigationStart: 0};
-      const performance: PerformancePaintTiming = service.getFirstPaint();
-      expect(performance).toEqual([{
-        duration: 0,
-        entryType: 'paint',
-        name: 'first-contentful-paint',
-        startTime: 0,
-      }]);
+      (window.performance as any).timing = { navigationStart: 0 };
+      const performance: IPerformancePaintTiming = service.getFirstPaint();
+      expect(performance).toEqual([
+        {
+          duration: 0,
+          entryType: 'paint',
+          name: 'first-contentful-paint',
+          startTime: 0,
+        },
+      ]);
     });
 
     it('should return performancePaintTiming', () => {
-      (window.performance as any).timing = {navigationStart: 240};
-      const performance: PerformancePaintTiming = service.getFirstPaint();
-      expect(performance).toEqual([{
-        duration: 0,
-        entryType: 'paint',
-        name: 'first-contentful-paint',
-        startTime: 760,
-      }]);
+      (window.performance as any).timing = { navigationStart: 240 };
+      const performance: IPerformancePaintTiming = service.getFirstPaint();
+      expect(performance).toEqual([
+        {
+          duration: 0,
+          entryType: 'paint',
+          name: 'first-contentful-paint',
+          startTime: 760,
+        },
+      ]);
     });
   });
 });
