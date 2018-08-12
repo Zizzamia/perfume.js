@@ -149,6 +149,28 @@ export default class Perfume {
     window.console.log(text, style);
   }
 
+  /**
+   * Sends the User timing measure to Google Analytics.
+   * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])
+   * timingCategory: metricName
+   * timingVar: googleAnalytics.timingVar
+   * timingValue: The value of duration rounded to the nearest integer
+   */
+  public sendTiming(metricName: string, duration: number): void {
+    if (this.config.analyticsLogger) {
+      this.config.analyticsLogger(metricName, duration);
+    }
+    if (!this.config.googleAnalytics.enable) {
+      return;
+    }
+    if (!window.ga) {
+      this.logWarn(this.config.logPrefix, 'Google Analytics has not been loaded');
+      return;
+    }
+    const durationInteger = Math.round(duration);
+    window.ga('send', 'timing', metricName, this.config.googleAnalytics.timingVar, durationInteger);
+  }
+
   private checkMetricName(metricName: string): boolean {
     if (metricName) {
       return true;
@@ -215,28 +237,6 @@ export default class Perfume {
     }
     this.log(logText, duration);
     this.sendTiming(metricName, duration);
-  }
-
-  /**
-   * Sends the User timing measure to Google Analytics.
-   * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])
-   * timingCategory: metricName
-   * timingVar: googleAnalytics.timingVar
-   * timingValue: The value of duration rounded to the nearest integer
-   */
-  private sendTiming(metricName: string, duration: number): void {
-    if (this.config.analyticsLogger) {
-      this.config.analyticsLogger(metricName, duration);
-    }
-    if (!this.config.googleAnalytics.enable) {
-      return;
-    }
-    if (!window.ga) {
-      this.logWarn(this.config.logPrefix, 'Google Analytics has not been loaded');
-      return;
-    }
-    const durationInteger = Math.round(duration);
-    window.ga('send', 'timing', metricName, this.config.googleAnalytics.timingVar, durationInteger);
   }
 
   private logWarn(prefix: string, message: string): void {
