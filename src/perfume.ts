@@ -52,6 +52,7 @@ export default class Perfume {
   firstPaintDuration: number = 0;
   firstContentfulPaintDuration: number = 0;
   timeToInteractiveDuration: number = 0;
+  private isHidden: boolean = false;
   private metrics: IMetrics = {};
   private perf: Performance | EmulatedPerformance;
   private perfEmulated?: EmulatedPerformance;
@@ -77,6 +78,7 @@ export default class Perfume {
         });
       }
     });
+    this.onVisibilityChange();
   }
 
   observeTimeToInteractive(): Promise<number> {
@@ -99,6 +101,8 @@ export default class Perfume {
       start: this.perf.now(),
     };
     this.perf.mark(metricName, 'start');
+    // Reset hidden value
+    this.isHidden = false;
   }
 
   /**
@@ -137,7 +141,8 @@ export default class Perfume {
    * Coloring Text in Browser Console
    */
   log(metricName: string, duration: number): void {
-    if (!this.config.logging) {
+    // Don't log when page is hidden or has disabled logging
+    if (this.isHidden || !this.config.logging) {
       return;
     }
     if (!metricName) {
@@ -158,6 +163,10 @@ export default class Perfume {
    * timingValue: The value of duration rounded to the nearest integer
    */
   sendTiming(metricName: string, duration: number): void {
+    // Don't send timing when page is hidden
+    if (this.isHidden) {
+      return;
+    }
     if (this.config.analyticsLogger) {
       this.config.analyticsLogger(metricName, duration);
     }
@@ -188,6 +197,12 @@ export default class Perfume {
     this.logWarn(this.config.logPrefix, this.logMetric);
     return false;
   }
+
+  private didVisibilityChange = () => {
+    if (document.hidden) {
+      this.isHidden = document.hidden;
+    }
+  };
 
   private firstContentfulPaintCb(
     entries: any[],
@@ -234,6 +249,18 @@ export default class Perfume {
           this.timeToInteractiveCb(time);
         })
         .catch(reject);
+    }
+  }
+
+  /**
+   * From visibilitychange listener it saves only when
+   * the page gets hidden, because it's important to not
+   * use the wrong "hidden" value when send timing or logging.
+   */
+  private onVisibilityChange() {
+    if (typeof document.hidden !== 'undefined') {
+      // Opera 12.10 and Firefox 18 and later support
+      document.addEventListener('visibilitychange', this.didVisibilityChange);
     }
   }
 

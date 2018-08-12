@@ -225,11 +225,28 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.firstContentfulPaintCb()', () => {
-    beforeEach(() => {
-      // spyOn(perfume.perf, 'timeToInteractive').and.callThrough();
+  describe('.didVisibilityChange()', () => {
+    it('should keep "hidden" default value when is false', () => {
+      perfume['didVisibilityChange']();
+      expect(perfume['isHidden']).toEqual(false);
     });
 
+    it('should set "hidden" value when is true', () => {
+      perfume['isHidden'] = false;
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+      perfume['didVisibilityChange']();
+      expect(perfume['isHidden']).toEqual(true);
+    });
+
+    it('should keep "hidden" value when changes to false', () => {
+      perfume['isHidden'] = true;
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+      perfume['didVisibilityChange']();
+      expect(perfume['isHidden']).toEqual(true);
+    });
+  });
+
+  describe('.firstContentfulPaintCb()', () => {
     it('should call logFCP() with the correct arguments', () => {
       perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
@@ -270,6 +287,26 @@ describe('Perfume', () => {
         mock.Promise.reject,
       );
       expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('.onVisibilityChange()', () => {
+    it('should not call document.addEventListener() when document.hidden is undefined', () => {
+      spy = jest.spyOn(document, 'addEventListener');
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(undefined);
+      (perfume as any).onVisibilityChange();
+      expect(spy.mock.calls.length).toEqual(0);
+    });
+
+    it('should call document.addEventListener() with the correct argument', () => {
+      spy = jest.spyOn(document, 'addEventListener');
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+      (perfume as any).onVisibilityChange();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(document.addEventListener).toHaveBeenLastCalledWith(
+        'visibilitychange',
+        perfume['didVisibilityChange'],
+      );
     });
   });
 
@@ -340,6 +377,16 @@ describe('Perfume', () => {
   });
 
   describe('.sendTiming()', () => {
+    it('should not call analyticsLogger() if isHidden is true', () => {
+      perfume.config.analyticsLogger = (metricName, duration) => {
+        // console.log(metricName, duration);
+      };
+      spy = jest.spyOn(perfume.config, 'analyticsLogger');
+      perfume['isHidden'] = true;
+      (perfume as any).sendTiming('metricName', 123);
+      expect(spy).not.toHaveBeenCalled();
+    });
+
     it('should call analyticsLogger() if analyticsLogger is defined', () => {
       perfume.config.analyticsLogger = (metricName, duration) => {
         // console.log(metricName, duration);

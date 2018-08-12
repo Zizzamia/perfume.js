@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import * as $ from 'jquery';
-// import Perfume from 'perfume.js';
-import Perfume from '../../../../perfume.js';
+import Perfume from 'perfume.js';
+// import Perfume from '../../../../perfume.js';
 
 @Component({
   selector: 'app-root',
