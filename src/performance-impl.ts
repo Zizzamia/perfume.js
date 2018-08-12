@@ -1,13 +1,13 @@
-import { Metrics, PerfumeConfig } from './perfume';
+import { IMetrics, IPerfumeConfig } from './perfume';
 
-export default interface PerformImpl {
-  config: PerfumeConfig;
+export default interface IPerformance {
+  config: IPerfumeConfig;
 
   now(): number;
 
   mark(metricName: string, type: string): any;
 
-  measure(metricName: string, metrics: Metrics): number;
+  measure(metricName: string, metrics: IMetrics): number;
 
   firstContentfulPaint(cb: any): any;
-};
+}

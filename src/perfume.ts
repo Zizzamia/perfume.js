@@ -7,7 +7,7 @@
 import EmulatedPerformance from './emulated-performance';
 import Performance from './performance';
 
-export interface PerfumeConfig {
+export interface IPerfumeConfig {
   firstContentfulPaint: boolean;
   firstPaint: boolean;
   timeToInteractive: boolean;
@@ -21,7 +21,7 @@ export interface PerfumeConfig {
   warning: boolean;
 }
 
-export interface Metrics {
+export interface IMetrics {
   [key: string]: {
     start: number;
     end: number;
@@ -29,36 +29,37 @@ export interface Metrics {
 }
 
 declare global {
+  // tslint:disable-next-line:interface-name
   interface Window {
     ga: any;
   }
 }
 
 export default class Perfume {
-  public config: PerfumeConfig = {
+  config: IPerfumeConfig = {
     firstContentfulPaint: false,
     firstPaint: false,
     timeToInteractive: false,
     analyticsLogger: undefined,
     googleAnalytics: {
       enable: false,
-      timingVar: 'name'
+      timingVar: 'name',
     },
     logPrefix: '⚡️ Perfume.js:',
     logging: true,
-    warning: false
+    warning: false,
   };
-  public firstPaintDuration: number = 0;
-  public firstContentfulPaintDuration: number = 0;
-  public timeToInteractiveDuration: number = 0;
-  private metrics: Metrics = {};
+  firstPaintDuration: number = 0;
+  firstContentfulPaintDuration: number = 0;
+  timeToInteractiveDuration: number = 0;
+  private metrics: IMetrics = {};
   private perf: Performance | EmulatedPerformance;
   private perfEmulated?: EmulatedPerformance;
   private readonly timeToInteractivePromise: Promise<number>;
   private logMetric = 'Please provide a metric name';
 
   constructor(options: any = {}) {
-    this.config = Object.assign({}, this.config, options) as PerfumeConfig;
+    this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
     // Init performance implementation
     this.perf = Performance.supported()
       ? new Performance(this.config)
@@ -78,14 +79,14 @@ export default class Perfume {
     });
   }
 
-  public observeTimeToInteractive(): Promise<number> {
+  observeTimeToInteractive(): Promise<number> {
     return this.timeToInteractivePromise;
   }
 
   /**
    * Start performance measurement
    */
-  public start(metricName: string): void {
+  start(metricName: string): void {
     if (!this.checkMetricName(metricName)) {
       return;
     }
@@ -95,7 +96,7 @@ export default class Perfume {
     }
     this.metrics[metricName] = {
       end: 0,
-      start: this.perf.now()
+      start: this.perf.now(),
     };
     this.perf.mark(metricName, 'start');
   }
@@ -103,7 +104,7 @@ export default class Perfume {
   /**
    * End performance measurement
    */
-  public end(metricName: string): void | number {
+  end(metricName: string): void | number {
     if (!this.checkMetricName(metricName)) {
       return;
     }
@@ -123,7 +124,7 @@ export default class Perfume {
   /**
    * End performance measurement after first paint from the beging of it
    */
-  public endPaint(metricName: string): Promise<void | number> {
+  endPaint(metricName: string): Promise<void | number> {
     return new Promise(resolve => {
       setTimeout(() => {
         const duration = this.end(metricName);
@@ -135,7 +136,7 @@ export default class Perfume {
   /**
    * Coloring Text in Browser Console
    */
-  public log(metricName: string, duration: number): void {
+  log(metricName: string, duration: number): void {
     if (!this.config.logging) {
       return;
     }
@@ -156,7 +157,7 @@ export default class Perfume {
    * timingVar: googleAnalytics.timingVar
    * timingValue: The value of duration rounded to the nearest integer
    */
-  public sendTiming(metricName: string, duration: number): void {
+  sendTiming(metricName: string, duration: number): void {
     if (this.config.analyticsLogger) {
       this.config.analyticsLogger(metricName, duration);
     }
@@ -164,11 +165,20 @@ export default class Perfume {
       return;
     }
     if (!window.ga) {
-      this.logWarn(this.config.logPrefix, 'Google Analytics has not been loaded');
+      this.logWarn(
+        this.config.logPrefix,
+        'Google Analytics has not been loaded',
+      );
       return;
     }
     const durationInteger = Math.round(duration);
-    window.ga('send', 'timing', metricName, this.config.googleAnalytics.timingVar, durationInteger);
+    window.ga(
+      'send',
+      'timing',
+      metricName,
+      this.config.googleAnalytics.timingVar,
+      durationInteger,
+    );
   }
 
   private checkMetricName(metricName: string): boolean {
@@ -182,12 +192,19 @@ export default class Perfume {
   private firstContentfulPaintCb(
     entries: any[],
     resolve: (value: any) => void,
-    reject: (error: any) => void
+    reject: (error: any) => void,
   ): void {
     let firstContentfulPaintDuration;
     entries.forEach((performancePaintTiming: any) => {
-      if (this.config.firstPaint && performancePaintTiming.name === 'first-paint') {
-        this.logFCP(performancePaintTiming.startTime, 'First Paint', 'firstPaint');
+      if (
+        this.config.firstPaint &&
+        performancePaintTiming.name === 'first-paint'
+      ) {
+        this.logFCP(
+          performancePaintTiming.startTime,
+          'First Paint',
+          'firstPaint',
+        );
       }
       if (
         this.config.firstContentfulPaint &&
@@ -196,7 +213,7 @@ export default class Perfume {
         this.logFCP(
           performancePaintTiming.startTime,
           'First Contentful Paint',
-          'firstContentfulPaint'
+          'firstContentfulPaint',
         );
       }
       if (performancePaintTiming.name === 'first-contentful-paint') {

@@ -1,29 +1,29 @@
-import PerformImpl from './performance-impl';
-import { Metrics, PerfumeConfig } from './perfume';
+import IPerformance from './performance-impl';
+import { IMetrics, IPerfumeConfig } from './perfume';
 
-export interface PerformancePaintTiming {
+export interface IPerformancePaintTiming {
   name: string;
   entryType: string;
   startTime: number;
   duration: number;
 }
 
-export default class EmulatedPerformance implements PerformImpl {
-  constructor(public config: PerfumeConfig) {}
+export default class EmulatedPerformance implements IPerformance {
+  constructor(public config: IPerfumeConfig) {}
 
   /**
    * When performance API is not available
    * returns Date.now that is limited to one-millisecond resolution.
    */
-  public now(): number {
+  now(): number {
     return Date.now() / 1000;
   }
 
-  public mark(metricName: string, type: string): void {
+  mark(metricName: string, type: string): void {
     // Timeline won't be marked
   }
 
-  public measure(metricName: string, metrics: Metrics): number {
+  measure(metricName: string, metrics: IMetrics): number {
     return this.getDurationByMetric(metricName, metrics);
   }
 
@@ -32,7 +32,7 @@ export default class EmulatedPerformance implements PerformImpl {
    * the biggest above-the-fold layout change has happened.
    * Uses setTimeout to retrieve FCP
    */
-  public firstContentfulPaint(cb: (entries: any[]) => void): void {
+  firstContentfulPaint(cb: (entries: any[]) => void): void {
     setTimeout(() => {
       cb(this.getFirstPaint());
     });
@@ -42,7 +42,7 @@ export default class EmulatedPerformance implements PerformImpl {
    * Get the duration of the timing metric or -1 if there a measurement has
    * not been made by now() fallback.
    */
-  private getDurationByMetric(metricName: string, metrics: Metrics): number {
+  private getDurationByMetric(metricName: string, metrics: IMetrics): number {
     const duration = metrics[metricName].end - metrics[metricName].start;
     return duration || 0;
   }
@@ -51,13 +51,13 @@ export default class EmulatedPerformance implements PerformImpl {
    * http://msdn.microsoft.com/ff974719
    * developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming/navigationStart
    */
-  private getFirstPaint(): PerformancePaintTiming[] {
+  private getFirstPaint(): IPerformancePaintTiming[] {
     const navTiming = window.performance.timing;
-    const performancePaintTiming: PerformancePaintTiming = {
+    const performancePaintTiming: IPerformancePaintTiming = {
       duration: 0,
       entryType: 'paint',
       name: 'first-contentful-paint',
-      startTime: 0
+      startTime: 0,
     };
     if (navTiming && navTiming.navigationStart !== 0) {
       performancePaintTiming.startTime = Date.now() - navTiming.navigationStart;

@@ -1,10 +1,10 @@
 import ttiPolyfill from 'tti-polyfill';
 import PerformImpl from './performance-impl';
-import { Metrics, PerfumeConfig } from './perfume';
+import { IMetrics, IPerfumeConfig } from './perfume';
 
 declare const PerformanceObserver: any;
 
-declare interface PerformanceObserverEntryList {
+declare interface IPerformanceObserverEntryList {
   getEntries: any;
   getEntriesByName: any;
   getEntriesByType: any;
@@ -19,7 +19,7 @@ export default class Performance implements PerformImpl {
    * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
    * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
    */
-  public static supported(): boolean {
+  static supported(): boolean {
     return window.performance && !!performance.now && !!performance.mark;
   }
 
@@ -28,7 +28,7 @@ export default class Performance implements PerformImpl {
    * and the entryType "paint".
    * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
    */
-  public static supportedPerformanceObserver(): boolean {
+  static supportedPerformanceObserver(): boolean {
     return (window as any).chrome && 'PerformanceObserver' in window;
   }
 
@@ -36,15 +36,15 @@ export default class Performance implements PerformImpl {
    * True if the browser supports the PerformanceLongTaskTiming interface.
    * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming
    */
-  public static supportedLongTask(): boolean {
+  static supportedLongTask(): boolean {
     return 'PerformanceLongTaskTiming' in window;
   }
 
-  public timeToInteractiveDuration: number = 0;
+  timeToInteractiveDuration: number = 0;
   private ttiPolyfill: any;
   private perfObserver: any;
 
-  constructor(public config: PerfumeConfig) {
+  constructor(public config: IPerfumeConfig) {
     this.ttiPolyfill = ttiPolyfill;
   }
 
@@ -53,16 +53,16 @@ export default class Performance implements PerformImpl {
    * returns a DOMHighResTimeStamp, measured in milliseconds, accurate to five
    * thousandths of a millisecond (5 microseconds).
    */
-  public now(): number {
+  now(): number {
     return window.performance.now();
   }
 
-  public mark(metricName: string, type: string): void {
+  mark(metricName: string, type: string): void {
     const mark = `mark_${metricName}_${type}`;
     (window.performance.mark as any)(mark);
   }
 
-  public measure(metricName: string, metrics: Metrics): number {
+  measure(metricName: string, metrics: IMetrics): number {
     const startMark = `mark_${metricName}_start`;
     const endMark = `mark_${metricName}_end`;
     (window.performance.measure as any)(metricName, startMark, endMark);
@@ -76,8 +76,10 @@ export default class Performance implements PerformImpl {
    * and respond to them asynchronously.
    * entry.name will be either 'first-paint' or 'first-contentful-paint'
    */
-  public firstContentfulPaint(cb: (entries: any[]) => void): void {
-    this.perfObserver = new PerformanceObserver(this.performanceObserverCb.bind(this, cb));
+  firstContentfulPaint(cb: (entries: any[]) => void): void {
+    this.perfObserver = new PerformanceObserver(
+      this.performanceObserverCb.bind(this, cb),
+    );
     this.perfObserver.observe({ entryTypes: ['paint'] });
   }
 
@@ -92,7 +94,7 @@ export default class Performance implements PerformImpl {
    * but it's often more accurate to use something like the moment your hero elements
    * are visible or the point when you know all your event listeners have been added.
    */
-  public timeToInteractive(minValue: number): Promise<number> {
+  timeToInteractive(minValue: number): Promise<number> {
     return this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue });
   }
 
@@ -100,7 +102,7 @@ export default class Performance implements PerformImpl {
    * Get the duration of the timing metric or -1 if there a measurement has
    * not been made by the User Timing API
    */
-  private getDurationByMetric(metricName: string, metrics: Metrics): number {
+  private getDurationByMetric(metricName: string, metrics: IMetrics): number {
     const entry = this.getMeasurementForGivenName(metricName);
     if (entry && entry.entryType === 'measure') {
       return entry.duration;
@@ -118,7 +120,7 @@ export default class Performance implements PerformImpl {
 
   private performanceObserverCb(
     cb: (entries: PerformanceEntry[]) => void,
-    entryList: PerformanceObserverEntryList
+    entryList: IPerformanceObserverEntryList,
   ): void {
     const entries = entryList.getEntries();
     cb(entries);

@@ -3,11 +3,43 @@
   "extends": ["tslint:recommended"],
   "rules": {
     "arrow-parens": false,
-    "interface-name": [true, "never-prefix"],
+    "array-type": [true, "array-simple"],
+    "class-name": false,
+    "function-name": [
+      true,
+      {
+        "method-regex": "^_?[a-z][\\w\\d]+$",
+        "function-regex": "^[a-zA-Z][\\w\\d]+$",
+        "static-method-regex": "^[a-zA-Z_\\d]+$"
+      }
+    ],
+    "import-name": false,
+    "max-classes-per-file": false,
+    "member-access": [true, "no-public"],
+    "member-ordering": [
+      true,
+      {
+        "order": "statics-first"
+      }
+    ],
+    "no-else-after-return": [true, "allow-else-if"],
+    "no-empty": false,
+    "no-console": false,
+    "no-namespace": false,
+    "no-string-literal": false,
+    "no-unused-expression": [true, "allow-fast-null-checks"],
     "object-literal-sort-keys": false,
+    "object-shorthand-properties-first": false,
+    "ordered-imports": [true],
+    "prefer-array-literal": false,
+    "prettier": true,
     "quotemark": [true, "single"],
-    "semicolon": false,
-    "trailing-comma": false,
-    "no-implicit-dependencies": [true, "dev"]
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-leading-underscore",
+      "allow-trailing-underscore",
+      "allow-pascal-case"
+    ]
   }
 }
