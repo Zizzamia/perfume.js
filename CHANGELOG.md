@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.1 (2018-8-16)
+
+### Feat
+
+* **feat:** Send other metrics to google analytics using the sendTiming method [#39](https://github.com/Zizzamia/perfume.js/issues/39)
+
+### Bug Fixes
+* **fix:** Stop sendTiming when tab is hidden [#40](https://github.com/Zizzamia/perfume.js/issues/40)
+
 ## 0.8.0 (2018-7-11)
 
 ### Bug Fixes
