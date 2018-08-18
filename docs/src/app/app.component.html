@@ -126,7 +126,8 @@ npm install perfume.js --save-dev
       </ul>
       <p>The
         <b>TTI</b> metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle
-        (free of long tasks).</p>
+        (free of long tasks).
+      </p>
       <p class="box-demo">
         ⚡️ Perfume.js: Time to interactive {{ (perfume.observeTimeToInteractive() | async)?.toFixed(2) || 0 }} ms
       </p>
@@ -181,23 +182,22 @@ perfume.<span class="violet">end</span>('fibonacci');
     <div class="box" id="/component-first-paint/">
       <h2 class="box-title">Component First Paint (CFP)</h2>
       <p>This metric mark the point, immediately after creating a
-        <b>new component</b>, when the browser renders pixels to the screen.</p>
+        <b>new component</b>, when the browser renders pixels to the screen.
+      </p>
       <p class="box-demo">
-        <button type="button" #p="ngbPopover" class="box-demo-btn"
-        placement="top" ngbPopover triggers="manual"
-        popoverTitle="And here's some amazing content."
-        (click)="togglePopover()">Click to toggle popover</button>
-        <span>{{ logTogglePopover }}</span>
+        <button type="button" class="box-demo-btn"
+        (click)="openDialog()">Click to open dialog</button>
+        <span>{{ logOpenDialog }}</span>
       </p>
       <div class="box-code js">
         <table>
           <tbody>
             <tr>
               <td class="code">
-                <pre>perfume.<span class="blue">start</span>('togglePopover');
-<span class="violet">$</span>(element).<span class="violet">popover</span>('toggle');
-perfume.<span class="violet">endPaint</span>('togglePopover');
-<span class="gray">// ⚡️ Perfume.js: togglePopover 10.54 ms</span></pre>
+                <pre>perfume.<span class="blue">start</span>('openDialog');
+<span class="violet">this</span>.dialog.<span class="violet">open</span>();
+perfume.<span class="violet">endPaint</span>('openDialog');
+<span class="gray">// ⚡️ Perfume.js: openDialog 10.54 ms</span></pre>
               </td>
             </tr>
           </tbody>

@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+import { AfterViewInit, Component, ViewChild, NgZone } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import Perfume from 'perfume.js';
+import { DialogComponent } from './dialog/dialog.component';
 // import Perfume from '../../../../perfume.js';
 
 @Component({
@@ -11,25 +11,25 @@ import Perfume from 'perfume.js';
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('p')
-  public popover: NgbPopover;
   // Component
   logCustom: string;
   logFibonacci: string;
-  logTogglePopover: string;
+  logOpenDialog: string;
   path: any;
   perfume: any;
   navOptions: {
     [keyof: string]: string;
   };
   navSelected: string;
+  private gifIndex = 0;
 
-  constructor() {
+  constructor(public dialog: MatDialog, private zone: NgZone) {
     // Perfume
     this.perfume = new Perfume({
       firstPaint: true,
       firstContentfulPaint: true,
       timeToInteractive: true,
-      analyticsLogger: (metricName, duration) => {
+      analyticsLogger: (metricName: string, duration: number) => {
         console.log('Analytics Logger', metricName, duration);
       },
       googleAnalytics: {
@@ -56,49 +56,12 @@ export class AppComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.runFibonacci(500);
-    }, 500);
-  }
-
-  runFibonacci(maxSequence: number) {
-    this.fibonacci(maxSequence, {}, true);
-    this.reverseFibonacciSequence(6);
-    $('.Fibonacci').empty();
-  }
-
-  fibonacci(num, memo = {}, append = false) {
-    if (memo[num]) {
-      return memo[num];
-    }
-    if (num <= 1) {
-      return 1;
-    }
-    if (append) {
-      this.appendElSequence(num);
-    }
-    return (memo[num] =
-      this.fibonacci(num - 1, memo, append) +
-      this.fibonacci(num - 2, memo, append));
-  }
-
-  appendElSequence(num) {
-    const elSequence = $(`<span class="Fibonacci-sequence">${num} </span>`);
-    elSequence.css({
-      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+    // Ensure the page to have 400ms delay for TTI
+    this.zone.runOutsideAngular(() => {
+      setTimeout(() => {
+        this.runFibonacci(4500);
+      }, 400);
     });
-    $('.Fibonacci').append(elSequence);
-  }
-
-  reverseFibonacciSequence(reccurrence = 1) {
-    const $elFibonacci = $('.Fibonacci');
-    $elFibonacci.children().each((i, sequence) => {
-      $elFibonacci.prepend(sequence);
-    });
-    reccurrence -= 1;
-    if (reccurrence > 0) {
-      this.reverseFibonacciSequence(reccurrence);
-    }
   }
 
   measureFibonacci() {
@@ -108,18 +71,19 @@ export class AppComponent implements AfterViewInit {
     this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration.toFixed(2)} ms`;
   }
 
-  togglePopover() {
-    this.perfume.start('togglePopover');
-    const isOpen = this.popover.isOpen();
-    this.popover.close();
-    if (!isOpen) {
-      this.popover.open();
-    }
-    this.perfume.endPaint('togglePopover').then(duration => {
-      this.logTogglePopover = `⚡️ Perfume.js: togglePopover ${duration.toFixed(
+  openDialog() {
+    this.perfume.start('openDialog');
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: { gifIndex: this.gifIndex },
+      width: '50%',
+    });
+    this.perfume.endPaint('openDialog').then(duration => {
+      this.logOpenDialog = `⚡️ Perfume.js: openDialog ${duration.toFixed(
         2,
       )} ms`;
     });
+    // Increment or reset index
+    this.gifIndex = this.gifIndex === 4 ? 0 : this.gifIndex + 1;
   }
 
   customLogging() {
@@ -134,5 +98,38 @@ export class AppComponent implements AfterViewInit {
 
   activeNav(selected) {
     this.navSelected = selected;
+  }
+
+  private fibonacci(num: number, memo = {}, append: boolean = false): number {
+    if (memo[num]) {
+      return memo[num];
+    }
+    if (num <= 1) {
+      return 1;
+    }
+    if (append) {
+      this.appendElSequence(num);
+    }
+    return (memo[num] =
+      this.fibonacci(num - 1, memo, append) +
+      this.fibonacci(num - 2, memo, append));
+  }
+
+  private appendElSequence(num: number): void {
+    const elSequence = document.createElement('span');
+    elSequence.classList.add('Fibonacci-sequence');
+    elSequence.textContent = num + ' ';
+    elSequence.style.color =
+      '#' + Math.floor(Math.random() * 16777215).toString(16);
+    const elFibonacci = document.querySelector('.Fibonacci');
+    elFibonacci.appendChild(elSequence);
+  }
+
+  private runFibonacci(maxSequence: number) {
+    this.fibonacci(maxSequence, {}, true);
+    const elFibonacci = document.querySelector('.Fibonacci');
+    while (elFibonacci.firstChild) {
+      elFibonacci.removeChild(elFibonacci.firstChild);
+    }
   }
 }

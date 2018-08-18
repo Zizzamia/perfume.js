@@ -201,6 +201,11 @@ perfume.sendTiming(metricName, duration);
 * `npm run build`: Generate bundles and typings
 * `npm run lint`: Lints code
 
+## Articles
+
+* [First (Contentful) Paint with a touch of Perfume(.js)](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f)
+* [Time to Interactive with RUM](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c)
+
 ## Credits and Specs
 
 Made with ☕️ by [@zizzamia](https://twitter.com/zizzamia) and
