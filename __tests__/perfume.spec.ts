@@ -1,6 +1,6 @@
+import GaQueueItem from '../src/gaQueueItem';
 import Perfume from '../src/perfume';
 import mock from './_mock';
-import GaQueueItem from '../src/gaQueueItem';
 
 describe('Perfume', () => {
   let perfume: Perfume;
@@ -408,7 +408,8 @@ describe('Perfume', () => {
       perfume.config.googleAnalytics.enable = true;
       spy = jest.spyOn(perfume as any, 'logWarn');
       (perfume as any).sendTiming();
-      const text = 'Google Analytics has not been loaded. Timing sends will be queued until page load and tried again.';
+      const text =
+        'Google Analytics has not been loaded. Timing sends will be queued until page load and tried again.';
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, text);
     });
@@ -420,7 +421,10 @@ describe('Perfume', () => {
       (perfume as any).sendTiming(metricName, duration);
       expect(perfume.gaQueue).toEqual([new GaQueueItem(metricName, duration)]);
       (perfume as any).sendTiming(metricName, duration);
-      expect(perfume.gaQueue).toEqual([new GaQueueItem(metricName, duration), new GaQueueItem(metricName, duration)]);
+      expect(perfume.gaQueue).toEqual([
+        new GaQueueItem(metricName, duration),
+        new GaQueueItem(metricName, duration),
+      ]);
     });
 
     it('should not call global.logWarn() if googleAnalytics is enabled and ga is present', () => {
@@ -468,9 +472,10 @@ describe('Perfume', () => {
       (perfume as any).onWindowLoad(); // act
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(3);
-      expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, 
-        'Google Analytics has not been loaded but window has. Timing send will not be sent to Google Analytics. ' + 
-        'Please ensure you\'re adding the ga.js script to your page.'
+      expect(spy).toHaveBeenCalledWith(
+        perfume.config.logPrefix,
+        'Google Analytics has not been loaded but window has. Timing send will not be sent to Google Analytics. ' +
+          "Please ensure you're adding the ga.js script to your page.",
       );
     });
   });

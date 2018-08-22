@@ -5,8 +5,8 @@
  * @license 
  */
 import EmulatedPerformance from './emulated-performance';
-import Performance from './performance';
 import GaQueueItem from './gaQueueItem';
+import Performance from './performance';
 
 export interface IPerfumeConfig {
   firstContentfulPaint: boolean;
@@ -65,7 +65,8 @@ export default class Perfume {
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
 
     // Init window.load listener
-    window.addEventListener && window.addEventListener('load', this.onWindowLoad);
+    window.addEventListener &&
+      window.addEventListener('load', this.onWindowLoad);
 
     // Init performance implementation
     this.perf = Performance.supported()
@@ -176,7 +177,7 @@ export default class Perfume {
     }
     if (!this.config.googleAnalytics.enable) {
       return;
-    }   
+    }
     if (this.hasGoogleAnalyticsLoaded()) {
       this.sendTimingToGoogleAnalytics(metricName, duration);
     } else {
@@ -195,11 +196,11 @@ export default class Perfume {
       this.gaQueue.forEach(i => {
         this.sendTimingToGoogleAnalytics(i.metricName, i.duration);
       });
-    } else {          
+    } else {
       this.logWarn(
         this.config.logPrefix,
-        'Google Analytics has not been loaded but window has. Timing send will not be sent to Google Analytics. ' + 
-          'Please ensure you\'re adding the ga.js script to your page.',
+        'Google Analytics has not been loaded but window has. Timing send will not be sent to Google Analytics. ' +
+          "Please ensure you're adding the ga.js script to your page.",
       );
     }
   }
@@ -210,12 +211,10 @@ export default class Perfume {
 
   /**
    * Sends a timing to Google Analytics.
-   * 
    * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])
    * timingCategory: metricName
    * timingVar: googleAnalytics.timingVar
    * timingValue: The value of duration rounded to the nearest integer
-   * 
    * @param metricName value to use for timingCategory in GA.
    * @param duration value of duration to use for timingValue in GA. Will be rounded to nearest integer.
    */
