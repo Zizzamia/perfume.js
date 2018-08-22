@@ -10,15 +10,30 @@ import Performance from './performance';
 export interface IPerfumeConfig {
   firstContentfulPaint: boolean;
   firstPaint: boolean;
+  firstInputDelay: boolean;
   timeToInteractive: boolean;
-  analyticsLogger: any;
-  googleAnalytics: {
-    enable: boolean;
-    timingVar: string;
-  };
+  analyticsLogger?: (metricName: string, duration: number) => void;
+  googleAnalytics: IGoogleAnalyticsConfig;
   logPrefix: string;
   logging: boolean;
   warning: boolean;
+}
+
+export interface IPerfumeOptions {
+  firstContentfulPaint?: boolean;
+  firstPaint?: boolean;
+  firstInputDelay?: boolean;
+  timeToInteractive?: boolean;
+  analyticsLogger?: (metricName: string, duration: number) => void;
+  googleAnalytics?: IGoogleAnalyticsConfig;
+  logPrefix?: string;
+  logging?: boolean;
+  warning?: boolean;
+}
+
+export interface IGoogleAnalyticsConfig {
+  enable: boolean;
+  timingVar: string;
 }
 
 export interface IMetrics {
@@ -39,8 +54,8 @@ export default class Perfume {
   config: IPerfumeConfig = {
     firstContentfulPaint: false,
     firstPaint: false,
+    firstInputDelay: false,
     timeToInteractive: false,
-    analyticsLogger: undefined,
     googleAnalytics: {
       enable: false,
       timingVar: 'name',
@@ -51,38 +66,34 @@ export default class Perfume {
   };
   firstPaintDuration: number = 0;
   firstContentfulPaintDuration: number = 0;
+  firstInputDelayDuration: number = 0;
+  observeFirstInputDelay: Promise<number>;
+  observeTimeToInteractive: Promise<number>;
   timeToInteractiveDuration: number = 0;
   private isHidden: boolean = false;
   private metrics: IMetrics = {};
   private perf: Performance | EmulatedPerformance;
   private perfEmulated?: EmulatedPerformance;
-  private readonly timeToInteractivePromise: Promise<number>;
-  private logMetric = 'Please provide a metric name';
+  private logMetricWarn = 'Please provide a metric name';
 
-  constructor(options: any = {}) {
+  constructor(options: IPerfumeOptions = {}) {
+    // Extend default config with external options
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
-    // Init performance implementation
+
+    // Init performance implementation based on supported browser APIs
     this.perf = Performance.supported()
       ? new Performance(this.config)
       : new EmulatedPerformance(this.config);
-    this.timeToInteractivePromise = new Promise((resolve, reject) => {
-      // Init First Contentful Paint
-      if (Performance.supportedPerformanceObserver()) {
-        this.perf.firstContentfulPaint((entries: any[]) => {
-          this.firstContentfulPaintCb(entries, resolve, reject);
-        });
-      } else {
-        this.perfEmulated = new EmulatedPerformance(this.config);
-        this.perfEmulated.firstContentfulPaint((entries: any[]) => {
-          this.firstContentfulPaintCb(entries, resolve, reject);
-        });
-      }
-    });
-    this.onVisibilityChange();
-  }
 
-  observeTimeToInteractive(): Promise<number> {
-    return this.timeToInteractivePromise;
+    // Init observe FP / FCP / TTI and creates the Promise to observe metrics
+    this.observeTimeToInteractive = this.initFirstPaintAndTTI();
+
+    // FID needs to be initialized as soon as Perfume is available, which returns
+    // a Promise that can be observed
+    this.observeFirstInputDelay = this.initFirstInputDelay();
+
+    // Init visibilitychange listener
+    this.onVisibilityChange();
   }
 
   /**
@@ -146,7 +157,7 @@ export default class Perfume {
       return;
     }
     if (!metricName) {
-      this.logWarn(this.config.logPrefix, this.logMetric);
+      this.logWarn(this.config.logPrefix, this.logMetricWarn);
       return;
     }
     const durationMs = duration.toFixed(2);
@@ -163,13 +174,17 @@ export default class Perfume {
    * timingValue: The value of duration rounded to the nearest integer
    */
   sendTiming(metricName: string, duration: number): void {
-    // Don't send timing when page is hidden
+    // Doesn't send timing when page is hidden
     if (this.isHidden) {
       return;
     }
+
+    // Send metric to custom Analytics service,
+    // the default choice is Google Analytics
     if (this.config.analyticsLogger) {
       this.config.analyticsLogger(metricName, duration);
     }
+
     if (!this.config.googleAnalytics.enable) {
       return;
     }
@@ -194,7 +209,7 @@ export default class Perfume {
     if (metricName) {
       return true;
     }
-    this.logWarn(this.config.logPrefix, this.logMetric);
+    this.logWarn(this.config.logPrefix, this.logMetricWarn);
     return false;
   }
 
@@ -215,7 +230,7 @@ export default class Perfume {
         this.config.firstPaint &&
         performancePaintTiming.name === 'first-paint'
       ) {
-        this.logFCP(
+        this.logMetric(
           performancePaintTiming.startTime,
           'First Paint',
           'firstPaint',
@@ -225,7 +240,7 @@ export default class Perfume {
         this.config.firstContentfulPaint &&
         performancePaintTiming.name === 'first-contentful-paint'
       ) {
-        this.logFCP(
+        this.logMetric(
           performancePaintTiming.startTime,
           'First Contentful Paint',
           'firstContentfulPaint',
@@ -246,10 +261,38 @@ export default class Perfume {
         .timeToInteractive(firstContentfulPaintDuration)
         .then((time: number) => {
           resolve(time);
-          this.timeToInteractiveCb(time);
+          this.logMetric(time, 'Time to Interactive', 'timeToInteractive');
         })
         .catch(reject);
     }
+  }
+
+  private initFirstPaintAndTTI(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      // Checks if use Performance or the EmulatedPerformance instance
+      if (Performance.supportedPerformanceObserver()) {
+        this.perf.firstContentfulPaint((entries: any[]) => {
+          this.firstContentfulPaintCb(entries, resolve, reject);
+        });
+      } else {
+        this.perfEmulated = new EmulatedPerformance(this.config);
+        this.perfEmulated.firstContentfulPaint((entries: any[]) => {
+          this.firstContentfulPaintCb(entries, resolve, reject);
+        });
+      }
+    });
+  }
+
+  private initFirstInputDelay(): Promise<number> {
+    return new Promise(resolve => {
+      if (Performance.supported() && this.config.firstInputDelay) {
+        // perfMetrics is exposed by the FID Polyfill
+        perfMetrics.onFirstInputDelay((duration, event) => {
+          this.logMetric(duration, 'First Input Delay', 'firstInputDelay');
+          resolve(duration);
+        });
+      }
+    });
   }
 
   /**
@@ -264,22 +307,32 @@ export default class Perfume {
     }
   }
 
-  private timeToInteractiveCb(timeToInteractive: number): void {
-    this.timeToInteractiveDuration = timeToInteractive;
-    if (this.timeToInteractiveDuration) {
-      this.log('Time to interactive', this.timeToInteractiveDuration);
-    }
-    this.sendTiming('timeToInteractive', this.timeToInteractiveDuration);
-  }
-
-  private logFCP(duration: number, logText: string, metricName: string): void {
+  /**
+   * Dispatches the metric duration into internal logs
+   * and the external time tracking service.
+   */
+  private logMetric(
+    duration: number,
+    logText: string,
+    metricName: string,
+  ): void {
     if (metricName === 'firstPaint') {
       this.firstPaintDuration = duration;
     }
     if (metricName === 'firstContentfulPaint') {
       this.firstContentfulPaintDuration = duration;
     }
+    if (metricName === 'firstInputDelaty') {
+      this.firstInputDelayDuration = duration;
+    }
+    if (metricName === 'timeToInteractive') {
+      this.timeToInteractiveDuration = duration;
+    }
+
+    // Logs the metric in the internal console.log
     this.log(logText, duration);
+
+    // Sends the metric to an external tracking service
     this.sendTiming(metricName, duration);
   }
 

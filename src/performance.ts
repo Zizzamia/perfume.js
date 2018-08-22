@@ -1,3 +1,4 @@
+import 'first-input-delay';
 import ttiPolyfill from 'tti-polyfill';
 import PerformImpl from './performance-impl';
 import { IMetrics, IPerfumeConfig } from './perfume';

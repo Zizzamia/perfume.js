@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ViewChild, NgZone } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import Perfume from 'perfume.js';
+// import Perfume from 'perfume.js';
 import { DialogComponent } from './dialog/dialog.component';
-// import Perfume from '../../../../perfume.js';
+import Perfume from '../../../../perfume.js';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +28,7 @@ export class AppComponent implements AfterViewInit {
     this.perfume = new Perfume({
       firstPaint: true,
       firstContentfulPaint: true,
+      firstInputDelay: true,
       timeToInteractive: true,
       analyticsLogger: (metricName: string, duration: number) => {
         console.log('Analytics Logger', metricName, duration);
@@ -43,9 +44,12 @@ export class AppComponent implements AfterViewInit {
     this.navOptions = {
       userCentric: 'user-centric-metrics',
       installing: 'installing-and-imports',
+      fp: 'first-paint',
+      fcp: 'first-contentful-paint',
+      fid: 'first-input-delay',
       tti: 'time-to-interactive',
-      annotate: 'annotate-metrics',
       cfp: 'component-first-paint',
+      annotate: 'annotate-metrics',
       log: 'custom-logging',
       ga: 'google-analytics',
       as: 'analytics-support',

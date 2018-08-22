@@ -1,10 +1,12 @@
-<a href="http://zizzamia.github.io/perfume/"><img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v0-8-1.png" align="left" width="262" /></a>
+<a href="http://www.perfumejs.com/">
+  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v0-8-1.png" align="left" width="262" />
+</a>
 
-# [Perfume.js v0.8.1](http://zizzamia.github.io/perfume/)
+# [Perfume.js v0.8.1](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
-> Perfume is a JavaScript library for measuring Short and Long Script, First (Contentful) Paint ([FP/FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f)), Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c)), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.
+> Perfume is a JavaScript library for measuring Short and Long Script, First (Contentful) Paint ([FP/FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f)), First Input Delay (FID), Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c)), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.
 
 <br />
 <br />
@@ -17,6 +19,7 @@
 
 * First Paint (FP)
 * First Contentful Paint (FCP)
+* First Input Delay (FID)
 * Time to Interactive (TTI)
 * Component First Paint (CFP)
 
@@ -70,6 +73,17 @@ const perfume = new Perfume({
   firstContentfulPaint: true
 });
 // ⚡️ Perfume.js: First Contentful Paint 2029.00 ms
+```
+
+### First Input Delay (FID)
+
+**FID** measures the time from when a user first interacts with your site (i.e. when they click a link, tap on a button) to the time when the browser is actually able to respond to that interaction..
+
+```javascript
+const perfume = new Perfume({
+  firstInputDelay: true
+});
+// ⚡️ Perfume.js: First Input Delay 3.20 ms
 ```
 
 ### Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c))

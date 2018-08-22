@@ -30,6 +30,7 @@ describe('Perfume', () => {
       expect(instance.config).toEqual({
         firstContentfulPaint: false,
         firstPaint: false,
+        firstInputDelay: false,
         timeToInteractive: false,
         analyticsLogger: undefined,
         googleAnalytics: {

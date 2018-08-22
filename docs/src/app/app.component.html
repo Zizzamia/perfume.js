@@ -11,7 +11,7 @@
       <h1 class="title">Perfume.js</h1>
       <p>A JavaScript library for <b>measuring</b> Short and Long Script, <br />
         <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f"
-          target="_blank">FP/FCP</a>),
+          target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID),
         <b>Time to Interactive</b> (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>),
         <b>Component First Paint</b> (CFM), annotating them to the DevTools timeline and reporting the results to
         <b>Google Analytics</b>.
@@ -35,6 +35,7 @@
       <ul>
         <li>First Paint (FP)</li>
         <li>First Contentful Paint (FCP)</li>
+        <li>First Input Delay (FID)</li>
         <li>Time to Interactive (TTI)</li>
         <li>Component First Paint (CFP)</li>
       </ul>
@@ -72,7 +73,7 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="first-contentful-paint">First Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP</a>)</h2>
+      <h2 class="box-title" id="/first-paint/">First Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP</a>)</h2>
       <p>FP is the exact time the browser renders anything as visually different from what was
       on the screen before navigation, e.g. a background change after a long blank white screen time.</p>
       <p class="box-demo">
@@ -95,7 +96,7 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="first-contentful-paint">First Contentful Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FCP</a>)</h2>
+      <h2 class="box-title" id="/first-contentful-paint/">First Contentful Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FCP</a>)</h2>
       <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
       <p class="box-demo">
         ⚡️ Perfume.js: First Contentful Paint {{ perfume.firstContentfulPaintDuration.toFixed(2) }} ms
@@ -117,6 +118,32 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
+      <h2 class="box-title" id="/first-input-delay/">First Input Delay (FID)</h2>
+      <p>
+        <b>FID</b> measures the time from when a user first interacts with your site 
+        (i.e. when they click a link, tap on a button) to the time when the browser is actually 
+        able to respond to that interaction..
+      </p>
+      <p class="box-demo">
+        ⚡️ Perfume.js: First Input Delay {{ (perfume.observeFirstInputDelay | async)?.toFixed(2) || 0 }} ms
+      </p>
+      <div class="box-code js">
+        <table>
+          <tbody>
+            <tr>
+              <td class="code">
+                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
+  firstInputDelay<span class="red">:</span> <span class="blue">true</span>
+{{'}'}});
+<span class="gray">// ⚡️ Perfume.js: First Input Delay 3.20 ms</span></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box">
       <h2 class="box-title" id="/time-to-interactive/">Time to Interactive (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>)</h2>
       <p>The metric marks the point at which your application is both visually rendered and capable of reliably responding to
         user input. An application could be unable to respond to user input for a couple of reasons:</p>
@@ -129,7 +156,7 @@ npm install perfume.js --save-dev
         (free of long tasks).
       </p>
       <p class="box-demo">
-        ⚡️ Perfume.js: Time to interactive {{ (perfume.observeTimeToInteractive() | async)?.toFixed(2) || 0 }} ms
+        ⚡️ Perfume.js: Time to interactive {{ (perfume.observeTimeToInteractive | async)?.toFixed(2) || 0 }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -299,6 +326,7 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
                 <pre><span class="red">const</span> <span class="blue">options</span> <span class="red">=</span> {{'{'}}
   firstPaint<span class="red">:</span> <span class="blue">false</span>
   firstContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
+  firstInputDelay<span class="red">:</span> <span class="blue">false</span>,
   timeToInteractive<span class="red">:</span> <span class="blue">false</span>,
   analyticsLogger<span class="red">:</span> <span class="blue">undefined</span>,
   googleAnalytics<span class="red">:</span> {{'{'}}
@@ -330,8 +358,11 @@ perfume.firstPaintDuration;
 <span class="gray">// First Contentful Paint value</span>
 perfume.firstContentfulPaintDuration;
 
+<span class="gray">// First Input Delay value (Async)</span>
+perfume.<span class="blue">observeFirstInputDelay</span>;
+
 <span class="gray">// Time To Interactive value (Async)</span>
-perfume.<span class="blue">observeTimeToInteractive</span>();
+perfume.<span class="blue">observeTimeToInteractive</span>;
 
 <span class="gray">// Send Custom User timing measure to Google Analytics</span>
 perfume.<span class="blue">sendTiming</span>(metricName, duration);</pre>
@@ -349,6 +380,19 @@ perfume.<span class="blue">sendTiming</span>(metricName, duration);</pre>
         <a href="https://github.com/Zizzamia/perfume.js/blob/master/LICENSE" target="_blank">MIT license</a>. Docs released under Creative Commons.</p>
     </div>
 
+    <div class="box">
+      <a href="https://twitter.com/Zizzamia" class="box-leo" target="_blank">
+        <img src="/assets/leo.jpg" alt="Leonardo Zizzamia">
+        <div>
+          <h3>Leonardo Zizzamia</h3>
+          <h4>
+            Co-Founder of Plan, Google Developer Expert in Web Technologies & Angular. <br />
+            International speaker. Ex Twitter & Framestore
+          </h4>
+        </div>
+      </a>
+    </div>
+
     <div class="box Fibonacci"></div>
   </div>
   <div class="layout-nav">
@@ -362,6 +406,15 @@ perfume.<span class="blue">sendTiming</span>(metricName, duration);</pre>
       <a href="{{ path }}#/installing-and-imports/"
       [class.active]="navSelected === navOptions.installing"
       (click)="activeNav(navOptions.installing)">Installing and Imports</a>
+      <a href="{{ path }}#/first-paint/"
+      [class.active]="navSelected === navOptions.fp"
+      (click)="activeNav(navOptions.fp)">First Paint</a>
+      <a href="{{ path }}#/first-contentful-paint/"
+      [class.active]="navSelected === navOptions.fcp"
+      (click)="activeNav(navOptions.fcp)">First Contentful Paint</a>
+      <a href="{{ path }}#/first-input-delay/"
+      [class.active]="navSelected === navOptions.fid"
+      (click)="activeNav(navOptions.fid)">First Input Delay</a>
       <a href="{{ path }}#/time-to-interactive/"
       [class.active]="navSelected === navOptions.tti"
       (click)="activeNav(navOptions.tti)">Time to Interactive</a>
