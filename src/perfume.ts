@@ -86,11 +86,15 @@ export default class Perfume {
       : new EmulatedPerformance(this.config);
 
     // Init observe FP / FCP / TTI and creates the Promise to observe metrics
-    this.observeTimeToInteractive = this.initFirstPaintAndTTI();
+    this.observeTimeToInteractive = new Promise((resolve, reject) => {
+      this.initFirstPaintAndTTI(resolve, reject);
+    });
 
     // FID needs to be initialized as soon as Perfume is available, which returns
     // a Promise that can be observed
-    this.observeFirstInputDelay = this.initFirstInputDelay();
+    this.observeFirstInputDelay = new Promise(resolve => {
+      this.initFirstInputDelay(resolve);
+    });
 
     // Init visibilitychange listener
     this.onVisibilityChange();
@@ -111,7 +115,10 @@ export default class Perfume {
       end: 0,
       start: this.perf.now(),
     };
+
+    // Creates a timestamp in the browser's performance entry buffer
     this.perf.mark(metricName, 'start');
+
     // Reset hidden value
     this.isHidden = false;
   }
@@ -221,8 +228,8 @@ export default class Perfume {
 
   private firstContentfulPaintCb(
     entries: any[],
-    resolve: (value: any) => void,
-    reject: (error: any) => void,
+    resolve: (duration: number) => void,
+    reject: (err: any) => void,
   ): void {
     let firstContentfulPaintDuration;
     entries.forEach((performancePaintTiming: any) => {
@@ -267,32 +274,31 @@ export default class Perfume {
     }
   }
 
-  private initFirstPaintAndTTI(): Promise<number> {
-    return new Promise((resolve, reject) => {
-      // Checks if use Performance or the EmulatedPerformance instance
-      if (Performance.supportedPerformanceObserver()) {
-        this.perf.firstContentfulPaint((entries: any[]) => {
-          this.firstContentfulPaintCb(entries, resolve, reject);
-        });
-      } else {
-        this.perfEmulated = new EmulatedPerformance(this.config);
-        this.perfEmulated.firstContentfulPaint((entries: any[]) => {
-          this.firstContentfulPaintCb(entries, resolve, reject);
-        });
-      }
-    });
+  private initFirstPaintAndTTI(
+    resolve: (duration: number) => void,
+    reject: (err: any) => void,
+  ): void {
+    // Checks if use Performance or the EmulatedPerformance instance
+    if (Performance.supportedPerformanceObserver()) {
+      this.perf.firstContentfulPaint((entries: any[]) => {
+        this.firstContentfulPaintCb(entries, resolve, reject);
+      });
+    } else {
+      this.perfEmulated = new EmulatedPerformance(this.config);
+      this.perfEmulated.firstContentfulPaint((entries: any[]) => {
+        this.firstContentfulPaintCb(entries, resolve, reject);
+      });
+    }
   }
 
-  private initFirstInputDelay(): Promise<number> {
-    return new Promise(resolve => {
-      if (Performance.supported() && this.config.firstInputDelay) {
-        // perfMetrics is exposed by the FID Polyfill
-        perfMetrics.onFirstInputDelay((duration, event) => {
-          this.logMetric(duration, 'First Input Delay', 'firstInputDelay');
-          resolve(duration);
-        });
-      }
-    });
+  private initFirstInputDelay(resolve: (duration: number) => void): void {
+    if (Performance.supported() && this.config.firstInputDelay) {
+      // perfMetrics is exposed by the FID Polyfill
+      perfMetrics.onFirstInputDelay((duration, event) => {
+        this.logMetric(duration, 'First Input Delay', 'firstInputDelay');
+        resolve(duration);
+      });
+    }
   }
 
   /**
@@ -336,6 +342,10 @@ export default class Perfume {
     this.sendTiming(metricName, duration);
   }
 
+  /**
+   * Ensures console.warn exist and logging is enable for
+   * warning messages
+   */
   private logWarn(prefix: string, message: string): void {
     if (!this.config.warning || !this.config.logging) {
       return;

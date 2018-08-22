@@ -44,25 +44,51 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.observeTimeToInteractive()', () => {
+  describe('.observeTimeToInteractive', () => {
     const instance = new Perfume({ timeToInteractive: true });
     (instance as any).perf.timeToInteractive = mock.timeToInteractive;
     (window as any).chrome = true;
 
     it('should be a promise', () => {
-      const promise = instance.observeTimeToInteractive();
+      const promise = instance.observeTimeToInteractive;
       expect(promise).toBeInstanceOf(Promise);
     });
 
     it('should resolve tti on chrome', done => {
-      instance.observeTimeToInteractive().then(time => {
+      instance.observeTimeToInteractive.then(time => {
         expect(typeof time).toBe('number');
         done();
       });
     });
   });
 
+  describe('.observeFirstInputDelay', () => {
+    (window as any).perfMetrics = mock.perfMetrics;
+    (window as any).chrome = true;
+    let instance;
+
+    beforeEach(() => {
+      instance = new Perfume({ firstInputDelay: true });
+    });
+
+    it('should be a promise', () => {
+      const promise = instance.observeFirstInputDelay;
+      expect(promise).toBeInstanceOf(Promise);
+    });
+
+    it('should resolve fdi on chrome', done => {
+      instance.observeFirstInputDelay.then(duration => {
+        expect(typeof duration).toBe('number');
+        done();
+      });
+    });
+  });
+
   describe('.start()', () => {
+    beforeEach(() => {
+      perfume = new Perfume({ ...mock.defaultPerfumeConfig });
+    });
+
     it('should throw a logWarn if metricName is not passed', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       perfume.start('');
@@ -78,7 +104,13 @@ describe('Perfume', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       perfume.start('metricName');
       expect(spy.mock.calls.length).toEqual(0);
-      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should call perf.mark', () => {
+      spy = jest.spyOn((perfume as any).perf, 'mark');
+      perfume.start('metricName');
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith('metricName', 'start');
     });
 
     it('should throw a logWarn if recording already started', () => {
@@ -204,179 +236,6 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.checkMetricName()', () => {
-    it('should return "true" when provided a metric name', () => {
-      const value = (perfume as any).checkMetricName('metricName');
-      expect(value).toEqual(true);
-    });
-
-    it('should call logWarn when not provided a metric name', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      (perfume as any).checkMetricName();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        perfume.config.logPrefix,
-        'Please provide a metric name',
-      );
-    });
-
-    it('should return "false" when not provided a metric name', () => {
-      const value = (perfume as any).checkMetricName();
-      expect(value).toEqual(false);
-    });
-  });
-
-  describe('.didVisibilityChange()', () => {
-    it('should keep "hidden" default value when is false', () => {
-      perfume['didVisibilityChange']();
-      expect(perfume['isHidden']).toEqual(false);
-    });
-
-    it('should set "hidden" value when is true', () => {
-      perfume['isHidden'] = false;
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
-      perfume['didVisibilityChange']();
-      expect(perfume['isHidden']).toEqual(true);
-    });
-
-    it('should keep "hidden" value when changes to false', () => {
-      perfume['isHidden'] = true;
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(false);
-      perfume['didVisibilityChange']();
-      expect(perfume['isHidden']).toEqual(true);
-    });
-  });
-
-  describe('.firstContentfulPaintCb()', () => {
-    it('should call logFCP() with the correct arguments', () => {
-      perfume.config.firstPaint = true;
-      perfume.config.firstContentfulPaint = true;
-      perfume.config.timeToInteractive = true;
-      spy = jest.spyOn(perfume as any, 'logFCP');
-      (perfume as any).firstContentfulPaintCb(
-        mock.entries,
-        mock.Promise.resolve,
-        mock.Promise.reject,
-      );
-      expect(spy.mock.calls.length).toEqual(2);
-      expect(spy).toHaveBeenCalledWith(1, 'First Paint', 'firstPaint');
-      expect(spy).toHaveBeenCalledWith(
-        1,
-        'First Contentful Paint',
-        'firstContentfulPaint',
-      );
-    });
-
-    it('should not call logFCP() when firstPaint and firstContentfulPaint is false', () => {
-      perfume.config.firstPaint = false;
-      perfume.config.firstContentfulPaint = false;
-      spy = jest.spyOn(perfume as any, 'logFCP');
-      (perfume as any).firstContentfulPaintCb(
-        mock.entries,
-        mock.Promise.resolve,
-        mock.Promise.reject,
-      );
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should call timeToInteractive()', () => {
-      perfume.config.timeToInteractive = true;
-      spy = jest.spyOn((perfume as any).perf, 'timeToInteractive');
-      (perfume as any).firstContentfulPaintCb(
-        mock.entries,
-        mock.Promise.resolve,
-        mock.Promise.reject,
-      );
-      expect(spy.mock.calls.length).toEqual(1);
-    });
-  });
-
-  describe('.onVisibilityChange()', () => {
-    it('should not call document.addEventListener() when document.hidden is undefined', () => {
-      spy = jest.spyOn(document, 'addEventListener');
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(undefined);
-      (perfume as any).onVisibilityChange();
-      expect(spy.mock.calls.length).toEqual(0);
-    });
-
-    it('should call document.addEventListener() with the correct argument', () => {
-      spy = jest.spyOn(document, 'addEventListener');
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
-      (perfume as any).onVisibilityChange();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(document.addEventListener).toHaveBeenLastCalledWith(
-        'visibilitychange',
-        perfume['didVisibilityChange'],
-      );
-    });
-  });
-
-  describe('.timeToInteractiveCb()', () => {
-    it('should call log() with the correct arguments', () => {
-      spy = jest.spyOn(perfume, 'log');
-      (perfume as any).timeToInteractiveCb(1);
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'Time to interactive',
-        perfume.timeToInteractiveDuration,
-      );
-    });
-
-    it('should call sendTiming() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'sendTiming');
-      (perfume as any).timeToInteractiveCb(1);
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'timeToInteractive',
-        perfume.timeToInteractiveDuration,
-      );
-    });
-
-    it('should perfume.timeToInteractiveDuration be equal to 1', () => {
-      (perfume as any).timeToInteractiveCb(1);
-      expect(perfume.timeToInteractiveDuration).toEqual(1);
-    });
-  });
-
-  describe('.logFCP()', () => {
-    it('should call log() with the correct arguments', () => {
-      spy = jest.spyOn(perfume, 'log');
-      (perfume as any).logFCP(
-        1,
-        'First Contentful Paint',
-        'firstContentfulPaint',
-      );
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'First Contentful Paint',
-        perfume.firstContentfulPaintDuration,
-      );
-    });
-
-    it('should call sendTiming() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'sendTiming');
-      (perfume as any).logFCP(
-        1,
-        'First Contentful Paint',
-        'firstContentfulPaint',
-      );
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'firstContentfulPaint',
-        perfume.firstContentfulPaintDuration,
-      );
-    });
-
-    it('should perfume.firstContentfulPaintDuration be equal to duration', () => {
-      (perfume as any).logFCP(
-        1,
-        'First Contentful Paint',
-        'firstContentfulPaint',
-      );
-      expect(perfume.firstContentfulPaintDuration).toEqual(1);
-    });
-  });
-
   describe('.sendTiming()', () => {
     it('should not call analyticsLogger() if isHidden is true', () => {
       perfume.config.analyticsLogger = (metricName, duration) => {
@@ -422,6 +281,162 @@ describe('Perfume', () => {
     });
   });
 
+  describe('.checkMetricName()', () => {
+    it('should return "true" when provided a metric name', () => {
+      const value = (perfume as any).checkMetricName('metricName');
+      expect(value).toEqual(true);
+    });
+
+    it('should call logWarn when not provided a metric name', () => {
+      spy = jest.spyOn(perfume as any, 'logWarn');
+      (perfume as any).checkMetricName();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(
+        perfume.config.logPrefix,
+        'Please provide a metric name',
+      );
+    });
+
+    it('should return "false" when not provided a metric name', () => {
+      const value = (perfume as any).checkMetricName();
+      expect(value).toEqual(false);
+    });
+  });
+
+  describe('.didVisibilityChange()', () => {
+    it('should keep "hidden" default value when is false', () => {
+      perfume['didVisibilityChange']();
+      expect(perfume['isHidden']).toEqual(false);
+    });
+
+    it('should set "hidden" value when is true', () => {
+      perfume['isHidden'] = false;
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+      perfume['didVisibilityChange']();
+      expect(perfume['isHidden']).toEqual(true);
+    });
+
+    it('should keep "hidden" value when changes to false', () => {
+      perfume['isHidden'] = true;
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+      perfume['didVisibilityChange']();
+      expect(perfume['isHidden']).toEqual(true);
+    });
+  });
+
+  describe('.firstContentfulPaintCb()', () => {
+    it('should call logMetric() with the correct arguments', () => {
+      perfume.config.firstPaint = true;
+      perfume.config.firstContentfulPaint = true;
+      perfume.config.timeToInteractive = true;
+      spy = jest.spyOn(perfume as any, 'logMetric');
+      (perfume as any).firstContentfulPaintCb(
+        mock.entries,
+        mock.Promise.resolve,
+        mock.Promise.reject,
+      );
+      expect(spy.mock.calls.length).toEqual(2);
+      expect(spy).toHaveBeenCalledWith(1, 'First Paint', 'firstPaint');
+      expect(spy).toHaveBeenCalledWith(
+        1,
+        'First Contentful Paint',
+        'firstContentfulPaint',
+      );
+    });
+
+    it('should not call logMetric() when firstPaint and firstContentfulPaint is false', () => {
+      perfume.config.firstPaint = false;
+      perfume.config.firstContentfulPaint = false;
+      spy = jest.spyOn(perfume as any, 'logMetric');
+      (perfume as any).firstContentfulPaintCb(
+        mock.entries,
+        mock.Promise.resolve,
+        mock.Promise.reject,
+      );
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should call timeToInteractive()', () => {
+      perfume.config.timeToInteractive = true;
+      spy = jest.spyOn((perfume as any).perf, 'timeToInteractive');
+      (perfume as any).firstContentfulPaintCb(
+        mock.entries,
+        mock.Promise.resolve,
+        mock.Promise.reject,
+      );
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('.onVisibilityChange()', () => {
+    it('should not call document.addEventListener() when document.hidden is undefined', () => {
+      spy = jest.spyOn(document, 'addEventListener');
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(undefined);
+      (perfume as any).onVisibilityChange();
+      expect(spy.mock.calls.length).toEqual(0);
+    });
+
+    it('should call document.addEventListener() with the correct argument', () => {
+      spy = jest.spyOn(document, 'addEventListener');
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+      (perfume as any).onVisibilityChange();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(document.addEventListener).toHaveBeenLastCalledWith(
+        'visibilitychange',
+        perfume['didVisibilityChange'],
+      );
+    });
+  });
+
+  describe('.logMetric()', () => {
+    it('should call log() with the correct arguments', () => {
+      spy = jest.spyOn(perfume, 'log');
+      (perfume as any).logMetric(
+        1,
+        'First Contentful Paint',
+        'firstContentfulPaint',
+      );
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(
+        'First Contentful Paint',
+        perfume.firstContentfulPaintDuration,
+      );
+    });
+
+    it('should call sendTiming() with the correct arguments', () => {
+      spy = jest.spyOn(perfume as any, 'sendTiming');
+      (perfume as any).logMetric(
+        1,
+        'First Contentful Paint',
+        'firstContentfulPaint',
+      );
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(
+        'firstContentfulPaint',
+        perfume.firstContentfulPaintDuration,
+      );
+    });
+
+    it('should perfume.firstContentfulPaintDuration be equal to duration', () => {
+      (perfume as any).logMetric(
+        1,
+        'First Contentful Paint',
+        'firstContentfulPaint',
+      );
+      expect(perfume.firstContentfulPaintDuration).toEqual(1);
+    });
+
+    it('should perfume.firstInputDelayDuration be equal to duration', () => {
+      (perfume as any).logMetric(2, 'First Input Delay', 'firstInputDelaty');
+      expect(perfume.firstInputDelayDuration).toEqual(2);
+    });
+
+    it('should perfume.timeToInteractiveDuration be equal to duration', () => {
+      (perfume as any).logMetric(3, 'Time to Interactive', 'timeToInteractive');
+      expect(perfume.timeToInteractiveDuration).toEqual(3);
+    });
+  });
+
   describe('.logWarn()', () => {
     it('should throw a console.warn if config.warning is true', () => {
       spy = jest.spyOn(window.console, 'warn');
@@ -435,6 +450,15 @@ describe('Perfume', () => {
     it('should not throw a console.warn if config.warning is false', () => {
       spy = jest.spyOn(window.console, 'warn');
       perfume.config.warning = false;
+      (perfume as any).logWarn('prefix', 'message');
+      expect(spy.mock.calls.length).toEqual(0);
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should not throw a console.warn if config.logging is false', () => {
+      spy = jest.spyOn(window.console, 'warn');
+      perfume.config.warning = true;
+      perfume.config.logging = false;
       (perfume as any).logWarn('prefix', 'message');
       expect(spy.mock.calls.length).toEqual(0);
       expect(spy).not.toHaveBeenCalled();
