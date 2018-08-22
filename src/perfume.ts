@@ -1,11 +1,12 @@
 /*!
- * Perfume.js v0.8.1 (http://zizzamia.github.io/perfume)
+ * Perfume.js v0.9.0 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
- * @license
+ * @license 
  */
 import EmulatedPerformance from './emulated-performance';
 import Performance from './performance';
+import GaQueueItem from './gaQueueItem';
 
 export interface IPerfumeConfig {
   firstContentfulPaint: boolean;
@@ -52,6 +53,7 @@ export default class Perfume {
   firstPaintDuration: number = 0;
   firstContentfulPaintDuration: number = 0;
   timeToInteractiveDuration: number = 0;
+  gaQueue: GaQueueItem[] = [];
   private isHidden: boolean = false;
   private metrics: IMetrics = {};
   private perf: Performance | EmulatedPerformance;
@@ -61,6 +63,10 @@ export default class Perfume {
 
   constructor(options: any = {}) {
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
+
+    // Init window.load listener
+    window.addEventListener && window.addEventListener('load', this.onWindowLoad);
+
     // Init performance implementation
     this.perf = Performance.supported()
       ? new Performance(this.config)
@@ -156,11 +162,9 @@ export default class Perfume {
   }
 
   /**
-   * Sends the User timing measure to Google Analytics.
-   * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])
-   * timingCategory: metricName
-   * timingVar: googleAnalytics.timingVar
-   * timingValue: The value of duration rounded to the nearest integer
+   * Records the User timing measure by sending it to:
+   * - any custom analytics logger
+   * - Google Analytics if enabled and when/if possible
    */
   sendTiming(metricName: string, duration: number): void {
     // Don't send timing when page is hidden
@@ -172,21 +176,56 @@ export default class Perfume {
     }
     if (!this.config.googleAnalytics.enable) {
       return;
-    }
-    if (!window.ga) {
+    }   
+    if (this.hasGoogleAnalyticsLoaded()) {
+      this.sendTimingToGoogleAnalytics(metricName, duration);
+    } else {
       this.logWarn(
         this.config.logPrefix,
-        'Google Analytics has not been loaded',
+        'Google Analytics has not been loaded. Timing sends will be queued until page load and tried again.',
       );
-      return;
+      this.gaQueue.push(new GaQueueItem(metricName, duration));
     }
-    const durationInteger = Math.round(duration);
+  }
+
+  onWindowLoad(): void {
+    // Once window has loaded, GA should have been by now too
+    // If not, it was never added by user
+    if (this.hasGoogleAnalyticsLoaded()) {
+      this.gaQueue.forEach(i => {
+        this.sendTimingToGoogleAnalytics(i.metricName, i.duration);
+      });
+    } else {          
+      this.logWarn(
+        this.config.logPrefix,
+        'Google Analytics has not been loaded but window has. Timing send will not be sent to Google Analytics. ' + 
+          'Please ensure you\'re adding the ga.js script to your page.',
+      );
+    }
+  }
+
+  private hasGoogleAnalyticsLoaded(): boolean {
+    return window.ga && typeof window.ga === 'function';
+  }
+
+  /**
+   * Sends a timing to Google Analytics.
+   * 
+   * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])
+   * timingCategory: metricName
+   * timingVar: googleAnalytics.timingVar
+   * timingValue: The value of duration rounded to the nearest integer
+   * 
+   * @param metricName value to use for timingCategory in GA.
+   * @param duration value of duration to use for timingValue in GA. Will be rounded to nearest integer.
+   */
+  private sendTimingToGoogleAnalytics(metricName: string, duration: number) {
     window.ga(
       'send',
       'timing',
       metricName,
       this.config.googleAnalytics.timingVar,
-      durationInteger,
+      Math.round(duration),
     );
   }
 

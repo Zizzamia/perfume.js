@@ -1,5 +1,6 @@
 import Perfume from '../src/perfume';
 import mock from './_mock';
+import GaQueueItem from '../src/gaQueueItem';
 
 describe('Perfume', () => {
   let perfume: Perfume;
@@ -403,21 +404,74 @@ describe('Perfume', () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should call global.logWarn() if googleAnalytics is disable with the correct arguments', () => {
+    it('should call global.logWarn() if googleAnalytics is enabled with the correct arguments', () => {
       perfume.config.googleAnalytics.enable = true;
       spy = jest.spyOn(perfume as any, 'logWarn');
       (perfume as any).sendTiming();
-      const text = 'Google Analytics has not been loaded';
+      const text = 'Google Analytics has not been loaded. Timing sends will be queued until page load and tried again.';
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, text);
     });
 
-    it('should not call global.logWarn() if googleAnalytics is enable and ga is present', () => {
+    it('should queue ga sends if googleAnalytics is enabled with the correct arguments', () => {
+      perfume.config.googleAnalytics.enable = true;
+      const metricName = 'metricName';
+      const duration = 123;
+      (perfume as any).sendTiming(metricName, duration);
+      expect(perfume.gaQueue).toEqual([new GaQueueItem(metricName, duration)]);
+      (perfume as any).sendTiming(metricName, duration);
+      expect(perfume.gaQueue).toEqual([new GaQueueItem(metricName, duration), new GaQueueItem(metricName, duration)]);
+    });
+
+    it('should not call global.logWarn() if googleAnalytics is enabled and ga is present', () => {
       perfume.config.googleAnalytics.enable = true;
       spy = jest.spyOn(perfume as any, 'logWarn');
       window.ga = () => true;
       (perfume as any).sendTiming('metricName', 123);
       expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should call global.sendTimingToGoogleAnalytics() if googleAnalytics is enabled and ga is present', () => {
+      perfume.config.googleAnalytics.enable = true;
+      spy = jest.spyOn(perfume as any, 'sendTimingToGoogleAnalytics');
+      window.ga = () => true;
+      const metricName = 'metricName';
+      const duration = 123;
+      (perfume as any).sendTiming(metricName, duration);
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(metricName, duration);
+    });
+  });
+
+  describe('.onWindowLoad()', () => {
+    it('should call ga() as needed if appropriate', () => {
+      perfume.config.googleAnalytics.enable = true;
+      spy = jest.spyOn(perfume as any, 'sendTimingToGoogleAnalytics');
+      const metricName = 'metricName';
+      const duration = 123;
+      (perfume as any).sendTiming(metricName, duration);
+      (perfume as any).sendTiming(metricName, duration);
+      window.ga = () => true; // make it present now
+      (perfume as any).onWindowLoad(); // act
+      expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls.length).toEqual(2);
+      expect(spy).toHaveBeenCalledWith(metricName, duration);
+    });
+
+    it('should call global.logWarn() if google analytics is enabled but was never loaded', () => {
+      perfume.config.googleAnalytics.enable = true;
+      spy = jest.spyOn(perfume as any, 'logWarn');
+      const metricName = 'metricName';
+      const duration = 123;
+      (perfume as any).sendTiming(metricName, duration);
+      (perfume as any).sendTiming(metricName, duration);
+      (perfume as any).onWindowLoad(); // act
+      expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls.length).toEqual(3);
+      expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, 
+        'Google Analytics has not been loaded but window has. Timing send will not be sent to Google Analytics. ' + 
+        'Please ensure you\'re adding the ga.js script to your page.'
+      );
     });
   });
 
