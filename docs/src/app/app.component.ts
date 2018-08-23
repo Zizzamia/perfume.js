@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ViewChild, NgZone } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-// import Perfume from 'perfume.js';
+import Perfume from 'perfume.js';
 import { DialogComponent } from './dialog/dialog.component';
-import Perfume from '../../../../perfume.js';
+// import Perfume from '../../../../perfume.js';
 
 @Component({
   selector: 'app-root',
