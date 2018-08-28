@@ -4,15 +4,17 @@
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license 
  */
+import IAnalyticsTracker from './analytics-tracker';
 import EmulatedPerformance from './emulated-performance';
-import GaQueueItem from './gaQueueItem';
+import GoogleAnalyticsTracker from './google-analytics-tracker';
+import Metric from './metric';
 import Performance from './performance';
 
 export interface IPerfumeConfig {
   firstContentfulPaint: boolean;
   firstPaint: boolean;
   timeToInteractive: boolean;
-  analyticsLogger: any;
+  analyticsTracker: IAnalyticsTracker | null;
   googleAnalytics: {
     enable: boolean;
     timingVar: string;
@@ -29,19 +31,12 @@ export interface IMetrics {
   };
 }
 
-declare global {
-  // tslint:disable-next-line:interface-name
-  interface Window {
-    ga: any;
-  }
-}
-
 export default class Perfume {
   config: IPerfumeConfig = {
     firstContentfulPaint: false,
     firstPaint: false,
     timeToInteractive: false,
-    analyticsLogger: undefined,
+    analyticsTracker: null,
     googleAnalytics: {
       enable: false,
       timingVar: 'name',
@@ -53,7 +48,7 @@ export default class Perfume {
   firstPaintDuration: number = 0;
   firstContentfulPaintDuration: number = 0;
   timeToInteractiveDuration: number = 0;
-  gaQueue: GaQueueItem[] = [];
+  analyticsTrackers: IAnalyticsTracker[] = [];
   private isHidden: boolean = false;
   private metrics: IMetrics = {};
   private perf: Performance | EmulatedPerformance;
@@ -63,6 +58,18 @@ export default class Perfume {
 
   constructor(options: any = {}) {
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
+
+    // Setup GA tracker if enabled
+    if (this.config.googleAnalytics.enable) {
+      const googleAnalyticsTracker = new GoogleAnalyticsTracker();
+      googleAnalyticsTracker.timingVar = this.config.googleAnalytics.timingVar;
+      this.analyticsTrackers.push(googleAnalyticsTracker);
+    }
+
+    // Setup user's customer tracker impl if configured
+    if (this.config.analyticsTracker) {
+      this.analyticsTrackers.push(this.config.analyticsTracker);
+    }
 
     // Init window.load listener
     window.addEventListener &&
@@ -164,68 +171,50 @@ export default class Perfume {
 
   /**
    * Records the User timing measure by sending it to:
-   * - any custom analytics logger
-   * - Google Analytics if enabled and when/if possible
+   * - any custom analytics tracker
+   * - built-in Google Analytics if enabled if/when possible.
    */
   sendTiming(metricName: string, duration: number): void {
     // Don't send timing when page is hidden
     if (this.isHidden) {
       return;
     }
-    if (this.config.analyticsLogger) {
-      this.config.analyticsLogger(metricName, duration);
-    }
-    if (!this.config.googleAnalytics.enable) {
-      return;
-    }
-    if (this.hasGoogleAnalyticsLoaded()) {
-      this.sendTimingToGoogleAnalytics(metricName, duration);
-    } else {
-      this.logWarn(
-        this.config.logPrefix,
-        'Google Analytics has not been loaded. Timing sends will be queued until page load and tried again.',
-      );
-      this.gaQueue.push(new GaQueueItem(metricName, duration));
-    }
-  }
 
-  onWindowLoad(): void {
-    // Once window has loaded, GA should have been by now too
-    // If not, it was never added by user
-    if (this.hasGoogleAnalyticsLoaded()) {
-      this.gaQueue.forEach(i => {
-        this.sendTimingToGoogleAnalytics(i.metricName, i.duration);
-      });
-    } else {
-      this.logWarn(
-        this.config.logPrefix,
-        'Google Analytics has not been loaded but window has. Timing send will not be sent to Google Analytics. ' +
-          "Please ensure you're adding the ga.js script to your page.",
-      );
-    }
-  }
+    const metric = new Metric(metricName, duration);
 
-  private hasGoogleAnalyticsLoaded(): boolean {
-    return window.ga && typeof window.ga === 'function';
+    this.analyticsTrackers.forEach(tracker => {
+      if (tracker.canSend()) {
+        tracker.send(metric);
+      } else {
+        tracker.metricQueue = tracker.metricQueue || [];
+        tracker.metricQueue.push(metric);
+        this.logWarn(
+          this.config.logPrefix,
+          `${tracker.name} is not ready; metric will be ` +
+            'queued until window.load and tried then.',
+        );
+      }
+    });
   }
 
   /**
-   * Sends a timing to Google Analytics.
-   * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])
-   * timingCategory: metricName
-   * timingVar: googleAnalytics.timingVar
-   * timingValue: The value of duration rounded to the nearest integer
-   * @param metricName value to use for timingCategory in GA.
-   * @param duration value of duration to use for timingValue in GA. Will be rounded to nearest integer.
+   * window.load handler.
+   * Tries to send any queued metrics to trackers.
    */
-  private sendTimingToGoogleAnalytics(metricName: string, duration: number) {
-    window.ga(
-      'send',
-      'timing',
-      metricName,
-      this.config.googleAnalytics.timingVar,
-      Math.round(duration),
-    );
+  onWindowLoad(): void {
+    this.analyticsTrackers.forEach(tracker => {
+      if (tracker.canSend()) {
+        while (tracker.metricQueue.length) {
+          tracker.send(tracker.metricQueue.pop() as Metric);
+        }
+      } else {
+        this.logWarn(
+          this.config.logPrefix,
+          `${tracker.name} was not ready by window.load; ` +
+            `${tracker.metricQueue.length} metric/s can't be sent for it.`,
+        );
+      }
+    });
   }
 
   private checkMetricName(metricName: string): boolean {

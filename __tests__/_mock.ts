@@ -1,3 +1,6 @@
+import IAnalyticsTracker from '../src/analytics-tracker';
+import Metric from '../src/metric';
+
 const entries = [
   { name: 'first-paint', startTime: 1 },
   { name: 'first-contentful-paint', startTime: 1 },
@@ -50,11 +53,23 @@ export default {
       });
     },
   },
+  analyticsTracker: {
+    name: 'Custom Analytics',
+    metricQueue: [],
+    canSend: () => true,
+    send: () => true,
+  } as IAnalyticsTracker,
+  analyticsTrackerUninitQueue: {
+    name: 'Custom Analytics',
+    metricQueue: null,
+    canSend: () => true,
+    send: () => true,
+  } as IAnalyticsTracker,
   defaultPerfumeConfig: {
     firstContentfulPaint: false,
     firstPaint: false,
     timeToInteractive: false,
-    analyticsLogger: undefined,
+    analyticsTracker: undefined,
     googleAnalytics: {
       enable: false,
       timingVar: 'name',

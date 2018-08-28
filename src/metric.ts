@@ -1,9 +1,9 @@
-export default class GaQueueItem {
-  metricName: string;
+export default class Metric {
+  name: string;
   duration: number;
 
   constructor(metricName: string, duration: number) {
-    this.metricName = metricName;
+    this.name = metricName;
     this.duration = duration;
   }
 }
