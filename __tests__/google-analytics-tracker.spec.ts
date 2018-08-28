@@ -5,7 +5,7 @@ describe('GoogleAnalyticsTracker', () => {
   let googleAnalyticsTracker: GoogleAnalyticsTracker;
 
   beforeEach(() => {
-    googleAnalyticsTracker = new GoogleAnalyticsTracker();    
+    googleAnalyticsTracker = new GoogleAnalyticsTracker();
   });
 
   afterEach(() => {
