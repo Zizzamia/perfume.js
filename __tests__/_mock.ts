@@ -5,6 +5,16 @@ const entries = [
   { name: 'first-paint', startTime: 1 },
   { name: 'first-contentful-paint', startTime: 1 },
 ];
+
+export const EventMock = {
+  preventDefault: () => {
+    return;
+  },
+  stopPropagation: () => {
+    return;
+  },
+} as Event;
+
 export default {
   Date: {
     now: () => 1000,
@@ -35,6 +45,11 @@ export default {
       value: performance,
       writable: true,
     });
+  },
+  perfMetrics: {
+    onFirstInputDelay: cb => {
+      cb(3.2, EventMock);
+    },
   },
   PerformanceLongTaskTiming: {},
   PerformanceObserver: class {
@@ -68,6 +83,7 @@ export default {
   defaultPerfumeConfig: {
     firstContentfulPaint: false,
     firstPaint: false,
+    firstInputDelay: false,
     timeToInteractive: false,
     analyticsTracker: undefined,
     googleAnalytics: {

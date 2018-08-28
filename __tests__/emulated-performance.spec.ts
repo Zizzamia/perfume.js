@@ -31,8 +31,10 @@ describe('EmulatedPerformance', () => {
   });
 
   describe('.mark()', () => {
-    it('should has "mark" method ', () => {
-      expect(service.mark).toBeDefined();
+    it('should call mark() with the correct arguments', () => {
+      spy = jest.spyOn(service, 'mark');
+      service.mark('metricName', 'start');
+      expect(spy).toHaveBeenCalledWith('metricName', 'start');
     });
   });
 

@@ -90,8 +90,8 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 98.7,
-        "functions": 97.7,
+        "branches": 100,
+        "functions": 100,
         "lines": 100,
         "statements": 100
       }
@@ -125,6 +125,7 @@
     "validate-commit-msg": "^2.12.2"
   },
   "dependencies": {
+    "first-input-delay": "^0.1.2",
     "tti-polyfill": "^0.2.2"
   }
 }

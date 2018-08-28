@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.0 (2018-8-22)
+
+### Feat
+
+* **feat:** feat: added First Input Delay metric [#33](https://github.com/Zizzamia/perfume.js/issues/33)
+
 ## 0.8.1 (2018-8-16)
 
 ### Feat

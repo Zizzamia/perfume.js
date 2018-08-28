@@ -19,9 +19,7 @@ export default class EmulatedPerformance implements IPerformance {
     return Date.now() / 1000;
   }
 
-  mark(metricName: string, type: string): void {
-    // Timeline won't be marked
-  }
+  mark(metricName: string, type: string): void {}
 
   measure(metricName: string, metrics: IMetrics): number {
     return this.getDurationByMetric(metricName, metrics);
