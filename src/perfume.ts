@@ -12,7 +12,7 @@ export interface IPerfumeConfig {
   firstPaint: boolean;
   firstInputDelay: boolean;
   timeToInteractive: boolean;
-  analyticsLogger?: (metricName: string, duration: number) => void;
+  analyticsTracker?: (metricName: string, duration: number) => void;
   googleAnalytics: IGoogleAnalyticsConfig;
   logPrefix: string;
   logging: boolean;
@@ -24,7 +24,7 @@ export interface IPerfumeOptions {
   firstPaint?: boolean;
   firstInputDelay?: boolean;
   timeToInteractive?: boolean;
-  analyticsLogger?: (metricName: string, duration: number) => void;
+  analyticsTracker?: (metricName: string, duration: number) => void;
   googleAnalytics?: IGoogleAnalyticsConfig;
   logPrefix?: string;
   logging?: boolean;
@@ -36,11 +36,9 @@ export interface IGoogleAnalyticsConfig {
   timingVar: string;
 }
 
-export interface IMetrics {
-  [key: string]: {
-    start: number;
-    end: number;
-  };
+export interface IPerformanceEntry {
+  start: number;
+  end: number;
 }
 
 declare global {
@@ -67,11 +65,12 @@ export default class Perfume {
   firstPaintDuration: number = 0;
   firstContentfulPaintDuration: number = 0;
   firstInputDelayDuration: number = 0;
+  observeFirstContentfulPaint: Promise<number>;
   observeFirstInputDelay: Promise<number>;
   observeTimeToInteractive: Promise<number>;
   timeToInteractiveDuration: number = 0;
   private isHidden: boolean = false;
-  private metrics: IMetrics = {};
+  private metrics: Map<string, IPerformanceEntry> = new Map();
   private perf: Performance | EmulatedPerformance;
   private perfEmulated?: EmulatedPerformance;
   private logMetricWarn = 'Please provide a metric name';
@@ -84,6 +83,8 @@ export default class Perfume {
     this.perf = Performance.supported()
       ? new Performance(this.config)
       : new EmulatedPerformance(this.config);
+
+    this.observeFirstContentfulPaint = Promise.resolve(0);
 
     // Init observe FP / FCP / TTI and creates the Promise to observe metrics
     this.observeTimeToInteractive = new Promise((resolve, reject) => {
@@ -107,14 +108,14 @@ export default class Perfume {
     if (!this.checkMetricName(metricName)) {
       return;
     }
-    if (this.metrics[metricName]) {
+    if (this.metrics.has(metricName)) {
       this.logWarn(this.config.logPrefix, 'Recording already started.');
       return;
     }
-    this.metrics[metricName] = {
+    this.metrics.set(metricName, {
       end: 0,
       start: this.perf.now(),
-    };
+    });
 
     // Creates a timestamp in the browser's performance entry buffer
     this.perf.mark(metricName, 'start');
@@ -130,17 +131,22 @@ export default class Perfume {
     if (!this.checkMetricName(metricName)) {
       return;
     }
-    if (!this.metrics[metricName]) {
+    const metric = this.metrics.get(metricName);
+    if (!metric) {
       this.logWarn(this.config.logPrefix, 'Recording already stopped.');
       return;
     }
-    this.metrics[metricName].end = this.perf.now();
+    // End Performance Mark
+    metric.end = this.perf.now();
     this.perf.mark(metricName, 'end');
-    const duration = this.perf.measure(metricName, this.metrics);
-    this.log(metricName, duration);
-    delete this.metrics[metricName];
-    this.sendTiming(metricName, duration);
-    return duration;
+    // Get duration and change it to a two decimal value
+    const duration = this.perf.measure(metricName, metric);
+    const duration2Decimal = parseFloat(duration.toFixed(2));
+    // Log to console, delete metric and send to analytics tracker
+    this.log(metricName, duration2Decimal);
+    this.metrics.delete(metricName);
+    this.sendTiming(metricName, duration2Decimal);
+    return duration2Decimal;
   }
 
   /**
@@ -185,13 +191,12 @@ export default class Perfume {
     if (this.isHidden) {
       return;
     }
-
     // Send metric to custom Analytics service,
     // the default choice is Google Analytics
-    if (this.config.analyticsLogger) {
-      this.config.analyticsLogger(metricName, duration);
+    if (this.config.analyticsTracker) {
+      this.config.analyticsTracker(metricName, duration);
     }
-
+    // Stop sending timing to GA if not enabled
     if (!this.config.googleAnalytics.enable) {
       return;
     }
@@ -322,24 +327,26 @@ export default class Perfume {
     logText: string,
     metricName: string,
   ): void {
+    const duration2Decimal = parseFloat(duration.toFixed(2));
     if (metricName === 'firstPaint') {
-      this.firstPaintDuration = duration;
+      this.firstPaintDuration = duration2Decimal;
     }
     if (metricName === 'firstContentfulPaint') {
-      this.firstContentfulPaintDuration = duration;
+      this.firstContentfulPaintDuration = duration2Decimal;
+      this.observeFirstContentfulPaint = Promise.resolve(duration2Decimal);
     }
     if (metricName === 'firstInputDelaty') {
-      this.firstInputDelayDuration = duration;
+      this.firstInputDelayDuration = duration2Decimal;
     }
     if (metricName === 'timeToInteractive') {
-      this.timeToInteractiveDuration = duration;
+      this.timeToInteractiveDuration = duration2Decimal;
     }
 
     // Logs the metric in the internal console.log
-    this.log(logText, duration);
+    this.log(logText, duration2Decimal);
 
     // Sends the metric to an external tracking service
-    this.sendTiming(metricName, duration);
+    this.sendTiming(metricName, duration2Decimal);
   }
 
   /**

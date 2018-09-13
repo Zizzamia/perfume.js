@@ -99,7 +99,7 @@ npm install perfume.js --save-dev
       <h2 class="box-title" id="/first-contentful-paint/">First Contentful Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FCP</a>)</h2>
       <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
       <p class="box-demo">
-        ⚡️ Perfume.js: First Contentful Paint {{ perfume.firstContentfulPaintDuration.toFixed(2) }} ms
+        ⚡️ Perfume.js: First Contentful Paint {{ perfume.observeFirstContentfulPaint | async }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -304,7 +304,7 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsLogger</span><span class="red">:</span> (metricName, duration) => {{'{'}}
+  <span class="violet">analyticsTracker</span><span class="red">:</span> (metricName, duration) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
   {{'}'}})
 {{'}'}});</pre>
@@ -328,7 +328,7 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
   firstContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
   firstInputDelay<span class="red">:</span> <span class="blue">false</span>,
   timeToInteractive<span class="red">:</span> <span class="blue">false</span>,
-  analyticsLogger<span class="red">:</span> <span class="blue">undefined</span>,
+  analyticsTracker<span class="red">:</span> <span class="blue">undefined</span>,
   googleAnalytics<span class="red">:</span> {{'{'}}
     enable<span class="red">:</span> <span class="blue">false</span>,
     timingVar<span class="red">:</span> "name"
@@ -352,16 +352,15 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
           <tbody>
             <tr>
               <td class="code">
-                <pre><span class="gray">// First Paint value</span>
+                <pre><span class="gray">// Values</span>
 perfume.firstPaintDuration;
-
-<span class="gray">// First Contentful Paint value</span>
 perfume.firstContentfulPaintDuration;
+perfume.firstInputDelayDuration;
+perfume.timeToInteractiveDuration;
 
-<span class="gray">// First Input Delay value (Async)</span>
+<span class="gray">// Async Values</span>
+perfume.<span class="blue">observeFirstContentfulPaint</span>;
 perfume.<span class="blue">observeFirstInputDelay</span>;
-
-<span class="gray">// Time To Interactive value (Async)</span>
 perfume.<span class="blue">observeTimeToInteractive</span>;
 
 <span class="gray">// Send Custom User timing measure to Google Analytics</span>

@@ -32,7 +32,7 @@ describe('Perfume', () => {
         firstPaint: false,
         firstInputDelay: false,
         timeToInteractive: false,
-        analyticsLogger: undefined,
+        analyticsTracker: undefined,
         googleAnalytics: {
           enable: false,
           timingVar: 'name',
@@ -237,21 +237,21 @@ describe('Perfume', () => {
   });
 
   describe('.sendTiming()', () => {
-    it('should not call analyticsLogger() if isHidden is true', () => {
-      perfume.config.analyticsLogger = (metricName, duration) => {
+    it('should not call analyticsTracker() if isHidden is true', () => {
+      perfume.config.analyticsTracker = (metricName, duration) => {
         // console.log(metricName, duration);
       };
-      spy = jest.spyOn(perfume.config, 'analyticsLogger');
+      spy = jest.spyOn(perfume.config, 'analyticsTracker');
       perfume['isHidden'] = true;
       (perfume as any).sendTiming('metricName', 123);
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should call analyticsLogger() if analyticsLogger is defined', () => {
-      perfume.config.analyticsLogger = (metricName, duration) => {
+    it('should call analyticsTracker() if analyticsTracker is defined', () => {
+      perfume.config.analyticsTracker = (metricName, duration) => {
         // console.log(metricName, duration);
       };
-      spy = jest.spyOn(perfume.config, 'analyticsLogger');
+      spy = jest.spyOn(perfume.config, 'analyticsTracker');
       (perfume as any).sendTiming('metricName', 123);
       expect(spy).toHaveBeenCalled();
       expect(spy).toHaveBeenCalledWith('metricName', 123);

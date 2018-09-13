@@ -163,7 +163,7 @@ Configurable analytics callback to use Perfume.js with any platform.
 
 ```javascript
 const perfume = new Perfume({
-  analyticsLogger: (metricName, duration) => {
+  analyticsTracker: (metricName, duration) => {
     myAnalyticsTool.track(metricName, duration);
   })
 });
@@ -178,7 +178,7 @@ const options = {
   firstPaint: false,
   firstContentfulPaint: false,
   timeToInteractive: false,
-  analyticsLogger: undefined,
+  analyticsTracker: undefined,
   googleAnalytics: {
     enable: false,
     timingVar: 'name'
@@ -194,14 +194,16 @@ const options = {
 Perfume.js expose some methods and properties which may be useful to people extending the library.
 
 ```javascript
-// First Paint value
+// Values
 perfume.firstPaintDuration;
-
-// First Contentful Paint value
 perfume.firstContentfulPaintDuration;
+perfume.firstInputDelayDuration;
+perfume.timeToInteractiveDuration;
 
-// Time To Interactive value (Async)
-perfume.observeTimeToInteractive();
+// Aync Values
+perfume.observeFirstContentfulPaint;
+perfume.observeFirstInputDelay;
+perfume.observeTimeToInteractive;
 
 // Send Custom User timing measure to Google Analytics
 perfume.sendTiming(metricName, duration);

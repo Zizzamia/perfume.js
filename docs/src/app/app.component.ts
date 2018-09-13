@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ViewChild, NgZone } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import Perfume from 'perfume.js';
+// import Perfume from 'perfume.js';
 import { DialogComponent } from './dialog/dialog.component';
-// import Perfume from '../../../../perfume.js';
+import Perfume from '../../../../perfume.js';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +15,8 @@ export class AppComponent implements AfterViewInit {
   logCustom: string;
   logFibonacci: string;
   logOpenDialog: string;
-  path: any;
-  perfume: any;
+  path: string;
+  perfume: Perfume;
   navOptions: {
     [keyof: string]: string;
   };
@@ -30,8 +30,8 @@ export class AppComponent implements AfterViewInit {
       firstContentfulPaint: true,
       firstInputDelay: true,
       timeToInteractive: true,
-      analyticsLogger: (metricName: string, duration: number) => {
-        console.log('Analytics Logger', metricName, duration);
+      analyticsTracker: (metricName: string, duration: number) => {
+        console.log('Analytics Tracker', metricName, duration);
       },
       googleAnalytics: {
         enable: true,
@@ -72,38 +72,37 @@ export class AppComponent implements AfterViewInit {
     this.perfume.start('fibonacci');
     this.fibonacci(800);
     const duration = this.perfume.end('fibonacci');
-    this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration.toFixed(2)} ms`;
+    this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration} ms`;
   }
 
-  openDialog() {
+  async openDialog() {
     this.perfume.start('openDialog');
     const dialogRef = this.dialog.open(DialogComponent, {
       data: { gifIndex: this.gifIndex },
       width: '50%',
     });
-    this.perfume.endPaint('openDialog').then(duration => {
-      this.logOpenDialog = `⚡️ Perfume.js: openDialog ${duration.toFixed(
-        2,
-      )} ms`;
-    });
     // Increment or reset index
     this.gifIndex = this.gifIndex === 4 ? 0 : this.gifIndex + 1;
+    const duration = await this.perfume.endPaint('openDialog');
+    this.logOpenDialog = `⚡️ Perfume.js: openDialog ${duration} ms`;
   }
 
   customLogging() {
     this.perfume.start('fibonacci');
     this.fibonacci(800);
-    const duration = this.perfume.end('fibonacci');
+    const duration = this.perfume.end('fibonacci') as number;
     this.perfume.log('Custom logging', duration);
-    this.logCustom = `🍹 HayesValley.js: Custom logging ${duration.toFixed(
-      2,
-    )} ms`;
+    this.logCustom = `🍹 HayesValley.js: Custom logging ${duration} ms`;
   }
 
   activeNav(selected) {
     this.navSelected = selected;
   }
 
+  /**
+   * The fibonacci methods ensures to reduce the performance of TTI and
+   * make it more realistic to a bigger Single Page App
+   */
   private fibonacci(num: number, memo = {}, append: boolean = false): number {
     if (memo[num]) {
       return memo[num];
