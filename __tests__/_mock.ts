@@ -3,6 +3,8 @@ const entries = [
   { name: 'first-contentful-paint', startTime: 1 },
 ];
 
+export const MockDateNowValue = 1537118926087;
+
 export const EventMock = {
   preventDefault: () => {
     return;
@@ -33,7 +35,7 @@ export default {
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure
       measure: () => 12345,
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
-      now: Date.now,
+      now: () => MockDateNowValue,
       timing: { navigationStart: 12345 },
     };
     Object.defineProperty(window, 'performance', {
@@ -70,7 +72,7 @@ export default {
     firstPaint: false,
     firstInputDelay: false,
     timeToInteractive: false,
-    analyticsLogger: undefined,
+    analyticsTracker: undefined,
     googleAnalytics: {
       enable: false,
       timingVar: 'name',

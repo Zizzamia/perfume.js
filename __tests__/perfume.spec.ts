@@ -1,5 +1,5 @@
 import Perfume from '../src/perfume';
-import mock from './_mock';
+import mock, { MockDateNowValue } from './_mock';
 
 describe('Perfume', () => {
   let perfume: Perfume;
@@ -176,7 +176,10 @@ describe('Perfume', () => {
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('metricName', {});
+      expect(spy).toHaveBeenCalledWith('metricName', {
+        end: MockDateNowValue,
+        start: MockDateNowValue,
+      });
     });
   });
 

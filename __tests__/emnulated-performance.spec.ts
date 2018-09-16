@@ -1,7 +1,7 @@
 import EmulatedPerformance, {
   IPerformancePaintTiming,
 } from '../src/emulated-performance';
-import { IMetrics } from '../src/perfume';
+import { IPerformanceEntry } from '../src/perfume';
 import mock from './_mock';
 
 describe('EmulatedPerformance', () => {
@@ -40,14 +40,12 @@ describe('EmulatedPerformance', () => {
 
   describe('.measure()', () => {
     it('should call getDurationByMetric() with the correct arguments', () => {
-      const metrics: IMetrics = {
-        age: { end: 2018, start: 1987 },
-      };
+      const metric: IPerformanceEntry = { end: 2018, start: 1987 };
       spy = jest.spyOn(service, 'getDurationByMetric');
-      service.measure('age', metrics);
+      service.measure('age', metric);
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toBe(1);
-      expect(spy).toHaveBeenCalledWith('age', metrics);
+      expect(spy).toHaveBeenCalledWith('age', metric);
     });
   });
 
@@ -68,15 +66,17 @@ describe('EmulatedPerformance', () => {
   describe('.getDurationByMetric()', () => {
     it('should return the duration', () => {
       const duration = service.getDurationByMetric('age', {
-        age: { end: 2018, start: 1987 },
-      } as IMetrics);
+        end: 2018,
+        start: 1987,
+      } as IPerformanceEntry);
       expect(duration).toEqual(31);
     });
 
     it('should return the -1 when duration is 0', () => {
       const duration = service.getDurationByMetric('age', {
-        age: { end: 2018, start: 2018 },
-      } as IMetrics);
+        end: 2018,
+        start: 2018,
+      } as IPerformanceEntry);
       expect(duration).toEqual(0);
     });
   });
