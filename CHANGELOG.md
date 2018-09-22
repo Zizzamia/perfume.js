@@ -1,10 +1,20 @@
 # Changelog
 
+
+## 0.9.0 (2018-9-22)
+
+### Feat
+
+* **feat:** New Observer APIs [#46](https://github.com/Zizzamia/perfume.js/issues/46)
+
+### Bug Fixes
+* **fix:** Added TTI polyfill head script inside Perfume [#44](https://github.com/Zizzamia/perfume.js/issues/44)
+
 ## 0.9.0 (2018-8-22)
 
 ### Feat
 
-* **feat:** feat: added First Input Delay metric [#33](https://github.com/Zizzamia/perfume.js/issues/33)
+* **feat:** Added First Input Delay metric [#33](https://github.com/Zizzamia/perfume.js/issues/33)
 
 ## 0.8.1 (2018-8-16)
 
@@ -27,7 +37,7 @@
 
 ### Feat
 
-* **feat:** added generic analytics platform support [#24](https://github.com/Zizzamia/perfume.js/issues/24)
+* **feat:** Added generic analytics platform support [#24](https://github.com/Zizzamia/perfume.js/issues/24)
 * **feat:** Added warning option [#34](https://github.com/Zizzamia/perfume.js/issues/34)
 
 ## 0.7.0 (2018-5-12)
