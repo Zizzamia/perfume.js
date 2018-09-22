@@ -17,10 +17,10 @@
 
 **Perfume** leverage the latest W3C Performance Drafts (like PerformanceObserver), for measuring performance that matters! ⚡️
 
-* First Paint (FP)
-* First Contentful Paint (FCP)
+* First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+* First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Input Delay (FID)
-* Time to Interactive (TTI)
+* Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c))
 * Component First Paint (CFP)
 
 ![Performance Metrics load timeline](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perf-metrics-load-timeline.png)
