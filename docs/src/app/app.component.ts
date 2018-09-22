@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ViewChild, NgZone } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ViewChild,
+  NgZone,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 // import Perfume from 'perfume.js';
 import { DialogComponent } from './dialog/dialog.component';
@@ -15,6 +21,9 @@ export class AppComponent implements AfterViewInit {
   logCustom: string;
   logFibonacci: string;
   logOpenDialog: string;
+  firstContentfulPaint: number;
+  firstInputDelay: number;
+  timeToInteractive: number;
   path: string;
   perfume: Perfume;
   navOptions: {
@@ -23,7 +32,11 @@ export class AppComponent implements AfterViewInit {
   navSelected: string;
   private gifIndex = 0;
 
-  constructor(public dialog: MatDialog, private zone: NgZone) {
+  constructor(
+    private ref: ChangeDetectorRef,
+    public dialog: MatDialog,
+    private zone: NgZone,
+  ) {
     // Perfume
     this.perfume = new Perfume({
       firstPaint: true,
@@ -38,6 +51,9 @@ export class AppComponent implements AfterViewInit {
         timingVar: 'userId',
       },
     });
+    this.observeFCP();
+    this.observeFID();
+    this.observeTTI();
     this.path = window.location.href.split('#')[0];
 
     // Component variables
@@ -97,6 +113,21 @@ export class AppComponent implements AfterViewInit {
 
   activeNav(selected) {
     this.navSelected = selected;
+  }
+
+  private async observeFCP() {
+    this.firstContentfulPaint = await this.perfume.observeFirstContentfulPaint;
+    this.ref.detectChanges();
+  }
+
+  private async observeFID() {
+    this.firstInputDelay = await this.perfume.observeFirstInputDelay;
+    this.ref.detectChanges();
+  }
+
+  private async observeTTI() {
+    this.timeToInteractive = await this.perfume.observeTimeToInteractive;
+    this.ref.detectChanges();
   }
 
   /**

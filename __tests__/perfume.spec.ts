@@ -14,6 +14,9 @@ describe('Perfume', () => {
     (window as any).PerformanceObserver = mock.PerformanceObserver;
     (window as any).console.log = (n: any) => n;
     (window as any).console.warn = (n: any) => n;
+    perfume['observers'].set('fcp', () => 400);
+    perfume['observers'].set('fid', () => 400);
+    perfume['observers'].set('tti', () => 400);
   });
 
   afterEach(() => {
@@ -45,39 +48,64 @@ describe('Perfume', () => {
   });
 
   describe('.observeTimeToInteractive', () => {
-    const instance = new Perfume({ timeToInteractive: true });
-    (instance as any).perf.timeToInteractive = mock.timeToInteractive;
-    (window as any).chrome = true;
+    let instance;
+
+    beforeAll(() => {
+      instance = new Perfume({ firstContentfulPaint: true });
+      (window as any).chrome = true;
+      instance['observers'].set('fcp', () => 400);
+      instance['observers'].set('fid', () => 400);
+      instance['observers'].set('tti', () => 400);
+    });
+
+    it('should be a promise', () => {
+      const promise = instance.observeFirstContentfulPaint;
+      expect(promise).toBeInstanceOf(Promise);
+    });
+
+    it('should resolve fcp on chrome', done => {
+      instance.observeFirstContentfulPaint.then(duration => {
+        expect(typeof duration).toBe('number');
+        done();
+      });
+    });
+  });
+
+  describe('.observeTimeToInteractive', () => {
+    let instance;
+
+    beforeAll(() => {
+      instance = new Perfume({ timeToInteractive: true });
+      (window as any).chrome = true;
+      instance['observers'].set('fcp', () => 400);
+      instance['observers'].set('fid', () => 400);
+      instance['observers'].set('tti', () => 400);
+    });
 
     it('should be a promise', () => {
       const promise = instance.observeTimeToInteractive;
       expect(promise).toBeInstanceOf(Promise);
-    });
-
-    it('should resolve tti on chrome', done => {
-      instance.observeTimeToInteractive.then(time => {
-        expect(typeof time).toBe('number');
-        done();
-      });
     });
   });
 
   describe('.observeFirstInputDelay', () => {
     (window as any).perfMetrics = mock.perfMetrics;
     (window as any).chrome = true;
-    let instance;
 
     beforeEach(() => {
-      instance = new Perfume({ firstInputDelay: true });
+      perfume = new Perfume({ firstInputDelay: true });
+      perfume['observers'].set('fcp', () => 400);
+      perfume['observers'].set('fid', () => 400);
+      perfume['observers'].set('tti', () => 400);
     });
 
     it('should be a promise', () => {
-      const promise = instance.observeFirstInputDelay;
+      const promise = perfume.observeFirstInputDelay;
       expect(promise).toBeInstanceOf(Promise);
     });
 
-    it('should resolve fdi on chrome', done => {
-      instance.observeFirstInputDelay.then(duration => {
+    it('should resolve fid on chrome', done => {
+      perfume.observeFirstInputDelay.then(duration => {
         expect(typeof duration).toBe('number');
         done();
       });
@@ -328,9 +356,12 @@ describe('Perfume', () => {
   });
 
   describe('.firstContentfulPaintCb()', () => {
-    it('should call logMetric() with the correct arguments', () => {
+    beforeEach(() => {
       perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
+    });
+
+    it('should call logMetric() with the correct arguments', () => {
       perfume.config.timeToInteractive = true;
       spy = jest.spyOn(perfume as any, 'logMetric');
       (perfume as any).firstContentfulPaintCb(
@@ -358,15 +389,65 @@ describe('Perfume', () => {
       );
       expect(spy).not.toHaveBeenCalled();
     });
+  });
 
-    it('should call timeToInteractive()', () => {
+  describe('.initFirstPaint()', () => {
+    beforeEach(() => {
+      perfume.config.firstPaint = true;
+      perfume.config.firstContentfulPaint = true;
+    });
+
+    it('should call firstContentfulPaint()', () => {
+      spy = jest.spyOn(perfume['perf'], 'firstContentfulPaint');
+      (window as any).chrome = true;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initFirstPaint']();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(perfume['perfEmulated']).not.toBeDefined();
+    });
+
+    it('should call firstContentfulPaint() with EmulatedPerformance', () => {
+      delete (window as any).chrome;
+      delete (window as any).PerformanceObserver;
+      perfume = new Perfume({ ...mock.defaultPerfumeConfig });
+      spy = jest.spyOn(perfume['perfEmulated'], 'firstContentfulPaint');
+      perfume['initFirstPaint']();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(perfume['perfEmulated']).toBeDefined();
+    });
+
+    it('should not call firstContentfulPaint() with EmulatedPerformance when perfEmulated is undefined', () => {
+      delete (window as any).chrome;
+      delete (window as any).PerformanceObserver;
+      perfume = new Perfume({ ...mock.defaultPerfumeConfig });
+      perfume['perfEmulated'] = undefined;
+      perfume['initFirstPaint']();
+      expect(perfume['perfEmulated']).not.toBeDefined();
+    });
+  });
+
+  describe('.initTimeToInteractive()', () => {
+    beforeEach(() => {
       perfume.config.timeToInteractive = true;
-      spy = jest.spyOn((perfume as any).perf, 'timeToInteractive');
-      (perfume as any).firstContentfulPaintCb(
-        mock.entries,
-        mock.Promise.resolve,
-        mock.Promise.reject,
-      );
+    });
+
+    it('should not call perf.timeToInteractive() when is not supported', () => {
+      spy = jest.spyOn(perfume['perf'] as any, 'timeToInteractive');
+      delete (window as any).chrome;
+      delete (window as any).PerformanceLongTaskTiming;
+      delete (window as any).PerformanceObserver;
+      perfume.config.timeToInteractive = false;
+      perfume['initTimeToInteractive'](0);
+      expect(spy.mock.calls.length).toEqual(0);
+    });
+
+    it('should call perf.timeToInteractive() when supported', () => {
+      spy = jest.spyOn(perfume['perf'] as any, 'timeToInteractive');
+      (window as any).chrome = true;
+      (window as any).PerformanceLongTaskTiming =
+        mock.PerformanceLongTaskTiming;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initTimeToInteractive'](400);
       expect(spy.mock.calls.length).toEqual(1);
     });
   });
@@ -430,7 +511,7 @@ describe('Perfume', () => {
     });
 
     it('should perfume.firstInputDelayDuration be equal to duration', () => {
-      (perfume as any).logMetric(2, 'First Input Delay', 'firstInputDelaty');
+      (perfume as any).logMetric(2, 'First Input Delay', 'firstInputDelay');
       expect(perfume.firstInputDelayDuration).toEqual(2);
     });
 

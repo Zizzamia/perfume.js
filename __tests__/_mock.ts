@@ -58,8 +58,8 @@ export default {
         return {};
       };
     }
+    disconnect() {}
   },
-  timeToInteractive: (n: any) => new Promise(resolve => resolve(n)),
   ttiPolyfill: {
     getFirstConsistentlyInteractive: (n: number) => {
       return new Promise(resolve => {

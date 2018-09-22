@@ -12,6 +12,8 @@ export interface IPerformance {
   measure(metricName: string, metric: IPerformanceEntry): number;
 
   firstContentfulPaint(cb: any): any;
+
+  timeToInteractive?(minValue: number): Promise<number>;
 }
 
 declare const PerformanceObserver: any;
