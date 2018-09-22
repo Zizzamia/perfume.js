@@ -1,5 +1,13 @@
+// Init Polyfill
+import PerformanceObserverTTI from './tti-polyfill-starts';
+const performanceTTI = new PerformanceObserverTTI();
+performanceTTI.create();
+
+// Import Polyfills
 import 'first-input-delay';
 import ttiPolyfill from 'tti-polyfill';
+
+// Types
 import { IPerformanceEntry, IPerfumeConfig } from './perfume';
 
 export interface IPerformance {
