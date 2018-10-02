@@ -33,10 +33,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
-# VS Code - https://github.com/github/gitignore/blob/master/Global/VisualStudioCode.gitignore
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
