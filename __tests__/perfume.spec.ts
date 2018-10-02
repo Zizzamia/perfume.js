@@ -3,7 +3,7 @@ import Perfume, {
   IGoogleAnalyticsConfig,
   IPerfumeConfig,
 } from '../src/perfume';
-import mock from './_mock';
+import mock, { MockDateNowValue } from './_mock';
 
 describe('Perfume', () => {
   let perfume: Perfume;
@@ -18,6 +18,9 @@ describe('Perfume', () => {
     (window as any).PerformanceObserver = mock.PerformanceObserver;
     (window as any).console.log = (n: any) => n;
     (window as any).console.warn = (n: any) => n;
+    perfume['observers'].set('fcp', () => 400);
+    perfume['observers'].set('fid', () => 400);
+    perfume['observers'].set('tti', () => 400);
   });
 
   afterEach(() => {
@@ -36,7 +39,7 @@ describe('Perfume', () => {
         firstPaint: false,
         firstInputDelay: false,
         timeToInteractive: false,
-        analyticsTracker: null,
+        analyticsTracker: undefined,
         googleAnalytics: {
           enable: false,
           timingVar: 'name',
@@ -49,39 +52,64 @@ describe('Perfume', () => {
   });
 
   describe('.observeTimeToInteractive', () => {
-    const instance = new Perfume({ timeToInteractive: true });
-    (instance as any).perf.timeToInteractive = mock.timeToInteractive;
-    (window as any).chrome = true;
+    let instance;
+
+    beforeAll(() => {
+      instance = new Perfume({ firstContentfulPaint: true });
+      (window as any).chrome = true;
+      instance['observers'].set('fcp', () => 400);
+      instance['observers'].set('fid', () => 400);
+      instance['observers'].set('tti', () => 400);
+    });
+
+    it('should be a promise', () => {
+      const promise = instance.observeFirstContentfulPaint;
+      expect(promise).toBeInstanceOf(Promise);
+    });
+
+    it('should resolve fcp on chrome', done => {
+      instance.observeFirstContentfulPaint.then(duration => {
+        expect(typeof duration).toBe('number');
+        done();
+      });
+    });
+  });
+
+  describe('.observeTimeToInteractive', () => {
+    let instance;
+
+    beforeAll(() => {
+      instance = new Perfume({ timeToInteractive: true });
+      (window as any).chrome = true;
+      instance['observers'].set('fcp', () => 400);
+      instance['observers'].set('fid', () => 400);
+      instance['observers'].set('tti', () => 400);
+    });
 
     it('should be a promise', () => {
       const promise = instance.observeTimeToInteractive;
       expect(promise).toBeInstanceOf(Promise);
-    });
-
-    it('should resolve tti on chrome', done => {
-      instance.observeTimeToInteractive.then(time => {
-        expect(typeof time).toBe('number');
-        done();
-      });
     });
   });
 
   describe('.observeFirstInputDelay', () => {
     (window as any).perfMetrics = mock.perfMetrics;
     (window as any).chrome = true;
-    let instance;
 
     beforeEach(() => {
-      instance = new Perfume({ firstInputDelay: true });
+      perfume = new Perfume({ firstInputDelay: true });
+      perfume['observers'].set('fcp', () => 400);
+      perfume['observers'].set('fid', () => 400);
+      perfume['observers'].set('tti', () => 400);
     });
 
     it('should be a promise', () => {
-      const promise = instance.observeFirstInputDelay;
+      const promise = perfume.observeFirstInputDelay;
       expect(promise).toBeInstanceOf(Promise);
     });
 
-    it('should resolve fdi on chrome', done => {
-      instance.observeFirstInputDelay.then(duration => {
+    it('should resolve fid on chrome', done => {
+      perfume.observeFirstInputDelay.then(duration => {
         expect(typeof duration).toBe('number');
         done();
       });
@@ -180,7 +208,10 @@ describe('Perfume', () => {
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('metricName', {});
+      expect(spy).toHaveBeenCalledWith('metricName', {
+        end: MockDateNowValue,
+        start: MockDateNowValue,
+      });
     });
   });
 
@@ -240,98 +271,50 @@ describe('Perfume', () => {
     });
   });
 
-  // describe('.sendTiming()', () => {
-  //   const perfEntry1 = new PerformanceEntryItem('1', 1);
-  //   const perfEntry2 = new PerformanceEntryItem('2', 2);
+  describe('.sendTiming()', () => {
+    it('should not call analyticsTracker() if isHidden is true', () => {
+      perfume.config.analyticsTracker = (metricName, duration) => {
+        // console.log(metricName, duration);
+      };
+      spy = jest.spyOn(perfume.config, 'analyticsTracker');
+      perfume['isHidden'] = true;
+      (perfume as any).sendTiming('metricName', 123);
+      expect(spy).not.toHaveBeenCalled();
+    });
 
-  //   function getPerfumeInstanceWithGoogleAnalyticsTrackerEnabled(): Perfume {
-  //     return new Perfume({
-  //       googleAnalytics: {
-  //         enable: true,
-  //       } as IGoogleAnalyticsConfig,
-  //     });
-  //   }
+    it('should call analyticsTracker() if analyticsTracker is defined', () => {
+      perfume.config.analyticsTracker = (metricName, duration) => {
+        // console.log(metricName, duration);
+      };
+      spy = jest.spyOn(perfume.config, 'analyticsTracker');
+      (perfume as any).sendTiming('metricName', 123);
+      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith('metricName', 123);
+    });
 
-  //   afterEach(() => {
-  //     jest.resetAllMocks();
-  //   });
+    it('should not call global.logWarn() if googleAnalytics is disable', () => {
+      spy = jest.spyOn(perfume as any, 'logWarn');
+      (perfume as any).sendTiming();
+      expect(spy).not.toHaveBeenCalled();
+    });
 
-  //   it('should not call analyticsTracker.send() if isHidden is true', () => {
-  //     perfume = getPerfumeInstanceWithGoogleAnalyticsTrackerEnabled();
-  //     const gaTracker = perfume['analyticsTrackers'][0];
-  //     jest.spyOn(gaTracker, 'canSend').mockReturnValue(true);
-  //     spy = jest.spyOn(gaTracker, 'send');
-  //     perfume['isHidden'] = true;
+    it('should call global.logWarn() if googleAnalytics is disable with the correct arguments', () => {
+      perfume.config.googleAnalytics.enable = true;
+      spy = jest.spyOn(perfume as any, 'logWarn');
+      (perfume as any).sendTiming();
+      const text = 'Google Analytics has not been loaded';
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, text);
+    });
 
-  //     (perfume as any).sendTiming('metricName', 123);
-
-  //     expect(spy).not.toHaveBeenCalled();
-  //   });
-
-  //   it('should call analyticsTracker.send() if analyticsLogger is defined', () => {
-  //     perfume = getPerfumeInstanceWithGoogleAnalyticsTrackerEnabled();
-  //     const gaTracker = perfume['analyticsTrackers'][0];
-  //     jest.spyOn(gaTracker, 'canSend').mockReturnValue(true);
-  //     const gaTrackerSendMock = jest
-  //       .spyOn(gaTracker, 'send')
-  //       .mockImplementation(m => {});
-
-  //     (perfume as any).sendTiming(metric1.name, metric1.duration);
-
-  //     expect(gaTrackerSendMock).toHaveBeenCalled();
-  //     expect(gaTrackerSendMock).toHaveBeenCalledWith(metric1);
-  //   });
-
-  //   it('should not call global.logWarn() if googleAnalytics is disabled', () => {
-  //     spy = jest.spyOn(perfume as any, 'logWarn');
-  //     (perfume as any).sendTiming();
-  //     expect(spy).not.toHaveBeenCalled();
-  //   });
-
-  //   it('should call global.logWarn() if googleAnalytics is enabled but not canSend()', () => {
-  //     perfume = getPerfumeInstanceWithGoogleAnalyticsTrackerEnabled();
-  //     spy = jest.spyOn(perfume as any, 'logWarn');
-
-  //     (perfume as any).sendTiming();
-  //     const text =
-  //       'Google Analytics is not ready; metric will be queued until window.load and tried then.';
-  //     expect(spy.mock.calls.length).toEqual(1);
-  //     expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, text);
-  //   });
-
-  //   it('should queue ga sends if googleAnalytics is enabled but not canSend()', () => {
-  //     perfume = getPerfumeInstanceWithGoogleAnalyticsTrackerEnabled();
-  //     const gaQueue = perfume['analyticsTrackers'][0].metricQueue;
-  //     (perfume as any).sendTiming(metric1.name, metric1.duration);
-  //     expect(gaQueue).toEqual([metric1]);
-  //     (perfume as any).sendTiming(metric2.name, metric2.duration);
-  //     expect(gaQueue).toEqual([metric1, metric2]);
-  //   });
-
-  //   it('should handle customer analyticsTracker with uninitialized metricQueue', () => {
-  //     perfume = new Perfume({
-  //       analyticsTracker: mock.analyticsTrackerUninitQueue,
-  //     });
-  //     const customTracker = perfume['analyticsTrackers'][0];
-  //     jest.spyOn(customTracker, 'canSend').mockReturnValue(false);
-
-  //     (perfume as any).sendTiming(metric1.name, metric1.duration);
-
-  //     expect(customTracker.metricQueue).toEqual([metric1]);
-  //   });
-
-  //   it('should not call global.logWarn() if googleAnalytics is enabled and canSend()', () => {
-  //     perfume = getPerfumeInstanceWithGoogleAnalyticsTrackerEnabled();
-  //     const gaTracker = perfume['analyticsTrackers'][0];
-  //     jest.spyOn(gaTracker, 'canSend').mockReturnValue(true);
-  //     jest.spyOn(gaTracker, 'send').mockImplementation(m => {});
-  //     spy = jest.spyOn(perfume as any, 'logWarn');
-
-  //     (perfume as any).sendTiming('metricName', 123);
-
-  //     expect(spy).not.toHaveBeenCalled();
-  //   });
-  // });
+    it('should not call global.logWarn() if googleAnalytics is enable and ga is present', () => {
+      perfume.config.googleAnalytics.enable = true;
+      spy = jest.spyOn(perfume as any, 'logWarn');
+      window.ga = () => true;
+      (perfume as any).sendTiming('metricName', 123);
+      expect(spy).not.toHaveBeenCalled();
+    });
+  });
 
   describe('.checkMetricName()', () => {
     it('should return "true" when provided a metric name', () => {
@@ -377,9 +360,12 @@ describe('Perfume', () => {
   });
 
   describe('.firstContentfulPaintCb()', () => {
-    it('should call logMetric() with the correct arguments', () => {
+    beforeEach(() => {
       perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
+    });
+
+    it('should call logMetric() with the correct arguments', () => {
       perfume.config.timeToInteractive = true;
       spy = jest.spyOn(perfume as any, 'logMetric');
       (perfume as any).firstContentfulPaintCb(
@@ -407,15 +393,65 @@ describe('Perfume', () => {
       );
       expect(spy).not.toHaveBeenCalled();
     });
+  });
 
-    it('should call timeToInteractive()', () => {
+  describe('.initFirstPaint()', () => {
+    beforeEach(() => {
+      perfume.config.firstPaint = true;
+      perfume.config.firstContentfulPaint = true;
+    });
+
+    it('should call firstContentfulPaint()', () => {
+      spy = jest.spyOn(perfume['perf'], 'firstContentfulPaint');
+      (window as any).chrome = true;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initFirstPaint']();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(perfume['perfEmulated']).not.toBeDefined();
+    });
+
+    it('should call firstContentfulPaint() with EmulatedPerformance', () => {
+      delete (window as any).chrome;
+      delete (window as any).PerformanceObserver;
+      perfume = new Perfume({ ...mock.defaultPerfumeConfig });
+      spy = jest.spyOn(perfume['perfEmulated'], 'firstContentfulPaint');
+      perfume['initFirstPaint']();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(perfume['perfEmulated']).toBeDefined();
+    });
+
+    it('should not call firstContentfulPaint() with EmulatedPerformance when perfEmulated is undefined', () => {
+      delete (window as any).chrome;
+      delete (window as any).PerformanceObserver;
+      perfume = new Perfume({ ...mock.defaultPerfumeConfig });
+      perfume['perfEmulated'] = undefined;
+      perfume['initFirstPaint']();
+      expect(perfume['perfEmulated']).not.toBeDefined();
+    });
+  });
+
+  describe('.initTimeToInteractive()', () => {
+    beforeEach(() => {
       perfume.config.timeToInteractive = true;
-      spy = jest.spyOn((perfume as any).perf, 'timeToInteractive');
-      (perfume as any).firstContentfulPaintCb(
-        mock.entries,
-        mock.Promise.resolve,
-        mock.Promise.reject,
-      );
+    });
+
+    it('should not call perf.timeToInteractive() when is not supported', () => {
+      spy = jest.spyOn(perfume['perf'] as any, 'timeToInteractive');
+      delete (window as any).chrome;
+      delete (window as any).PerformanceLongTaskTiming;
+      delete (window as any).PerformanceObserver;
+      perfume.config.timeToInteractive = false;
+      perfume['initTimeToInteractive'](0);
+      expect(spy.mock.calls.length).toEqual(0);
+    });
+
+    it('should call perf.timeToInteractive() when supported', () => {
+      spy = jest.spyOn(perfume['perf'] as any, 'timeToInteractive');
+      (window as any).chrome = true;
+      (window as any).PerformanceLongTaskTiming =
+        mock.PerformanceLongTaskTiming;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initTimeToInteractive'](400);
       expect(spy.mock.calls.length).toEqual(1);
     });
   });
@@ -479,7 +515,7 @@ describe('Perfume', () => {
     });
 
     it('should perfume.firstInputDelayDuration be equal to duration', () => {
-      (perfume as any).logMetric(2, 'First Input Delay', 'firstInputDelaty');
+      (perfume as any).logMetric(2, 'First Input Delay', 'firstInputDelay');
       expect(perfume.firstInputDelayDuration).toEqual(2);
     });
 

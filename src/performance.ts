@@ -1,7 +1,28 @@
+// Init Polyfill
+import PerformanceObserverTTI from './tti-polyfill-starts';
+const performanceTTI = new PerformanceObserverTTI();
+performanceTTI.create();
+
+// Import Polyfills
 import 'first-input-delay';
 import ttiPolyfill from 'tti-polyfill';
-import PerformImpl from './performance-impl';
-import { IMetrics, IPerfumeConfig } from './perfume';
+
+// Types
+import { IPerformanceEntry, IPerfumeConfig } from './perfume';
+
+export interface IPerformance {
+  config: IPerfumeConfig;
+
+  now(): number;
+
+  mark(metricName: string, type: string): any;
+
+  measure(metricName: string, metric: IPerformanceEntry): number;
+
+  firstContentfulPaint(cb: any): any;
+
+  timeToInteractive?(minValue: number): Promise<number>;
+}
 
 declare const PerformanceObserver: any;
 
@@ -11,7 +32,7 @@ declare interface IPerformanceObserverEntryList {
   getEntriesByType: any;
 }
 
-export default class Performance implements PerformImpl {
+export default class Performance implements IPerformance {
   /**
    * True if the browser supports the Navigation Timing API,
    * User Timing API and the PerformanceObserver Interface.
@@ -63,11 +84,11 @@ export default class Performance implements PerformImpl {
     (window.performance.mark as any)(mark);
   }
 
-  measure(metricName: string, metrics: IMetrics): number {
+  measure(metricName: string, metric: IPerformanceEntry): number {
     const startMark = `mark_${metricName}_start`;
     const endMark = `mark_${metricName}_end`;
     (window.performance.measure as any)(metricName, startMark, endMark);
-    return this.getDurationByMetric(metricName, metrics);
+    return this.getDurationByMetric(metricName, metric);
   }
 
   /**
@@ -103,7 +124,10 @@ export default class Performance implements PerformImpl {
    * Get the duration of the timing metric or -1 if there a measurement has
    * not been made by the User Timing API
    */
-  private getDurationByMetric(metricName: string, metrics: IMetrics): number {
+  private getDurationByMetric(
+    metricName: string,
+    metric: IPerformanceEntry,
+  ): number {
     const entry = this.getMeasurementForGivenName(metricName);
     if (entry && entry.entryType === 'measure') {
       return entry.duration;

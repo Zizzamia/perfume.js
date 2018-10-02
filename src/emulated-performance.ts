@@ -1,5 +1,5 @@
-import IPerformance from './performance-impl';
-import { IMetrics, IPerfumeConfig } from './perfume';
+import { IPerformance } from './performance';
+import { IPerformanceEntry, IPerfumeConfig } from './perfume';
 
 export interface IPerformancePaintTiming {
   name: string;
@@ -21,8 +21,8 @@ export default class EmulatedPerformance implements IPerformance {
 
   mark(metricName: string, type: string): void {}
 
-  measure(metricName: string, metrics: IMetrics): number {
-    return this.getDurationByMetric(metricName, metrics);
+  measure(metricName: string, metric: IPerformanceEntry): number {
+    return this.getDurationByMetric(metricName, metric);
   }
 
   /**
@@ -40,8 +40,11 @@ export default class EmulatedPerformance implements IPerformance {
    * Get the duration of the timing metric or -1 if there a measurement has
    * not been made by now() fallback.
    */
-  private getDurationByMetric(metricName: string, metrics: IMetrics): number {
-    const duration = metrics[metricName].end - metrics[metricName].start;
+  private getDurationByMetric(
+    metricName: string,
+    metric: IPerformanceEntry,
+  ): number {
+    const duration = metric.end - metric.start;
     return duration || 0;
   }
 

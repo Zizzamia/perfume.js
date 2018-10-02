@@ -1,8 +1,8 @@
 <a href="http://www.perfumejs.com/">
-  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v0-9-0.png" align="left" width="262" />
+  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v1-0-0.png" align="left" width="262" />
 </a>
 
-# [Perfume.js v0.9.0](http://perfumejs.com)
+# [Perfume.js v1.0.0](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
@@ -17,10 +17,10 @@
 
 **Perfume** leverage the latest W3C Performance Drafts (like PerformanceObserver), for measuring performance that matters! ⚡️
 
-* First Paint (FP)
-* First Contentful Paint (FCP)
+* First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+* First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Input Delay (FID)
-* Time to Interactive (TTI)
+* Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c))
 * Component First Paint (CFP)
 
 ![Performance Metrics load timeline](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perf-metrics-load-timeline.png)
@@ -163,7 +163,7 @@ Configurable analytics callback to use Perfume.js with any platform.
 
 ```javascript
 const perfume = new Perfume({
-  analyticsLogger: (metricName, duration) => {
+  analyticsTracker: (metricName, duration) => {
     myAnalyticsTool.track(metricName, duration);
   })
 });
@@ -177,8 +177,9 @@ Default options provided to Perfume.js constructor.
 const options = {
   firstPaint: false,
   firstContentfulPaint: false,
+  firstInputDelay: false,
   timeToInteractive: false,
-  analyticsLogger: undefined,
+  analyticsTracker: undefined,
   googleAnalytics: {
     enable: false,
     timingVar: 'name'
@@ -194,17 +195,25 @@ const options = {
 Perfume.js expose some methods and properties which may be useful to people extending the library.
 
 ```javascript
-// First Paint value
+const perfume = new Perfume({
+  firstContentfulPaint: true,
+  firstInputDelay: true,
+  timeToInteractive: true,
+});
+
+// Values
 perfume.firstPaintDuration;
-
-// First Contentful Paint value
 perfume.firstContentfulPaintDuration;
+perfume.firstInputDelayDuration;
+perfume.timeToInteractiveDuration;
 
-// Time To Interactive value (Async)
-perfume.observeTimeToInteractive();
+// Aync Values
+const durationFCP = await perfume.observeFirstContentfulPaint;
+const durationFID = await perfume.observeFirstInputDelay;
+const durationTTI = await perfume.observeTimeToInteractive;
 
 // Send Custom User timing measure to Google Analytics
-perfume.sendTiming(metricName, duration);
+perfume.sendTiming(metricName, durationFCP);
 ```
 
 ## Develop
