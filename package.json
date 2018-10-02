@@ -1,6 +1,6 @@
 {
   "name": "perfume.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript library for measuring Short and Long Script, First Contentful Paint (FCP), Time to Interactive (TTI), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.",
   "keywords": [
     "performance-metrics",
@@ -26,6 +26,7 @@
   "unpkg": "dist/perfume.umd.min.js",
   "typings": "dist/types/perfume.d.ts",
   "files": [
+    "angular/dist",
     "dist"
   ],
   "author": "Leonardo Zizzamia",
@@ -99,6 +100,7 @@
     "collectCoverage": true
   },
   "devDependencies": {
+    "@angular/core": "6.1.7",
     "@types/jest": "^23.1.4",
     "@types/node": "^8.0.0",
     "colors": "^1.1.2",

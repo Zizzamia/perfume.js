@@ -6,15 +6,15 @@ import {
   NgZone,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import Perfume from 'perfume.js';
 import { DialogComponent } from './dialog/dialog.component';
-// import Perfume from '../../../../perfume.js';
+import { NgPerfume, PerfumeViewInit } from '../../../angular/dist/perfume';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],
 })
+@PerfumeViewInit()
 export class AppComponent implements AfterViewInit {
   @ViewChild('p')
   // Component
@@ -25,7 +25,6 @@ export class AppComponent implements AfterViewInit {
   firstInputDelay: number;
   timeToInteractive: number;
   path: string;
-  perfume: Perfume;
   navOptions: {
     [keyof: string]: string;
   };
@@ -36,21 +35,9 @@ export class AppComponent implements AfterViewInit {
     private ref: ChangeDetectorRef,
     public dialog: MatDialog,
     private zone: NgZone,
+    private perfume: NgPerfume,
   ) {
     // Perfume
-    this.perfume = new Perfume({
-      firstPaint: true,
-      firstContentfulPaint: true,
-      firstInputDelay: true,
-      timeToInteractive: true,
-      analyticsTracker: (metricName: string, duration: number) => {
-        console.log('Analytics Tracker', metricName, duration);
-      },
-      googleAnalytics: {
-        enable: true,
-        timingVar: 'userId',
-      },
-    });
     this.observeFCP();
     this.observeFID();
     this.observeTTI();
