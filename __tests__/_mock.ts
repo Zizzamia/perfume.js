@@ -90,6 +90,7 @@ export default {
       enable: false,
       timingVar: 'name',
     },
+    isTrackerAsync: false,
     logPrefix: '⚡️ Perfume.js:',
     logging: true,
     warning: false,

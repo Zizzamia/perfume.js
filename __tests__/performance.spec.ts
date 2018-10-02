@@ -96,7 +96,7 @@ describe('Performance', () => {
   describe('.getDurationByMetric()', () => {
     it('should return entry.duration when entryType is not measure', () => {
       window.performance.getEntriesByName = () => [
-        { duration: 12345, entryType: 'notMeasure' },
+        { name: 'a', startTime: 1, endTime: 12346, duration: 12345, entryType: 'notMeasure', toJSON: null },
       ];
       const value = service.getDurationByMetric('metricName');
       expect(value).toEqual(-1);

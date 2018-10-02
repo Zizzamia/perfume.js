@@ -2,21 +2,20 @@
  * Perfume.js v0.9.0 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
- * @license 
+ * @license
  */
-import IAnalyticsTracker from './analytics-tracker';
 import EmulatedPerformance from './emulated-performance';
-import GoogleAnalyticsTracker from './google-analytics-tracker';
-import Metric from './metric';
 import Performance from './performance';
+import PerformanceEntryItem from './performance-entry-item';
 
 export interface IPerfumeConfig {
   firstContentfulPaint: boolean;
   firstPaint: boolean;
   firstInputDelay: boolean;
   timeToInteractive: boolean;
-  analyticsTracker: IAnalyticsTracker | null;
+  analyticsTracker?: (performanceEntry: string, duration: number) => void;
   googleAnalytics: IGoogleAnalyticsConfig;
+  isTrackerAsync: boolean;
   logPrefix: string;
   logging: boolean;
   warning: boolean;
@@ -27,8 +26,9 @@ export interface IPerfumeOptions {
   firstPaint?: boolean;
   firstInputDelay?: boolean;
   timeToInteractive?: boolean;
-  analyticsTracker?: IAnalyticsTracker | null;
+  analyticsTracker?: (metricName: string, duration: number) => void;
   googleAnalytics?: IGoogleAnalyticsConfig;
+  isTrackerAsync?: boolean;
   logPrefix?: string;
   logging?: boolean;
   warning?: boolean;
@@ -46,17 +46,24 @@ export interface IMetrics {
   };
 }
 
+declare global {
+  // tslint:disable-next-line:interface-name
+  interface Window {
+    ga: any;
+  }
+}
+
 export default class Perfume {
   config: IPerfumeConfig = {
     firstContentfulPaint: false,
     firstPaint: false,
     firstInputDelay: false,
     timeToInteractive: false,
-    analyticsTracker: null,
     googleAnalytics: {
       enable: false,
       timingVar: 'name',
     },
+    isTrackerAsync: false,
     logPrefix: '⚡️ Perfume.js:',
     logging: true,
     warning: false,
@@ -67,32 +74,20 @@ export default class Perfume {
   observeFirstInputDelay: Promise<number>;
   observeTimeToInteractive: Promise<number>;
   timeToInteractiveDuration: number = 0;
-  analyticsTrackers: IAnalyticsTracker[] = [];
   private isHidden: boolean = false;
   private metrics: IMetrics = {};
   private perf: Performance | EmulatedPerformance;
   private perfEmulated?: EmulatedPerformance;
   private logMetricWarn = 'Please provide a metric name';
+  private performanceEntryQueue: PerformanceEntryItem[] = [];
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
 
-    // Setup GA tracker if enabled
-    if (this.config.googleAnalytics.enable) {
-      const googleAnalyticsTracker = new GoogleAnalyticsTracker();
-      googleAnalyticsTracker.timingVar = this.config.googleAnalytics.timingVar;
-      this.analyticsTrackers.push(googleAnalyticsTracker);
-    }
-
-    // Setup user's customer tracker impl if configured
-    if (this.config.analyticsTracker) {
-      this.analyticsTrackers.push(this.config.analyticsTracker);
-    }
-
     // Init window.load listener
     window.addEventListener &&
-      window.addEventListener('load', this.onWindowLoad);
+      window.addEventListener('load', this.didWindowLoad);
 
     // Init performance implementation based on supported browser APIs
     this.perf = Performance.supported()
@@ -189,8 +184,8 @@ export default class Perfume {
 
   /**
    * Records the User timing measure by sending it to:
-   * - any custom analytics tracker
-   * - built-in Google Analytics if enabled if/when possible.
+   * - custom analytics tracker if provided
+   * - Google Analytics if enabled
    */
   sendTiming(metricName: string, duration: number): void {
     // Doesn't send timing when page is hidden
@@ -198,41 +193,57 @@ export default class Perfume {
       return;
     }
 
-    const metric = new Metric(metricName, duration);
-
-    this.analyticsTrackers.forEach(tracker => {
-      if (tracker.canSend()) {
-        tracker.send(metric);
-      } else {
-        tracker.metricQueue = tracker.metricQueue || [];
-        tracker.metricQueue.push(metric);
-        this.logWarn(
-          this.config.logPrefix,
-          `${tracker.name} is not ready; metric will be ` +
-            'queued until window.load and tried then.',
-        );
-      }
-    });
+    // If tracker/s is loaded asynchronously, queue metric send until window.load
+    const performanceEntry = new PerformanceEntryItem(metricName, duration);
+    if (this.config.isTrackerAsync) {
+      this.performanceEntryQueue.push(performanceEntry);
+    } else {
+      this.sendToGoogleAnalytics(performanceEntry);
+    }
   }
 
   /**
    * window.load handler.
-   * Tries to send any queued metrics to trackers.
+   * Sends any queued metrics to trackers.
    */
-  onWindowLoad(): void {
-    this.analyticsTrackers.forEach(tracker => {
-      if (tracker.canSend()) {
-        while (tracker.metricQueue.length) {
-          tracker.send(tracker.metricQueue.pop() as Metric);
-        }
-      } else {
-        this.logWarn(
-          this.config.logPrefix,
-          `${tracker.name} was not ready by window.load; ` +
-            `${tracker.metricQueue.length} metric/s can't be sent for it.`,
-        );
-      }
-    });
+  didWindowLoad(): void {
+    while (this.performanceEntryQueue.length) {
+      const performanceEntry = this.performanceEntryQueue.pop() as PerformanceEntry;
+      this.sendToGoogleAnalytics(performanceEntry);
+      this.sendToCustomAnalyticsTracker(performanceEntry);
+    }
+  }
+
+  private sendToGoogleAnalytics(performanceEntry: PerformanceEntryItem): void {
+    if (!this.config.googleAnalytics.enable) {
+      return;
+    }
+
+    if (window.ga && typeof window.ga === 'function') {
+      window.ga(
+        'send',
+        'timing',
+        performanceEntry.name,
+        this.config.googleAnalytics.timingVar,
+        Math.round(performanceEntry.duration),
+      );
+    } else {
+      this.logWarn(
+        this.config.logPrefix,
+        'Google Analytics has not been loaded',
+      );
+    }
+  }
+
+  private sendToCustomAnalyticsTracker(
+    performanceEntry: PerformanceEntryItem,
+  ): void {
+    if (this.config.analyticsTracker) {
+      this.config.analyticsTracker(
+        performanceEntry.name,
+        performanceEntry.duration,
+      );
+    }
   }
 
   private checkMetricName(metricName: string): boolean {
