@@ -1,30 +1,4 @@
-<div class="layout layout--intro">
-  <div class="layout-content">
-    <div class="box box--intro" id="/home/">
-      <a href="https://github.com/zizzamia/perfume.js" target="_blank">
-        <picture class="logo">
-          <source srcset="{{ path }}assets/perfume-logo-v1-0-0.webp" type="image/webp" />
-          <source srcset="{{ path }}assets/perfume-logo-v1-0-0.png" type="image/png" />
-          <img src="{{ path }}assets/perfume-logo-v1-0-0.png" alt="Perfume.js logo" />
-        </picture>
-      </a>
-      <h1 class="title">Perfume.js</h1>
-      <p>A JavaScript library for <b>measuring</b> Short and Long Script, <br />
-        <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f"
-          target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID),
-        <b>Time to Interactive</b> (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>),
-        <b>Component First Paint</b> (CFM), annotating them to the DevTools timeline and reporting the results to
-        <b>Google Analytics</b>.
-      </p>
-      <a class="github-button" href="https://github.com/zizzamia/perfume.js"
-      data-size="large" data-show-count="true"
-      aria-label="Star zizzamia/perfume.js on GitHub">Star</a>
-      <a href="https://twitter.com/zizzamia?ref_src=twsrc%5Etfw"
-      class="twitter-follow-button" data-size="large"
-      data-show-count="true">Follow @zizzamia</a>
-    </div>
-  </div>
-</div>
+<app-intro class="layout"></app-intro>
 <div class="layout layout--body">
   <div class="layout-content">
     <div class="box box--intro">
@@ -404,53 +378,5 @@ perfume.<span class="blue">sendTiming</span>(metricName, durationFCP);</pre>
 
     <div class="box Fibonacci"></div>
   </div>
-  <div class="layout-nav">
-    <div class="layout-nav-links">
-      <a href="{{ path }}#/home/"
-      [class.active]="navSelected === navOptions.home"
-      (click)="activeNav(navOptions.home)">Home</a>
-      <a href="{{ path }}#/user-centric-metrics/"
-      [class.active]="navSelected === navOptions.userCentric"
-      (click)="activeNav(navOptions.userCentric)">User-centric metrics</a>
-      <a href="{{ path }}#/installing-and-imports/"
-      [class.active]="navSelected === navOptions.installing"
-      (click)="activeNav(navOptions.installing)">Installing and Imports</a>
-      <a href="{{ path }}#/first-paint/"
-      [class.active]="navSelected === navOptions.fp"
-      (click)="activeNav(navOptions.fp)">First Paint</a>
-      <a href="{{ path }}#/first-contentful-paint/"
-      [class.active]="navSelected === navOptions.fcp"
-      (click)="activeNav(navOptions.fcp)">First Contentful Paint</a>
-      <a href="{{ path }}#/first-input-delay/"
-      [class.active]="navSelected === navOptions.fid"
-      (click)="activeNav(navOptions.fid)">First Input Delay</a>
-      <a href="{{ path }}#/time-to-interactive/"
-      [class.active]="navSelected === navOptions.tti"
-      (click)="activeNav(navOptions.tti)">Time to Interactive</a>
-      <a href="{{ path }}#/annotate-metrics/"
-      [class.active]="navSelected === navOptions.annotate"
-      (click)="activeNav(navOptions.annotate)">Annotate metrics</a>
-      <a href="{{ path }}#/component-first-paint/"
-      [class.active]="navSelected === navOptions.cfp"
-      (click)="activeNav(navOptions.cfp)">Component First Paint</a>
-      <a href="{{ path }}#/custom-logging/"
-      [class.active]="navSelected === navOptions.log"
-      (click)="activeNav(navOptions.log)">Custom Logging</a>
-      <a href="{{ path }}#/google-analytics/"
-      [class.active]="navSelected === navOptions.ga"
-      (click)="activeNav(navOptions.ga)">Google Analytics</a>
-      <a href="{{ path }}#/analytics-support/"
-      [class.active]="navSelected === navOptions.as"
-      (click)="activeNav(navOptions.as)">Analytics Support</a>
-      <a href="{{ path }}#/default-options/"
-      [class.active]="navSelected === navOptions.options"
-      (click)="activeNav(navOptions.options)">Default Options</a>
-      <a href="{{ path }}#/default-options/"
-      [class.active]="navSelected === navOptions.utilities"
-      (click)="activeNav(navOptions.utilities)">Utilities</a>
-      <a href="{{ path }}#/copyright-and-license/"
-      [class.active]="navSelected === navOptions.copyright"
-      (click)="activeNav(navOptions.copyright)">Copyright and licenses</a>
-    </div>
-  </div>
+  <app-navigation></app-navigation>
 </div>

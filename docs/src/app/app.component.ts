@@ -7,14 +7,16 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { DialogComponent } from './dialog/dialog.component';
-import { NgPerfume, PerfumeViewInit } from '../../../angular/dist/perfume';
+
+// import { NgPerfume, PerfumeAfterViewInit } from '../../../angular/';
+import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],
 })
-@PerfumeViewInit()
+@PerfumeAfterViewInit()
 export class AppComponent implements AfterViewInit {
   @ViewChild('p')
   // Component
@@ -25,10 +27,6 @@ export class AppComponent implements AfterViewInit {
   firstInputDelay: number;
   timeToInteractive: number;
   path: string;
-  navOptions: {
-    [keyof: string]: string;
-  };
-  navSelected: string;
   private gifIndex = 0;
 
   constructor(
@@ -42,24 +40,6 @@ export class AppComponent implements AfterViewInit {
     this.observeFID();
     this.observeTTI();
     this.path = window.location.href.split('#')[0];
-
-    // Component variables
-    this.navOptions = {
-      userCentric: 'user-centric-metrics',
-      installing: 'installing-and-imports',
-      fp: 'first-paint',
-      fcp: 'first-contentful-paint',
-      fid: 'first-input-delay',
-      tti: 'time-to-interactive',
-      cfp: 'component-first-paint',
-      annotate: 'annotate-metrics',
-      log: 'custom-logging',
-      ga: 'google-analytics',
-      as: 'analytics-support',
-      options: 'default-options',
-      utilities: 'utilities',
-      copyright: 'copyright-and-license',
-    };
   }
 
   ngAfterViewInit() {
@@ -96,10 +76,6 @@ export class AppComponent implements AfterViewInit {
     const duration = this.perfume.end('fibonacci') as number;
     this.perfume.log('Custom logging', duration);
     this.logCustom = `🍹 HayesValley.js: Custom logging ${duration} ms`;
-  }
-
-  activeNav(selected) {
-    this.navSelected = selected;
   }
 
   private async observeFCP() {

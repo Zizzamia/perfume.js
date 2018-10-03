@@ -9,15 +9,6 @@ import Perfume, { IPerfumeConfig } from 'perfume.js';
 
 let perfume;
 
-/**
- * Describes any Angular component class that implements `AfterViewInit`.
- */
-// tslint:disable-next-line:interface-name
-export interface AfterViewInitable {
-  prototype: AfterViewInit;
-  new (...args: any[]): AfterViewInit;
-}
-
 @NgModule()
 export class PerfumeRootModule {
   constructor() {}
@@ -91,12 +82,21 @@ export class PerfumeModule {
 }
 
 /**
+ * Describes any Angular component class that implements `AfterViewInit`.
+ */
+// tslint:disable-next-line:interface-name
+export interface AfterViewInitable {
+  prototype: AfterViewInit;
+  new (...args: any[]): AfterViewInit;
+}
+
+/**
  * Component View Init (CVI) decorator
  * Marks the time between the constructor is initialized,
  * and ngAfterViewInit execution ends.
  */
 // tslint:disable-next-line:function-name
-export function PerfumeViewInit() {
+export function PerfumeAfterViewInit() {
   return function DecoratorFactory(target: AfterViewInitable) {
     // The new constructor behavior, supports AOT and DI
     const newConstructor: any = function newCtor(...args) {

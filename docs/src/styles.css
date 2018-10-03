@@ -60,10 +60,38 @@ img {
   border-radius: 4px !important;
   box-shadow: none !important;
 }
+.layout {
+  margin: 0 auto;
+  padding: 10px 32px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.layout-content a {
+  color: #caa29b;
+}
+.layout-content a:hover {
+  color: #b08881;
+}
+.box {
+  overflow: hidden;
+  margin: 30px 0 30px;
+  text-align: left;
+}
 
 @media only screen and (max-width: 600px) {
   #twitter-widget-0 {
     float: left;
     margin-left: 0;
+  }
+}
+@media (min-width: 960px) {
+  .layout {
+    display: flex;
+    justify-content: center;
+  }
+  .layout-content {
+    flex: 1;
+    max-width: 700px;
   }
 }

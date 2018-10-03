@@ -3,14 +3,22 @@ import { NgModule } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { PerfumeModule } from '../../../angular/dist/perfume';
+// import { PerfumeModule } from '../../../angular';
+import { PerfumeModule } from 'perfume.js/angular';
 
 // Componentes
 import { AppComponent } from './app.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { IntroComponent } from './intro/intro.component';
 
 @NgModule({
-  declarations: [AppComponent, DialogComponent],
+  declarations: [
+    AppComponent,
+    DialogComponent,
+    NavigationComponent,
+    IntroComponent,
+  ],
   imports: [
     PerfumeModule.forRoot({
       firstPaint: true,

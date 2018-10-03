@@ -1,11 +1,10 @@
 {
   "name": "perfume-angular",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "",
-  "main": "perfume.js",
+  "main": "dist/perfume.js",
   "scripts": {
-    "build": "tsc && tsc --module commonjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc && tsc --module commonjs"
   },
   "author": "Leonardo Zizzamia",
   "license": "MIT",
