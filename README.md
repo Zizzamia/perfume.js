@@ -22,7 +22,6 @@
 * First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Input Delay (FID)
 * Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c))
-* Component First Paint (CFP)
 
 ![Performance Metrics load timeline](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perf-metrics-load-timeline.png)
 
@@ -217,7 +216,38 @@ const durationTTI = await perfume.observeTimeToInteractive;
 perfume.sendTiming(metricName, durationFCP);
 ```
 
-## Angular
+## Frameworks
+
+### Angular
+Let's use Perfume with the Angular framework
+
+```js
+import { PerfumeModule, PerfumeAfterViewInit } from 'perfume.js/angular';
+import { AppComponent } from './app.component';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.less'],
+})
+@PerfumeAfterViewInit()
+export class AppComponent implements AfterViewInit {
+  constructor() {}
+  ngAfterViewInit() {}
+}
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    PerfumeModule.forRoot({
+      firstContentfulPaint: true,
+      firstInputDelay: true,
+    }),
+  ],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
 
 ## Develop
 
