@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0 (2018-10-3)
+
+### Feat
+
+* **feat:** Initial Angular decorator implementation
 
 ## 1.0.0 (2018-9-22)
 
