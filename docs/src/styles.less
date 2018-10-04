@@ -1,0 +1,241 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/OpenSans-Regular.woff2') format('woff2'),
+      url('./assets/fonts/OpenSans-Regular.woff') format('woff'),
+      url('./assets/fonts/OpenSans-Regular.ttf') format('truetype');
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fffeff;
+  box-sizing: border-box;
+  color: #5e5252;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+}
+h3 {
+  font-size: 1.6em;
+  margin: 0.7em 0 0.38em;
+}
+p,
+li {
+  font-size: 1.12em;
+  margin: 0;
+}
+p + p {
+  margin: 10px 0;
+}
+a {
+  color: inherit;
+}
+b {
+  font-weight: 600;
+}
+img {
+  border: none;
+}
+.ng-version {
+  position: relative;
+  z-index: 0;
+}
+#twitter-widget-0 {
+  margin-left: 20px;
+}
+.mat-dialog-container {
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+.layout {
+  margin: 0 auto;
+  padding: 10px 32px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.layout-content a {
+  color: #caa29b;
+}
+.layout-content a:hover {
+  color: #b08881;
+}
+
+.box {
+  margin: 30px 0 30px;
+  text-align: left;
+}
+.box p,
+.box li {
+  line-height: 27px;
+}
+h2.box-title {
+  margin: 0;
+  padding: 14px 0 12px;
+  border-bottom: 1px solid #ccc;
+  font-size: 2em;
+  font-weight: 400;
+  line-height: 32x;
+}
+h3.box-title {
+  position: relative;
+  margin: 0;
+  padding: 0 0 6px;
+  font-size: 1.6em;
+  font-weight: 400;
+  line-height: 34px;
+
+  a {
+    color: #5e5252;
+    text-decoration: none;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+    
+    &:hover {
+      color: #222;
+      &:before {
+        color: rgba(34,34,34,0.3);
+      }
+    }
+    &:before {
+      position: absolute;
+      top: -2px;
+      right: 100%;
+      font-size: 28px;
+      display: block;
+      color: rgba(34,34,34,0.1);
+      content: "#";
+      padding-right: 5px;
+    }
+  }
+}
+.box-img img {
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+  border-radius: 2px;
+}
+.box-demo {
+  margin: 10px 0;
+  padding: 10px;
+  border-left: 2px solid rgba(227, 187, 180, 0.8);
+  border-radius: 2px;
+  background: rgba(246, 225, 113, 0.3);
+}
+.box-demo-btn {
+  transition: all 0.3s;
+  margin-right: 20px;
+  padding: 5px 12px;
+  border: 1px solid #ddbdb6;
+  border-radius: 0.25rem;
+  line-height: 1.25;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.8em;
+  cursor: pointer;
+  background: #f5d7cd;
+  color: #8a7a75;
+}
+.box-demo-btn:hover {
+  border-color: #f2db77;
+  background: #f7e7a1;
+  color: #fdfbfa;
+}
+.box-code {
+  overflow-x: auto;
+  background-color: #f8f8f8;
+  padding: 0.4em 0 0;
+  line-height: 1.1em;
+  border-radius: 2px;
+  position: relative;
+  margin: 10px 0;
+
+  &.js .code:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #ccc;
+    text-align: right;
+    font-size: 0.8em;
+    padding: 5px 10px 0;
+    line-height: 15px;
+    height: 15px;
+    font-weight: 600;
+    content: 'JS';
+  }
+  table,
+  tr,
+  td {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 0;
+    margin: 0;
+  }
+  pre {
+    padding: 0.4em 1em 0.8em;
+    line-height: 1.55em;
+    font-size: 0.9em;
+    margin: 0;
+    color: #24292e;
+    font-family: 'Roboto Mono', Monaco, courier, monospace;
+
+    .gray {
+      color: #6a737d;
+    }
+    .red {
+      color: #d73a49;
+    }
+    .blue {
+      color: #005cc5;
+    }
+    .violet {
+      color: #6f42c1;
+    }
+    .green {
+      color: #7cb026;
+    }
+    .yellow {
+      color: #E0D067;
+    }
+  }
+  .code .line {
+    min-height: 1.5em;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #twitter-widget-0 {
+    float: left;
+    margin-left: 0;
+  }
+}
+@media (min-width: 960px) {
+  .layout {
+    display: flex;
+    justify-content: center;
+  }
+  .layout-content {
+    flex: 1;
+    max-width: 700px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .box-code {
+    pre {
+      font-size: 1em;
+    }
+  }
+}

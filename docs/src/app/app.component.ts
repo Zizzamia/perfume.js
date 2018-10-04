@@ -5,8 +5,6 @@ import {
   ViewChild,
   NgZone,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { DialogComponent } from './dialog/dialog.component';
 
 // import { NgPerfume, PerfumeAfterViewInit } from '../../../angular/';
 import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
@@ -22,18 +20,15 @@ export class AppComponent implements AfterViewInit {
   // Component
   logCustom: string;
   logFibonacci: string;
-  logOpenDialog: string;
   firstContentfulPaint: number;
   firstInputDelay: number;
   timeToInteractive: number;
   path: string;
-  private gifIndex = 0;
 
   constructor(
     private ref: ChangeDetectorRef,
-    public dialog: MatDialog,
     private zone: NgZone,
-    private perfume: NgPerfume,
+    public perfume: NgPerfume,
   ) {
     // Perfume
     this.observeFCP();
@@ -56,18 +51,6 @@ export class AppComponent implements AfterViewInit {
     this.fibonacci(800);
     const duration = this.perfume.end('fibonacci');
     this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration} ms`;
-  }
-
-  async openDialog() {
-    this.perfume.start('openDialog');
-    const dialogRef = this.dialog.open(DialogComponent, {
-      data: { gifIndex: this.gifIndex },
-      width: '50%',
-    });
-    // Increment or reset index
-    this.gifIndex = this.gifIndex === 4 ? 0 : this.gifIndex + 1;
-    const duration = await this.perfume.endPaint('openDialog');
-    this.logOpenDialog = `⚡️ Perfume.js: openDialog ${duration} ms`;
   }
 
   customLogging() {

@@ -15,20 +15,21 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <div class="box box--intro" id="/home/">
         <a href="https://github.com/zizzamia/perfume.js" target="_blank">
           <picture class="logo">
-            <source srcset="{{ path }}assets/perfume-logo-v1-0-0.webp" type="image/webp" />
-            <source srcset="{{ path }}assets/perfume-logo-v1-0-0.png" type="image/png" />
-            <img src="{{ path }}assets/perfume-logo-v1-0-0.png" alt="Perfume.js logo" />
+            <source srcset="{{ path }}assets/perfume-logo-v1-1-0.webp" type="image/webp" />
+            <source srcset="{{ path }}assets/perfume-logo-v1-1-0.png" type="image/png" />
+            <img src="{{ path }}assets/perfume-logo-v1-1-0.png" alt="Perfume.js logo" />
           </picture>
         </a>
         <h1 class="title">Perfume.js</h1>
-        <p>A JavaScript library for <b>measuring</b> Short and Long Script, <br />
-          <b>First (Contentful) Paint</b>
-            (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f"
-            target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID),
+        <p>
+          JavaScript library that measures <b>First (Contentful) Paint</b>
+          (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f"
+          target="_blank">FP/FCP</a>), <br />
           <b>Time to Interactive</b>
-            (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>),
-          <b>Component First Paint</b> (CFM), annotating them to the DevTools timeline and reporting the results to
-          <b>Google Analytics</b>.
+          (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>) 
+          and <b>First Input Delay</b> (FID).<br />
+          Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline.
+          Reports all the results to <b>Google Analytics</b> or your favorite tracking tool.
         </p>
         <a class="github-button" href="https://github.com/zizzamia/perfume.js"
         data-size="large" data-show-count="true"

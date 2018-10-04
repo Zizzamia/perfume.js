@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { IntroComponent } from './intro/intro.component';
+import { CfpComponent } from './cfp/cfp.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { IntroComponent } from './intro/intro.component';
     DialogComponent,
     NavigationComponent,
     IntroComponent,
+    CfpComponent,
   ],
   imports: [
     PerfumeModule.forRoot({

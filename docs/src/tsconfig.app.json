@@ -3,8 +3,6 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "module": "es2015",
     "types": []
   },
@@ -12,7 +10,5 @@
     "test.ts",
     "**/*.spec.ts"
   ],
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true
-  }
+  "angularCompilerOptions": {}
 }

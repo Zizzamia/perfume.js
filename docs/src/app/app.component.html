@@ -2,16 +2,15 @@
 <div class="layout layout--body">
   <div class="layout-content">
     <div class="box box--intro">
-      <h2 class="box-title" id="/user-centric-metrics/">
-        User-centric performance metrics
-      </h2>
+      <h3 class="box-title" id="/user-centric-metrics/">
+        <a href="{{ path }}#/user-centric-metrics/">User-centric performance metrics</a>
+      </h3>
       <p><b>Perfume</b> leverage the latest W3C Performance Drafts (like PerformanceObserver), for measuring performance that matters! ⚡️ </p>
       <ul>
         <li>First Paint (FP)</li>
         <li>First Contentful Paint (FCP)</li>
         <li>First Input Delay (FID)</li>
         <li>Time to Interactive (TTI)</li>
-        <li>Component First Paint (CFP)</li>
       </ul>
       <picture class="box-img">
         <source srcset="{{ path }}assets/perf-metrics-load-timeline.webp" type="image/webp" />
@@ -21,7 +20,9 @@
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/installing-and-imports/">Installing and Imports</h2>
+      <h3 class="box-title" id="/installing-and-imports/">
+        <a href="{{ path }}#/installing-and-imports/">Installing and Imports</a>
+      </h3>
       <div class="box-code js">
         <table>
           <tbody>
@@ -47,7 +48,15 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/first-paint/">First Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP</a>)</h2>
+      <h2 class="box-title">Start measuring</h2>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/first-paint/">
+        <a href="{{ path }}#/first-paint/">
+          First Paint (FP)
+        </a>
+      </h3>
       <p>FP is the exact time the browser renders anything as visually different from what was
       on the screen before navigation, e.g. a background change after a long blank white screen time.</p>
       <p class="box-demo">
@@ -70,7 +79,11 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/first-contentful-paint/">First Contentful Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FCP</a>)</h2>
+      <h3 class="box-title" id="/first-contentful-paint/">
+        <a href="{{ path }}#/first-contentful-paint/">
+          First Contentful Paint (FCP)
+        </a>
+      </h3>
       <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
       <p class="box-demo">
         ⚡️ Perfume.js: First Contentful Paint {{ firstContentfulPaint || 0 }} ms
@@ -92,7 +105,9 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/first-input-delay/">First Input Delay (FID)</h2>
+      <h3 class="box-title" id="/first-input-delay/">
+        <a href="{{ path }}#/first-input-delay/">First Input Delay (FID)</a>
+      </h3>
       <p>
         <b>FID</b> measures the time from when a user first interacts with your site 
         (i.e. when they click a link, tap on a button) to the time when the browser is actually 
@@ -118,7 +133,11 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/time-to-interactive/">Time to Interactive (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>)</h2>
+      <h3 class="box-title" id="/time-to-interactive/">
+        <a href="{{ path }}#/time-to-interactive/">
+          Time to Interactive (TTI)
+        </a>  
+      </h3>
       <p>The metric marks the point at which your application is both visually rendered and capable of reliably responding to
         user input. An application could be unable to respond to user input for a couple of reasons:</p>
       <ul>
@@ -149,7 +168,9 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/annotate-metrics/">Annotate metrics in the DevTools</h2>
+      <h3 class="box-title" id="/annotate-metrics/">
+        <a href="{{ path }}#/annotate-metrics/">Annotate metrics in the DevTools</a>
+      </h3>
       <p>
         <b>Performance.mark</b> (
         <a href="https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API" target="_blank">User Timing API</a>) is used to create an application-defined peformance entry in the browser's performance entry
@@ -180,39 +201,12 @@ perfume.<span class="violet">end</span>('fibonacci');
       </picture>
     </div>
 
-    <div class="box" id="/component-first-paint/">
-      <h2 class="box-title">Component First Paint (CFP)</h2>
-      <p>This metric mark the point, immediately after creating a
-        <b>new component</b>, when the browser renders pixels to the screen.
-      </p>
-      <p class="box-demo">
-        <button type="button" class="box-demo-btn"
-        (click)="openDialog()">Click to open dialog</button>
-        <span>{{ logOpenDialog }}</span>
-      </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre>perfume.<span class="blue">start</span>('openDialog');
-<span class="violet">this</span>.dialog.<span class="violet">open</span>();
-perfume.<span class="violet">endPaint</span>('openDialog');
-<span class="gray">// ⚡️ Perfume.js: openDialog 10.54 ms</span></pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <picture class="box-img">
-        <source srcset="{{ path }}assets/performance-cfp.webp" type="image/webp" />
-        <source srcset="{{ path }}assets/performance-cfp.png" type="image/png" />
-        <img src="{{ path }}assets/performance-cfp.png" alt="Annotate Component First Paint (CFP)" />
-      </picture>
-    </div>
+    <app-cfp class="box" id="/component-first-paint/"></app-cfp>
 
     <div class="box">
-      <h2 class="box-title" id="/custom-logging/">Custom Logging</h2>
+      <h3 class="box-title" id="/custom-logging/">
+        <a href="{{ path }}#/custom-logging/">Custom Logging</a>
+      </h3>
       <p>Save the duration and print it out exactly the way you want it.</p>
       <p class="box-demo">
         <button class="box-demo-btn" (click)="customLogging()">Run custom logging</button>
@@ -240,7 +234,61 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/google-analytics/">Google Analytics</h2>
+      <h2 class="box-title">Frameworks</h2>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/angular/">
+        <a href="{{ path }}#/angular/">Angular</a>
+      </h3>
+      <p>
+        Let's use Perfume with the Angular framework
+      </p>
+      <div class="box-code js">
+        <table>
+          <tbody>
+            <tr>
+              <td class="code">
+                <pre><span class="red">import</span> {{'{'}} {{ 'PerfumeModule' }}, PerfumeAfterViewInit {{'}'}} <span class="red">from</span> <span class="yellow">'perfume.js/angular'</span>;
+<span class="red">import</span> {{'{'}} AppComponent {{'}'}} <span class="red">from</span> <span class="yellow">'./app.component'</span>;
+
+@<span class="green">Component</span>({{'{'}}
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.less'],
+{{'}'}})
+@<span class="green">PerfumeAfterViewInit</span>()
+<span class="red">export</span> <span class="blue">class</span> <span class="green">AppComponent</span> <span class="red">implements</span> <span class="green">AfterViewInit</span> {{'{'}}
+  <span class="blue">constructor</span>() {{'{}'}}
+  <span class="green">ngAfterViewInit</span>() {{'{}'}}
+{{'}'}}
+
+@<span class="green">NgModule</span>({{'{'}}
+  declarations: [AppComponent],
+  imports: [
+    {{ 'PerfumeModule' }}.<span class="green">forRoot</span>({{'{'}}
+      firstContentfulPaint: <span class="blue">true</span>,
+      firstInputDelay: <span class="blue">true</span>,
+    {{'}'}}),
+  ],
+  bootstrap: [AppComponent],
+{{'}'}})
+<span class="red">export</span> <span class="blue">class</span> <span class="green">AppModule</span> {{'{}'}}</pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box">
+      <h2 class="box-title">Analytics</h2>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/google-analytics/">
+        <a href="{{ path }}#/google-analytics/">Google Analytics</a>
+      </h3>
       <p>To enable Perfume to send your measures to Google Analytics User timing, set the option
         <b>enable:true</b> and a custom
         <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar" target="_blank">user timing variable</a>
@@ -270,7 +318,9 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/analytics-support/">Generic analytics platform support</h2>
+      <h3 class="box-title" id="/analytics-support/">
+        <a href="{{ path }}#/analytics-support/">Generic analytics platform support</a>
+      </h3>
       <p>Configurable analytics callback to use Perfume.js with any platform.</p>
       <div class="box-code js">
         <table>
@@ -290,7 +340,13 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/default-options/">Default Options</h2>
+      <h2 class="box-title">Customize & Utilities</h2>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/default-options/">
+        <a href="{{ path }}#/default-options/">Default Options</a>
+      </h3>
       <p>Default options provided to Perfume.js constructor.</p>
       <div class="box-code js">
         <table>
@@ -319,7 +375,9 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/utilities/">Utilities</h2>
+      <h3 class="box-title" id="/utilities/">
+        <a href="{{ path }}#/utilities/">Utilities</a>
+      </h3>
       <p>Perfume.js expose some methods and properties which may be useful to people extending the library.</p>
       <div class="box-code js">
         <table>
@@ -353,7 +411,29 @@ perfume.<span class="blue">sendTiming</span>(metricName, durationFCP);</pre>
     </div>
 
     <div class="box">
-      <h2 class="box-title" id="/copyright-and-license/">Copyright and license</h2>
+      <h3 class="box-title" id="/articles/">
+        <a href="{{ path }}#/articles/">Articles</a>
+      </h3>
+      <ul>
+        <li>
+          <a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" 
+          target="_blank">First (Contentful) Paint with a touch of Perfume(.js)</a>
+        </li>
+        <li>
+          <a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" 
+          target="_blank">Time to Interactive with RUM</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h2 class="box-title">Contacts</h2>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/copyright-and-license/">
+        <a href="{{ path }}#/copyright-and-license/">Copyright and licenses</a>
+      </h3>
       <p>Code and documentation copyright 2018
         <a href="https://twitter.com/Zizzamia" target="_blank">Leonardo Zizzamia</a>. Code released under the
         <a href="https://github.com/Zizzamia/perfume.js/blob/master/LICENSE" target="_blank">MIT license</a>. Docs released under Creative Commons.</p>
