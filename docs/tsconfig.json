@@ -19,10 +19,10 @@
     ],
     "paths": {
       "perfume": [
-        "dist/perfume"
+        "../angular"
       ],
       "perfume/*": [
-        "dist/perfume/*"
+        "../angular/*"
       ]
     }
   }
