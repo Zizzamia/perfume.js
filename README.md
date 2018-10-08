@@ -1,13 +1,13 @@
 <a href="http://www.perfumejs.com/">
-  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v1-1-0.png" align="left" width="262" />
+  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v1-2-0.png" align="left" width="262" />
 </a>
 
-# [Perfume.js v1.1.0](http://perfumejs.com)
+# [Perfume.js v1.2.0](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
 
-> JavaScript library that measures <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>Time to Interactive</b> (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>) and First Input Delay. Annotates components’ performance for Vanilla and Angular applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.
+> JavaScript library that measures <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>Time to Interactive</b> (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>) and First Input Delay. Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.
 
 <br />
 <br />
@@ -141,6 +141,45 @@ const duration = this.perfume.end('fibonacci');
 perfume.log('Custom logging', duration);
 // 🍹 HayesValley.js: Custom logging 0.14 ms
 ```
+
+## Frameworks
+
+### Angular
+Let's use Perfume with the Angular framework
+
+```javascript
+import { PerfumeModule, PerfumeAfterViewInit } from 'perfume.js/angular';
+import { AppComponent } from './app.component';
+
+// Demo App
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.less'],
+})
+@PerfumeAfterViewInit('AppComponent')
+export class AppComponent implements AfterViewInit {
+  constructor() {}
+  ngAfterViewInit() {}
+}
+
+// Perfume.js config, supports AOT and DI
+export const PerfumeConfig = {
+  firstContentfulPaint: true,
+  firstInputDelay: true,
+};
+
+// Bootstrap App
+@NgModule({
+  declarations: [AppComponent],
+  imports: [PerfumeModule.forRoot(PerfumeConfig)],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+
+
+## Analytics
 
 ### Google Analytics
 

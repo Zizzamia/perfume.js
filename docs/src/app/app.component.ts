@@ -13,7 +13,7 @@ import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],
 })
-@PerfumeAfterViewInit()
+@PerfumeAfterViewInit('AppComponent')
 export class AppComponent implements AfterViewInit {
   @ViewChild('p')
   // Component

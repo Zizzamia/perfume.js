@@ -252,25 +252,28 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
                 <pre><span class="red">import</span> {{'{'}} {{ 'PerfumeModule' }}, PerfumeAfterViewInit {{'}'}} <span class="red">from</span> <span class="yellow">'perfume.js/angular'</span>;
 <span class="red">import</span> {{'{'}} AppComponent {{'}'}} <span class="red">from</span> <span class="yellow">'./app.component'</span>;
 
+<span class="gray">// Demo App</span>
 @<span class="green">Component</span>({{'{'}}
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],
 {{'}'}})
-@<span class="green">PerfumeAfterViewInit</span>()
+@<span class="green">PerfumeAfterViewInit</span>(<span class="yellow">'AppComponent'</span>)
 <span class="red">export</span> <span class="blue">class</span> <span class="green">AppComponent</span> <span class="red">implements</span> <span class="green">AfterViewInit</span> {{'{'}}
   <span class="blue">constructor</span>() {{'{}'}}
   <span class="green">ngAfterViewInit</span>() {{'{}'}}
 {{'}'}}
 
+<span class="gray">// Perfume.js config, supports AOT and DI</span>
+<span class="red">export</span> <span class="blue">const</span> PerfumeConfig <span class="red">=</span> {{'{'}}
+  firstContentfulPaint: <span class="blue">true</span>,
+  firstInputDelay: <span class="blue">true</span>,
+{{'}'}};
+
+<span class="gray">// Bootstrap App</span>
 @<span class="green">NgModule</span>({{'{'}}
   declarations: [AppComponent],
-  imports: [
-    {{ 'PerfumeModule' }}.<span class="green">forRoot</span>({{'{'}}
-      firstContentfulPaint: <span class="blue">true</span>,
-      firstInputDelay: <span class="blue">true</span>,
-    {{'}'}}),
-  ],
+  imports: [{{ 'PerfumeModule' }}.<span class="green">forRoot</span>(PerfumeConfig)],
   bootstrap: [AppComponent],
 {{'}'}})
 <span class="red">export</span> <span class="blue">class</span> <span class="green">AppModule</span> {{'{}'}}</pre>

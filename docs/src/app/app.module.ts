@@ -15,6 +15,17 @@ import { PerfumeModule } from 'perfume.js/angular';
 export function analyticsTracker(metricName: string, duration: number) {
   console.log('Analytics Tracker', metricName, duration);
 }
+export const PerfumeConfig = {
+  firstPaint: true,
+  firstContentfulPaint: true,
+  firstInputDelay: true,
+  timeToInteractive: true,
+  analyticsTracker,
+  googleAnalytics: {
+    enable: true,
+    timingVar: 'userId',
+  },
+};
 
 @NgModule({
   declarations: [
@@ -28,19 +39,10 @@ export function analyticsTracker(metricName: string, duration: number) {
     BrowserAnimationsModule,
     BrowserModule,
     MatDialogModule,
-    PerfumeModule.forRoot({
-      firstPaint: true,
-      firstContentfulPaint: true,
-      firstInputDelay: true,
-      timeToInteractive: true,
-      analyticsTracker,
-      googleAnalytics: {
-        enable: true,
-        timingVar: 'userId',
-      },
-    }),
+    PerfumeModule.forRoot(PerfumeConfig),
   ],
   providers: [],
+  entryComponents: [DialogComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

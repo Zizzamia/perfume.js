@@ -10,20 +10,6 @@ import Perfume, { IPerfumeConfig } from 'perfume.js';
 
 export let perfume;
 
-const defaultPerfumeConfig = {
-  firstContentfulPaint: false,
-  firstPaint: false,
-  firstInputDelay: false,
-  timeToInteractive: false,
-  googleAnalytics: {
-    enable: false,
-    timingVar: 'name',
-  },
-  logPrefix: '⚡️ Perfume.js:',
-  logging: true,
-  warning: false,
-};
-
 export const PERFUME_CONFIG = new InjectionToken('Perfume.js config');
 
 @NgModule({})
@@ -89,7 +75,7 @@ export class PerfumeModule {
       providers: [
         {
           provide: PERFUME_CONFIG,
-          useValue: { ...defaultPerfumeConfig, ...config },
+          useValue: config,
         },
         NgPerfume,
       ],
@@ -112,11 +98,11 @@ export interface AfterViewInitable {
  * and ngAfterViewInit execution ends.
  */
 // tslint:disable-next-line:function-name
-export function PerfumeAfterViewInit() {
+export function PerfumeAfterViewInit(targetName?: string) {
   return function DecoratorFactory(target: AfterViewInitable) {
     // The new constructor behavior, supports AOT and DI
     const newConstructor: any = function newCtor(...args) {
-      perfume.start(target.name);
+      perfume.start(targetName || target.name);
       const c: any = function childConstuctor() {
         return target.apply(this, arguments);
       };
@@ -129,7 +115,7 @@ export function PerfumeAfterViewInit() {
     target.prototype.ngAfterViewInit = function(...args) {
       // tslint:disable-next-line:no-unused-expression
       ngAfterViewInit && ngAfterViewInit.apply(this, args);
-      perfume.end(target.name);
+      perfume.end(targetName || target.name);
     };
 
     // Copy prototype so instanceof operator still works

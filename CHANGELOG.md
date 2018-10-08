@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 (2018-10-8)
+
+### Bug Fixes
+
+* **fix:** Added Angular AOT support for PerfumeModule
+
 ## 1.1.0 (2018-10-3)
 
 ### Feat

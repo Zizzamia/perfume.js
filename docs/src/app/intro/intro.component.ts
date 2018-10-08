@@ -14,9 +14,9 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <div class="box box--intro" id="/home/">
         <a href="https://github.com/zizzamia/perfume.js" target="_blank">
           <picture class="logo">
-            <source srcset="{{ path }}assets/perfume-logo-v1-1-0.webp" type="image/webp" />
-            <source srcset="{{ path }}assets/perfume-logo-v1-1-0.png" type="image/png" />
-            <img src="{{ path }}assets/perfume-logo-v1-1-0.png" alt="Perfume.js logo" />
+            <source srcset="{{ path }}assets/perfume-logo-v1-2-0.webp" type="image/webp" />
+            <source srcset="{{ path }}assets/perfume-logo-v1-2-0.png" type="image/png" />
+            <img src="{{ path }}assets/perfume-logo-v1-2-0.png" alt="Perfume.js logo" />
           </picture>
         </a>
         <h1 class="title">Perfume.js</h1>
@@ -41,22 +41,6 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
   `,
   styles: [
     `
-      @font-face {
-        font-family: 'Dancing Script';
-        font-style: normal;
-        font-weight: 400;
-        src: url('../../assets/fonts/dancing.woff2') format('woff2'),
-          url('../../assets/fonts/dancing.woff') format('woff'),
-          url('../../assets/fonts/dancing.ttf') format('truetype');
-      }
-      @font-face {
-        font-family: 'Source Sans Pro';
-        font-style: normal;
-        font-weight: 400;
-        src: url('../assets/fonts/SourceSansPro-Regular.woff2') format('woff2'),
-          url('../assets/fonts/SourceSansPro-Regular.woff') format('woff'),
-          url('../assets/fonts/SourceSansPro-Regular.ttf') format('truetype');
-      }
       .layout--intro .box--intro {
         margin: 0 0 40px !important;
       }
@@ -97,7 +81,7 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-@PerfumeAfterViewInit()
+@PerfumeAfterViewInit('IntroComponent')
 export class IntroComponent implements AfterViewInit {
   @HostBinding('class.layout--intro')
   classHost = true;

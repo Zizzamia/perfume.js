@@ -10,7 +10,7 @@ import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
   styles: [``],
   encapsulation: ViewEncapsulation.None,
 })
-@PerfumeAfterViewInit()
+@PerfumeAfterViewInit('CfpComponent')
 export class CfpComponent implements AfterViewInit {
   logOpenDialog: string;
   path: string;

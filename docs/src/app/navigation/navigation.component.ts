@@ -113,7 +113,7 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-@PerfumeAfterViewInit()
+@PerfumeAfterViewInit('NavigationComponent')
 export class NavigationComponent implements AfterViewInit {
   @HostBinding('class.layout-nav')
   classHost = true;
