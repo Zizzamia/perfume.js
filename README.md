@@ -178,6 +178,8 @@ export const PerfumeConfig = {
 export class AppModule {}
 ```
 
+![Angular Performance Decorator](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/angular-performance-decorator.png)
+
 
 ## Analytics
 
@@ -208,6 +210,8 @@ const perfume = new Perfume({
 });
 ```
 
+## Customize & Utilities
+
 ### Default Options
 
 Default options provided to Perfume.js constructor.
@@ -229,7 +233,7 @@ const options = {
 };
 ```
 
-### Utilities
+#### Utilities
 
 Perfume.js expose some methods and properties which may be useful to people extending the library.
 
@@ -253,39 +257,6 @@ const durationTTI = await perfume.observeTimeToInteractive;
 
 // Send Custom User timing measure to Google Analytics
 perfume.sendTiming(metricName, durationFCP);
-```
-
-## Frameworks
-
-### Angular
-Let's use Perfume with the Angular framework
-
-```js
-import { PerfumeModule, PerfumeAfterViewInit } from 'perfume.js/angular';
-import { AppComponent } from './app.component';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.less'],
-})
-@PerfumeAfterViewInit()
-export class AppComponent implements AfterViewInit {
-  constructor() {}
-  ngAfterViewInit() {}
-}
-
-@NgModule({
-  declarations: [AppComponent],
-  imports: [
-    PerfumeModule.forRoot({
-      firstContentfulPaint: true,
-      firstInputDelay: true,
-    }),
-  ],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
 ```
 
 ## Develop
