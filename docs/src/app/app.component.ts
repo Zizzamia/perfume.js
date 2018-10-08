@@ -6,8 +6,8 @@ import {
   NgZone,
 } from '@angular/core';
 
-// import { NgPerfume, PerfumeAfterViewInit } from '../../../angular/';
-import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
+import { NgPerfume, PerfumeAfterViewInit } from 'perfume';
+// import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
 
 @Component({
   selector: 'app-root',

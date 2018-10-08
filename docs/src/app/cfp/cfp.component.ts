@@ -2,8 +2,8 @@ import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { DialogComponent } from '../dialog/dialog.component';
 
-// import { PerfumeAfterViewInit } from '../../../../angular/';
-import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
+import { NgPerfume, PerfumeAfterViewInit } from 'perfume';
+// import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
 
 @Component({
   selector: 'app-cfp',
@@ -17,7 +17,7 @@ export class CfpComponent implements AfterViewInit {
   path: string;
   private gifIndex = 0;
 
-  constructor(public dialog: MatDialog, private perfume: NgPerfume) {
+  constructor(public dialog: MatDialog, public perfume: NgPerfume) {
     this.path = window.location.href.split('#')[0];
   }
 

@@ -1,17 +1,20 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-// import { PerfumeModule } from '../../../angular';
-import { PerfumeModule } from 'perfume.js/angular';
-
-// Componentes
 import { AppComponent } from './app.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { IntroComponent } from './intro/intro.component';
 import { CfpComponent } from './cfp/cfp.component';
+
+import { PerfumeModule } from 'perfume';
+
+// Supports AOT and DI
+export function analyticsTracker(metricName: string, duration: number) {
+  console.log('Analytics Tracker', metricName, duration);
+}
 
 @NgModule({
   declarations: [
@@ -22,25 +25,22 @@ import { CfpComponent } from './cfp/cfp.component';
     CfpComponent,
   ],
   imports: [
+    BrowserAnimationsModule,
+    BrowserModule,
+    MatDialogModule,
     PerfumeModule.forRoot({
       firstPaint: true,
       firstContentfulPaint: true,
       firstInputDelay: true,
       timeToInteractive: true,
-      analyticsTracker: (metricName: string, duration: number) => {
-        console.log('Analytics Tracker', metricName, duration);
-      },
+      analyticsTracker,
       googleAnalytics: {
         enable: true,
         timingVar: 'userId',
       },
     }),
-    BrowserAnimationsModule,
-    BrowserModule,
-    MatDialogModule,
   ],
   providers: [],
-  entryComponents: [DialogComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

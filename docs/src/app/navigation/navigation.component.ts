@@ -5,8 +5,8 @@ import {
   AfterViewInit,
 } from '@angular/core';
 
-// import { PerfumeAfterViewInit } from '../../../../angular/';
-import { PerfumeAfterViewInit } from 'perfume.js/angular';
+import { PerfumeAfterViewInit } from 'perfume';
+// import { PerfumeAfterViewInit } from 'perfume.js/angular';
 
 @Component({
   selector: 'app-navigation',
