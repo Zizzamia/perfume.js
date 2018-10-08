@@ -24,12 +24,10 @@
       "perfume.js/angular/*": [
         "node_modules/perfume.js/angular/*"
       ],
-      "perfume": [
-        "../angular"
-      ],
-      "perfume/*": [
-        "../angular/*"
-      ]
     }
+  },
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": false,
+    "strictMetadataEmit": false
   }
 }

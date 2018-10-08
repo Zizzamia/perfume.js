@@ -9,6 +9,7 @@ import {
 import Perfume, { IPerfumeConfig } from 'perfume.js';
 
 export let perfume;
+
 const defaultPerfumeConfig = {
   firstContentfulPaint: false,
   firstPaint: false,

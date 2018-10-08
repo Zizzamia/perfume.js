@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { DialogComponent } from '../dialog/dialog.component';
 
-import { NgPerfume, PerfumeAfterViewInit } from 'perfume';
+import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
 
 @Component({
   selector: 'app-cfp',
