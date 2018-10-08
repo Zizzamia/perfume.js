@@ -4,7 +4,6 @@
 /tmp
 out-tsc
 dist
-angular/dist
 
 # dependencies
 node_modules
