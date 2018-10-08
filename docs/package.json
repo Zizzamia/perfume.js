@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
     "core-js": "^2.5.4",
-    "perfume.js": "^1.1.2",
+    "perfume.js": "^1.1.4",
     "rxjs": "~6.2.0",
     "zone.js": "~0.8.26"
   },

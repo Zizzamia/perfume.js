@@ -18,6 +18,12 @@
       "dom"
     ],
     "paths": {
+      "perfume.js/angular": [
+        "node_modules/perfume.js/angular"
+      ],
+      "perfume.js/angular/*": [
+        "node_modules/perfume.js/angular/*"
+      ],
       "perfume": [
         "../angular"
       ],

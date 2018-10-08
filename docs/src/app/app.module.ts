@@ -9,7 +9,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { IntroComponent } from './intro/intro.component';
 import { CfpComponent } from './cfp/cfp.component';
 
-import { PerfumeModule } from 'perfume.js/angular';
+import { PerfumeModule } from 'perfume';
 
 // Supports AOT and DI
 export function analyticsTracker(metricName: string, duration: number) {
