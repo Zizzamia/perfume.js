@@ -36,10 +36,10 @@ export const PerfumeConfig = {
     CfpComponent,
   ],
   imports: [
+    PerfumeModule.forRoot(PerfumeConfig),
     BrowserAnimationsModule,
     BrowserModule,
     MatDialogModule,
-    PerfumeModule.forRoot(PerfumeConfig),
   ],
   providers: [],
   entryComponents: [DialogComponent],

@@ -242,14 +242,25 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
         <a href="{{ path }}#/angular/">Angular</a>
       </h3>
       <p>
-        Let's use Perfume with the Angular framework
+        In combination with the Angular framework, we can start configuring Perfume to collect the initial 
+        performance metrics of the application. Make sure to import the `PefumeModule` 
+        at first inside the `NgModule` to let the PerformanceObserver work correctly.
+      </p>
+      <p>
+        In a large application use the  `@PerfumeAfterViewInit()` decorator to monitor the rendering 
+        performance of the most complex components. Avoid using it inside a NgFor, 
+        instead focus on components that include a collection of smaller components.
+      </p>
+      <p>
+        The `NgPerfume` service exposes all the methods and property of the `perfume` instance,
+        use it to annotate a distinct coding flow manually and for unit test mocking.
       </p>
       <div class="box-code js">
         <table>
           <tbody>
             <tr>
               <td class="code">
-                <pre><span class="red">import</span> {{'{'}} {{ 'PerfumeModule' }}, PerfumeAfterViewInit {{'}'}} <span class="red">from</span> <span class="yellow">'perfume.js/angular'</span>;
+                <pre><span class="red">import</span> {{'{'}} {{ 'NgPerfume, PerfumeModule' }}, PerfumeAfterViewInit {{'}'}} <span class="red">from</span> <span class="yellow">'perfume.js/angular'</span>;
 <span class="red">import</span> {{'{'}} AppComponent {{'}'}} <span class="red">from</span> <span class="yellow">'./app.component'</span>;
 
 <span class="gray">// Demo App</span>
@@ -260,8 +271,13 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
 {{'}'}})
 @<span class="green">PerfumeAfterViewInit</span>(<span class="yellow">'AppComponent'</span>)
 <span class="red">export</span> <span class="blue">class</span> <span class="green">AppComponent</span> <span class="red">implements</span> <span class="green">AfterViewInit</span> {{'{'}}
-  <span class="blue">constructor</span>() {{'{}'}}
+  <span class="blue">constructor</span>(public perfume: NgPerfume) {{'{}'}}
   <span class="green">ngAfterViewInit</span>() {{'{}'}}
+  <span class="green">launchFalconNine</span>() {{'{'}}
+    perfume.<span class="blue">start</span>('rocketScience');
+    <span class="gray">// Rocket Science Match ...</span>
+    perfume.<span class="blue">end</span>('rocketScience');
+  {{'}'}}
 {{'}'}}
 
 <span class="gray">// Perfume.js config, supports AOT and DI</span>

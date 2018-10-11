@@ -145,10 +145,14 @@ perfume.log('Custom logging', duration);
 ## Frameworks
 
 ### Angular
-Let's use Perfume with the Angular framework
+In combination with the Angular framework, we can start configuring Perfume to collect the initial performance metrics of the application. Make sure to import the `PefumeModule` at first inside the `NgModule` to let the PerformanceObserver work correctly.
+
+In a large application use the  `@PerfumeAfterViewInit()` decorator to monitor the rendering performance of the most complex components. Avoid using it inside a NgFor, instead focus on components that include a collection of smaller components.
+
+The `NgPerfume` service exposes all the methods and property of the `perfume` instance, use it to annotate a distinct coding flow manually and for unit test mocking.
 
 ```javascript
-import { PerfumeModule, PerfumeAfterViewInit } from 'perfume.js/angular';
+import { NgPerfume, PerfumeModule, PerfumeAfterViewInit } from 'perfume.js/angular';
 import { AppComponent } from './app.component';
 
 // Demo App
@@ -159,8 +163,13 @@ import { AppComponent } from './app.component';
 })
 @PerfumeAfterViewInit('AppComponent')
 export class AppComponent implements AfterViewInit {
-  constructor() {}
+  constructor(public perfume: NgPerfume) {}
   ngAfterViewInit() {}
+  launchFalconNine() {
+    this.perfume.start('rocketScience');
+    // Rocket Science Match ...
+    this.perfume.end('rocketScience');
+  }
 }
 
 // Perfume.js config, supports AOT and DI
@@ -172,7 +181,7 @@ export const PerfumeConfig = {
 // Bootstrap App
 @NgModule({
   declarations: [AppComponent],
-  imports: [PerfumeModule.forRoot(PerfumeConfig)],
+  imports: [PerfumeModule.forRoot(PerfumeConfig), BrowserModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
@@ -285,3 +294,17 @@ I want to thank some friends and projects for the work they did:
 ## Copyright and license
 
 Code and documentation copyright 2018 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
+
+## Team
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top">
+        <img width="100" height="100" src="https://github.com/zizzamia.png?s=150">
+        <br>
+        <a href="https://twitter.com/Zizzamia">Leonardo Zizzamia</a>
+      </td>
+     </tr>
+  </tbody>
+</table>
