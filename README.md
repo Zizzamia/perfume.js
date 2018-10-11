@@ -155,7 +155,6 @@ The `NgPerfume` service exposes all the methods and property of the `perfume` in
 import { NgPerfume, PerfumeModule, PerfumeAfterViewInit } from 'perfume.js/angular';
 import { AppComponent } from './app.component';
 
-// Demo App
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -178,7 +177,6 @@ export const PerfumeConfig = {
   firstInputDelay: true,
 };
 
-// Bootstrap App
 @NgModule({
   declarations: [AppComponent],
   imports: [PerfumeModule.forRoot(PerfumeConfig), BrowserModule],
@@ -301,8 +299,10 @@ Code and documentation copyright 2018 [Leonardo Zizzamia](https://twitter.com/Zi
   <tbody>
     <tr>
       <td align="center" valign="top">
-        <img width="100" height="100" src="https://github.com/zizzamia.png?s=150">
-        <br>
+        <a href="https://twitter.com/Zizzamia">
+          <img width="100" height="100" src="https://github.com/zizzamia.png?s=150">
+        </a>
+        <br />
         <a href="https://twitter.com/Zizzamia">Leonardo Zizzamia</a>
       </td>
      </tr>

@@ -243,16 +243,16 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
       </h3>
       <p>
         In combination with the Angular framework, we can start configuring Perfume to collect the initial 
-        performance metrics of the application. Make sure to import the `PefumeModule` 
-        at first inside the `NgModule` to let the PerformanceObserver work correctly.
+        performance metrics of the application. Make sure to import the <b>PefumeModule</b> 
+        at first inside the <b>NgModule</b> to let the PerformanceObserver work correctly.
       </p>
       <p>
-        In a large application use the  `@PerfumeAfterViewInit()` decorator to monitor the rendering 
+        In a large application use the  <b>@PerfumeAfterViewInit()</b> decorator to monitor the rendering 
         performance of the most complex components. Avoid using it inside a NgFor, 
         instead focus on components that include a collection of smaller components.
       </p>
       <p>
-        The `NgPerfume` service exposes all the methods and property of the `perfume` instance,
+        The <b>NgPerfume</b> service exposes all the methods and property of the <b>perfume</b> instance,
         use it to annotate a distinct coding flow manually and for unit test mocking.
       </p>
       <div class="box-code js">
@@ -260,23 +260,26 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
           <tbody>
             <tr>
               <td class="code">
-                <pre><span class="red">import</span> {{'{'}} {{ 'NgPerfume, PerfumeModule' }}, PerfumeAfterViewInit {{'}'}} <span class="red">from</span> <span class="yellow">'perfume.js/angular'</span>;
-<span class="red">import</span> {{'{'}} AppComponent {{'}'}} <span class="red">from</span> <span class="yellow">'./app.component'</span>;
+                <pre><span class="red">import</span> {{'{'}}
+  {{ 'NgPerfume, 
+  PerfumeModule' }},
+  PerfumeAfterViewInit
+{{'}'}} <span class="red">from</span> 'perfume.js/angular';
+<span class="red">import</span> {{'{'}} AppComponent {{'}'}} <span class="red">from</span> './app.component';
 
-<span class="gray">// Demo App</span>
 @<span class="green">Component</span>({{'{'}}
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],
 {{'}'}})
-@<span class="green">PerfumeAfterViewInit</span>(<span class="yellow">'AppComponent'</span>)
+@<span class="green">PerfumeAfterViewInit</span>('AppComponent')
 <span class="red">export</span> <span class="blue">class</span> <span class="green">AppComponent</span> <span class="red">implements</span> <span class="green">AfterViewInit</span> {{'{'}}
-  <span class="blue">constructor</span>(public perfume: NgPerfume) {{'{}'}}
+  <span class="blue">constructor</span>(<span class="red">public</span> perfume<span class="red">:</span> NgPerfume) {{'{}'}}
   <span class="green">ngAfterViewInit</span>() {{'{}'}}
   <span class="green">launchFalconNine</span>() {{'{'}}
     perfume.<span class="blue">start</span>('rocketScience');
     <span class="gray">// Rocket Science Match ...</span>
-    perfume.<span class="blue">end</span>('rocketScience');
+    perfume.<span class="violet">end</span>('rocketScience');
   {{'}'}}
 {{'}'}}
 
@@ -286,7 +289,6 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
   firstInputDelay: <span class="blue">true</span>,
 {{'}'}};
 
-<span class="gray">// Bootstrap App</span>
 @<span class="green">NgModule</span>({{'{'}}
   declarations: [AppComponent],
   imports: [{{ 'PerfumeModule' }}.<span class="green">forRoot</span>(PerfumeConfig)],
