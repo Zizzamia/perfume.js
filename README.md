@@ -7,7 +7,7 @@
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
 
-> JavaScript library that measures <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>Time to Interactive</b> (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>) and First Input Delay. Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.
+> JavaScript library that measures <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>Time to Interactive</b> (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>) and First Input Delay (FID). Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.
 
 <br />
 <br />
@@ -61,7 +61,7 @@ import Perfume from 'node_modules/perfume.js/perfume.umd.js';
 const perfume = new Perfume({
   firstPaint: true
 });
-// ⚡️ Perfume.js: First Paint 1482.00 ms
+// Perfume.js: First Paint 1482.00 ms
 ```
 
 ### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
@@ -72,7 +72,7 @@ const perfume = new Perfume({
 const perfume = new Perfume({
   firstContentfulPaint: true
 });
-// ⚡️ Perfume.js: First Contentful Paint 2029.00 ms
+// Perfume.js: First Contentful Paint 2029.00 ms
 ```
 
 ### First Input Delay (FID)
@@ -83,7 +83,7 @@ const perfume = new Perfume({
 const perfume = new Perfume({
   firstInputDelay: true
 });
-// ⚡️ Perfume.js: First Input Delay 3.20 ms
+// Perfume.js: First Input Delay 3.20 ms
 ```
 
 ### Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c))
@@ -98,7 +98,7 @@ The metric marks the point at which your application is both visually rendered a
 const perfume = new Perfume({
   timeToInteractive: true
 });
-// ⚡️ Perfume.js: Time to interactive 2452.07 ms
+// Perfume.js: Time to interactive 2452.07 ms
 ```
 
 ### Annotate metrics in the DevTools
@@ -109,7 +109,7 @@ const perfume = new Perfume({
 perfume.start('fibonacci');
 fibonacci(400);
 perfume.end('fibonacci');
-// ⚡️ Perfume.js: fibonacci 0.14 ms
+// Perfume.js: fibonacci 0.14 ms
 ```
 
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
@@ -122,7 +122,7 @@ This metric mark the point, immediately after creating a **new component**, when
 perfume.start('togglePopover');
 $(element).popover('toggle');
 perfume.endPaint('togglePopover');
-// ⚡️ Perfume.js: togglePopover 10.54 ms
+// Perfume.js: togglePopover 10.54 ms
 ```
 
 ![Performance](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
@@ -235,7 +235,7 @@ const options = {
     timingVar: 'name'
   },
   logging: true,
-  logPrefix: '⚡️ Perfume.js:',
+  logPrefix: 'Perfume.js:',
   warning: false
 };
 ```

@@ -1,5 +1,5 @@
 import { IPerformance } from './performance';
-import { IPerformanceEntry, IPerfumeConfig } from './perfume';
+import { IMetricEntry, IPerfumeConfig } from './perfume';
 
 export interface IPerformancePaintTiming {
   name: string;
@@ -21,7 +21,7 @@ export default class EmulatedPerformance implements IPerformance {
 
   mark(metricName: string, type: string): void {}
 
-  measure(metricName: string, metric: IPerformanceEntry): number {
+  measure(metricName: string, metric: IMetricEntry): number {
     return this.getDurationByMetric(metricName, metric);
   }
 
@@ -42,7 +42,7 @@ export default class EmulatedPerformance implements IPerformance {
    */
   private getDurationByMetric(
     metricName: string,
-    metric: IPerformanceEntry,
+    metric: IMetricEntry,
   ): number {
     const duration = metric.end - metric.start;
     return duration || 0;

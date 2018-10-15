@@ -8,7 +8,7 @@ import 'first-input-delay';
 import ttiPolyfill from 'tti-polyfill';
 
 // Types
-import { IPerformanceEntry, IPerfumeConfig } from './perfume';
+import { IMetricEntry, IPerformanceEntry, IPerfumeConfig } from './perfume';
 
 export interface IPerformance {
   config: IPerfumeConfig;
@@ -17,7 +17,7 @@ export interface IPerformance {
 
   mark(metricName: string, type: string): any;
 
-  measure(metricName: string, metric: IPerformanceEntry): number;
+  measure(metricName: string, metric: IMetricEntry): number;
 
   firstContentfulPaint(cb: any): any;
 
@@ -84,7 +84,7 @@ export default class Performance implements IPerformance {
     (window.performance.mark as any)(mark);
   }
 
-  measure(metricName: string, metric: IPerformanceEntry): number {
+  measure(metricName: string, metric: IMetricEntry): number {
     const startMark = `mark_${metricName}_start`;
     const endMark = `mark_${metricName}_end`;
     (window.performance.measure as any)(metricName, startMark, endMark);
@@ -126,7 +126,7 @@ export default class Performance implements IPerformance {
    */
   private getDurationByMetric(
     metricName: string,
-    metric: IPerformanceEntry,
+    metric: IMetricEntry,
   ): number {
     const entry = this.getMeasurementForGivenName(metricName);
     if (entry && entry.entryType === 'measure') {
@@ -149,7 +149,7 @@ export default class Performance implements IPerformance {
   ): void {
     const entries = entryList.getEntries();
     cb(entries);
-    entries.forEach((performancePaintTiming: any) => {
+    entries.forEach((performancePaintTiming: IPerformanceEntry) => {
       if (
         this.config.firstContentfulPaint &&
         performancePaintTiming.name === 'first-contentful-paint'

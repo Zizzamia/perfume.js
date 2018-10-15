@@ -77,7 +77,7 @@ export default {
       enable: false,
       timingVar: 'name',
     },
-    logPrefix: '⚡️ Perfume.js:',
+    logPrefix: 'Perfume.js:',
     logging: true,
     warning: false,
   },

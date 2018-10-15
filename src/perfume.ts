@@ -21,6 +21,8 @@ export interface IPerfumeConfig {
   logging: boolean;
   maxMeasureTime: number;
   warning: boolean;
+  // Debugging
+  debugging: boolean;
 }
 
 export interface IPerfumeOptions {
@@ -37,6 +39,8 @@ export interface IPerfumeOptions {
   logging?: boolean;
   maxMeasureTime?: number;
   warning?: boolean;
+  // Debugging
+  debugging?: boolean;
 }
 
 export interface IGoogleAnalyticsConfig {
@@ -44,9 +48,16 @@ export interface IGoogleAnalyticsConfig {
   timingVar: string;
 }
 
-export interface IPerformanceEntry {
+export interface IMetricEntry {
   start: number;
   end: number;
+}
+
+export declare interface IPerformanceEntry {
+  duration: number;
+  entryType: 'longtask' | 'measure' | 'navigation' | 'paint' | 'resource';
+  name: string;
+  startTime: number;
 }
 
 declare global {
@@ -69,10 +80,11 @@ export default class Perfume {
       timingVar: 'name',
     },
     // Logging
-    logPrefix: '⚡️ Perfume.js:',
+    logPrefix: 'Perfume.js:',
     logging: true,
     maxMeasureTime: 18000,
     warning: false,
+    debugging: false,
   };
   firstPaintDuration: number = 0;
   firstContentfulPaintDuration: number = 0;
@@ -83,7 +95,7 @@ export default class Perfume {
   timeToInteractiveDuration: number = 0;
   private isHidden: boolean = false;
   private logMetricWarn = 'Please provide a metric name';
-  private metrics: Map<string, IPerformanceEntry> = new Map();
+  private metrics: Map<string, IMetricEntry> = new Map();
   private observers = new Map();
   private perf: Performance | EmulatedPerformance;
   private perfEmulated?: EmulatedPerformance;
@@ -104,6 +116,7 @@ export default class Perfume {
 
     // Init observe FCP  and creates the Promise to observe metric
     this.observeFirstContentfulPaint = new Promise(resolve => {
+      this.logDebug('observeFirstContentfulPaint');
       this.observers.set('fcp', resolve);
       this.initFirstPaint();
     });
@@ -199,9 +212,19 @@ export default class Perfume {
       return;
     }
     const durationMs = duration.toFixed(2);
-    const style = 'color: #ff6d00;font-size:12px;';
+    const style = 'color: #ff6d00;font-size:11px;';
     const text = `%c ${this.config.logPrefix} ${metricName} ${durationMs} ms`;
     window.console.log(text, style);
+  }
+
+  /**
+   * Coloring Debugging Text in Browser Console
+   */
+  logDebug(methodName: string, debugValue: any = ''): void {
+    if (!this.config.debugging) {
+      return;
+    }
+    window.console.log(`Perfume.js debugging ${methodName}:`, debugValue);
   }
 
   /**
@@ -256,9 +279,10 @@ export default class Perfume {
     }
   };
 
-  private firstContentfulPaintCb(entries: any[]): void {
+  private firstContentfulPaintCb(entries: IPerformanceEntry[]): void {
+    this.logDebug('firstContentfulPaintCb', entries);
     // Logging Performance Paint Timing
-    entries.forEach((performancePaintTiming: any) => {
+    entries.forEach((performancePaintTiming: IPerformanceEntry) => {
       if (
         this.config.firstPaint &&
         performancePaintTiming.name === 'first-paint'
@@ -283,10 +307,13 @@ export default class Perfume {
   }
 
   private initFirstPaint(): void {
+    this.logDebug('initFirstPaint');
     // Checks if use Performance or the EmulatedPerformance instance
     if (Performance.supportedPerformanceObserver()) {
+      this.logDebug('initFirstPaint.supportedPerformanceObserver');
       this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
     } else if (this.perfEmulated) {
+      this.logDebug('initFirstPaint.perfEmulated');
       this.perfEmulated.firstContentfulPaint(
         this.firstContentfulPaintCb.bind(this),
       );

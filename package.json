@@ -1,24 +1,19 @@
 {
   "name": "perfume.js",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "JavaScript library for measuring Short and Long Script, First Contentful Paint (FCP), Time to Interactive (TTI), Component First Paint (CFM), annotating them to the DevTools timeline and reporting the results to Google Analytics.",
   "keywords": [
     "performance-metrics",
     "google-analytics",
-    "paint",
-    "perfume",
     "metrics",
     "javascript-library",
-    "timeline",
     "time-to-interactive",
     "first-contentful-paint",
     "devtools",
-    "tti",
-    "fcp",
     "user-timing",
     "web-performance",
-    "web-performance-reports",
-    "webperf"
+    "webperf",
+    "angular"
   ],
   "iife": "dist/perfume.iife.min.js",
   "main": "dist/perfume.min.js",

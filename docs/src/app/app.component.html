@@ -5,7 +5,7 @@
       <h3 class="box-title" id="/user-centric-metrics/">
         <a href="{{ path }}#/user-centric-metrics/">User-centric performance metrics</a>
       </h3>
-      <p><b>Perfume</b> leverage the latest W3C Performance Drafts (like PerformanceObserver), for measuring performance that matters! ⚡️ </p>
+      <p><b>Perfume</b> leverage the latest W3C Performance Drafts (like PerformanceObserver), for measuring performance that matters! </p>
       <ul>
         <li>First Paint (FP)</li>
         <li>First Contentful Paint (FCP)</li>
@@ -60,7 +60,7 @@ npm install perfume.js --save-dev
       <p>FP is the exact time the browser renders anything as visually different from what was
       on the screen before navigation, e.g. a background change after a long blank white screen time.</p>
       <p class="box-demo">
-        ⚡️ Perfume.js: First Paint {{ perfume.firstPaintDuration }} ms
+        Perfume.js: First Paint {{ perfume.firstPaintDuration }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -70,7 +70,7 @@ npm install perfume.js --save-dev
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   firstPaint<span class="red">:</span> <span class="blue">true</span>
 {{'}'}});
-<span class="gray">// ⚡️ Perfume.js: First Paint 1482.00 ms</span></pre>
+<span class="gray">// Perfume.js: First Paint 1482.00 ms</span></pre>
               </td>
             </tr>
           </tbody>
@@ -86,7 +86,7 @@ npm install perfume.js --save-dev
       </h3>
       <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
       <p class="box-demo">
-        ⚡️ Perfume.js: First Contentful Paint {{ firstContentfulPaint || 0 }} ms
+        Perfume.js: First Contentful Paint {{ firstContentfulPaint || 0 }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -96,7 +96,7 @@ npm install perfume.js --save-dev
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   firstContentfulPaint<span class="red">:</span> <span class="blue">true</span>
 {{'}'}});
-<span class="gray">// ⚡️ Perfume.js: First Contentful Paint 2029.00 ms</span></pre>
+<span class="gray">// Perfume.js: First Contentful Paint 2029.00 ms</span></pre>
               </td>
             </tr>
           </tbody>
@@ -114,7 +114,7 @@ npm install perfume.js --save-dev
         able to respond to that interaction..
       </p>
       <p class="box-demo">
-        ⚡️ Perfume.js: First Input Delay {{ firstInputDelay || 0 }} ms
+        Perfume.js: First Input Delay {{ firstInputDelay || 0 }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -124,7 +124,7 @@ npm install perfume.js --save-dev
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   firstInputDelay<span class="red">:</span> <span class="blue">true</span>
 {{'}'}});
-<span class="gray">// ⚡️ Perfume.js: First Input Delay 3.20 ms</span></pre>
+<span class="gray">// Perfume.js: First Input Delay 3.20 ms</span></pre>
               </td>
             </tr>
           </tbody>
@@ -149,7 +149,7 @@ npm install perfume.js --save-dev
         (free of long tasks).
       </p>
       <p class="box-demo">
-        ⚡️ Perfume.js: Time to interactive {{ timeToInteractive || 0 }} ms
+        Perfume.js: Time to interactive {{ timeToInteractive || 0 }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -159,7 +159,7 @@ npm install perfume.js --save-dev
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   timeToInteractive<span class="red">:</span> <span class="blue">true</span>
 {{'}'}});
-<span class="gray">// ⚡️ Perfume.js: Time to interactive 2452.07 ms</span></pre>
+<span class="gray">// Perfume.js: Time to interactive 2452.07 ms</span></pre>
               </td>
             </tr>
           </tbody>
@@ -188,7 +188,7 @@ npm install perfume.js --save-dev
                 <pre>perfume.<span class="blue">start</span>('fibonacci');
 <span class="violet">fibonacci</span>(<span class="blue">400</span>);
 perfume.<span class="violet">end</span>('fibonacci');
-<span class="gray">// ⚡️ Perfume.js: fibonacci 0.14 ms</span></pre>
+<span class="gray">// Perfume.js: fibonacci 0.14 ms</span></pre>
               </td>
             </tr>
           </tbody>
@@ -390,7 +390,7 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
     timingVar<span class="red">:</span> "name"
   {{'}'}},
   logging<span class="red">:</span> <span class="blue">true</span>,
-  logPrefix<span class="red">:</span> "⚡️ Perfume.js:"
+  logPrefix<span class="red">:</span> "Perfume.js:"
   warning<span class="red">:</span> <span class="blue">false</span>,
 {{'}'}};</pre>
               </td>
