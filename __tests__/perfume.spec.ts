@@ -35,13 +35,13 @@ describe('Perfume', () => {
         firstPaint: false,
         firstInputDelay: false,
         timeToInteractive: false,
-        analyticsTracker: undefined,
         googleAnalytics: {
           enable: false,
           timingVar: 'name',
         },
         logPrefix: '⚡️ Perfume.js:',
         logging: true,
+        maxMeasureTime: 18000,
         warning: false,
       });
     });
@@ -499,6 +499,16 @@ describe('Perfume', () => {
         'firstContentfulPaint',
         perfume.firstContentfulPaintDuration,
       );
+    });
+
+    it('should not call sendTiming() when duration is higher of config.maxMeasureTime', () => {
+      spy = jest.spyOn(perfume as any, 'sendTiming');
+      (perfume as any).logMetric(
+        20000,
+        'First Contentful Paint',
+        'firstContentfulPaint',
+      );
+      expect(spy.mock.calls.length).toEqual(0);
     });
 
     it('should perfume.firstContentfulPaintDuration be equal to duration', () => {

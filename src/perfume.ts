@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v1.0.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v1.2.1 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -8,26 +8,34 @@ import EmulatedPerformance from './emulated-performance';
 import Performance from './performance';
 
 export interface IPerfumeConfig {
+  // Metrics
   firstContentfulPaint: boolean;
-  firstPaint: boolean;
   firstInputDelay: boolean;
+  firstPaint: boolean;
   timeToInteractive: boolean;
+  // Analytics
   analyticsTracker?: (metricName: string, duration: number) => void;
   googleAnalytics: IGoogleAnalyticsConfig;
+  // Logging
   logPrefix: string;
   logging: boolean;
+  maxMeasureTime: number;
   warning: boolean;
 }
 
 export interface IPerfumeOptions {
+  // Metrics
   firstContentfulPaint?: boolean;
-  firstPaint?: boolean;
   firstInputDelay?: boolean;
+  firstPaint?: boolean;
   timeToInteractive?: boolean;
+  // Analytics
   analyticsTracker?: (metricName: string, duration: number) => void;
   googleAnalytics?: IGoogleAnalyticsConfig;
+  // Logging
   logPrefix?: string;
   logging?: boolean;
+  maxMeasureTime?: number;
   warning?: boolean;
 }
 
@@ -50,16 +58,20 @@ declare global {
 
 export default class Perfume {
   config: IPerfumeConfig = {
+    // Metrics
     firstContentfulPaint: false,
     firstPaint: false,
     firstInputDelay: false,
     timeToInteractive: false,
+    // Analytics
     googleAnalytics: {
       enable: false,
       timingVar: 'name',
     },
+    // Logging
     logPrefix: '⚡️ Perfume.js:',
     logging: true,
+    maxMeasureTime: 18000,
     warning: false,
   };
   firstPaintDuration: number = 0;
@@ -327,6 +339,12 @@ export default class Perfume {
     metricName: string,
   ): void {
     const duration2Decimal = parseFloat(duration.toFixed(2));
+    // Stop Analytics and Logging for false negative metrics
+    if (duration2Decimal > this.config.maxMeasureTime) {
+      return;
+    }
+
+    // Save metrics in Duration property
     if (metricName === 'firstPaint') {
       this.firstPaintDuration = duration2Decimal;
     }
