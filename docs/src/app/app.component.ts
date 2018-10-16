@@ -49,7 +49,7 @@ export class AppComponent implements AfterViewInit {
     this.perfume.start('fibonacci');
     this.fibonacci(800);
     const duration = this.perfume.end('fibonacci');
-    this.logFibonacci = `⚡️ Perfume.js: fibonacci ${duration} ms`;
+    this.logFibonacci = `Perfume.js: fibonacci ${duration} ms`;
   }
 
   customLogging() {

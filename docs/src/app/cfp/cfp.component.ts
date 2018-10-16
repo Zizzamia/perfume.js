@@ -31,6 +31,6 @@ export class CfpComponent implements AfterViewInit {
     // Increment or reset index
     this.gifIndex = this.gifIndex === 4 ? 0 : this.gifIndex + 1;
     const duration = await this.perfume.endPaint('openDialog');
-    this.logOpenDialog = `⚡️ Perfume.js: openDialog ${duration} ms`;
+    this.logOpenDialog = `Perfume.js: openDialog ${duration} ms`;
   }
 }
