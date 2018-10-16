@@ -32,7 +32,6 @@ describe('Perfume', () => {
         firstContentfulPaint: false,
         firstPaint: false,
         firstInputDelay: false,
-        timeToInteractive: false,
         googleAnalytics: {
           enable: false,
           timingVar: 'name',
@@ -42,30 +41,6 @@ describe('Perfume', () => {
         maxMeasureTime: 18000,
         warning: false,
         debugging: false,
-      });
-    });
-  });
-
-  describe('.observeTimeToInteractive', () => {
-    let instance;
-
-    beforeAll(() => {
-      instance = new Perfume({ firstContentfulPaint: true });
-      (window as any).chrome = true;
-      instance['observers'].set('fcp', () => 400);
-      instance['observers'].set('fid', () => 400);
-      instance['observers'].set('tti', () => 400);
-    });
-
-    it('should be a promise', () => {
-      const promise = instance.observeFirstContentfulPaint;
-      expect(promise).toBeInstanceOf(Promise);
-    });
-
-    it('should resolve fcp on chrome', done => {
-      instance.observeFirstContentfulPaint.then(duration => {
-        expect(typeof duration).toBe('number');
-        done();
       });
     });
   });
