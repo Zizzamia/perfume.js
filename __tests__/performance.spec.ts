@@ -7,9 +7,7 @@ describe('Performance', () => {
 
   beforeEach(() => {
     service = new Performance({ ...mock.defaultPerfumeConfig });
-    service.ttiPolyfill = mock.ttiPolyfill;
     mock.performance();
-    (window as any).PerformanceLongTaskTiming = mock.PerformanceLongTaskTiming;
     (window as any).PerformanceObserver = mock.PerformanceObserver;
   });
 
@@ -148,19 +146,6 @@ describe('Performance', () => {
       service.performanceObserverCb(service.callback, { getEntries: () => [] });
       expect(spy).not.toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(0);
-    });
-  });
-
-  describe('.timeToInteractive()', () => {
-    it('should call ttiPolyfill with the correct argument', () => {
-      spy = jest.spyOn(service.ttiPolyfill, 'getFirstConsistentlyInteractive');
-      service.timeToInteractive(10).catch(console.error);
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({ minValue: 10 });
-    });
-
-    it('should be a promise', () => {
-      expect(service.timeToInteractive(10)).toBeInstanceOf(Promise);
     });
   });
 });

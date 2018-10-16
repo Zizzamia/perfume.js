@@ -21,7 +21,6 @@ export class AppComponent implements AfterViewInit {
   logFibonacci: string;
   firstContentfulPaint: number;
   firstInputDelay: number;
-  timeToInteractive: number;
   path: string;
 
   constructor(
@@ -32,18 +31,10 @@ export class AppComponent implements AfterViewInit {
     // Perfume
     this.observeFCP();
     this.observeFID();
-    this.observeTTI();
     this.path = window.location.href.split('#')[0];
   }
 
-  ngAfterViewInit() {
-    // Ensure the page to have 400ms delay for TTI
-    this.zone.runOutsideAngular(() => {
-      setTimeout(() => {
-        this.runFibonacci(4500);
-      }, 400);
-    });
-  }
+  ngAfterViewInit() {}
 
   measureFibonacci() {
     this.perfume.start('fibonacci');
@@ -67,11 +58,6 @@ export class AppComponent implements AfterViewInit {
 
   private async observeFID() {
     this.firstInputDelay = await this.perfume.observeFirstInputDelay;
-    this.ref.detectChanges();
-  }
-
-  private async observeTTI() {
-    this.timeToInteractive = await this.perfume.observeTimeToInteractive;
     this.ref.detectChanges();
   }
 
@@ -102,13 +88,5 @@ export class AppComponent implements AfterViewInit {
       '#' + Math.floor(Math.random() * 16777215).toString(16);
     const elFibonacci = document.querySelector('.Fibonacci');
     elFibonacci.appendChild(elSequence);
-  }
-
-  private runFibonacci(maxSequence: number) {
-    this.fibonacci(maxSequence, {}, true);
-    const elFibonacci = document.querySelector('.Fibonacci');
-    while (elFibonacci.firstChild) {
-      elFibonacci.removeChild(elFibonacci.firstChild);
-    }
   }
 }

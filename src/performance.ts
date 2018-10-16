@@ -1,11 +1,5 @@
-// Init Polyfill
-import PerformanceObserverTTI from './tti-polyfill-starts';
-const performanceTTI = new PerformanceObserverTTI();
-performanceTTI.create();
-
 // Import Polyfills
 import 'first-input-delay';
-import ttiPolyfill from 'tti-polyfill';
 
 // Types
 import { IMetricEntry, IPerformanceEntry, IPerfumeConfig } from './perfume';
@@ -20,8 +14,6 @@ export interface IPerformance {
   measure(metricName: string, metric: IMetricEntry): number;
 
   firstContentfulPaint(cb: any): any;
-
-  timeToInteractive?(minValue: number): Promise<number>;
 }
 
 declare const PerformanceObserver: any;
@@ -54,21 +46,9 @@ export default class Performance implements IPerformance {
     return (window as any).chrome && 'PerformanceObserver' in window;
   }
 
-  /**
-   * True if the browser supports the PerformanceLongTaskTiming interface.
-   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming
-   */
-  static supportedLongTask(): boolean {
-    return 'PerformanceLongTaskTiming' in window;
-  }
-
-  timeToInteractiveDuration: number = 0;
-  private ttiPolyfill: any;
   private perfObserver: any;
 
-  constructor(public config: IPerfumeConfig) {
-    this.ttiPolyfill = ttiPolyfill;
-  }
+  constructor(public config: IPerfumeConfig) {}
 
   /**
    * When performance API available
@@ -103,21 +83,6 @@ export default class Performance implements IPerformance {
       this.performanceObserverCb.bind(this, cb),
     );
     this.perfObserver.observe({ entryTypes: ['paint'] });
-  }
-
-  /**
-   * The polyfill exposes a getFirstConsistentlyInteractive() method,
-   * which returns a promise that resolves with the TTI value.
-   *
-   * The getFirstConsistentlyInteractive() method accepts an optional
-   * startTime configuration option, allowing you to specify a lower bound
-   * for which you know your app cannot be interactive before.
-   * By default the polyfill uses DOMContentLoaded as the start time,
-   * but it's often more accurate to use something like the moment your hero elements
-   * are visible or the point when you know all your event listeners have been added.
-   */
-  timeToInteractive(minValue: number): Promise<number> {
-    return this.ttiPolyfill.getFirstConsistentlyInteractive({ minValue });
   }
 
   /**

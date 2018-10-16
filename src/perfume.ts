@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v1.2.1 (http://zizzamia.github.io/perfume)
+ * Perfume.js v2.0.0 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -12,7 +12,6 @@ export interface IPerfumeConfig {
   firstContentfulPaint: boolean;
   firstInputDelay: boolean;
   firstPaint: boolean;
-  timeToInteractive: boolean;
   // Analytics
   analyticsTracker?: (metricName: string, duration: number) => void;
   googleAnalytics: IGoogleAnalyticsConfig;
@@ -30,7 +29,6 @@ export interface IPerfumeOptions {
   firstContentfulPaint?: boolean;
   firstInputDelay?: boolean;
   firstPaint?: boolean;
-  timeToInteractive?: boolean;
   // Analytics
   analyticsTracker?: (metricName: string, duration: number) => void;
   googleAnalytics?: IGoogleAnalyticsConfig;
@@ -73,7 +71,6 @@ export default class Perfume {
     firstContentfulPaint: false,
     firstPaint: false,
     firstInputDelay: false,
-    timeToInteractive: false,
     // Analytics
     googleAnalytics: {
       enable: false,
@@ -91,8 +88,6 @@ export default class Perfume {
   firstInputDelayDuration: number = 0;
   observeFirstContentfulPaint: Promise<number>;
   observeFirstInputDelay: Promise<number>;
-  observeTimeToInteractive?: Promise<number>;
-  timeToInteractiveDuration: number = 0;
   private isHidden: boolean = false;
   private logMetricWarn = 'Please provide a metric name';
   private metrics: Map<string, IMetricEntry> = new Map();
@@ -130,13 +125,6 @@ export default class Perfume {
 
     // Init visibilitychange listener
     this.onVisibilityChange();
-
-    // Init observe TTI and creates the Promise to observe metric
-    this.observeTimeToInteractive = new Promise(async resolve => {
-      this.observers.set('tti', resolve);
-      const FCPDuration = await this.observeFirstContentfulPaint;
-      this.initTimeToInteractive(FCPDuration);
-    });
   }
 
   /**
@@ -320,21 +308,6 @@ export default class Perfume {
     }
   }
 
-  private initTimeToInteractive(FCPDuration: number): void {
-    if (
-      Performance.supported() &&
-      Performance.supportedPerformanceObserver() &&
-      Performance.supportedLongTask() &&
-      this.config.timeToInteractive &&
-      FCPDuration
-    ) {
-      // Get Time to Interactivite
-      (this.perf as Performance).timeToInteractive(FCPDuration).then(time => {
-        this.logMetric(time, 'Time to Interactive', 'timeToInteractive');
-      });
-    }
-  }
-
   private initFirstInputDelay(): void {
     if (Performance.supported() && this.config.firstInputDelay) {
       // perfMetrics is exposed by the FID Polyfill
@@ -382,10 +355,6 @@ export default class Perfume {
     if (metricName === 'firstInputDelay') {
       this.firstInputDelayDuration = duration2Decimal;
       this.observers.get('fid')(duration2Decimal);
-    }
-    if (metricName === 'timeToInteractive') {
-      this.timeToInteractiveDuration = duration2Decimal;
-      this.observers.get('tti')(duration2Decimal);
     }
 
     // Logs the metric in the internal console.log
