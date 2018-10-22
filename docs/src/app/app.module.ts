@@ -10,12 +10,7 @@ import { IntroComponent } from './intro/intro.component';
 import { CfpComponent } from './cfp/cfp.component';
 
 import { PerfumeModule } from 'perfume.js/angular';
-import Perfume from '../../../';
-
-const perfV2 = new Perfume({
-  firstContentfulPaint: true,
-  firstInputDelay: true,
-});
+// import Perfume from '../../../';
 
 // Supports AOT and DI
 export function analyticsTracker(metricName: string, duration: number) {
@@ -25,7 +20,6 @@ export const PerfumeConfig = {
   firstPaint: true,
   firstContentfulPaint: true,
   firstInputDelay: true,
-  timeToInteractive: true,
   analyticsTracker,
   googleAnalytics: {
     enable: true,

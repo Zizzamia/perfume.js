@@ -4,6 +4,8 @@
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
+import { IdleQueue } from './idle-queue';
+
 import EmulatedPerformance from './emulated-performance';
 import Performance from './performance';
 
@@ -86,10 +88,11 @@ export default class Perfume {
   firstPaintDuration: number = 0;
   firstContentfulPaintDuration: number = 0;
   firstInputDelayDuration: number = 0;
-  observeFirstContentfulPaint: Promise<number>;
-  observeFirstInputDelay: Promise<number>;
+  observeFirstContentfulPaint?: Promise<number>;
+  observeFirstInputDelay?: Promise<number>;
   private isHidden: boolean = false;
   private logMetricWarn = 'Please provide a metric name';
+  private queue: any;
   private metrics: Map<string, IMetricEntry> = new Map();
   private observers = new Map();
   private perf: Performance | EmulatedPerformance;
@@ -110,21 +113,30 @@ export default class Perfume {
     }
 
     // Init observe FCP  and creates the Promise to observe metric
-    this.observeFirstContentfulPaint = new Promise(resolve => {
-      this.logDebug('observeFirstContentfulPaint');
-      this.observers.set('fcp', resolve);
-      this.initFirstPaint();
-    });
+    if (this.config.firstPaint || this.config.firstContentfulPaint) {
+      this.observeFirstContentfulPaint = new Promise(resolve => {
+        this.logDebug('observeFirstContentfulPaint');
+        this.observers.set('fcp', resolve);
+        this.initFirstPaint();
+      });
+    }
 
     // FID needs to be initialized as soon as Perfume is available, which returns
     // a Promise that can be observed
-    this.observeFirstInputDelay = new Promise(resolve => {
-      this.observers.set('fid', resolve);
-      this.initFirstInputDelay();
-    });
+    if (this.config.firstInputDelay) {
+      this.observeFirstInputDelay = new Promise(resolve => {
+        this.observers.set('fid', resolve);
+        this.initFirstInputDelay();
+      });
+    }
 
     // Init visibilitychange listener
     this.onVisibilityChange();
+
+    // Ensures the queue is run immediately whenever the page
+    // is in a state where it might soon be unloaded.
+    // https://philipwalton.com/articles/idle-until-urgent/
+    this.queue = new IdleQueue({ ensureTasksRun: true });
   }
 
   /**
@@ -168,10 +180,12 @@ export default class Perfume {
     // Get duration and change it to a two decimal value
     const duration = this.perf.measure(metricName, metric);
     const duration2Decimal = parseFloat(duration.toFixed(2));
-    // Log to console, delete metric and send to analytics tracker
-    this.log(metricName, duration2Decimal);
     this.metrics.delete(metricName);
-    this.sendTiming(metricName, duration2Decimal);
+    this.queue.pushTask(() => {
+      // Log to console, delete metric and send to analytics tracker
+      this.log(metricName, duration2Decimal);
+      this.sendTiming(metricName, duration2Decimal);
+    });
     return duration2Decimal;
   }
 
@@ -271,26 +285,28 @@ export default class Perfume {
     this.logDebug('firstContentfulPaintCb', entries);
     // Logging Performance Paint Timing
     entries.forEach((performancePaintTiming: IPerformanceEntry) => {
-      if (
-        this.config.firstPaint &&
-        performancePaintTiming.name === 'first-paint'
-      ) {
-        this.logMetric(
-          performancePaintTiming.startTime,
-          'First Paint',
-          'firstPaint',
-        );
-      }
-      if (
-        this.config.firstContentfulPaint &&
-        performancePaintTiming.name === 'first-contentful-paint'
-      ) {
-        this.logMetric(
-          performancePaintTiming.startTime,
-          'First Contentful Paint',
-          'firstContentfulPaint',
-        );
-      }
+      this.queue.pushTask(() => {
+        if (
+          this.config.firstPaint &&
+          performancePaintTiming.name === 'first-paint'
+        ) {
+          this.logMetric(
+            performancePaintTiming.startTime,
+            'First Paint',
+            'firstPaint',
+          );
+        }
+        if (
+          this.config.firstContentfulPaint &&
+          performancePaintTiming.name === 'first-contentful-paint'
+        ) {
+          this.logMetric(
+            performancePaintTiming.startTime,
+            'First Contentful Paint',
+            'firstContentfulPaint',
+          );
+        }
+      });
     });
   }
 
@@ -312,7 +328,9 @@ export default class Perfume {
     if (Performance.supported() && this.config.firstInputDelay) {
       // perfMetrics is exposed by the FID Polyfill
       perfMetrics.onFirstInputDelay((duration, event) => {
-        this.logMetric(duration, 'First Input Delay', 'firstInputDelay');
+        this.queue.pushTask(() => {
+          this.logMetric(duration, 'First Input Delay', 'firstInputDelay');
+        });
       });
     }
   }
