@@ -10,12 +10,11 @@
         <li>First Paint (FP)</li>
         <li>First Contentful Paint (FCP)</li>
         <li>First Input Delay (FID)</li>
-        <li>Time to Interactive (TTI)</li>
       </ul>
       <picture class="box-img">
-        <source srcset="{{ path }}assets/perf-metrics-load-timeline.webp" type="image/webp" />
-        <source srcset="{{ path }}assets/perf-metrics-load-timeline.png" type="image/png" />
-        <img src="{{ path }}assets/perf-metrics-load-timeline.png" alt="Performance Timeline" />
+        <source srcset="{{ path }}assets/first-paint-and-first-input-delay.webp" type="image/webp" />
+        <source srcset="{{ path }}assets/first-paint-and-first-input-delay.png" type="image/png" />
+        <img src="{{ path }}assets/first-paint-and-first-input-delay.png" alt="first paint and first input delay" />
       </picture>
     </div>
 
@@ -125,41 +124,6 @@ npm install perfume.js --save-dev
   firstInputDelay<span class="red">:</span> <span class="blue">true</span>
 {{'}'}});
 <span class="gray">// Perfume.js: First Input Delay 3.20 ms</span></pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="box">
-      <h3 class="box-title" id="/time-to-interactive/">
-        <a href="{{ path }}#/time-to-interactive/">
-          Time to Interactive (TTI)
-        </a>  
-      </h3>
-      <p>The metric marks the point at which your application is both visually rendered and capable of reliably responding to
-        user input. An application could be unable to respond to user input for a couple of reasons:</p>
-      <ul>
-        <li>The JavaScript needed to make the components on the page work hasn't yet loaded;</li>
-        <li>There are long tasks blocking the main thread.</li>
-      </ul>
-      <p>The
-        <b>TTI</b> metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle
-        (free of long tasks).
-      </p>
-      <p class="box-demo">
-        Perfume.js: Time to interactive {{ timeToInteractive || 0 }} ms
-      </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  timeToInteractive<span class="red">:</span> <span class="blue">true</span>
-{{'}'}});
-<span class="gray">// Perfume.js: Time to interactive 2452.07 ms</span></pre>
               </td>
             </tr>
           </tbody>
@@ -384,7 +348,6 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
   firstContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
   firstPaint<span class="red">:</span> <span class="blue">false</span>
   firstInputDelay<span class="red">:</span> <span class="blue">false</span>,
-  timeToInteractive<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Analytics</span>
   analyticsTracker<span class="red">:</span> <span class="blue">undefined</span>,
   googleAnalytics<span class="red">:</span> {{'{'}}
@@ -418,19 +381,16 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
                   <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   firstContentfulPaint<span class="red">:</span> <span class="blue">true</span>,
   firstInputDelay<span class="red">:</span> <span class="blue">true</span>,
-  timeToInteractive<span class="red">:</span> <span class="blue">true</span>,
 {{'}'}});
 
 <span class="gray">// Values</span>
 perfume.firstPaintDuration;
 perfume.firstContentfulPaintDuration;
 perfume.firstInputDelayDuration;
-perfume.timeToInteractiveDuration;
 
 <span class="gray">// Async/Await Values (don't forget to use "async" with "await")</span>
 <span class="blue">const</span> durationFCP <span class="red">= await</span> perfume.<span class="blue">observeFirstContentfulPaint</span>;
 <span class="blue">const</span> durationFID <span class="red">= await</span> perfume.<span class="blue">observeFirstInputDelay</span>;
-<span class="blue">const</span> durationTTI <span class="red">= await</span> perfume.<span class="blue">observeTimeToInteractive</span>;
 
 <span class="gray">// Send Custom User timing measure to Google Analytics</span>
 perfume.<span class="blue">sendTiming</span>(metricName, durationFCP);</pre>

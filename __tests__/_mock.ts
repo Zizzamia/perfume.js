@@ -46,11 +46,10 @@ export default {
     });
   },
   perfMetrics: {
-    onFirstInputDelay: cb => {
+    onFirstInputDelay(cb) {
       cb(3.2, EventMock);
     },
   },
-  PerformanceLongTaskTiming: {},
   PerformanceObserver: class {
     constructor(cb) {
       (this as any).observe = () => {
@@ -60,18 +59,10 @@ export default {
     }
     disconnect() {}
   },
-  ttiPolyfill: {
-    getFirstConsistentlyInteractive: (n: number) => {
-      return new Promise(resolve => {
-        resolve(n);
-      });
-    },
-  },
   defaultPerfumeConfig: {
     firstContentfulPaint: false,
     firstPaint: false,
     firstInputDelay: false,
-    timeToInteractive: false,
     analyticsTracker: undefined,
     googleAnalytics: {
       enable: false,

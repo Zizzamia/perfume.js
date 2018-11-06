@@ -14,19 +14,16 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <div class="box box--intro" id="/home/">
         <a href="https://github.com/zizzamia/perfume.js" target="_blank">
           <picture class="logo">
-            <source srcset="{{ path }}assets/perfume-logo-v1-2-1.webp" type="image/webp" />
-            <source srcset="{{ path }}assets/perfume-logo-v1-2-1.png" type="image/png" />
-            <img src="{{ path }}assets/perfume-logo-v1-2-1.png" alt="Perfume.js logo" />
+            <source srcset="{{ path }}assets/perfume-logo-v2-0-0.webp" type="image/webp" />
+            <source srcset="{{ path }}assets/perfume-logo-v2-0-0.png" type="image/png" />
+            <img src="{{ path }}assets/perfume-logo-v2-0-0.png" alt="Perfume.js logo" />
           </picture>
         </a>
         <h1 class="title">Perfume.js</h1>
         <p>
           JavaScript library that measures <b>First (Contentful) Paint</b>
           (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f"
-          target="_blank">FP/FCP</a>), <br />
-          <b>Time to Interactive</b>
-          (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>) 
-          and <b>First Input Delay</b> (FID).<br />
+          target="_blank">FP/FCP</a>) and <b>First Input Delay</b> (FID).
           Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline.
           Reports all the results to <b>Google Analytics</b> or your favorite tracking tool.
         </p>
@@ -66,7 +63,7 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       }
       @media (min-width: 960px) {
         .layout--intro .layout-content {
-          max-width: 800px;
+          max-width: 832px;
         }
       }
       @media (min-width: 640px) {
@@ -75,6 +72,9 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
         }
         .title {
           text-align: left;
+        }
+        .layout--intro .box--intro p {
+          margin: 10px 20px 10px 0px;
         }
       }
     `,

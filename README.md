@@ -1,13 +1,13 @@
 <a href="http://www.perfumejs.com/">
-  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v1-2-1.png" align="left" width="262" />
+  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v2-0-0.png" align="left" width="262" />
 </a>
 
-# [Perfume.js v1.2.1](http://perfumejs.com)
+# [Perfume.js v2.0.0](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
 
-> JavaScript library that measures <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>Time to Interactive</b> (<a href="https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c" target="_blank">TTI</a>) and First Input Delay (FID). Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.
+> JavaScript library that measures <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>) and <b>First Input Delay</b> (FID). Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.
 
 <br />
 <br />
@@ -21,9 +21,8 @@
 * First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Input Delay (FID)
-* Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c))
 
-![Performance Metrics load timeline](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perf-metrics-load-timeline.png)
+![first paint and first input delay](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-paint-and-first-input-delay.png)
 
 #### Installing
 
@@ -84,21 +83,6 @@ const perfume = new Perfume({
   firstInputDelay: true
 });
 // Perfume.js: First Input Delay 3.20 ms
-```
-
-### Time to Interactive ([TTI](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c))
-
-The metric marks the point at which your application is both visually rendered and capable of reliably responding to user input. An application could be unable to respond to user input for a couple of reasons:
-
-* The JavaScript needed to make the components on the page work hasn't yet loaded;
-* There are long tasks blocking the main thread.
-  The **TTI** metric identifies the point at which the page's initial JavaScript is loaded and the main thread is idle (free of long tasks).
-
-```javascript
-const perfume = new Perfume({
-  timeToInteractive: true
-});
-// Perfume.js: Time to interactive 2452.07 ms
 ```
 
 ### Annotate metrics in the DevTools
@@ -229,7 +213,6 @@ const options = {
   firstContentfulPaint: false,
   firstPaint: false,
   firstInputDelay: false,
-  timeToInteractive: false,
   // Analytics
   analyticsTracker: undefined,
   googleAnalytics: {
@@ -260,12 +243,10 @@ const perfume = new Perfume({
 perfume.firstPaintDuration;
 perfume.firstContentfulPaintDuration;
 perfume.firstInputDelayDuration;
-perfume.timeToInteractiveDuration;
 
 // Aync Values
 const durationFCP = await perfume.observeFirstContentfulPaint;
 const durationFID = await perfume.observeFirstInputDelay;
-const durationTTI = await perfume.observeTimeToInteractive;
 
 // Send Custom User timing measure to Google Analytics
 perfume.sendTiming(metricName, durationFCP);

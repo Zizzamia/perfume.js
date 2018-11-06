@@ -20,7 +20,6 @@ export const PerfumeConfig = {
   firstPaint: true,
   firstContentfulPaint: true,
   firstInputDelay: true,
-  timeToInteractive: true,
   analyticsTracker,
   googleAnalytics: {
     enable: true,
