@@ -46,7 +46,7 @@ export default {
     });
   },
   perfMetrics: {
-    onFirstInputDelay: cb => {
+    onFirstInputDelay(cb) {
       cb(3.2, EventMock);
     },
   },

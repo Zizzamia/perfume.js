@@ -14,7 +14,7 @@ describe('Perfume', () => {
     (window as any).console.warn = (n: any) => n;
     perfume['observers'].set('fcp', () => 400);
     perfume['observers'].set('fid', () => 400);
-    perfume['observers'].set('tti', () => 400);
+    perfume['queue'].pushTask = cb => cb();
   });
 
   afterEach(() => {
@@ -50,22 +50,18 @@ describe('Perfume', () => {
     (window as any).chrome = true;
 
     beforeEach(() => {
-      perfume = new Perfume({ firstInputDelay: true });
-      perfume['observers'].set('fcp', () => 400);
+      perfume = new Perfume({
+        firstPaint: false,
+        firstContentfulPaint: false,
+        firstInputDelay: true,
+      });
       perfume['observers'].set('fid', () => 400);
-      perfume['observers'].set('tti', () => 400);
+      perfume['queue'].pushTask = cb => cb();
     });
 
     it('should be a promise', () => {
       const promise = perfume.observeFirstInputDelay;
       expect(promise).toBeInstanceOf(Promise);
-    });
-
-    it('should resolve fid on chrome', done => {
-      perfume.observeFirstInputDelay.then(duration => {
-        expect(typeof duration).toBe('number');
-        done();
-      });
     });
   });
 
