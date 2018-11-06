@@ -23,7 +23,7 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
         <p>
           JavaScript library that measures <b>First (Contentful) Paint</b>
           (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f"
-          target="_blank">FP/FCP</a>) and <b>First Input Delay</b> (FID).<br />
+          target="_blank">FP/FCP</a>) and <b>First Input Delay</b> (FID).
           Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline.
           Reports all the results to <b>Google Analytics</b> or your favorite tracking tool.
         </p>
@@ -63,7 +63,7 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       }
       @media (min-width: 960px) {
         .layout--intro .layout-content {
-          max-width: 800px;
+          max-width: 832px;
         }
       }
       @media (min-width: 640px) {
@@ -72,6 +72,9 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
         }
         .title {
           text-align: left;
+        }
+        .layout--intro .box--intro p {
+          margin: 10px 20px 10px 0px;
         }
       }
     `,
