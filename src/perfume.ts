@@ -81,7 +81,7 @@ export default class Perfume {
     // Logging
     logPrefix: 'Perfume.js:',
     logging: true,
-    maxMeasureTime: 18000,
+    maxMeasureTime: 8000,
     warning: false,
     debugging: false,
   };
