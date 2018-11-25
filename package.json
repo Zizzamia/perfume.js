@@ -95,8 +95,12 @@
     },
     "collectCoverage": true
   },
+  "dependencies": {
+    "first-input-delay": "^0.1.3",
+    "idlize": "^0.1.1"
+  },
   "devDependencies": {
-    "@angular/core": "6.1.7",
+    "@angular/core": "7.1.0",
     "@types/jest": "^23.1.4",
     "@types/node": "^8.0.0",
     "colors": "^1.1.2",
@@ -121,9 +125,5 @@
     "tslint-plugin-prettier": "^1.3.0",
     "typescript": "2.9.x",
     "validate-commit-msg": "^2.12.2"
-  },
-  "dependencies": {
-    "first-input-delay": "^0.1.3",
-    "idlize": "^0.1.0"
   }
 }
