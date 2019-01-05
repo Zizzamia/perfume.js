@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v2.1.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v2.1.1 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -265,7 +265,7 @@ export default class Perfume {
     // Send metric to custom Analytics service,
     // the default choice is Google Analytics
     if (this.config.analyticsTracker) {
-      this.config.analyticsTracker(metricNameWithBrowser, duration, browser);
+      this.config.analyticsTracker(metricName, duration, browser);
     }
     // Stop sending timing to GA if not enabled
     if (!this.config.googleAnalytics.enable) {

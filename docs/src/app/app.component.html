@@ -318,8 +318,8 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> (metricName, duration) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
+  <span class="violet">analyticsTracker</span><span class="red">:</span> (metricName, duration, browser) => {{'{'}}
+    myAnalyticsTool.<span class="violet">track</span>(metricName, duration, browser.name, browser.os);
   {{'}'}})
 {{'}'}});</pre>
               </td>
@@ -346,10 +346,11 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
                 <pre><span class="red">const</span> <span class="blue">options</span> <span class="red">=</span> {{'{'}}
   <span class="gray">// Metrics</span>
   firstContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
-  firstPaint<span class="red">:</span> <span class="blue">false</span>
+  firstPaint<span class="red">:</span> <span class="blue">false</span>,
   firstInputDelay<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Analytics</span>
   analyticsTracker<span class="red">:</span> <span class="blue">undefined</span>,
+  browserTracker<span class="red">:</span> <span class="blue">false</span>,
   googleAnalytics<span class="red">:</span> {{'{'}}
     enable<span class="red">:</span> <span class="blue">false</span>,
     timingVar<span class="red">:</span> "name"
