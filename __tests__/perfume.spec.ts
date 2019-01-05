@@ -32,13 +32,14 @@ describe('Perfume', () => {
         firstContentfulPaint: false,
         firstPaint: false,
         firstInputDelay: false,
+        browserTracker: false,
         googleAnalytics: {
           enable: false,
           timingVar: 'name',
         },
         logPrefix: 'Perfume.js:',
         logging: true,
-        maxMeasureTime: 18000,
+        maxMeasureTime: 15000,
         warning: false,
         debugging: false,
       });
@@ -256,7 +257,7 @@ describe('Perfume', () => {
       spy = jest.spyOn(perfume.config, 'analyticsTracker');
       (perfume as any).sendTiming('metricName', 123);
       expect(spy).toHaveBeenCalled();
-      expect(spy).toHaveBeenCalledWith('metricName', 123);
+      expect(spy).toHaveBeenCalledWith('metricName', 123, undefined);
     });
 
     it('should not call global.logWarn() if googleAnalytics is disable', () => {

@@ -10,21 +10,28 @@ import { IntroComponent } from './intro/intro.component';
 import { CfpComponent } from './cfp/cfp.component';
 
 import { PerfumeModule } from 'perfume.js/angular';
-// import Perfume from '../../../';
+import Perfume from '../../../';
+
+const perfume = new Perfume({
+  firstPaint: true,
+  firstContentfulPaint: true,
+  browserTracker: true
+});
 
 // Supports AOT and DI
 export function analyticsTracker(metricName: string, duration: number) {
   console.log('Analytics Tracker', metricName, duration);
 }
 export const PerfumeConfig = {
-  firstPaint: true,
-  firstContentfulPaint: true,
-  firstInputDelay: true,
-  analyticsTracker,
-  googleAnalytics: {
-    enable: true,
-    timingVar: 'userId',
-  },
+  // firstPaint: true,
+  // firstContentfulPaint: true,
+  // firstInputDelay: true,
+  // analyticsTracker,
+  // browserTracker: true,
+  // googleAnalytics: {
+  //   enable: true,
+  //   timingVar: 'userId',
+  // },
 };
 
 @NgModule({

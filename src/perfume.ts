@@ -4,6 +4,7 @@
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
+import { BrowserInfo, detect } from './detect-browser';
 import { IdleQueue } from './idle-queue';
 
 import EmulatedPerformance from './emulated-performance';
@@ -15,7 +16,12 @@ export interface IPerfumeConfig {
   firstInputDelay: boolean;
   firstPaint: boolean;
   // Analytics
-  analyticsTracker?: (metricName: string, duration: number) => void;
+  analyticsTracker?: (
+    metricName: string,
+    duration: number,
+    browser?: BrowserInfo | any,
+  ) => void;
+  browserTracker?: boolean;
   googleAnalytics: IGoogleAnalyticsConfig;
   // Logging
   logPrefix: string;
@@ -32,7 +38,12 @@ export interface IPerfumeOptions {
   firstInputDelay?: boolean;
   firstPaint?: boolean;
   // Analytics
-  analyticsTracker?: (metricName: string, duration: number) => void;
+  analyticsTracker?: (
+    metricName: string,
+    duration: number,
+    browser?: BrowserInfo | any,
+  ) => void;
+  browserTracker?: boolean;
   googleAnalytics?: IGoogleAnalyticsConfig;
   // Logging
   logPrefix?: string;
@@ -78,10 +89,11 @@ export default class Perfume {
       enable: false,
       timingVar: 'name',
     },
+    browserTracker: false,
     // Logging
     logPrefix: 'Perfume.js:',
     logging: true,
-    maxMeasureTime: 8000,
+    maxMeasureTime: 15000,
     warning: false,
     debugging: false,
   };
@@ -90,6 +102,7 @@ export default class Perfume {
   firstInputDelayDuration: number = 0;
   observeFirstContentfulPaint?: Promise<number>;
   observeFirstInputDelay?: Promise<number>;
+  private browser: BrowserInfo | any;
   private isHidden: boolean = false;
   private logMetricWarn = 'Please provide a metric name';
   private queue: any;
@@ -106,6 +119,11 @@ export default class Perfume {
     this.perf = Performance.supported()
       ? new Performance(this.config)
       : new EmulatedPerformance(this.config);
+
+    // In case we want to track Browser version and OS
+    if (this.config.browserTracker) {
+      this.browser = detect();
+    }
 
     // In case we can not use Performance Observer for initFirstPaint
     if (!Performance.supportedPerformanceObserver()) {
@@ -241,10 +259,13 @@ export default class Perfume {
     if (this.isHidden) {
       return;
     }
+    // Get Browser from userAgent
+    const browser = this.config.browserTracker ? this.browser : undefined;
+    metricName = this.addBrowserToMetricName(metricName);
     // Send metric to custom Analytics service,
     // the default choice is Google Analytics
     if (this.config.analyticsTracker) {
-      this.config.analyticsTracker(metricName, duration);
+      this.config.analyticsTracker(metricName, duration, browser);
     }
     // Stop sending timing to GA if not enabled
     if (!this.config.googleAnalytics.enable) {
@@ -265,6 +286,23 @@ export default class Perfume {
       this.config.googleAnalytics.timingVar,
       durationInteger,
     );
+  }
+
+  private addBrowserToMetricName(metricName: string): string {
+    if (!this.config.browserTracker) {
+      return metricName;
+    }
+    // Check if Browser Name exist
+    if (this.browser.name) {
+      const browserName = this.browser.name.replace(/\s/g, '');
+      metricName += `.${browserName}`;
+      // Check if Browser OS exist
+      if (this.browser.os) {
+        const browserOS = this.browser.os.replace(/\s/g, '');
+        metricName += `.${browserOS}`;
+      }
+    }
+    return metricName;
   }
 
   private checkMetricName(metricName: string): boolean {
