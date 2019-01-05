@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.0 (2019-1-5)
+
+### Feat
+
+* **feat:** Added option for browser and OS infos [#45](https://github.com/Zizzamia/perfume.js/issues/45)
+
 ## 2.0.0 (2018-11-5)
 
 ### Feat
