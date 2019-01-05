@@ -1,6 +1,6 @@
 {
   "name": "perfume.js",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "JavaScript library that measures First (Contentful) Paint (FP/FCP) and First Input Delay (FID). Annotates components’ performance for Vanilla and Angular applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.",
   "keywords": [
     "performance-metrics",
@@ -33,7 +33,7 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "lint": "tslint -t codeFrame 'src/**/*.ts' '__tests__/**/*.ts'",
+    "lint": "tslint -t codeFrame 'src/emulated-performance.ts' 'src/perfume.ts' 'src/performance.ts' '__tests__/**/*.ts'",
     "prebuild": "rimraf dist",
     "build": "tsc && tsc --module commonjs --outDir dist/lib && rollup -c rollup.config.ts",
     "start": "tsc -w & rollup -c rollup.config.ts -w",

@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v2.0.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v2.1.0 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -261,11 +261,11 @@ export default class Perfume {
     }
     // Get Browser from userAgent
     const browser = this.config.browserTracker ? this.browser : undefined;
-    metricName = this.addBrowserToMetricName(metricName);
+    const metricNameWithBrowser = this.addBrowserToMetricName(metricName);
     // Send metric to custom Analytics service,
     // the default choice is Google Analytics
     if (this.config.analyticsTracker) {
-      this.config.analyticsTracker(metricName, duration, browser);
+      this.config.analyticsTracker(metricNameWithBrowser, duration, browser);
     }
     // Stop sending timing to GA if not enabled
     if (!this.config.googleAnalytics.enable) {
@@ -282,7 +282,7 @@ export default class Perfume {
     window.ga(
       'send',
       'timing',
-      metricName,
+      metricNameWithBrowser,
       this.config.googleAnalytics.timingVar,
       durationInteger,
     );
@@ -292,17 +292,18 @@ export default class Perfume {
     if (!this.config.browserTracker) {
       return metricName;
     }
+    let metricNameWithBrowser = metricName;
     // Check if Browser Name exist
     if (this.browser.name) {
       const browserName = this.browser.name.replace(/\s/g, '');
-      metricName += `.${browserName}`;
+      metricNameWithBrowser += `.${browserName}`;
       // Check if Browser OS exist
       if (this.browser.os) {
         const browserOS = this.browser.os.replace(/\s/g, '');
-        metricName += `.${browserOS}`;
+        metricNameWithBrowser += `.${browserOS}`;
       }
     }
-    return metricName;
+    return metricNameWithBrowser;
   }
 
   private checkMetricName(metricName: string): boolean {

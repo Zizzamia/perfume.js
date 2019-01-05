@@ -1,8 +1,8 @@
 <a href="http://www.perfumejs.com/">
-  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v2-0-0.png" align="left" width="262" />
+  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v2-1-0.png" align="left" width="262" />
 </a>
 
-# [Perfume.js v2.0.0](http://perfumejs.com)
+# [Perfume.js v2.1.0](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
@@ -195,8 +195,8 @@ Configurable analytics callback to use Perfume.js with any platform.
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: (metricName, duration) => {
-    myAnalyticsTool.track(metricName, duration);
+  analyticsTracker: (metricName, duration, browser) => {
+    myAnalyticsTool.track(metricName, duration, browser.name, browser.os);
   })
 });
 ```
@@ -215,6 +215,7 @@ const options = {
   firstInputDelay: false,
   // Analytics
   analyticsTracker: undefined,
+  browserTracker: false,
   googleAnalytics: {
     enable: false,
     timingVar: 'name',
@@ -222,7 +223,7 @@ const options = {
   // Logging
   logPrefix: 'Perfume.js:',
   logging: true,
-  maxMeasureTime: 18000,
+  maxMeasureTime: 15000,
   warning: false,
   debugging: false,
 };
