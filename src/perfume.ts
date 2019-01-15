@@ -355,9 +355,9 @@ export default class Perfume {
     if (Performance.supportedPerformanceObserver()) {
       this.logDebug('initFirstPaint.supportedPerformanceObserver');
       try {
-        this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));        
+        this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
       } catch (e) {
-        this.logWarn(this.config.logPrefix, "initFirstPaint failed");
+        this.logWarn(this.config.logPrefix, 'initFirstPaint failed');
       }
     } else if (this.perfEmulated) {
       this.logDebug('initFirstPaint.perfEmulated');

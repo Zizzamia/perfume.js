@@ -384,10 +384,7 @@ describe('Perfume', () => {
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstPaint']();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'Perfume.js:',
-        'initFirstPaint failed',
-      );
+      expect(spy).toHaveBeenCalledWith('Perfume.js:', 'initFirstPaint failed');
       expect(perfume['perfEmulated']).not.toBeDefined();
     });
 
