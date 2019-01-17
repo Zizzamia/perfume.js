@@ -14,6 +14,22 @@ export const EventMock = {
   },
 } as Event;
 
+export class MockPerformanceObserver {
+  static simulateErrorOnObserve = false;
+
+  constructor(cb) {
+    (this as any).observe = () => {
+      if (MockPerformanceObserver.simulateErrorOnObserve) {
+        MockPerformanceObserver.simulateErrorOnObserve = false;
+        throw new Error('Simulated Error');
+      }
+      cb({ getEntries: () => entries });
+      return {};
+    };
+  }
+  disconnect() {}
+}
+
 export default {
   Date: {
     now: () => 1000,
@@ -50,15 +66,7 @@ export default {
       cb(3.2, EventMock);
     },
   },
-  PerformanceObserver: class {
-    constructor(cb) {
-      (this as any).observe = () => {
-        cb({ getEntries: () => entries });
-        return {};
-      };
-    }
-    disconnect() {}
-  },
+  PerformanceObserver: MockPerformanceObserver,
   defaultPerfumeConfig: {
     firstContentfulPaint: false,
     firstPaint: false,

@@ -377,6 +377,17 @@ describe('Perfume', () => {
       expect(perfume['perfEmulated']).not.toBeDefined();
     });
 
+    it('should throw a logWarn if initFirstPaint fails', () => {
+      spy = jest.spyOn(perfume as any, 'logWarn');
+      (window as any).chrome = true;
+      mock.PerformanceObserver.simulateErrorOnObserve = true;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initFirstPaint']();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith('Perfume.js:', 'initFirstPaint failed');
+      expect(perfume['perfEmulated']).not.toBeDefined();
+    });
+
     it('should call firstContentfulPaint() with EmulatedPerformance', () => {
       delete (window as any).chrome;
       delete (window as any).PerformanceObserver;
