@@ -1,6 +1,6 @@
 {
   "name": "perfume.js",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "JavaScript library that measures First (Contentful) Paint (FP/FCP) and First Input Delay (FID). Annotates components’ performance for Vanilla and Angular applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.",
   "keywords": [
     "performance-metrics",
