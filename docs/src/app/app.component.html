@@ -257,12 +257,22 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
 {{'}'}})
 @<span class="green">PerfumeAfterViewInit</span>('AppComponent')
 <span class="red">export</span> <span class="blue">class</span> <span class="green">AppComponent</span> <span class="red">implements</span> <span class="green">AfterViewInit</span> {{'{'}}
-  <span class="blue">constructor</span>(<span class="red">public</span> perfume<span class="red">:</span> NgPerfume) {{'{}'}}
-  <span class="green">ngAfterViewInit</span>() {{'{}'}}
-  <span class="green">launchFalconNine</span>() {{'{'}}
-    this.perfume.<span class="blue">start</span>('rocketScience');
-    <span class="gray">// Rocket Science Match ...</span>
-    this.perfume.<span class="violet">end</span>('rocketScience');
+  data: AwesomeType;
+
+  <span class="blue">constructor</span>(<span class="red">public</span> perfume<span class="red">:</span> NgPerfume) {{'{'}}
+    <span class="gray">// Start measure component time to paint</span>
+    this.perfume.<span class="blue">start</span>('AppComponentAfterPaint');
+  {{'}'}}
+  
+  <span class="green">ngAfterViewInit</span>() {{'{'}}
+    this.loadAwesomeData();
+  {{'}'}}
+
+  <span class="green">loadAwesomeData</span> = async () => {{'{'}}
+    await AppApi.loadAmazingData();
+    this.data = AppApi.loadAwesomeData();
+    <span class="gray">// End measure component time to paint</span>
+    this.perfume.<span class="blue">endPaint</span>('AppComponentAfterPaint');
   {{'}'}}
 {{'}'}}
 
@@ -320,16 +330,18 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
 export default class App extends React.Component {{'{'}}
 
   <span class="blue">constructor</span>() {{'{'}}
-    perfume.start('AppAfterPaint');
+    <span class="gray">// Start measure component time to paint</span>
+    perfume.<span class="blue">start</span>('AppAfterPaint');
   {{'}'}}
 
   <span class="green">loadData</span> = async () => {{'{'}}
     await AppApi.loadAmazingData();
     await AppApi.loadAwesomeData();
-    perfume.endPaint('AppAfterPaint');
+    <span class="gray">// End measure component time to paint</span>
+    perfume.<span class="blue">endPaint</span>('AppAfterPaint');
   {{'}'}}
 
-  <span class="green">render</span>() {{'{'}}
+  <span class="blue">render</span>() {{'{'}}
     const data = this.loadData();
     return (
       <span class="red">{{'<'}}</span>div<span class="red">{{'>'}}</span>

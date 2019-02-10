@@ -210,12 +210,14 @@ const perfume = new Perfume({
 export default class App extends React.Component {
 
   constructor() {
+    // Start measure component time to paint
     perfume.start('AppAfterPaint');
   }
 
   loadData = async () => {
     await AppApi.loadAmazingData();
     await AppApi.loadAwesomeData();
+    // End measure component time to paint
     perfume.endPaint('AppAfterPaint');
   }
 
