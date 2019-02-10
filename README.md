@@ -1,5 +1,5 @@
 <a href="http://www.perfumejs.com/">
-  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v2-1-1.png" align="left" width="262" />
+  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v2-1-2.png" align="left" width="262" />
 </a>
 
 # [Perfume.js v2.1.2](http://perfumejs.com)
@@ -7,12 +7,22 @@
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
 
-> JavaScript library that measures <b>First (Contentful) Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>) and <b>First Input Delay</b> (FID). Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.
+> A flexible library for measuring <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID) and components lifecycle performance. Report real user measurements to Google Analytics or your ideal tracking tool.
 
 <br />
 <br />
 <br />
 <br />
+
+## Why Perfume.js?
+
+⏰ Latest Performance APIs for precise metrics
+🔨 Cross browser tested
+🚿 Filters out false positive/negative results
+🔭 Browser tracker built-in
+🤙 Support for async/await syntax
+🛰 Flexible tracking tool
+⚡️ Waste-zero ms with Idle Until Urgent strategy built-in 
 
 ## User-centric performance metrics
 
@@ -21,6 +31,7 @@
 * First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Input Delay (FID)
+* Framework components lifecycle monitoring
 
 ![first paint and first input delay](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-paint-and-first-input-delay.png)
 
@@ -129,15 +140,16 @@ perfume.log('Custom logging', duration);
 ## Frameworks
 
 ### Angular
-In combination with the Angular framework, we can start configuring Perfume to collect the initial performance metrics of the application. Make sure to import the `PefumeModule` at first inside the `NgModule` to let the PerformanceObserver work correctly.
+In combination with the Angular framework, we can start configuring Perfume to collect the initial performance metrics  (eg. FCP, FID). Make sure to import the `PefumeModule` at first inside the `NgModule` to let the PerformanceObserver work correctly.
 
-In a large application use the  `@PerfumeAfterViewInit()` decorator to monitor the rendering performance of the most complex components. Avoid using it inside a NgFor, instead focus on components that include a collection of smaller components.
+In a large application use the `@PerfumeAfterViewInit()` decorator to monitor the rendering performance of the most complex components. Avoid using it inside a NgFor, instead focus on components that include a collection of smaller components.
 
-The `NgPerfume` service exposes all the methods and property of the `perfume` instance, use it to annotate a distinct coding flow manually and for unit test mocking.
+The `NgPerfume` service exposes all the methods and property of the `perfume` instance, use it to annotate a distinct coding flow like loading api data and measuring the time the components needs to paint the backend data and the component be fully interactive.
 
 ```javascript
 import { NgPerfume, PerfumeModule, PerfumeAfterViewInit } from 'perfume.js/angular';
 import { AppComponent } from './app.component';
+import { AppApi } from './app-api';
 
 @Component({
   selector: 'app-root',
@@ -146,12 +158,18 @@ import { AppComponent } from './app.component';
 })
 @PerfumeAfterViewInit('AppComponent')
 export class AppComponent implements AfterViewInit {
-  constructor(public perfume: NgPerfume) {}
-  ngAfterViewInit() {}
-  launchFalconNine() {
-    this.perfume.start('rocketScience');
-    // Rocket Science Match ...
-    this.perfume.end('rocketScience');
+  constructor(public perfume: NgPerfume) {
+    this.perfume.start('AppComponentAfterPaint');
+  }
+
+  ngAfterViewInit() {
+    this.loadAwesomeData();
+  }
+
+  loadAwesomeData = async () => {
+    await AppApi.loadAmazingData();
+    await AppApi.loadAwesomeData();
+    this.perfume.endPaint('AppComponentAfterPaint');
   }
 }
 
@@ -171,6 +189,45 @@ export class AppModule {}
 
 ![Angular Performance Decorator](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/angular-performance-decorator.png)
 
+### React
+In combination with the React framework, we can start configuring Perfume to collect the initial performance metrics (eg. FCP, FID).
+
+In a large application use the `perfume.start()` combine with `perfume.endPaint()` to monitor the time it will take a component from the initialization to the next Paint events. Use it to annotate a distinct coding flow like loading api data and measuring the time the components needs to paint the backend data and the component be fully interactive.
+
+```javascript
+import React from 'react';
+import Perfume from 'perfume.js';
+
+import { AppApi } from './AppApi';
+
+const perfume = new Perfume({
+  firstContentfulPaint: true,
+  firstInputDelay: true
+});
+
+export default class App extends React.Component {
+
+  constructor() {
+    perfume.start('AppAfterPaint');
+  }
+
+  loadData = async () => {
+    await AppApi.loadAmazingData();
+    await AppApi.loadAwesomeData();
+    perfume.endPaint('AppAfterPaint');
+  }
+
+  render() {
+    const data = this.loadData();
+    return (
+      <div>
+        <h2>Awesome App</h2>
+        <div>{data}</div>
+      </div>
+    );
+  }
+}
+```
 
 ## Analytics
 
