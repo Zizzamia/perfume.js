@@ -1,5 +1,5 @@
 <a href="http://www.perfumejs.com/">
-  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v2-1-2.png" align="left" width="262" />
+  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v2-1-2.png" align="left" width="200" />
 </a>
 
 # [Perfume.js v2.1.2](http://perfumejs.com)
@@ -16,13 +16,13 @@
 
 ## Why Perfume.js?
 
-⏰ Latest Performance APIs for precise metrics
-🔨 Cross browser tested
-🚿 Filters out false positive/negative results
-🔭 Browser tracker built-in
-🤙 Support for async/await syntax
-🛰 Flexible tracking tool
-⚡️ Waste-zero ms with Idle Until Urgent strategy built-in 
+- ⏰ Latest Performance APIs for precise metrics
+- 🔨 Cross browser tested
+- 🚿 Filters out false positive/negative results
+- 🔭 Browser tracker built-in
+- 🤙 Support for async/await syntax
+- 🛰 Flexible tracking tool
+- ⚡️ Waste-zero ms with Idle Until Urgent strategy built-in 
 
 ## User-centric performance metrics
 
