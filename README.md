@@ -11,8 +11,6 @@
 
 <br />
 <br />
-<br />
-<br />
 
 ## Why Perfume.js?
 
@@ -22,11 +20,11 @@
 - 🔭 Browser tracker built-in
 - 🤙 Support for async/await syntax
 - 🛰 Flexible tracking tool
-- ⚡️ Waste-zero ms with Idle Until Urgent strategy built-in 
+- ⚡️ Waste-zero ms with [Idle Until Urgent](https://philipwalton.com/articles/idle-until-urgent/) strategy built-in 
 
 ## User-centric performance metrics
 
-**Perfume** leverage the latest W3C Performance Drafts (like PerformanceObserver), for measuring performance that matters! ⚡️
+**Perfume** leverage the latest W3C Performance Drafts (like [PerformanceObserver](https://w3c.github.io/performance-timeline/)), for measuring performance that matters! ⚡️
 
 * First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
@@ -140,11 +138,11 @@ perfume.log('Custom logging', duration);
 ## Frameworks
 
 ### Angular
-In combination with the Angular framework, we can start configuring Perfume to collect the initial performance metrics  (eg. FCP, FID). Make sure to import the `PefumeModule` at first inside the `NgModule` to let the PerformanceObserver work correctly.
+Wth the Angular framework, we can start configuring Perfume to collect the initial performance metrics (eg. FCP, FID). Make sure to import the `PefumeModule` at first inside the `NgModule` to let the PerformanceObserver work correctly.
 
 In a large application use the `@PerfumeAfterViewInit()` decorator to monitor the rendering performance of the most complex components. Avoid using it inside a NgFor, instead focus on components that include a collection of smaller components.
 
-The `NgPerfume` service exposes all the methods and property of the `perfume` instance, use it to annotate a distinct coding flow like loading api data and measuring the time the components needs to paint the backend data and the component be fully interactive.
+The `NgPerfume` service exposes all the methods and property of the `perfume` instance, you can annotate component lifecycles combined with APIs calls to measure how long it takes to paint the component.
 
 ```javascript
 import { NgPerfume, PerfumeModule, PerfumeAfterViewInit } from 'perfume.js/angular';
@@ -158,7 +156,10 @@ import { AppApi } from './app-api';
 })
 @PerfumeAfterViewInit('AppComponent')
 export class AppComponent implements AfterViewInit {
+  data: AwesomeType;
+
   constructor(public perfume: NgPerfume) {
+    // Start measure component time to paint
     this.perfume.start('AppComponentAfterPaint');
   }
 
@@ -168,7 +169,8 @@ export class AppComponent implements AfterViewInit {
 
   loadAwesomeData = async () => {
     await AppApi.loadAmazingData();
-    await AppApi.loadAwesomeData();
+    this.data = AppApi.loadAwesomeData();
+    // End measure component time to paint
     this.perfume.endPaint('AppComponentAfterPaint');
   }
 }
@@ -192,7 +194,8 @@ export class AppModule {}
 ### React
 In combination with the React framework, we can start configuring Perfume to collect the initial performance metrics (eg. FCP, FID).
 
-In a large application use the `perfume.start()` combine with `perfume.endPaint()` to monitor the time it will take a component from the initialization to the next Paint events. Use it to annotate a distinct coding flow like loading api data and measuring the time the components needs to paint the backend data and the component be fully interactive.
+Use `perfume.start()` and `perfume.endPaint()` to track the component lifecycle with APIs calls to measure how long it takes to paint the component.
+
 
 ```javascript
 import React from 'react';
