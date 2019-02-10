@@ -194,8 +194,7 @@ export class AppModule {}
 ### React
 In combination with the React framework, we can start configuring Perfume to collect the initial performance metrics (eg. FCP, FID).
 
-Use `perfume.start()` and `perfume.endPaint()` to track the component lifecycle with APIs calls to measure how long it takes to paint the component.
-
+Use `perfume.start()` and `perfume.endPaint()` into a component lifecycle mixed with APIs calls to measure how long it takes to paint the component.
 
 ```javascript
 import React from 'react';
@@ -338,7 +337,7 @@ I want to thank some friends and projects for the work they did:
 
 ## Copyright and license
 
-Code and documentation copyright 2018 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
+Code and documentation copyright 2019 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
 
 ## Team
 

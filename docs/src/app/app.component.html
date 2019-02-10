@@ -2,7 +2,22 @@
 <div class="layout layout--body">
   <div class="layout-content">
     <div class="box box--intro">
-      
+        <h3 class="box-title" id="/why-perfume/">
+          <a href="{{ path }}#/why-perfume/">Why Perfume.js?</a>
+        </h3>
+        <ul>
+          <li>⏰ Latest Performance APIs for precise metrics</li>
+          <li>🔨 Cross browser tested</li>
+          <li>🚿 Filters out false positive/negative results</li>
+          <li>🔭 Browser tracker built-in</li>
+          <li>🤙 Support for async/await syntax</li>
+          <li>🛰 Flexible tracking tool</li>
+          <li>
+            ⚡️ Waste-zero ms with 
+            <a href="https://philipwalton.com/articles/idle-until-urgent/" target="_blank">Idle Until Urgent</a> 
+            strategy built-in
+          </li>
+        </ul>
     </div>
 
     <div class="box">
@@ -276,6 +291,62 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
     </div>
 
     <div class="box">
+        <h3 class="box-title" id="/react/">
+          <a href="{{ path }}#/react/">React</a>
+        </h3>
+        <p>
+          In combination with the React framework, we can start configuring Perfume to collect 
+          the initial performance metrics (eg. FCP, FID).
+        </p>
+        <p>
+          Use `perfume.start()` and `perfume.endPaint()` into a component lifecycle mixed 
+          with APIs calls to measure how long it takes to paint the component.
+        </p>
+        <div class="box-code js">
+          <table>
+            <tbody>
+              <tr>
+                <td class="code">
+                  <pre><span class="red">import</span> React <span class="red">from</span> 'react';
+<span class="red">import</span> Perfume <span class="red">from</span> 'perfume.js';
+
+<span class="red">import</span> {{'{'}} AppApi {{'}'}} <span class="red">from</span> 'AppApi.js';
+
+<span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
+  firstContentfulPaint<span class="red">:</span> <span class="blue">true</span>
+  firstInputDelay<span class="red">:</span> <span class="blue">true</span>
+{{'}'}});
+
+export default class App extends React.Component {{'{'}}
+
+  <span class="blue">constructor</span>() {{'{'}}
+    perfume.start('AppAfterPaint');
+  {{'}'}}
+
+  <span class="green">loadData</span> = async () => {{'{'}}
+    await AppApi.loadAmazingData();
+    await AppApi.loadAwesomeData();
+    perfume.endPaint('AppAfterPaint');
+  {{'}'}}
+
+  <span class="green">render</span>() {{'{'}}
+    const data = this.loadData();
+    return (
+      <span class="red">{{'<'}}</span>div<span class="red">{{'>'}}</span>
+        <span class="red">{{'<'}}</span>h2<span class="red">{{'>'}}</span>Awesome App<span class="red">{{'<'}}</span>/h2<span class="red">{{'>'}}</span>
+        <span class="red">{{'<'}}</span>div<span class="red">{{'>'}}</span>{{'{'}}data{{'}'}}<span class="red">{{'<'}}</span>/div<span class="red">{{'>'}}</span>
+      <span class="red">{{'<'}}</span>/div<span class="red">{{'>'}}</span>
+    );
+  {{'}'}}
+{{'}'}}</pre>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    <div class="box">
       <h2 class="box-title">Analytics</h2>
     </div>
 
@@ -285,8 +356,7 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
       </h3>
       <p>To enable Perfume to send your measures to Google Analytics User timing, set the option
         <b>enable:true</b> and a custom
-        <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar" target="_blank">user timing variable</a>
-        <b>timingVar:"name"</b>.
+        <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar" target="_blank">user timing variable</a> <b>timingVar:"name"</b>.
       </p>
       <div class="box-code js">
         <table>
