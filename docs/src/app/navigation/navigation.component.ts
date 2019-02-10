@@ -113,6 +113,7 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
           display: block;
           position: sticky;
           top: 10px;
+          margin-top: 28px;
         }
       }
     `,

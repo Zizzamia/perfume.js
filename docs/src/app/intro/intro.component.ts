@@ -21,11 +21,10 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
         </a>
         <h1 class="title">Perfume.js</h1>
         <p>
-          JavaScript library that measures <b>First (Contentful) Paint</b>
+        A flexible library for measuring <b>First Contentful Paint</b>
           (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f"
-          target="_blank">FP/FCP</a>) and <b>First Input Delay</b> (FID).
-          Annotates components’ performance for <b>Vanilla</b> and <b>Angular</b> applications, into the DevTools timeline.
-          Reports all the results to <b>Google Analytics</b> or your favorite tracking tool.
+          target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID) and components lifecycle performance.
+          Report real user measurements to <b>Google Analytics</b> or your ideal tracking tool.
         </p>
         <a class="github-button" href="https://github.com/zizzamia/perfume.js"
         data-size="large" data-show-count="true"
@@ -49,16 +48,16 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       }
       .title {
         margin: 0;
-        padding: 9px 0 0;
+        padding: 8px 0 0;
         font-family: 'Dancing Script', cursive;
-        font-size: 5em;
+        font-size: 3.7em;
         font-weight: 400;
         text-align: center;
         color: #f2db77;
       }
       .logo img {
         display: block;
-        width: 262px;
+        width: 212px;
         margin: auto;
       }
       @media (min-width: 960px) {

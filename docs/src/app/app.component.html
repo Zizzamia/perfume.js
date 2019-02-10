@@ -1,23 +1,24 @@
-<app-intro class="layout"></app-intro>
 <div class="layout layout--body">
   <div class="layout-content">
+    <app-intro class="layout layout-performance"></app-intro>
     <div class="box box--intro">
-        <h3 class="box-title" id="/why-perfume/">
-          <a href="{{ path }}#/why-perfume/">Why Perfume.js?</a>
-        </h3>
-        <ul>
-          <li>⏰ Latest Performance APIs for precise metrics</li>
-          <li>🔨 Cross browser tested</li>
-          <li>🚿 Filters out false positive/negative results</li>
-          <li>🔭 Browser tracker built-in</li>
-          <li>🤙 Support for async/await syntax</li>
-          <li>🛰 Flexible tracking tool</li>
-          <li>
-            ⚡️ Waste-zero ms with 
-            <a href="https://philipwalton.com/articles/idle-until-urgent/" target="_blank">Idle Until Urgent</a> 
-            strategy built-in
-          </li>
-        </ul>
+      <br />
+      <h3 class="box-title" id="/why-perfume/">
+        <a href="{{ path }}#/why-perfume/">Why Perfume.js?</a>
+      </h3>
+      <ul>
+        <li>⏰ Latest Performance APIs for precise metrics</li>
+        <li>🔨 Cross browser tested</li>
+        <li>🚿 Filters out false positive/negative results</li>
+        <li>🔭 Browser tracker built-in</li>
+        <li>🤙 Support for async/await syntax</li>
+        <li>🛰 Flexible tracking tool</li>
+        <li>
+          ⚡️ Waste-zero ms with 
+          <a href="https://philipwalton.com/articles/idle-until-urgent/" target="_blank">Idle Until Urgent</a> 
+          strategy built-in
+        </li>
+      </ul>
     </div>
 
     <div class="box">
@@ -327,7 +328,7 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
   firstInputDelay<span class="red">:</span> <span class="blue">true</span>
 {{'}'}});
 
-export default class App extends React.Component {{'{'}}
+<span class="red">export</span> default <span class="red">class</span> App extends React.Component {{'{'}}
 
   <span class="blue">constructor</span>() {{'{'}}
     <span class="gray">// Start measure component time to paint</span>
@@ -335,8 +336,8 @@ export default class App extends React.Component {{'{'}}
   {{'}'}}
 
   <span class="green">loadData</span> = async () => {{'{'}}
-    await AppApi.loadAmazingData();
-    await AppApi.loadAwesomeData();
+    <span class="red">await</span> AppApi.loadAmazingData();
+    <span class="red">await</span> AppApi.loadAwesomeData();
     <span class="gray">// End measure component time to paint</span>
     perfume.<span class="blue">endPaint</span>('AppAfterPaint');
   {{'}'}}
@@ -512,7 +513,7 @@ perfume.<span class="blue">sendTiming</span>(metricName, durationFCP);</pre>
       <h3 class="box-title" id="/copyright-and-license/">
         <a href="{{ path }}#/copyright-and-license/">Copyright and licenses</a>
       </h3>
-      <p>Code and documentation copyright 2018
+      <p>Code and documentation copyright 2019
         <a href="https://twitter.com/Zizzamia" target="_blank">Leonardo Zizzamia</a>. Code released under the
         <a href="https://github.com/Zizzamia/perfume.js/blob/master/LICENSE" target="_blank">MIT license</a>. Docs released under Creative Commons.</p>
     </div>
@@ -520,7 +521,7 @@ perfume.<span class="blue">sendTiming</span>(metricName, durationFCP);</pre>
     <div class="box">
       <a href="https://twitter.com/Zizzamia" class="box-leo" target="_blank">
         <picture class="logo">
-          <source srcset="{{ path }}assets/leo.webp" type="image/webp" />
+          <source srcset="{{ path }}assets/leo-100.webp" type="image/webp" />
           <source srcset="{{ path }}assets/leo.jpg" type="image/jpeg" />
           <img src="{{ path }}assets/leo.jpg" alt="Leonardo Zizzamia" />
         </picture>
