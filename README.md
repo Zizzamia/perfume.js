@@ -5,7 +5,8 @@
 # [Perfume.js v2.1.2](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
-
+[![Backers on Open Collective](https://opencollective.com/perfumejs/backers/badge.svg)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/perfumejs/sponsors/badge.svg)](#sponsors) 
 
 > A flexible library for measuring <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID) and components lifecycle performance. Report real user measurements to Google Analytics or your ideal tracking tool.
 
@@ -336,6 +337,26 @@ I want to thank some friends and projects for the work they did:
 * [Performance Timeline Level 2](https://w3c.github.io/performance-timeline/) the definition of _PerformanceObserver_ in that specification;
 * [The Contributors](https://github.com/Zizzamia/perfume.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
 * **you** for the star you'll give this project 😉 and for supporting me by giving my project a try 😄
+
+
+### Contributors
+
+This project exists thanks to all the people who contribute. 
+<img src="https://opencollective.com/perfumejs/contributors.svg?width=890&button=false" />
+
+### Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/perfumejs#backer)]
+
+<a href="https://opencollective.com/perfumejs#backers" target="_blank"><img src="https://opencollective.com/perfumejs/backers.svg?width=890"></a>
+
+### Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/perfumejs#sponsor)]
+
+<a href="https://opencollective.com/perfumejs/sponsor/0/website" target="_blank"><img src="https://opencollective.com/perfumejs/sponsor/0/avatar.svg"></a>
+
+
 
 ## Copyright and license
 
