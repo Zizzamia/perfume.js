@@ -57,7 +57,7 @@ import Perfume from 'node_modules/perfume.js/dist/es/perfume';
 Universal Module Definition:
 
 ```javascript
-import Perfume from 'node_modules/perfume.js/perfume.umd.js';
+import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 ```
 
 ## Start measuring
@@ -299,7 +299,6 @@ Perfume.js expose some methods and properties which may be useful to people exte
 const perfume = new Perfume({
   firstContentfulPaint: true,
   firstInputDelay: true,
-  timeToInteractive: true,
 });
 
 // Values
