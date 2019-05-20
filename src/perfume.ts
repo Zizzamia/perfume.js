@@ -20,6 +20,7 @@ export interface IPerfumeConfig {
     metricName: string,
     duration: number,
     browser?: BrowserInfo | any,
+    customProperties?: { [key: string]: any },
   ) => void;
   browserTracker?: boolean;
   googleAnalytics: IGoogleAnalyticsConfig;
@@ -183,7 +184,10 @@ export default class Perfume {
   /**
    * End performance measurement
    */
-  end(metricName: string): void | number {
+  end(
+    metricName: string,
+    customProperties?: { [key: string]: any },
+  ): void | number {
     if (!this.checkMetricName(metricName)) {
       return;
     }
@@ -201,8 +205,8 @@ export default class Perfume {
     this.metrics.delete(metricName);
     this.queue.pushTask(() => {
       // Log to console, delete metric and send to analytics tracker
-      this.log(metricName, duration2Decimal);
-      this.sendTiming(metricName, duration2Decimal);
+      this.log(metricName, duration2Decimal, customProperties);
+      this.sendTiming(metricName, duration2Decimal, customProperties);
     });
     return duration2Decimal;
   }
@@ -210,10 +214,13 @@ export default class Perfume {
   /**
    * End performance measurement after first paint from the beging of it
    */
-  endPaint(metricName: string): Promise<void | number> {
+  endPaint(
+    metricName: string,
+    customProperties?: { [key: string]: any },
+  ): Promise<void | number> {
     return new Promise(resolve => {
       setTimeout(() => {
-        const duration = this.end(metricName);
+        const duration = this.end(metricName, customProperties);
         resolve(duration);
       });
     });
@@ -222,7 +229,11 @@ export default class Perfume {
   /**
    * Coloring Text in Browser Console
    */
-  log(metricName: string, duration: number): void {
+  log(
+    metricName: string,
+    duration: number,
+    customProperties?: { [key: string]: any },
+  ): void {
     // Don't log when page is hidden or has disabled logging
     if (this.isHidden || !this.config.logging) {
       return;
@@ -233,7 +244,10 @@ export default class Perfume {
     }
     const durationMs = duration.toFixed(2);
     const style = 'color: #ff6d00;font-size:11px;';
-    const text = `%c ${this.config.logPrefix} ${metricName} ${durationMs} ms`;
+    let text = `%c ${this.config.logPrefix} ${metricName} ${durationMs} ms`;
+    if (customProperties && Object.keys(customProperties).length > 0) {
+      text += `\nCustom Properties: ${JSON.stringify(customProperties)}`;
+    }
     window.console.log(text, style);
   }
 
@@ -254,7 +268,11 @@ export default class Perfume {
    * timingVar: googleAnalytics.timingVar
    * timingValue: The value of duration rounded to the nearest integer
    */
-  sendTiming(metricName: string, duration: number): void {
+  sendTiming(
+    metricName: string,
+    duration: number,
+    customProperties?: { [key: string]: string },
+  ): void {
     // Doesn't send timing when page is hidden
     if (this.isHidden) {
       return;
@@ -265,7 +283,12 @@ export default class Perfume {
     // Send metric to custom Analytics service,
     // the default choice is Google Analytics
     if (this.config.analyticsTracker) {
-      this.config.analyticsTracker(metricName, duration, browser);
+      this.config.analyticsTracker(
+        metricName,
+        duration,
+        browser,
+        customProperties,
+      );
     }
     // Stop sending timing to GA if not enabled
     if (!this.config.googleAnalytics.enable) {
