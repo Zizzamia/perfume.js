@@ -1,7 +1,7 @@
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import sourceMaps from 'rollup-plugin-sourcemaps';
-import uglify from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
 const ensureArray = maybeArr =>
@@ -10,7 +10,7 @@ const ensureArray = maybeArr =>
 const createConfig = ({ output, includeExternals = false, min = false }) => {
   const minify =
     min &&
-    uglify({
+    terser({
       output: {
         comments(node, { text, type }) {
           if (type === 'comment2') {
@@ -20,14 +20,28 @@ const createConfig = ({ output, includeExternals = false, min = false }) => {
         },
       },
     });
+  
+  const plugins = [
+    // https://github.com/rollup/rollup-plugin-node-resolve#usage
+    resolve(),
+    // Resolve source maps to the original source
+    sourceMaps(),
+    minify,
+  ];
+
+  if (output.format !== 'esm') {
+    // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
+    plugins.unshift(commonjs());
+  }
 
   return {
     input: 'dist/es/perfume.js',
-    output: ensureArray(output).map(format => ({
-      ...format,
+    output: {
+      file: output.file,
+      format: output.format,
       name: 'Perfume',
       sourcemap: true,
-    })),
+    },
     // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
     external: includeExternals
       ? []
@@ -36,27 +50,19 @@ const createConfig = ({ output, includeExternals = false, min = false }) => {
           ...Object.keys(pkg.peerDependencies || {}),
         ],
     watch: { include: 'dist/es/**' },
-    plugins: [
-      // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
-      commonjs(),
-      // https://github.com/rollup/rollup-plugin-node-resolve#usage
-      resolve(),
-      // Resolve source maps to the original source
-      sourceMaps(),
-      minify,
-    ].filter(Boolean),
+    plugins: plugins.filter(Boolean),
   };
 };
 
 export default [
   createConfig({
-    output: [
-      { file: pkg.module, format: 'es' },
-      { file: pkg.main, format: 'cjs' },
-    ],
+    output: { file: pkg.module, format: 'esm' }
   }),
   createConfig({
-    output: { file: 'dist/perfume.es5.min.js', format: 'es' },
+    output: { file: pkg.main, format: 'cjs' }
+  }),
+  createConfig({
+    output: { file: 'dist/perfume.esm.min.js', format: 'esm' },
     min: true,
   }),
   createConfig({
