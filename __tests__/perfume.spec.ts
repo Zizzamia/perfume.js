@@ -14,7 +14,7 @@ describe('Perfume', () => {
     (window as any).console.warn = (n: any) => n;
     perfume['observers'].set('fcp', () => 400);
     perfume['observers'].set('fid', () => 400);
-    perfume['queue'].pushTask = cb => cb();
+    perfume['queue'].pushTask = (cb: any) => cb();
   });
 
   afterEach(() => {
@@ -57,7 +57,7 @@ describe('Perfume', () => {
         firstInputDelay: true,
       });
       perfume['observers'].set('fid', () => 400);
-      perfume['queue'].pushTask = cb => cb();
+      perfume['queue'].pushTask = (cb: any) => cb();
     });
 
     it('should be a promise', () => {
@@ -392,7 +392,7 @@ describe('Perfume', () => {
       delete (window as any).chrome;
       delete (window as any).PerformanceObserver;
       perfume = new Perfume({ ...mock.defaultPerfumeConfig });
-      spy = jest.spyOn(perfume['perfEmulated'], 'firstContentfulPaint');
+      spy = jest.spyOn(perfume['perfEmulated'] as any, 'firstContentfulPaint');
       perfume['initFirstPaint']();
       expect(spy.mock.calls.length).toEqual(1);
       expect(perfume['perfEmulated']).toBeDefined();
@@ -411,7 +411,7 @@ describe('Perfume', () => {
   describe('.onVisibilityChange()', () => {
     it('should not call document.addEventListener() when document.hidden is undefined', () => {
       spy = jest.spyOn(document, 'addEventListener');
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(undefined);
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(undefined as any);
       (perfume as any).onVisibilityChange();
       expect(spy.mock.calls.length).toEqual(0);
     });

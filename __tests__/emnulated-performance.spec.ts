@@ -1,7 +1,7 @@
 import EmulatedPerformance, {
   IPerformancePaintTiming,
 } from '../src/emulated-performance';
-import { IPerformanceEntry } from '../src/perfume';
+import { IMetricEntry, IPerfumeConfig } from '../src/perfume';
 import mock from './_mock';
 
 describe('EmulatedPerformance', () => {
@@ -12,7 +12,7 @@ describe('EmulatedPerformance', () => {
     service = new EmulatedPerformance({
       ...mock.defaultPerfumeConfig,
       logPrefix: '',
-    });
+    } as IPerfumeConfig);
     mock.performance();
   });
 
@@ -40,7 +40,7 @@ describe('EmulatedPerformance', () => {
 
   describe('.measure()', () => {
     it('should call getDurationByMetric() with the correct arguments', () => {
-      const metric: IPerformanceEntry = { end: 2018, start: 1987 };
+      const metric: IMetricEntry = { end: 2018, start: 1987 };
       spy = jest.spyOn(service, 'getDurationByMetric');
       service.measure('age', metric);
       expect(spy).toHaveBeenCalled();
@@ -68,7 +68,7 @@ describe('EmulatedPerformance', () => {
       const duration = service.getDurationByMetric('age', {
         end: 2018,
         start: 1987,
-      } as IPerformanceEntry);
+      } as IMetricEntry);
       expect(duration).toEqual(31);
     });
 
@@ -76,7 +76,7 @@ describe('EmulatedPerformance', () => {
       const duration = service.getDurationByMetric('age', {
         end: 2018,
         start: 2018,
-      } as IPerformanceEntry);
+      } as IMetricEntry);
       expect(duration).toEqual(0);
     });
   });

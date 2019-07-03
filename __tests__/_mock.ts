@@ -17,7 +17,7 @@ export const EventMock = {
 export class MockPerformanceObserver {
   static simulateErrorOnObserve = false;
 
-  constructor(cb) {
+  constructor(cb: any) {
     (this as any).observe = () => {
       if (MockPerformanceObserver.simulateErrorOnObserve) {
         MockPerformanceObserver.simulateErrorOnObserve = false;
@@ -62,7 +62,7 @@ export default {
     });
   },
   perfMetrics: {
-    onFirstInputDelay(cb) {
+    onFirstInputDelay(cb: any) {
       cb(3.2, EventMock);
     },
   },
