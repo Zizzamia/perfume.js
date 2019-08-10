@@ -11,6 +11,7 @@
 <br />
 <br />
 
+English | [简体中文](./README-zh_CN.md)
 ## Why Perfume.js?
 
 - ⏰ Latest Performance APIs for precise metrics
@@ -19,7 +20,7 @@
 - 🔭 Browser tracker built-in
 - 🤙 Support for async/await syntax
 - 🛰 Flexible tracking tool
-- ⚡️ Waste-zero ms with [Idle Until Urgent](https://philipwalton.com/articles/idle-until-urgent/) strategy built-in 
+- ⚡️ Waste-zero ms with [Idle Until Urgent](https://philipwalton.com/articles/idle-until-urgent/) strategy built-in
 
 ## User-centric performance metrics
 
@@ -332,7 +333,7 @@ I want to thank some friends and projects for the work they did:
 
 ### Contributors
 
-This project exists thanks to all the people who contribute. 
+This project exists thanks to all the people who contribute.
 <img src="https://opencollective.com/perfumejs/contributors.svg?width=890&button=false" />
 
 ### Backers

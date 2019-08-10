@@ -11,6 +11,7 @@
 <br />
 <br />
 
+[English](./README.md) | 简体中文
 ## Why Perfume.js?
 
 - ⏰ 用最新的API获取精准的性能信息
