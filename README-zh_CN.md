@@ -20,7 +20,7 @@
 - 🔭 浏览器跟踪器内置
 - 🤙 支持 async/await 语法
 - 🛰 灵活的跟踪工具
-- ⚡️ 内置策略，不浪费 0 毫秒  [Idle Until Urgent](https://philipwalton.com/articles/idle-until-urgent/)
+- ⚡️ 内置[Idle Until Urgent](https://philipwalton.com/articles/idle-until-urgent/)策略，0 毫秒浪费
 
 ## 以用户为中心的性能指标
 
@@ -79,8 +79,7 @@ const perfume = new Perfume({
 
 ### 首次输入延迟 (FID)
 
-**FID** 测量用户首次与站点交互时（即，当他们单击链接，点击按钮或使用自定义的，由JavaScript驱动的控件）到浏览器实际能够的时间回应这种互动的延时。
-
+**FID** 测量用户首次与站点交互时（即，当他们单击链接，点击按钮或使用自定义的，由JavaScript驱动的控件）到浏览器实际能够回应这种互动的延时。
 ```javascript
 const perfume = new Perfume({
   firstInputDelay: true
@@ -235,8 +234,7 @@ export default class App extends React.Component {
 
 ### Google Analytics
 
-To enable Perfume to send your measures to Google Analytics User timing, set the option `enable:true` and a custom [user timing variable](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar) `timingVar:"name"`.
-
+如果想使用Perfume将你的测量结果传递给Google Analytics User timing，请设置选项 `enable:true` 以及自定义的[user timing variable](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar)  `timingVar:"name`"。
 ```javascript
 const perfume = new Perfume({
   googleAnalytics: {
@@ -311,7 +309,7 @@ const durationFID = await perfume.observeFirstInputDelay;
 perfume.sendTiming(metricName, durationFCP);
 ```
 
-## Develop
+## 开发
 
 * `npm start`: Run `npm run build` in watch mode
 * `npm run test`: Run test suite
