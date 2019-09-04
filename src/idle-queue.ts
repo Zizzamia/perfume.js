@@ -95,15 +95,6 @@ export const cIC = supportsRequestIdleCallback_
   ? window.cancelIdleCallback
   : cancelIdleCallbackShim;
 
-const supportsPromisesNatively: boolean =
-  typeof Promise === 'function' &&
-  Promise.toString().indexOf('[native code]') > -1;
-
-const supportsMutationObserver: boolean =
-  'MutationObserver' in window ||
-  'WebKitMutationObserver' in window ||
-  'MozMutationObserver' in window;
-
 /*
  * Copyright 2018 Google Inc. All Rights Reserved.
  *
@@ -151,10 +142,6 @@ const createQueueMicrotaskViaMutationObserver = () => {
   };
 };
 
-const discardMicrotasks = () => {
-  return (microtask: any) => {};
-};
-
 /**
  * Queues a function to be run in the next microtask. If the browser supports
  * Promises, those are used. Otherwise it falls back to MutationObserver.
@@ -163,11 +150,11 @@ const discardMicrotasks = () => {
  * @private
  * @param {!Function} microtask
  */
-export const queueMicrotask = supportsPromisesNatively
-  ? createQueueMicrotaskViaPromises()
-  : supportsMutationObserver
-    ? createQueueMicrotaskViaMutationObserver()
-    : discardMicrotasks();
+export const queueMicrotask =
+  typeof Promise === 'function' &&
+  Promise.toString().indexOf('[native code]') > -1
+    ? createQueueMicrotaskViaPromises()
+    : createQueueMicrotaskViaMutationObserver();
 
 const DEFAULT_MIN_TASK_TIME = 0;
 
