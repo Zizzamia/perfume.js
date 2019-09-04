@@ -64,14 +64,6 @@ export interface IMetricEntry {
   end: number;
 }
 
-export interface IMetricMap {
-  [metricName: string]: IMetricEntry;
-}
-
-export interface IObserverMap {
-  [metricName: string]: any;
-}
-
 export declare interface IPerformanceEntry {
   duration: number;
   entryType: 'longtask' | 'measure' | 'navigation' | 'paint' | 'resource';
@@ -114,8 +106,8 @@ export default class Perfume {
   private isHidden: boolean = false;
   private logMetricWarn = 'Please provide a metric name';
   private queue: any;
-  private metrics: IMetricMap = {};
-  private observers: IObserverMap = {};
+  private metrics: Map<string, IMetricEntry> = new Map();
+  private observers = new Map();
   private perf: Performance | EmulatedPerformance;
   private perfEmulated?: EmulatedPerformance;
 
@@ -142,7 +134,7 @@ export default class Perfume {
     if (this.config.firstPaint || this.config.firstContentfulPaint) {
       this.observeFirstContentfulPaint = new Promise(resolve => {
         this.logDebug('observeFirstContentfulPaint');
-        this.observers['fcp'] = resolve;
+        this.observers.set('fcp', resolve);
         this.initFirstPaint();
       });
     }
@@ -151,7 +143,7 @@ export default class Perfume {
     // a Promise that can be observed
     if (this.config.firstInputDelay) {
       this.observeFirstInputDelay = new Promise(resolve => {
-        this.observers.fid = resolve;
+        this.observers.set('fid', resolve);
         this.initFirstInputDelay();
       });
     }
@@ -172,14 +164,14 @@ export default class Perfume {
     if (!this.checkMetricName(metricName)) {
       return;
     }
-    if (this.metrics.hasOwnProperty(metricName)) {
+    if (this.metrics.has(metricName)) {
       this.logWarn(this.config.logPrefix, 'Recording already started.');
       return;
     }
-    this.metrics[metricName] = {
+    this.metrics.set(metricName, {
       end: 0,
       start: this.perf.now(),
-    };
+    });
 
     // Creates a timestamp in the browser's performance entry buffer
     this.perf.mark(metricName, 'start');
@@ -195,7 +187,7 @@ export default class Perfume {
     if (!this.checkMetricName(metricName)) {
       return;
     }
-    const metric = this.metrics[metricName];
+    const metric = this.metrics.get(metricName);
     if (!metric) {
       this.logWarn(this.config.logPrefix, 'Recording already stopped.');
       return;
@@ -206,7 +198,7 @@ export default class Perfume {
     // Get duration and change it to a two decimal value
     const duration = this.perf.measure(metricName, metric);
     const duration2Decimal = parseFloat(duration.toFixed(2));
-    delete this.metrics.metricName;
+    this.metrics.delete(metricName);
     this.queue.pushTask(() => {
       // Log to console, delete metric and send to analytics tracker
       this.log(metricName, duration2Decimal);
@@ -419,11 +411,11 @@ export default class Perfume {
     }
     if (metricName === 'firstContentfulPaint') {
       this.firstContentfulPaintDuration = duration2Decimal;
-      this.observers['fcp'](duration2Decimal);
+      this.observers.get('fcp')(duration2Decimal);
     }
     if (metricName === 'firstInputDelay') {
       this.firstInputDelayDuration = duration2Decimal;
-      this.observers['fid'](duration2Decimal);
+      this.observers.get('fid')(duration2Decimal);
     }
 
     // Logs the metric in the internal console.log

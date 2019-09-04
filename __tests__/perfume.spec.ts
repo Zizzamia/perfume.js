@@ -12,8 +12,8 @@ describe('Perfume', () => {
     (window as any).PerformanceObserver = mock.PerformanceObserver;
     (window as any).console.log = (n: any) => n;
     (window as any).console.warn = (n: any) => n;
-    perfume['observers']['fcp'] = () => 400;
-    perfume['observers']['fid'] = () => 400;
+    perfume['observers'].set('fcp', () => 400);
+    perfume['observers'].set('fid', () => 400);
     perfume['queue'].pushTask = (cb: any) => cb();
   });
 
@@ -56,7 +56,7 @@ describe('Perfume', () => {
         firstContentfulPaint: false,
         firstInputDelay: true,
       });
-      perfume['observers']['fid'] = () => 400;
+      perfume['observers'].set('fid', () => 400);
       perfume['queue'].pushTask = (cb: any) => cb();
     });
 
