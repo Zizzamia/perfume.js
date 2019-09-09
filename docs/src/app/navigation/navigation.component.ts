@@ -10,7 +10,7 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
 @Component({
   selector: 'app-navigation',
   template: `
-    <div class="layout-nav-links">
+    <div class="layout-nav">
       <a href="{{ path }}#/home/"
       [class.active]="navSelected === navOptions.home"
       (click)="activeNav(navOptions.home)">Home</a>

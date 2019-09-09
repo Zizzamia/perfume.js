@@ -15,7 +15,7 @@ import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
 })
 @PerfumeAfterViewInit('AppComponent')
 export class AppComponent implements AfterViewInit {
-  @ViewChild('p')
+  @ViewChild('p', { static: true })
   // Component
   logCustom: string;
   logFibonacci: string;
