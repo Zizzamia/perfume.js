@@ -172,7 +172,7 @@ export default class Perfume {
     if (!this.checkMetricName(metricName)) {
       return;
     }
-    if (this.metrics.hasOwnProperty(metricName)) {
+    if (this.metrics[metricName]) {
       this.logWarn(this.config.logPrefix, 'Recording already started.');
       return;
     }
