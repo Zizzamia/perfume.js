@@ -136,6 +136,17 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith('metricName', 12346);
     });
+
+    it('should delete metrics properly', () => {
+      perfume = new Perfume({
+        firstPaint: false,
+        firstContentfulPaint: true,
+        firstInputDelay: true,
+      });
+      perfume.start('firstInputDelay');
+      perfume.end('firstInputDelay');
+      expect(perfume['metrics'].firstInputDelay).not.toBeDefined();
+    });
   });
 
   describe('.start() and .end()', () => {

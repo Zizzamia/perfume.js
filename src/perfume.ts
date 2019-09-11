@@ -206,7 +206,7 @@ export default class Perfume {
     // Get duration and change it to a two decimal value
     const duration = this.perf.measure(metricName, metric);
     const duration2Decimal = parseFloat(duration.toFixed(2));
-    delete this.metrics.metricName;
+    delete this.metrics[metricName];
     this.queue.pushTask(() => {
       // Log to console, delete metric and send to analytics tracker
       this.log(metricName, duration2Decimal);
