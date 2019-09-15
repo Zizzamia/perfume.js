@@ -82,7 +82,8 @@ export default class Performance implements IPerformance {
     this.perfObserver = new PerformanceObserver(
       this.performanceObserverCb.bind(this, cb),
     );
-    this.perfObserver.observe({ entryTypes: ['paint'] });
+    // Retrieve buffered events and subscribe to newer events for Paint Timing
+    this.perfObserver.observe({ type: 'paint', buffered: true });
   }
 
   /**

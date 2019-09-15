@@ -14,11 +14,16 @@ export const EventMock = {
   },
 } as Event;
 
+export interface IObserve {
+  type: string,
+  buffered: boolean
+}
+
 export class MockPerformanceObserver {
   static simulateErrorOnObserve = false;
 
   constructor(cb: any) {
-    (this as any).observe = () => {
+    (this as any).observe = (options: IObserve) => {
       if (MockPerformanceObserver.simulateErrorOnObserve) {
         MockPerformanceObserver.simulateErrorOnObserve = false;
         throw new Error('Simulated Error');

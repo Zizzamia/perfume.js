@@ -137,15 +137,17 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalledWith('metricName', 12346);
     });
 
+    it('should add metrics properly', () => {
+      perfume = new Perfume();
+      perfume.start('metricName');
+      expect(perfume['metrics']['metricName']).toBeDefined();
+    });
+
     it('should delete metrics properly', () => {
-      perfume = new Perfume({
-        firstPaint: false,
-        firstContentfulPaint: true,
-        firstInputDelay: true,
-      });
-      perfume.start('firstInputDelay');
-      perfume.end('firstInputDelay');
-      expect(perfume['metrics'].firstInputDelay).not.toBeDefined();
+      perfume = new Perfume();
+      perfume.start('metricName');
+      perfume.end('metricName');
+      expect(perfume['metrics']['metricName']).not.toBeDefined();
     });
   });
 
