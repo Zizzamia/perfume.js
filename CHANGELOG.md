@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-beta.0 (2019-9-14)
+
+* **feat:** replace Map by plain old objects to support more browsers [#78](https://github.com/Zizzamia/perfume.js/pull/78)
+
+### Breaking Changes
+
+* **feat:** discard queued tasks if running them as microtasks isn't supported [#77](https://github.com/Zizzamia/perfume.js/pull/77)
+
 ## 2.1.0 (2019-1-5)
 
 ### Feat
