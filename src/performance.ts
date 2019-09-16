@@ -1,19 +1,13 @@
-// Import Polyfills
-import 'first-input-delay';
-
 // Types
-import { IMetricEntry, IPerformanceEntry, IPerfumeConfig } from './perfume';
+import { IMetricEntry, IPerformanceEntry, IPerformanceObserverType, IPerfumeConfig } from './perfume';
 
-export interface IPerformance {
-  config: IPerfumeConfig;
 
-  now(): number;
 
-  mark(metricName: string, type: string): any;
-
-  measure(metricName: string, metric: IMetricEntry): number;
-
-  firstContentfulPaint(cb: any): any;
+export interface IPerformancePaintTiming {
+  name: string;
+  entryType: string;
+  startTime: number;
+  duration: number;
 }
 
 declare const PerformanceObserver: any;
@@ -24,7 +18,7 @@ declare interface IPerformanceObserverEntryList {
   getEntriesByType: any;
 }
 
-export default class Performance implements IPerformance {
+export default class Performance {
   /**
    * True if the browser supports the Navigation Timing API,
    * User Timing API and the PerformanceObserver Interface.
@@ -48,7 +42,7 @@ export default class Performance implements IPerformance {
 
   private perfObserver: any;
 
-  constructor(public config: IPerfumeConfig) {}
+  constructor(public config: IPerfumeConfig) { }
 
   /**
    * When performance API available
@@ -72,18 +66,15 @@ export default class Performance implements IPerformance {
   }
 
   /**
-   * First Paint is essentially the paint after which
-   * the biggest above-the-fold layout change has happened.
    * PerformanceObserver subscribes to performance events as they happen
    * and respond to them asynchronously.
-   * entry.name will be either 'first-paint' or 'first-contentful-paint'
    */
-  firstContentfulPaint(cb: (entries: any[]) => void): void {
+  performanceObserver(eventType: IPerformanceObserverType, cb: (entries: any[]) => void): void {
     this.perfObserver = new PerformanceObserver(
       this.performanceObserverCb.bind(this, cb),
     );
     // Retrieve buffered events and subscribe to newer events for Paint Timing
-    this.perfObserver.observe({ type: 'paint', buffered: true });
+    this.perfObserver.observe({ type: eventType, buffered: true });
   }
 
   /**
@@ -115,13 +106,5 @@ export default class Performance implements IPerformance {
   ): void {
     const entries = entryList.getEntries();
     cb(entries);
-    entries.forEach((performancePaintTiming: IPerformanceEntry) => {
-      if (
-        this.config.firstContentfulPaint &&
-        performancePaintTiming.name === 'first-contentful-paint'
-      ) {
-        this.perfObserver.disconnect();
-      }
-    });
   }
 }

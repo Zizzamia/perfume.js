@@ -14,7 +14,9 @@ describe('Perfume', () => {
     (window as any).console.warn = (n: any) => n;
     perfume['observers']['fcp'] = () => 400;
     perfume['observers']['fid'] = () => 400;
-    perfume['queue'].pushTask = (cb: any) => cb();
+    perfume['queue'] = {
+      pushTask: (cb: any) => cb()
+    };
   });
 
   afterEach(() => {
@@ -47,7 +49,6 @@ describe('Perfume', () => {
   });
 
   describe('.observeFirstInputDelay', () => {
-    (window as any).perfMetrics = mock.perfMetrics;
     (window as any).chrome = true;
 
     beforeEach(() => {
@@ -340,7 +341,7 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.firstContentfulPaintCb()', () => {
+  describe('.performanceObserverCb()', () => {
     beforeEach(() => {
       perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
@@ -348,11 +349,20 @@ describe('Perfume', () => {
 
     it('should call logMetric() with the correct arguments', () => {
       spy = jest.spyOn(perfume as any, 'logMetric');
-      (perfume as any).firstContentfulPaintCb(
-        mock.entries,
-        mock.Promise.resolve,
-        mock.Promise.reject,
-      );
+      (perfume as any).performanceObserverCb({
+        entries: mock.entries,
+        entryName: 'first-paint',
+        metricLog: 'First Paint',
+        metricName: 'firstPaint',
+        valueLog: 'startTime'
+      });
+      (perfume as any).performanceObserverCb({
+        entries: mock.entries,
+        entryName: 'first-contentful-paint',
+        metricLog: 'First Contentful Paint',
+        metricName: 'firstContentfulPaint',
+        valueLog: 'startTime'
+      });
       expect(spy.mock.calls.length).toEqual(2);
       expect(spy).toHaveBeenCalledWith(1, 'First Paint', 'firstPaint');
       expect(spy).toHaveBeenCalledWith(
@@ -366,11 +376,20 @@ describe('Perfume', () => {
       perfume.config.firstPaint = false;
       perfume.config.firstContentfulPaint = false;
       spy = jest.spyOn(perfume as any, 'logMetric');
-      (perfume as any).firstContentfulPaintCb(
-        mock.entries,
-        mock.Promise.resolve,
-        mock.Promise.reject,
-      );
+      (perfume as any).performanceObserverCb({
+        entries: mock.entries,
+        entryName: 'first-paint',
+        metricLog: 'First Paint',
+        metricName: 'firstPaint',
+        valueLog: 'startTime'
+      });
+      (perfume as any).performanceObserverCb({
+        entries: mock.entries,
+        entryName: 'first-contentful-paint',
+        metricLog: 'First Contentful Paint',
+        metricName: 'firstContentfulPaint',
+        valueLog: 'startTime'
+      });
       expect(spy).not.toHaveBeenCalled();
     });
   });
@@ -382,12 +401,11 @@ describe('Perfume', () => {
     });
 
     it('should call firstContentfulPaint()', () => {
-      spy = jest.spyOn(perfume['perf'], 'firstContentfulPaint');
+      spy = jest.spyOn(perfume['perf'], 'performanceObserver');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstPaint']();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(perfume['perfEmulated']).not.toBeDefined();
     });
 
     it('should throw a logWarn if initFirstPaint fails', () => {
@@ -398,26 +416,6 @@ describe('Perfume', () => {
       perfume['initFirstPaint']();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith('Perfume.js:', 'initFirstPaint failed');
-      expect(perfume['perfEmulated']).not.toBeDefined();
-    });
-
-    it('should call firstContentfulPaint() with EmulatedPerformance', () => {
-      delete (window as any).chrome;
-      delete (window as any).PerformanceObserver;
-      perfume = new Perfume({ ...mock.defaultPerfumeConfig });
-      spy = jest.spyOn(perfume['perfEmulated'] as any, 'firstContentfulPaint');
-      perfume['initFirstPaint']();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(perfume['perfEmulated']).toBeDefined();
-    });
-
-    it('should not call firstContentfulPaint() with EmulatedPerformance when perfEmulated is undefined', () => {
-      delete (window as any).chrome;
-      delete (window as any).PerformanceObserver;
-      perfume = new Perfume({ ...mock.defaultPerfumeConfig });
-      perfume['perfEmulated'] = undefined;
-      perfume['initFirstPaint']();
-      expect(perfume['perfEmulated']).not.toBeDefined();
     });
   });
 

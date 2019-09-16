@@ -1,6 +1,8 @@
+/* istanbul ignore file */
 const entries = [
   { name: 'first-paint', startTime: 1 },
   { name: 'first-contentful-paint', startTime: 1 },
+  { name: 'mousedown', duration: 4 },
 ];
 
 export const MockDateNowValue = 1537118926087;
@@ -65,11 +67,6 @@ export default {
       value: performance,
       writable: true,
     });
-  },
-  perfMetrics: {
-    onFirstInputDelay(cb: any) {
-      cb(3.2, EventMock);
-    },
   },
   PerformanceObserver: MockPerformanceObserver,
   defaultPerfumeConfig: {

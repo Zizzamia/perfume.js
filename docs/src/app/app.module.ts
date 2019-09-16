@@ -28,6 +28,12 @@ export const PerfumeConfig = {
   },
 };
 
+/*
+new Perfume({ ...PerfumeConfig, ...{
+  logPrefix: 'Perfume Vanilla:',
+}});
+*/
+
 @NgModule({
   declarations: [
     AppComponent,

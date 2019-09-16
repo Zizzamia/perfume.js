@@ -83,10 +83,10 @@ describe('Performance', () => {
     });
   });
 
-  describe('.firstContentfulPaint()', () => {
-    it('should call initPerformanceObserver()', () => {
+  describe('.performanceObserver()', () => {
+    it('should call PerformanceObserver', () => {
       spy = jest.spyOn(window, 'PerformanceObserver' as any);
-      service.firstContentfulPaint(() => 0);
+      service.performanceObserver('paint', () => 0);
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
     });
@@ -130,23 +130,6 @@ describe('Performance', () => {
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith([entry]);
-    });
-
-    it('should call perfObserver.disconnect', () => {
-      spy = jest.spyOn(service.perfObserver, 'disconnect');
-      service.config.firstContentfulPaint = true;
-      service.performanceObserverCb(service.callback, {
-        getEntries: () => [entry],
-      });
-      expect(spy).toHaveBeenCalled();
-      expect(spy.mock.calls.length).toEqual(1);
-    });
-
-    it('should not call perfObserver.disconnect when entries is empty', () => {
-      spy = jest.spyOn(service.perfObserver, 'disconnect');
-      service.performanceObserverCb(service.callback, { getEntries: () => [] });
-      expect(spy).not.toHaveBeenCalled();
-      expect(spy.mock.calls.length).toEqual(0);
     });
   });
 });

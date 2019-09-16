@@ -6,8 +6,9 @@
     "performance-metrics",
     "google-analytics",
     "metrics",
-    "javascript-library",
+    "first-paint",
     "first-contentful-paint",
+    "first-input-delay",
     "devtools",
     "user-timing",
     "web-performance",
@@ -57,7 +58,7 @@
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "testPathIgnorePatterns": [
-      "/__tests__/_mock.ts",
+      "_mock.ts",
       "/docs/",
       "detect-browser.ts",
       "idle-queue.ts",
@@ -80,17 +81,16 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 91,
-        "functions": 90,
+        "branches": 88,
+        "functions": 95,
         "lines": 92,
-        "statements": 92
+        "statements": 93
       }
     },
     "collectCoverage": true
   },
   "dependencies": {
     "detect-browser": "4.5.1",
-    "first-input-delay": "0.1.3",
     "idlize": "0.1.1"
   },
   "devDependencies": {

@@ -7,7 +7,6 @@
 import { BrowserInfo, detect } from './detect-browser';
 import { IdleQueue } from './idle-queue';
 
-import EmulatedPerformance from './emulated-performance';
 import Performance from './performance';
 
 export interface IPerfumeConfig {
@@ -72,12 +71,16 @@ export interface IObserverMap {
   [metricName: string]: any;
 }
 
+export type IPerformanceObserverType = 'longtask' | 'measure' | 'navigation' | 'paint' | 'resource' | 'first-input';
+
 export declare interface IPerformanceEntry {
   duration: number;
-  entryType: 'longtask' | 'measure' | 'navigation' | 'paint' | 'resource';
+  entryType: IPerformanceObserverType;
   name: string;
   startTime: number;
 }
+
+export type IPerfumeMetrics = 'firstContentfulPaint' | 'firstPaint' | 'firstInputDelay';
 
 declare global {
   // tslint:disable-next-line:interface-name
@@ -116,26 +119,21 @@ export default class Perfume {
   private queue: any;
   private metrics: IMetricMap = {};
   private observers: IObserverMap = {};
-  private perf: Performance | EmulatedPerformance;
-  private perfEmulated?: EmulatedPerformance;
+  private perf: Performance;
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
+    this.perf = new Performance(this.config);
 
-    // Init performance implementation based on supported browser APIs
-    this.perf = Performance.supported()
-      ? new Performance(this.config)
-      : new EmulatedPerformance(this.config);
+    // Exit from Perfume when basic Web Performance APIs aren't supported
+    if (!Performance.supported()) {
+      return;
+    }
 
     // In case we want to track Browser version and OS
     if (this.config.browserTracker) {
       this.browser = detect();
-    }
-
-    // In case we can not use Performance Observer for initFirstPaint
-    if (!Performance.supportedPerformanceObserver()) {
-      this.perfEmulated = new EmulatedPerformance(this.config);
     }
 
     // Init observe FCP  and creates the Promise to observe metric
@@ -151,7 +149,7 @@ export default class Perfume {
     // a Promise that can be observed
     if (this.config.firstInputDelay) {
       this.observeFirstInputDelay = new Promise(resolve => {
-        this.observers.fid = resolve;
+        this.observers['fid'] = resolve;
         this.initFirstInputDelay();
       });
     }
@@ -180,10 +178,8 @@ export default class Perfume {
       end: 0,
       start: this.perf.now(),
     };
-
     // Creates a timestamp in the browser's performance entry buffer
     this.perf.mark(metricName, 'start');
-
     // Reset hidden value
     this.isHidden = false;
   }
@@ -328,61 +324,79 @@ export default class Perfume {
     }
   };
 
-  private firstContentfulPaintCb(entries: IPerformanceEntry[]): void {
-    this.logDebug('firstContentfulPaintCb', entries);
-    // Logging Performance Paint Timing
-    entries.forEach((performancePaintTiming: IPerformanceEntry) => {
+  /**
+   * Logging Performance Paint Timing
+   */
+  private performanceObserverCb(options: {
+    entries: IPerformanceEntry[],
+    entryName?: string,
+    metricLog: string,
+    metricName: IPerfumeMetrics,
+    valueLog: 'duration' | 'startTime'
+  }): void {
+    this.logDebug('performanceObserverCb', options);
+    options.entries.forEach((performanceEntry: IPerformanceEntry) => {
       this.queue.pushTask(() => {
         if (
-          this.config.firstPaint &&
-          performancePaintTiming.name === 'first-paint'
+          this.config[options.metricName] &&
+          (!options.entryName || (options.entryName && performanceEntry.name === options.entryName))
         ) {
           this.logMetric(
-            performancePaintTiming.startTime,
-            'First Paint',
-            'firstPaint',
-          );
-        }
-        if (
-          this.config.firstContentfulPaint &&
-          performancePaintTiming.name === 'first-contentful-paint'
-        ) {
-          this.logMetric(
-            performancePaintTiming.startTime,
-            'First Contentful Paint',
-            'firstContentfulPaint',
+            performanceEntry[options.valueLog],
+            options.metricLog,
+            options.metricName,
           );
         }
       });
     });
   }
 
+  /**
+   * First Paint is essentially the paint after which
+   * the biggest above-the-fold layout change has happened.
+   */
   private initFirstPaint(): void {
     this.logDebug('initFirstPaint');
     // Checks if use Performance or the EmulatedPerformance instance
     if (Performance.supportedPerformanceObserver()) {
       this.logDebug('initFirstPaint.supportedPerformanceObserver');
       try {
-        this.perf.firstContentfulPaint(this.firstContentfulPaintCb.bind(this));
+        this.perf.performanceObserver('paint', (entries: IPerformanceEntry[]) => {
+          this.performanceObserverCb({
+            entries,
+            entryName: 'first-paint',
+            metricLog: 'First Paint',
+            metricName: 'firstPaint',
+            valueLog: 'startTime'
+          })
+          this.performanceObserverCb({
+            entries,
+            entryName: 'first-contentful-paint',
+            metricLog: 'First Contentful Paint',
+            metricName: 'firstContentfulPaint',
+            valueLog: 'startTime'
+          })
+        });
       } catch (e) {
         this.logWarn(this.config.logPrefix, 'initFirstPaint failed');
       }
-    } else if (this.perfEmulated) {
-      this.logDebug('initFirstPaint.perfEmulated');
-      this.perfEmulated.firstContentfulPaint(
-        this.firstContentfulPaintCb.bind(this),
-      );
     }
   }
 
   private initFirstInputDelay(): void {
-    if (Performance.supported() && this.config.firstInputDelay) {
-      // perfMetrics is exposed by the FID Polyfill
-      perfMetrics.onFirstInputDelay((duration, event) => {
-        this.queue.pushTask(() => {
-          this.logMetric(duration, 'First Input Delay', 'firstInputDelay');
+    if (Performance.supportedPerformanceObserver() && this.config.firstInputDelay) {
+      try {
+        this.perf.performanceObserver('first-input', (entries: IPerformanceEntry[]) => {
+          this.performanceObserverCb({
+            entries,
+            metricLog: 'First Input Delay',
+            metricName: 'firstInputDelay',
+            valueLog: 'duration'
+          })
         });
-      });
+      } catch (e) {
+        this.logWarn(this.config.logPrefix, 'initFirstInputDelay failed');
+      }
     }
   }
 
