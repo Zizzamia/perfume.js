@@ -71,7 +71,13 @@ export interface IObserverMap {
   [metricName: string]: any;
 }
 
-export type IPerformanceObserverType = 'longtask' | 'measure' | 'navigation' | 'paint' | 'resource' | 'first-input';
+export type IPerformanceObserverType =
+  | 'longtask'
+  | 'measure'
+  | 'navigation'
+  | 'paint'
+  | 'resource'
+  | 'first-input';
 
 export declare interface IPerformanceEntry {
   duration: number;
@@ -80,7 +86,10 @@ export declare interface IPerformanceEntry {
   startTime: number;
 }
 
-export type IPerfumeMetrics = 'firstContentfulPaint' | 'firstPaint' | 'firstInputDelay';
+export type IPerfumeMetrics =
+  | 'firstContentfulPaint'
+  | 'firstPaint'
+  | 'firstInputDelay';
 
 declare global {
   // tslint:disable-next-line:interface-name
@@ -328,18 +337,19 @@ export default class Perfume {
    * Logging Performance Paint Timing
    */
   private performanceObserverCb(options: {
-    entries: IPerformanceEntry[],
-    entryName?: string,
-    metricLog: string,
-    metricName: IPerfumeMetrics,
-    valueLog: 'duration' | 'startTime'
+    entries: IPerformanceEntry[];
+    entryName?: string;
+    metricLog: string;
+    metricName: IPerfumeMetrics;
+    valueLog: 'duration' | 'startTime';
   }): void {
     this.logDebug('performanceObserverCb', options);
     options.entries.forEach((performanceEntry: IPerformanceEntry) => {
       this.queue.pushTask(() => {
         if (
           this.config[options.metricName] &&
-          (!options.entryName || (options.entryName && performanceEntry.name === options.entryName))
+          (!options.entryName ||
+            (options.entryName && performanceEntry.name === options.entryName))
         ) {
           this.logMetric(
             performanceEntry[options.valueLog],
@@ -361,22 +371,25 @@ export default class Perfume {
     if (Performance.supportedPerformanceObserver()) {
       this.logDebug('initFirstPaint.supportedPerformanceObserver');
       try {
-        this.perf.performanceObserver('paint', (entries: IPerformanceEntry[]) => {
-          this.performanceObserverCb({
-            entries,
-            entryName: 'first-paint',
-            metricLog: 'First Paint',
-            metricName: 'firstPaint',
-            valueLog: 'startTime'
-          })
-          this.performanceObserverCb({
-            entries,
-            entryName: 'first-contentful-paint',
-            metricLog: 'First Contentful Paint',
-            metricName: 'firstContentfulPaint',
-            valueLog: 'startTime'
-          })
-        });
+        this.perf.performanceObserver(
+          'paint',
+          (entries: IPerformanceEntry[]) => {
+            this.performanceObserverCb({
+              entries,
+              entryName: 'first-paint',
+              metricLog: 'First Paint',
+              metricName: 'firstPaint',
+              valueLog: 'startTime',
+            });
+            this.performanceObserverCb({
+              entries,
+              entryName: 'first-contentful-paint',
+              metricLog: 'First Contentful Paint',
+              metricName: 'firstContentfulPaint',
+              valueLog: 'startTime',
+            });
+          },
+        );
       } catch (e) {
         this.logWarn(this.config.logPrefix, 'initFirstPaint failed');
       }
@@ -384,16 +397,22 @@ export default class Perfume {
   }
 
   private initFirstInputDelay(): void {
-    if (Performance.supportedPerformanceObserver() && this.config.firstInputDelay) {
+    if (
+      Performance.supportedPerformanceObserver() &&
+      this.config.firstInputDelay
+    ) {
       try {
-        this.perf.performanceObserver('first-input', (entries: IPerformanceEntry[]) => {
-          this.performanceObserverCb({
-            entries,
-            metricLog: 'First Input Delay',
-            metricName: 'firstInputDelay',
-            valueLog: 'duration'
-          })
-        });
+        this.perf.performanceObserver(
+          'first-input',
+          (entries: IPerformanceEntry[]) => {
+            this.performanceObserverCb({
+              entries,
+              metricLog: 'First Input Delay',
+              metricName: 'firstInputDelay',
+              valueLog: 'duration',
+            });
+          },
+        );
       } catch (e) {
         this.logWarn(this.config.logPrefix, 'initFirstInputDelay failed');
       }

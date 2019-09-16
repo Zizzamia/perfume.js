@@ -7,7 +7,9 @@ describe('Performance', () => {
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
-    service = new Performance({ ...mock.defaultPerfumeConfig } as IPerfumeConfig);
+    service = new Performance({
+      ...mock.defaultPerfumeConfig,
+    } as IPerfumeConfig);
     mock.performance();
     (window as any).PerformanceObserver = mock.PerformanceObserver;
   });
@@ -94,9 +96,8 @@ describe('Performance', () => {
 
   describe('.getDurationByMetric()', () => {
     it('should return entry.duration when entryType is not measure', () => {
-      window.performance.getEntriesByName = () => [
-        { duration: 12345, entryType: 'notMeasure' } as any,
-      ] as any[];
+      window.performance.getEntriesByName = () =>
+        [{ duration: 12345, entryType: 'notMeasure' } as any] as any[];
       const value = service.getDurationByMetric('metricName');
       expect(value).toEqual(-1);
     });

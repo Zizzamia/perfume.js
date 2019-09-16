@@ -1,7 +1,10 @@
 // Types
-import { IMetricEntry, IPerformanceEntry, IPerformanceObserverType, IPerfumeConfig } from './perfume';
-
-
+import {
+  IMetricEntry,
+  IPerformanceEntry,
+  IPerformanceObserverType,
+  IPerfumeConfig,
+} from './perfume';
 
 export interface IPerformancePaintTiming {
   name: string;
@@ -42,7 +45,7 @@ export default class Performance {
 
   private perfObserver: any;
 
-  constructor(public config: IPerfumeConfig) { }
+  constructor(public config: IPerfumeConfig) {}
 
   /**
    * When performance API available
@@ -69,7 +72,10 @@ export default class Performance {
    * PerformanceObserver subscribes to performance events as they happen
    * and respond to them asynchronously.
    */
-  performanceObserver(eventType: IPerformanceObserverType, cb: (entries: any[]) => void): void {
+  performanceObserver(
+    eventType: IPerformanceObserverType,
+    cb: (entries: any[]) => void,
+  ): void {
     this.perfObserver = new PerformanceObserver(
       this.performanceObserverCb.bind(this, cb),
     );

@@ -15,7 +15,7 @@ describe('Perfume', () => {
     perfume['observers']['fcp'] = () => 400;
     perfume['observers']['fid'] = () => 400;
     perfume['queue'] = {
-      pushTask: (cb: any) => cb()
+      pushTask: (cb: any) => cb(),
     };
   });
 
@@ -354,14 +354,14 @@ describe('Perfume', () => {
         entryName: 'first-paint',
         metricLog: 'First Paint',
         metricName: 'firstPaint',
-        valueLog: 'startTime'
+        valueLog: 'startTime',
       });
       (perfume as any).performanceObserverCb({
         entries: mock.entries,
         entryName: 'first-contentful-paint',
         metricLog: 'First Contentful Paint',
         metricName: 'firstContentfulPaint',
-        valueLog: 'startTime'
+        valueLog: 'startTime',
       });
       expect(spy.mock.calls.length).toEqual(2);
       expect(spy).toHaveBeenCalledWith(1, 'First Paint', 'firstPaint');
@@ -381,14 +381,14 @@ describe('Perfume', () => {
         entryName: 'first-paint',
         metricLog: 'First Paint',
         metricName: 'firstPaint',
-        valueLog: 'startTime'
+        valueLog: 'startTime',
       });
       (perfume as any).performanceObserverCb({
         entries: mock.entries,
         entryName: 'first-contentful-paint',
         metricLog: 'First Contentful Paint',
         metricName: 'firstContentfulPaint',
-        valueLog: 'startTime'
+        valueLog: 'startTime',
       });
       expect(spy).not.toHaveBeenCalled();
     });
