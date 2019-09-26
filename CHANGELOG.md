@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0-rc.0 (2019-9-25)
+## 3.0.0-rc.1 (2019-9-25)
 
 * **feat:** Added support to retrieve buffered FP/FCP events [#81](https://github.com/Zizzamia/perfume.js/issues/81)
 * **feat:** Added support for first-input and removed EmulatedPerformance [#60](https://github.com/Zizzamia/perfume.js/issues/60) [#82](https://github.com/Zizzamia/perfume.js/issues/82)
