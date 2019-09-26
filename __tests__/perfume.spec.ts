@@ -79,9 +79,7 @@ describe('Perfume', () => {
       perfume.start('');
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'Please provide a metric name',
-      );
+      expect(spy).toHaveBeenCalledWith('Please provide a metric name');
     });
 
     it('should not throw a logWarn if param is correct', () => {
@@ -102,9 +100,7 @@ describe('Perfume', () => {
       perfume.start('metricName');
       perfume.start('metricName');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'Recording already started.',
-      );
+      expect(spy).toHaveBeenCalledWith('Recording already started.');
     });
   });
 
@@ -113,18 +109,14 @@ describe('Perfume', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       perfume.end('');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'Please provide a metric name',
-      );
+      expect(spy).toHaveBeenCalledWith('Please provide a metric name');
     });
 
     it('should throw a logWarn if param is correct and recording already stopped', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'Recording already stopped.',
-      );
+      expect(spy).toHaveBeenCalledWith('Recording already stopped.');
     });
 
     it('should call log() with correct params', () => {
@@ -320,9 +312,7 @@ describe('Perfume', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       (perfume as any).checkMetricName();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'Please provide a metric name',
-      );
+      expect(spy).toHaveBeenCalledWith('Please provide a metric name');
     });
 
     it('should return "false" when not provided a metric name', () => {
@@ -422,9 +412,11 @@ describe('Perfume', () => {
     it('should float the pageResourceDecodedBodySize result', () => {
       perfume.pageResourceDecodedBodySize = 0;
       (perfume as any).performanceObserverResourceCb({
-        entries: [{
-          decodedBodySize: 12345
-        }],
+        entries: [
+          {
+            decodedBodySize: 12345,
+          },
+        ],
       });
       expect(perfume.pageResourceDecodedBodySize).toEqual(12.35);
     });
@@ -432,11 +424,14 @@ describe('Perfume', () => {
     it('should sum the pageResourceDecodedBodySize result', () => {
       perfume.pageResourceDecodedBodySize = 0;
       (perfume as any).performanceObserverResourceCb({
-        entries: [{
-          decodedBodySize: 12345
-        }, {
-          decodedBodySize: 10000
-        }],
+        entries: [
+          {
+            decodedBodySize: 12345,
+          },
+          {
+            decodedBodySize: 10000,
+          },
+        ],
       });
       expect(perfume.pageResourceDecodedBodySize).toEqual(22.35);
     });

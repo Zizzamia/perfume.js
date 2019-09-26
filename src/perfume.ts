@@ -89,7 +89,13 @@ export declare interface IPerformanceEntry {
   decodedBodySize?: number;
   duration: number;
   entryType: IPerformanceObserverType;
-  initiatorType?: 'css' | 'fetch' | 'img' | 'other' | 'script' | 'xmlhttprequest',
+  initiatorType?:
+    | 'css'
+    | 'fetch'
+    | 'img'
+    | 'other'
+    | 'script'
+    | 'xmlhttprequest';
   name: string;
   startTime: number;
 }
@@ -304,9 +310,7 @@ export default class Perfume {
       return;
     }
     if (!window.ga) {
-      this.logWarn(
-        'Google Analytics has not been loaded',
-      );
+      this.logWarn('Google Analytics has not been loaded');
       return;
     }
     const durationInteger = Math.round(duration);
@@ -391,7 +395,9 @@ export default class Perfume {
     this.logDebug('performanceObserverResourceCb', options);
     options.entries.forEach((performanceEntry: IPerformanceEntry) => {
       if (performanceEntry.decodedBodySize) {
-        const decodedBodySize = parseFloat((performanceEntry.decodedBodySize / 1000).toFixed(2));
+        const decodedBodySize = parseFloat(
+          (performanceEntry.decodedBodySize / 1000).toFixed(2),
+        );
         this.pageResourceDecodedBodySize += decodedBodySize;
       }
     });
@@ -452,7 +458,7 @@ export default class Perfume {
         'resource',
         (entries: IPerformanceEntry[]) => {
           this.performanceObserverResourceCb({
-            entries
+            entries,
           });
         },
       );
