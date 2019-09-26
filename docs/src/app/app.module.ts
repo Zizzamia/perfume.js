@@ -10,7 +10,7 @@ import { IntroComponent } from './intro/intro.component';
 import { CfpComponent } from './cfp/cfp.component';
 
 import { PerfumeModule } from 'perfume.js/angular';
-// import Perfume from '../../../';
+import Perfume from '../../../';
 
 // Supports AOT and DI
 export function analyticsTracker(metricName: string, duration: number, browser) {
@@ -28,11 +28,10 @@ export const PerfumeConfig = {
   },
 };
 
-/*
 new Perfume({ ...PerfumeConfig, ...{
+  pageResource: true,
   logPrefix: 'Perfume Vanilla:',
 }});
-*/
 
 @NgModule({
   declarations: [

@@ -17,6 +17,7 @@ describe('Perfume', () => {
     perfume['queue'] = {
       pushTask: (cb: any) => cb(),
     };
+    perfume['perfObservers'] = {};
   });
 
   afterEach(() => {
@@ -34,6 +35,7 @@ describe('Perfume', () => {
         firstContentfulPaint: false,
         firstPaint: false,
         firstInputDelay: false,
+        pageResource: false,
         browserTracker: false,
         googleAnalytics: {
           enable: false,
@@ -78,7 +80,6 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
-        'Perfume.js:',
         'Please provide a metric name',
       );
     });
@@ -102,7 +103,6 @@ describe('Perfume', () => {
       perfume.start('metricName');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
-        'Perfume.js:',
         'Recording already started.',
       );
     });
@@ -114,7 +114,6 @@ describe('Perfume', () => {
       perfume.end('');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
-        'Perfume.js:',
         'Please provide a metric name',
       );
     });
@@ -124,7 +123,6 @@ describe('Perfume', () => {
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
-        'Perfume.js:',
         'Recording already stopped.',
       );
     });
@@ -215,7 +213,7 @@ describe('Perfume', () => {
       perfume.log('', 0);
       const text = 'Please provide a metric name';
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, text);
+      expect(spy).toHaveBeenCalledWith(text);
     });
 
     it('should not call window.console.log() if params are not correct', () => {
@@ -286,7 +284,7 @@ describe('Perfume', () => {
       (perfume as any).sendTiming();
       const text = 'Google Analytics has not been loaded';
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, text);
+      expect(spy).toHaveBeenCalledWith(text);
     });
 
     it('should not call global.logWarn() if googleAnalytics is enable and ga is present', () => {
@@ -295,6 +293,20 @@ describe('Perfume', () => {
       window.ga = () => true;
       (perfume as any).sendTiming('metricName', 123);
       expect(spy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('.addBrowserToMetricName()', () => {
+    it('should return "metricName" when config.browserTracker is false', () => {
+      const value = (perfume as any).addBrowserToMetricName('metricName');
+      expect(value).toEqual('metricName');
+    });
+
+    it('should return "metricName" when config.browserTracker is true and browser.name is undefined', () => {
+      perfume.config.browserTracker = true;
+      (perfume as any).browser = {};
+      const value = (perfume as any).addBrowserToMetricName('metricName');
+      expect(value).toEqual('metricName');
     });
   });
 
@@ -309,7 +321,6 @@ describe('Perfume', () => {
       (perfume as any).checkMetricName();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
-        perfume.config.logPrefix,
         'Please provide a metric name',
       );
     });
@@ -345,6 +356,7 @@ describe('Perfume', () => {
     beforeEach(() => {
       perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
+      (perfume as any).perfObservers.fcp = { disconnect: () => {} };
     });
 
     it('should call logMetric() with the correct arguments', () => {
@@ -394,13 +406,49 @@ describe('Perfume', () => {
     });
   });
 
+  describe('.performanceObserverResourceCb()', () => {
+    beforeEach(() => {
+      perfume.config.pageResource = true;
+      (perfume as any).perfObservers.pageResource = { disconnect: () => {} };
+    });
+
+    it('should pageResourceDecodedBodySize be 0 when entries are empty', () => {
+      (perfume as any).performanceObserverResourceCb({
+        entries: [],
+      });
+      expect(perfume.pageResourceDecodedBodySize).toEqual(0);
+    });
+
+    it('should float the pageResourceDecodedBodySize result', () => {
+      perfume.pageResourceDecodedBodySize = 0;
+      (perfume as any).performanceObserverResourceCb({
+        entries: [{
+          decodedBodySize: 12345
+        }],
+      });
+      expect(perfume.pageResourceDecodedBodySize).toEqual(12.35);
+    });
+
+    it('should sum the pageResourceDecodedBodySize result', () => {
+      perfume.pageResourceDecodedBodySize = 0;
+      (perfume as any).performanceObserverResourceCb({
+        entries: [{
+          decodedBodySize: 12345
+        }, {
+          decodedBodySize: 10000
+        }],
+      });
+      expect(perfume.pageResourceDecodedBodySize).toEqual(22.35);
+    });
+  });
+
   describe('.initFirstPaint()', () => {
     beforeEach(() => {
       perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
     });
 
-    it('should call firstContentfulPaint()', () => {
+    it('should call performanceObserver()', () => {
       spy = jest.spyOn(perfume['perf'], 'performanceObserver');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
@@ -408,14 +456,62 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
     });
 
-    it('should throw a logWarn if initFirstPaint fails', () => {
+    it('should throw a logWarn if fails', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       (window as any).chrome = true;
       mock.PerformanceObserver.simulateErrorOnObserve = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstPaint']();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('Perfume.js:', 'initFirstPaint failed');
+      expect(spy).toHaveBeenCalledWith('initFirstPaint failed');
+    });
+  });
+
+  describe('.initFirstInputDelay()', () => {
+    beforeEach(() => {
+      perfume.config.firstInputDelay = true;
+    });
+
+    it('should call performanceObserver()', () => {
+      spy = jest.spyOn(perfume['perf'], 'performanceObserver');
+      (window as any).chrome = true;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initFirstInputDelay']();
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+
+    it('should throw a logWarn if fails', () => {
+      spy = jest.spyOn(perfume as any, 'logWarn');
+      (window as any).chrome = true;
+      mock.PerformanceObserver.simulateErrorOnObserve = true;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initFirstInputDelay']();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith('initFirstInputDelay failed');
+    });
+  });
+
+  describe('.initPageResource()', () => {
+    beforeEach(() => {
+      perfume.config.pageResource = true;
+    });
+
+    it('should call performanceObserver()', () => {
+      spy = jest.spyOn(perfume['perf'], 'performanceObserver');
+      (window as any).chrome = true;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initPageResource']();
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+
+    it('should throw a logWarn if fails', () => {
+      spy = jest.spyOn(perfume as any, 'logWarn');
+      (window as any).chrome = true;
+      mock.PerformanceObserver.simulateErrorOnObserve = true;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initPageResource']();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith('initPageResource failed');
     });
   });
 
@@ -497,16 +593,16 @@ describe('Perfume', () => {
     it('should throw a console.warn if config.warning is true', () => {
       spy = jest.spyOn(window.console, 'warn');
       perfume.config.warning = true;
-      (perfume as any).logWarn('prefix', 'message');
+      (perfume as any).logWarn('message');
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('prefix', 'message');
+      expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, 'message');
     });
 
     it('should not throw a console.warn if config.warning is false', () => {
       spy = jest.spyOn(window.console, 'warn');
       perfume.config.warning = false;
-      (perfume as any).logWarn('prefix', 'message');
+      (perfume as any).logWarn('message');
       expect(spy.mock.calls.length).toEqual(0);
       expect(spy).not.toHaveBeenCalled();
     });
@@ -515,7 +611,7 @@ describe('Perfume', () => {
       spy = jest.spyOn(window.console, 'warn');
       perfume.config.warning = true;
       perfume.config.logging = false;
-      (perfume as any).logWarn('prefix', 'message');
+      (perfume as any).logWarn('message');
       expect(spy.mock.calls.length).toEqual(0);
       expect(spy).not.toHaveBeenCalled();
     });

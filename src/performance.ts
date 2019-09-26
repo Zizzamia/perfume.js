@@ -21,6 +21,11 @@ declare interface IPerformanceObserverEntryList {
   getEntriesByType: any;
 }
 
+export interface IPerformanceObserver {
+  observer: Function;
+  disconnect: Function;
+}
+
 export default class Performance {
   /**
    * True if the browser supports the Navigation Timing API,
@@ -75,12 +80,13 @@ export default class Performance {
   performanceObserver(
     eventType: IPerformanceObserverType,
     cb: (entries: any[]) => void,
-  ): void {
+  ): IPerformanceObserver {
     this.perfObserver = new PerformanceObserver(
       this.performanceObserverCb.bind(this, cb),
     );
     // Retrieve buffered events and subscribe to newer events for Paint Timing
     this.perfObserver.observe({ type: eventType, buffered: true });
+    return this.perfObserver;
   }
 
   /**
