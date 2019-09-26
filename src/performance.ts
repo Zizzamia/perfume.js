@@ -22,8 +22,8 @@ declare interface IPerformanceObserverEntryList {
 }
 
 export interface IPerformanceObserver {
-  observer: Function;
-  disconnect: Function;
+  observer: () => void;
+  disconnect: () => void;
 }
 
 export default class Performance {
