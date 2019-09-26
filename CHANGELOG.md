@@ -1,12 +1,17 @@
 # Changelog
 
+## 3.0.0-rc.0 (2019-9-25)
+
+* **feat:** Added support to retrieve buffered FP/FCP events [#81](https://github.com/Zizzamia/perfume.js/issues/81)
+* **feat:** Added support for first-input and removed EmulatedPerformance [#60](https://github.com/Zizzamia/perfume.js/issues/60) [#82](https://github.com/Zizzamia/perfume.js/issues/82)
+
 ## 3.0.0-beta.0 (2019-9-14)
 
-* **feat:** replace Map by plain old objects to support more browsers [#78](https://github.com/Zizzamia/perfume.js/pull/78)
+* **feat:** Replace Map by plain old objects to support more browsers [#78](https://github.com/Zizzamia/perfume.js/pull/78)
 
 ### Breaking Changes
 
-* **feat:** discard queued tasks if running them as microtasks isn't supported [#77](https://github.com/Zizzamia/perfume.js/pull/77)
+* **feat:** Discard queued tasks if running them as microtasks isn't supported [#77](https://github.com/Zizzamia/perfume.js/pull/77)
 
 ## 2.1.0 (2019-1-5)
 
@@ -18,11 +23,11 @@
 
 ### Feat
 
-* **performance:** now we use Idle Untile Urget strategy for logging and analytics [#55](https://github.com/Zizzamia/perfume.js/issues/55)
+* **performance:** Now we use Idle Untile Urget strategy for logging and analytics [#55](https://github.com/Zizzamia/perfume.js/issues/55)
 
 ### Possible Breaking Changes
 
-* **core** removed Time to Interactive from Perfume [#54](https://github.com/Zizzamia/perfume.js/issues/54) 😬 (FID is a better metric for RUM)
+* **core** Removed Time to Interactive from Perfume [#54](https://github.com/Zizzamia/perfume.js/issues/54) 😬 (FID is a better metric for RUM)
 
 ## 1.2.0 (2018-10-8)
 
