@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.0-rc.5 (2019-9-26)
+
+* **feat:** Added initial support for Data Consumption [#85](https://github.com/Zizzamia/perfume.js/issues/85)
+
 ## 3.0.0-rc.1 (2019-9-25)
 
 * **feat:** Added support to retrieve buffered FP/FCP events [#81](https://github.com/Zizzamia/perfume.js/issues/81)
