@@ -172,9 +172,12 @@ export default class Perfume {
     if (Performance.supportedPerformanceObserver()) {
       // Init observe FCP  and creates the Promise to observe metric
       if (this.config.firstPaint || this.config.firstContentfulPaint) {
+        this.observeFirstPaint = new Promise(resolve => {
+          this.logDebug('observeFirstPaint');
+          this.observers['firstPaint'] = resolve;
+        });
         this.observeFirstContentfulPaint = new Promise(resolve => {
           this.logDebug('observeFirstContentfulPaint');
-          this.observers['firstPaint'] = resolve;
           this.observers['firstContentfulPaint'] = resolve;
           this.initFirstPaint();
         });
@@ -269,7 +272,7 @@ export default class Perfume {
   /**
    * Coloring Text in Browser Console
    */
-  log(metricName: string, duration: number): void {
+  log(metricName: string, duration: number, suffix: string = 'ms'): void {
     // Don't log when page is hidden or has disabled logging
     if (this.isHidden || !this.config.logging) {
       return;
@@ -280,7 +283,7 @@ export default class Perfume {
     }
     const durationMs = duration.toFixed(2);
     const style = 'color: #ff6d00;font-size:11px;';
-    const text = `%c ${this.config.logPrefix} ${metricName} ${durationMs} ms`;
+    const text = `%c ${this.config.logPrefix} ${metricName} ${durationMs} ${suffix}`;
     window.console.log(text, style);
   }
 
@@ -483,7 +486,7 @@ export default class Perfume {
     if (!this.perfObservers.dataConsumption || !this.dataConsumption) {
       return;
     }
-    this.logMetric(this.dataConsumption, 'Data Consumption', 'dataConsumption');
+    this.logMetric(this.dataConsumption, 'Data Consumption', 'dataConsumption', 'Kb');
     this.perfObservers.dataConsumption.disconnect();
   }
 
@@ -521,6 +524,7 @@ export default class Perfume {
     duration: number,
     logText: string,
     metricName: string,
+    suffix: string = 'ms',
   ): void {
     const duration2Decimal = parseFloat(duration.toFixed(2));
     // Stop Analytics and Logging for false negative metrics
@@ -549,7 +553,7 @@ export default class Perfume {
     this.observers[metricName](duration2Decimal);
 
     // Logs the metric in the internal console.log
-    this.log(logText, duration2Decimal);
+    this.log(logText, duration2Decimal, suffix);
 
     // Sends the metric to an external tracking service
     this.sendTiming(metricName, duration2Decimal);

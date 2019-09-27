@@ -404,7 +404,10 @@ describe('Perfume', () => {
     });
 
     it('should call disconnect() for firstInputDelay when metricName is firstInputDelay', () => {
-      spy = jest.spyOn((perfume as any).perfObservers.firstInputDelay, 'disconnect');
+      spy = jest.spyOn(
+        (perfume as any).perfObservers.firstInputDelay,
+        'disconnect',
+      );
       (perfume as any).performanceObserverCb({
         entries: [],
         metricLog: 'First Input Delay',
@@ -415,7 +418,10 @@ describe('Perfume', () => {
     });
 
     it('should not call disconnect() for firstInputDelay when metricName is not firstInputDelay', () => {
-      spy = jest.spyOn((perfume as any).perfObservers.firstInputDelay, 'disconnect');
+      spy = jest.spyOn(
+        (perfume as any).perfObservers.firstInputDelay,
+        'disconnect',
+      );
       (perfume as any).performanceObserverCb({
         entries: [],
         metricLog: 'First Input Delay',
@@ -572,11 +578,15 @@ describe('Perfume', () => {
         perfume.dataConsumption,
         'Data Consumption',
         'dataConsumption',
+        'Kb',
       );
     });
 
     it('should call disconnect()', () => {
-      spy = jest.spyOn((perfume as any).perfObservers.dataConsumption, 'disconnect');
+      spy = jest.spyOn(
+        (perfume as any).perfObservers.dataConsumption,
+        'disconnect',
+      );
       (perfume as any).disconnectDataConsumption();
       expect(spy.mock.calls.length).toEqual(1);
     });
@@ -649,6 +659,7 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalledWith(
         'First Contentful Paint',
         perfume.firstContentfulPaintDuration,
+        'ms',
       );
     });
 
