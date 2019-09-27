@@ -486,7 +486,12 @@ export default class Perfume {
     if (!this.perfObservers.dataConsumption || !this.dataConsumption) {
       return;
     }
-    this.logMetric(this.dataConsumption, 'Data Consumption', 'dataConsumption', 'Kb');
+    this.logMetric(
+      this.dataConsumption,
+      'Data Consumption',
+      'dataConsumption',
+      'Kb',
+    );
     this.perfObservers.dataConsumption.disconnect();
   }
 
