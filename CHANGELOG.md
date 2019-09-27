@@ -5,6 +5,10 @@
 * **feat:** Added support to retrieve buffered FP/FCP events [#81](https://github.com/Zizzamia/perfume.js/issues/81)
 * **feat:** Added support for first-input and removed EmulatedPerformance [#60](https://github.com/Zizzamia/perfume.js/issues/60) [#82](https://github.com/Zizzamia/perfume.js/issues/82)
 
+### Breaking Changes
+
+* **refactor:** Dropped support for EmulatedPerformance
+
 ## 3.0.0-beta.0 (2019-9-14)
 
 * **feat:** Replace Map by plain old objects to support more browsers [#78](https://github.com/Zizzamia/perfume.js/pull/78)

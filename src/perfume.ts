@@ -14,7 +14,7 @@ export interface IPerfumeConfig {
   firstContentfulPaint: boolean;
   firstInputDelay: boolean;
   firstPaint: boolean;
-  pageResource: boolean;
+  dataConsumption: boolean;
   // Analytics
   analyticsTracker?: (
     metricName: string,
@@ -27,6 +27,7 @@ export interface IPerfumeConfig {
   logPrefix: string;
   logging: boolean;
   maxMeasureTime: number;
+  maxDataConsumption: number;
   warning: boolean;
   // Debugging
   debugging: boolean;
@@ -37,7 +38,7 @@ export interface IPerfumeOptions {
   firstContentfulPaint?: boolean;
   firstInputDelay?: boolean;
   firstPaint?: boolean;
-  pageResource?: boolean;
+  dataConsumption?: boolean;
   // Analytics
   analyticsTracker?: (
     metricName: string,
@@ -50,6 +51,7 @@ export interface IPerfumeOptions {
   logPrefix?: string;
   logging?: boolean;
   maxMeasureTime?: number;
+  maxDataConsumption?: number;
   warning?: boolean;
   // Debugging
   debugging?: boolean;
@@ -118,7 +120,7 @@ export default class Perfume {
     firstContentfulPaint: false,
     firstPaint: false,
     firstInputDelay: false,
-    pageResource: false,
+    dataConsumption: false,
     // Analytics
     googleAnalytics: {
       enable: false,
@@ -129,16 +131,20 @@ export default class Perfume {
     logPrefix: 'Perfume.js:',
     logging: true,
     maxMeasureTime: 15000,
+    maxDataConsumption: 20000,
     warning: false,
     debugging: false,
   };
   firstPaintDuration: number = 0;
   firstContentfulPaintDuration: number = 0;
   firstInputDelayDuration: number = 0;
-  pageResourceDecodedBodySize: number = 0;
+  dataConsumption: number = 0;
+  observeFirstPaint?: Promise<number>;
   observeFirstContentfulPaint?: Promise<number>;
   observeFirstInputDelay?: Promise<number>;
+  observeDataConsumption?: Promise<number>;
   private browser: BrowserInfo | any;
+  private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
   private logMetricWarn = 'Please provide a metric name';
   private queue: any;
@@ -168,23 +174,26 @@ export default class Perfume {
       if (this.config.firstPaint || this.config.firstContentfulPaint) {
         this.observeFirstContentfulPaint = new Promise(resolve => {
           this.logDebug('observeFirstContentfulPaint');
-          this.observers['fcp'] = resolve;
+          this.observers['firstPaint'] = resolve;
+          this.observers['firstContentfulPaint'] = resolve;
           this.initFirstPaint();
         });
       }
 
-      // FID needs to be initialized as soon as Perfume is available, which returns
-      // a Promise that can be observed
-      if (this.config.firstInputDelay) {
-        this.observeFirstInputDelay = new Promise(resolve => {
-          this.observers['fid'] = resolve;
-          this.initFirstInputDelay();
-        });
-      }
+      // FID needs to be initialized as soon as Perfume is available,
+      // which returns a Promise that can be observed.
+      // DataConsumption resolves after FID is triggered
+      this.observeFirstInputDelay = new Promise(resolve => {
+        this.observers['firstInputDelay'] = resolve;
+        this.initFirstInputDelay();
+      });
 
-      //
-      if (this.config.pageResource) {
-        this.initPageResource();
+      // Collects KB information related to resources on the page
+      if (this.config.dataConsumption) {
+        this.observeDataConsumption = new Promise(resolve => {
+          this.observers['dataConsumption'] = resolve;
+          this.initDataConsumption();
+        });
       }
     }
 
@@ -380,12 +389,18 @@ export default class Perfume {
           );
         }
       });
-      if (performanceEntry.name === 'first-contentful-paint') {
-        this.perfObservers.fcp.disconnect();
+      if (
+        this.perfObservers.firstContentfulPaint &&
+        performanceEntry.name === 'first-contentful-paint'
+      ) {
+        this.perfObservers.firstContentfulPaint.disconnect();
       }
     });
-    if (options.entryName === 'first-input') {
-      this.perfObservers.fid.disconnect();
+    if (
+      this.perfObservers.firstInputDelay &&
+      options.metricName === 'firstInputDelay'
+    ) {
+      this.perfObservers.firstInputDelay.disconnect();
     }
   }
 
@@ -398,8 +413,25 @@ export default class Perfume {
         const decodedBodySize = parseFloat(
           (performanceEntry.decodedBodySize / 1000).toFixed(2),
         );
-        this.pageResourceDecodedBodySize += decodedBodySize;
+        this.dataConsumption += decodedBodySize;
       }
+    });
+  }
+
+  private digestFirstPaintEntries(entries: IPerformanceEntry[]): void {
+    this.performanceObserverCb({
+      entries,
+      entryName: 'first-paint',
+      metricLog: 'First Paint',
+      metricName: 'firstPaint',
+      valueLog: 'startTime',
+    });
+    this.performanceObserverCb({
+      entries,
+      entryName: 'first-contentful-paint',
+      metricLog: 'First Contentful Paint',
+      metricName: 'firstContentfulPaint',
+      valueLog: 'startTime',
     });
   }
 
@@ -410,65 +442,63 @@ export default class Perfume {
   private initFirstPaint(): void {
     this.logDebug('initFirstPaint');
     try {
-      this.perfObservers.fcp = this.perf.performanceObserver(
+      this.perfObservers.firstContentfulPaint = this.perf.performanceObserver(
         'paint',
-        (entries: IPerformanceEntry[]) => {
-          this.performanceObserverCb({
-            entries,
-            entryName: 'first-paint',
-            metricLog: 'First Paint',
-            metricName: 'firstPaint',
-            valueLog: 'startTime',
-          });
-          this.performanceObserverCb({
-            entries,
-            entryName: 'first-contentful-paint',
-            metricLog: 'First Contentful Paint',
-            metricName: 'firstContentfulPaint',
-            valueLog: 'startTime',
-          });
-        },
+        this.digestFirstPaintEntries,
       );
     } catch (e) {
       this.logWarn('initFirstPaint failed');
     }
   }
 
+  private digestFirstInputDelayEntries(entries: IPerformanceEntry[]): void {
+    this.performanceObserverCb({
+      entries,
+      metricLog: 'First Input Delay',
+      metricName: 'firstInputDelay',
+      valueLog: 'duration',
+    });
+    this.disconnectDataConsumption();
+  }
+
   private initFirstInputDelay(): void {
     try {
-      this.perfObservers.fid = this.perf.performanceObserver(
+      this.perfObservers.firstInputDelay = this.perf.performanceObserver(
         'first-input',
-        (entries: IPerformanceEntry[]) => {
-          this.performanceObserverCb({
-            entries,
-            metricLog: 'First Input Delay',
-            metricName: 'firstInputDelay',
-            valueLog: 'duration',
-          });
-        },
+        this.digestFirstInputDelayEntries,
       );
     } catch (e) {
       this.logWarn('initFirstInputDelay failed');
     }
   }
 
-  private initPageResource(): void {
-    try {
-      this.perfObservers.pageResource = this.perf.performanceObserver(
-        'resource',
-        (entries: IPerformanceEntry[]) => {
-          this.performanceObserverResourceCb({
-            entries,
-          });
-        },
-      );
-      // TODO Keep experimenting with this before release it
-      setTimeout(() => {
-        this.perfObservers.pageResource.disconnect();
-      }, 5000);
-    } catch (e) {
-      this.logWarn('initPageResource failed');
+  private digestDataConsumptionEntries(entries: IPerformanceEntry[]): void {
+    this.performanceObserverResourceCb({
+      entries,
+    });
+  }
+
+  private disconnectDataConsumption(): void {
+    clearTimeout(this.dataConsumptionTimeout);
+    if (!this.perfObservers.dataConsumption || !this.dataConsumption) {
+      return;
     }
+    this.logMetric(this.dataConsumption, 'Data Consumption', 'dataConsumption');
+    this.perfObservers.dataConsumption.disconnect();
+  }
+
+  private initDataConsumption(): void {
+    try {
+      this.perfObservers.dataConsumption = this.perf.performanceObserver(
+        'resource',
+        this.digestDataConsumptionEntries,
+      );
+    } catch (e) {
+      this.logWarn('initDataConsumption failed');
+    }
+    this.dataConsumptionTimeout = setTimeout(() => {
+      this.disconnectDataConsumption();
+    }, 15000);
   }
 
   /**
@@ -494,7 +524,15 @@ export default class Perfume {
   ): void {
     const duration2Decimal = parseFloat(duration.toFixed(2));
     // Stop Analytics and Logging for false negative metrics
-    if (duration2Decimal > this.config.maxMeasureTime) {
+    if (
+      metricName !== 'dataConsumption' &&
+      duration2Decimal > this.config.maxMeasureTime
+    ) {
+      return;
+    } else if (
+      metricName === 'dataConsumption' &&
+      duration2Decimal > this.config.maxDataConsumption
+    ) {
       return;
     }
 
@@ -504,12 +542,11 @@ export default class Perfume {
     }
     if (metricName === 'firstContentfulPaint') {
       this.firstContentfulPaintDuration = duration2Decimal;
-      this.observers['fcp'](duration2Decimal);
     }
     if (metricName === 'firstInputDelay') {
       this.firstInputDelayDuration = duration2Decimal;
-      this.observers['fid'](duration2Decimal);
     }
+    this.observers[metricName](duration2Decimal);
 
     // Logs the metric in the internal console.log
     this.log(logText, duration2Decimal);

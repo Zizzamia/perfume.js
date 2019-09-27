@@ -12,8 +12,10 @@ describe('Perfume', () => {
     (window as any).PerformanceObserver = mock.PerformanceObserver;
     (window as any).console.log = (n: any) => n;
     (window as any).console.warn = (n: any) => n;
-    perfume['observers']['fcp'] = () => 400;
-    perfume['observers']['fid'] = () => 400;
+    perfume['observers']['firstPaint'] = () => 400;
+    perfume['observers']['firstContentfulPaint'] = () => 400;
+    perfume['observers']['firstInputDelay'] = () => 400;
+    perfume['observers']['dataConsumption'] = () => 400;
     perfume['queue'] = {
       pushTask: (cb: any) => cb(),
     };
@@ -35,7 +37,7 @@ describe('Perfume', () => {
         firstContentfulPaint: false,
         firstPaint: false,
         firstInputDelay: false,
-        pageResource: false,
+        dataConsumption: false,
         browserTracker: false,
         googleAnalytics: {
           enable: false,
@@ -44,6 +46,7 @@ describe('Perfume', () => {
         logPrefix: 'Perfume.js:',
         logging: true,
         maxMeasureTime: 15000,
+        maxDataConsumption: 20000,
         warning: false,
         debugging: false,
       });
@@ -59,7 +62,7 @@ describe('Perfume', () => {
         firstContentfulPaint: false,
         firstInputDelay: true,
       });
-      perfume['observers']['fid'] = () => 400;
+      perfume['observers']['firstInputDelay'] = () => 400;
       perfume['queue'].pushTask = (cb: any) => cb();
     });
 
@@ -346,7 +349,12 @@ describe('Perfume', () => {
     beforeEach(() => {
       perfume.config.firstPaint = true;
       perfume.config.firstContentfulPaint = true;
-      (perfume as any).perfObservers.fcp = { disconnect: () => {} };
+      (perfume as any).perfObservers.firstContentfulPaint = {
+        disconnect: () => {},
+      };
+      (perfume as any).perfObservers.firstInputDelay = {
+        disconnect: () => {},
+      };
     });
 
     it('should call logMetric() with the correct arguments', () => {
@@ -394,23 +402,45 @@ describe('Perfume', () => {
       });
       expect(spy).not.toHaveBeenCalled();
     });
+
+    it('should call disconnect() for firstInputDelay when metricName is firstInputDelay', () => {
+      spy = jest.spyOn((perfume as any).perfObservers.firstInputDelay, 'disconnect');
+      (perfume as any).performanceObserverCb({
+        entries: [],
+        metricLog: 'First Input Delay',
+        metricName: 'firstInputDelay',
+        valueLog: 'duration',
+      });
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+
+    it('should not call disconnect() for firstInputDelay when metricName is not firstInputDelay', () => {
+      spy = jest.spyOn((perfume as any).perfObservers.firstInputDelay, 'disconnect');
+      (perfume as any).performanceObserverCb({
+        entries: [],
+        metricLog: 'First Input Delay',
+        metricName: 'firstInputDelay',
+        valueLog: 'duration',
+      });
+      expect(spy.mock.calls.length).toEqual(1);
+    });
   });
 
   describe('.performanceObserverResourceCb()', () => {
     beforeEach(() => {
-      perfume.config.pageResource = true;
-      (perfume as any).perfObservers.pageResource = { disconnect: () => {} };
+      perfume.config.dataConsumption = true;
+      (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
     });
 
-    it('should pageResourceDecodedBodySize be 0 when entries are empty', () => {
+    it('should dataConsumption be 0 when entries are empty', () => {
       (perfume as any).performanceObserverResourceCb({
         entries: [],
       });
-      expect(perfume.pageResourceDecodedBodySize).toEqual(0);
+      expect(perfume.dataConsumption).toEqual(0);
     });
 
-    it('should float the pageResourceDecodedBodySize result', () => {
-      perfume.pageResourceDecodedBodySize = 0;
+    it('should float the dataConsumption result', () => {
+      perfume.dataConsumption = 0;
       (perfume as any).performanceObserverResourceCb({
         entries: [
           {
@@ -418,11 +448,11 @@ describe('Perfume', () => {
           },
         ],
       });
-      expect(perfume.pageResourceDecodedBodySize).toEqual(12.35);
+      expect(perfume.dataConsumption).toEqual(12.35);
     });
 
-    it('should sum the pageResourceDecodedBodySize result', () => {
-      perfume.pageResourceDecodedBodySize = 0;
+    it('should sum the dataConsumption result', () => {
+      perfume.dataConsumption = 0;
       (perfume as any).performanceObserverResourceCb({
         entries: [
           {
@@ -433,7 +463,29 @@ describe('Perfume', () => {
           },
         ],
       });
-      expect(perfume.pageResourceDecodedBodySize).toEqual(22.35);
+      expect(perfume.dataConsumption).toEqual(22.35);
+    });
+  });
+
+  describe('.digestFirstPaintEntries()', () => {
+    it('should call performanceObserver()', () => {
+      spy = jest.spyOn(perfume as any, 'performanceObserverCb');
+      perfume['digestFirstPaintEntries']([]);
+      expect(spy.mock.calls.length).toEqual(2);
+      expect(spy).toHaveBeenCalledWith({
+        entries: [],
+        entryName: 'first-paint',
+        metricLog: 'First Paint',
+        metricName: 'firstPaint',
+        valueLog: 'startTime',
+      });
+      expect(spy).toHaveBeenCalledWith({
+        entries: [],
+        entryName: 'first-contentful-paint',
+        metricLog: 'First Contentful Paint',
+        metricName: 'firstContentfulPaint',
+        valueLog: 'startTime',
+      });
     });
   });
 
@@ -462,6 +514,26 @@ describe('Perfume', () => {
     });
   });
 
+  describe('.digestFirstInputDelayEntries()', () => {
+    it('should call performanceObserver()', () => {
+      spy = jest.spyOn(perfume as any, 'performanceObserverCb');
+      perfume['digestFirstInputDelayEntries']([]);
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith({
+        entries: [],
+        metricLog: 'First Input Delay',
+        metricName: 'firstInputDelay',
+        valueLog: 'duration',
+      });
+    });
+
+    it('should call disconnectDataConsumption()', () => {
+      spy = jest.spyOn(perfume as any, 'disconnectDataConsumption');
+      perfume['digestFirstInputDelayEntries']([]);
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
   describe('.initFirstInputDelay()', () => {
     beforeEach(() => {
       perfume.config.firstInputDelay = true;
@@ -486,16 +558,51 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.initPageResource()', () => {
+  describe('.disconnectDataConsumption()', () => {
     beforeEach(() => {
-      perfume.config.pageResource = true;
+      perfume.dataConsumption = 10;
+      (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
+    });
+
+    it('should call logMetric() with the correct arguments', () => {
+      spy = jest.spyOn(perfume as any, 'logMetric');
+      (perfume as any).disconnectDataConsumption();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(
+        perfume.dataConsumption,
+        'Data Consumption',
+        'dataConsumption',
+      );
+    });
+
+    it('should call disconnect()', () => {
+      spy = jest.spyOn((perfume as any).perfObservers.dataConsumption, 'disconnect');
+      (perfume as any).disconnectDataConsumption();
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('.initDataConsumption()', () => {
+    beforeEach(() => {
+      perfume.config.dataConsumption = true;
+      (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
     });
 
     it('should call performanceObserver()', () => {
       spy = jest.spyOn(perfume['perf'], 'performanceObserver');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
-      perfume['initPageResource']();
+      perfume['initDataConsumption']();
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+
+    it('should call disconnectDataConsumption() after the setTimeout', () => {
+      jest.spyOn(perfume['perf'], 'performanceObserver');
+      spy = jest.spyOn(perfume as any, 'disconnectDataConsumption');
+      (window as any).chrome = true;
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+      perfume['initDataConsumption']();
+      jest.runAllTimers();
       expect(spy.mock.calls.length).toEqual(1);
     });
 
@@ -504,9 +611,9 @@ describe('Perfume', () => {
       (window as any).chrome = true;
       mock.PerformanceObserver.simulateErrorOnObserve = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
-      perfume['initPageResource']();
+      perfume['initDataConsumption']();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('initPageResource failed');
+      expect(spy).toHaveBeenCalledWith('initDataConsumption failed');
     });
   });
 
@@ -566,6 +673,12 @@ describe('Perfume', () => {
         'First Contentful Paint',
         'firstContentfulPaint',
       );
+      expect(spy.mock.calls.length).toEqual(0);
+    });
+
+    it('should not call sendTiming() when dataConsumption is higher of config.maxDataConsumption', () => {
+      spy = jest.spyOn(perfume as any, 'sendTiming');
+      (perfume as any).logMetric(25000, 'Data Consumption', 'dataConsumption');
       expect(spy.mock.calls.length).toEqual(0);
     });
 

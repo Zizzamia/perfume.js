@@ -19,6 +19,7 @@ export class AppComponent implements AfterViewInit {
   // Component
   logCustom: string;
   logFibonacci: string;
+  firstPaint: number;
   firstContentfulPaint: number;
   firstInputDelay: number;
   path: string;
@@ -29,6 +30,7 @@ export class AppComponent implements AfterViewInit {
     public perfume: NgPerfume,
   ) {
     // Perfume
+    this.observeFP();
     this.observeFCP();
     this.observeFID();
     this.path = window.location.href.split('#')[0];
@@ -49,6 +51,11 @@ export class AppComponent implements AfterViewInit {
     const duration = this.perfume.end('fibonacci') as number;
     this.perfume.log('Custom logging', duration);
     this.logCustom = `🍹 HayesValley.js: Custom logging ${duration} ms`;
+  }
+
+  private async observeFP() {
+    this.firstPaint = await this.perfume.observeFirstPaint;
+    this.ref.detectChanges();
   }
 
   private async observeFCP() {
