@@ -49,6 +49,51 @@ describe('Perfume', () => {
         maxDataConsumption: 20000,
         warning: false,
         debugging: false,
+        
+      });
+    });
+  });
+
+  describe('constructor', () => {
+    it('should run with config version A', () => {
+      new Perfume({
+        firstContentfulPaint: true,
+        firstPaint: true,
+        firstInputDelay: true,
+        dataConsumption: true,
+      });
+    });
+
+    it('should run with config version B', () => {
+      new Perfume({
+        firstContentfulPaint: true,
+        firstPaint: true,
+        firstInputDelay: true,
+        dataConsumption: true,
+        browserTracker: true,
+      });
+    });
+
+    it('should run with config version C', () => {
+      new Perfume({
+        firstContentfulPaint: true,
+        firstPaint: true,
+        firstInputDelay: true,
+        dataConsumption: true,
+        browserTracker: true,
+        logging: false,
+      });
+    });
+
+    it('should run with config version D', () => {
+      new Perfume({
+        firstContentfulPaint: true,
+        firstPaint: true,
+        firstInputDelay: true,
+        dataConsumption: true,
+        browserTracker: true,
+        warning: true,
+        debugging: true,
       });
     });
   });
@@ -291,6 +336,39 @@ describe('Perfume', () => {
     });
   });
 
+  describe('.initPerformanceObserver()', () => {
+    it('should set observeFirstPaint when firstPaint is true', () => {
+      perfume.config.firstPaint = true;
+      (perfume as any).initPerformanceObserver();
+      expect(perfume.observeFirstPaint).toBeDefined();
+    });
+
+    it('should set observeFirstPaint when firstContentfulPaint is true', () => {
+      perfume.config.firstContentfulPaint = true;
+      (perfume as any).initPerformanceObserver();
+      expect(perfume.observeFirstPaint).toBeDefined();
+    });
+
+    it('should not set observeFirstPaint when firstPaint or firstContentfulPaint are false', () => {
+      perfume.config.firstPaint = false;
+      perfume.config.firstContentfulPaint = false;
+      (perfume as any).initPerformanceObserver();
+      expect(perfume.observeFirstPaint).not.toBeDefined();
+    });
+
+    it('should set observeDataConsumption when dataConsumption is true', () => {
+      perfume.config.dataConsumption = true;
+      (perfume as any).initPerformanceObserver();
+      expect(perfume.observeDataConsumption).toBeDefined();
+    });
+
+    it('should not set observeDataConsumption when dataConsumption is false', () => {
+      perfume.config.dataConsumption = false;
+      (perfume as any).initPerformanceObserver();
+      expect(perfume.observeDataConsumption).not.toBeDefined();
+    });
+  });
+
   describe('.addBrowserToMetricName()', () => {
     it('should return "metricName" when config.browserTracker is false', () => {
       const value = (perfume as any).addBrowserToMetricName('metricName');
@@ -302,6 +380,25 @@ describe('Perfume', () => {
       (perfume as any).browser = {};
       const value = (perfume as any).addBrowserToMetricName('metricName');
       expect(value).toEqual('metricName');
+    });
+
+    it('should return "metricName.browserName" when browser.name is defined', () => {
+      perfume.config.browserTracker = true;
+      (perfume as any).browser = {
+        name: 'browserName',
+      };
+      const value = (perfume as any).addBrowserToMetricName('metricName');
+      expect(value).toEqual('metricName.browserName');
+    });
+
+    it('should return "metricName.browserName.browserOS" when browser.browserOS is defined', () => {
+      perfume.config.browserTracker = true;
+      (perfume as any).browser = {
+        name: 'browserName',
+        os: 'browserOS',
+      };
+      const value = (perfume as any).addBrowserToMetricName('metricName');
+      expect(value).toEqual('metricName.browserName.browserOS');
     });
   });
 

@@ -170,34 +170,7 @@ export default class Perfume {
 
     // Checks if use Performance or the EmulatedPerformance instance
     if (Performance.supportedPerformanceObserver()) {
-      // Init observe FCP  and creates the Promise to observe metric
-      if (this.config.firstPaint || this.config.firstContentfulPaint) {
-        this.observeFirstPaint = new Promise(resolve => {
-          this.logDebug('observeFirstPaint');
-          this.observers['firstPaint'] = resolve;
-        });
-        this.observeFirstContentfulPaint = new Promise(resolve => {
-          this.logDebug('observeFirstContentfulPaint');
-          this.observers['firstContentfulPaint'] = resolve;
-          this.initFirstPaint();
-        });
-      }
-
-      // FID needs to be initialized as soon as Perfume is available,
-      // which returns a Promise that can be observed.
-      // DataConsumption resolves after FID is triggered
-      this.observeFirstInputDelay = new Promise(resolve => {
-        this.observers['firstInputDelay'] = resolve;
-        this.initFirstInputDelay();
-      });
-
-      // Collects KB information related to resources on the page
-      if (this.config.dataConsumption) {
-        this.observeDataConsumption = new Promise(resolve => {
-          this.observers['dataConsumption'] = resolve;
-          this.initDataConsumption();
-        });
-      }
+      this.initPerformanceObserver();
     }
 
     // Init visibilitychange listener
@@ -333,6 +306,37 @@ export default class Perfume {
       this.config.googleAnalytics.timingVar,
       durationInteger,
     );
+  }
+
+  private initPerformanceObserver(): void {
+    // Init observe FCP  and creates the Promise to observe metric
+    if (this.config.firstPaint || this.config.firstContentfulPaint) {
+      this.observeFirstPaint = new Promise(resolve => {
+        this.logDebug('observeFirstPaint');
+        this.observers['firstPaint'] = resolve;
+      });
+      this.observeFirstContentfulPaint = new Promise(resolve => {
+        this.logDebug('observeFirstContentfulPaint');
+        this.observers['firstContentfulPaint'] = resolve;
+        this.initFirstPaint();
+      });
+    }
+
+    // FID needs to be initialized as soon as Perfume is available,
+    // which returns a Promise that can be observed.
+    // DataConsumption resolves after FID is triggered
+    this.observeFirstInputDelay = new Promise(resolve => {
+      this.observers['firstInputDelay'] = resolve;
+      this.initFirstInputDelay();
+    });
+
+    // Collects KB information related to resources on the page
+    if (this.config.dataConsumption) {
+      this.observeDataConsumption = new Promise(resolve => {
+        this.observers['dataConsumption'] = resolve;
+        this.initDataConsumption();
+      });
+    }
   }
 
   private addBrowserToMetricName(metricName: string): string {
