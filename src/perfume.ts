@@ -9,6 +9,12 @@ import { IdleQueue } from './idle-queue';
 
 import Performance from './performance';
 
+interface IAnalyticsTrackerOptions {
+  metricName: string,
+  duration: number,
+  browser?: BrowserInfo | any,
+}
+
 export interface IPerfumeConfig {
   // Metrics
   firstContentfulPaint: boolean;
@@ -16,11 +22,7 @@ export interface IPerfumeConfig {
   firstPaint: boolean;
   dataConsumption: boolean;
   // Analytics
-  analyticsTracker?: (
-    metricName: string,
-    duration: number,
-    browser?: BrowserInfo | any,
-  ) => void;
+  analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   browserTracker?: boolean;
   googleAnalytics: IGoogleAnalyticsConfig;
   // Logging
@@ -62,6 +64,12 @@ export interface IGoogleAnalyticsConfig {
   timingVar: string;
 }
 
+interface ILogOptions {
+  metricName: string;
+  duration: number;
+  suffix?: string;
+}
+
 export interface IMetricEntry {
   start: number;
   end: number;
@@ -100,6 +108,11 @@ export declare interface IPerformanceEntry {
     | 'xmlhttprequest';
   name: string;
   startTime: number;
+}
+
+interface ISendTimingOptions {
+  metricName: string;
+  duration: number;
 }
 
 export type IPerfumeMetrics =
@@ -224,8 +237,8 @@ export default class Perfume {
     delete this.metrics[metricName];
     this.queue.pushTask(() => {
       // Log to console, delete metric and send to analytics tracker
-      this.log(metricName, duration2Decimal);
-      this.sendTiming(metricName, duration2Decimal);
+      this.log({ metricName, duration: duration2Decimal });
+      this.sendTiming({ metricName, duration: duration2Decimal });
     });
     return duration2Decimal;
   }
@@ -245,7 +258,8 @@ export default class Perfume {
   /**
    * Coloring Text in Browser Console
    */
-  log(metricName: string, duration: number, suffix: string = 'ms'): void {
+  log(options: ILogOptions): void {
+    const { metricName, duration, suffix } = { suffix: 'ms', ...options };
     // Don't log when page is hidden or has disabled logging
     if (this.isHidden || !this.config.logging) {
       return;
@@ -277,7 +291,8 @@ export default class Perfume {
    * timingVar: googleAnalytics.timingVar
    * timingValue: The value of duration rounded to the nearest integer
    */
-  sendTiming(metricName: string, duration: number): void {
+  sendTiming(options: ISendTimingOptions): void {
+    const { metricName, duration } = options;
     // Doesn't send timing when page is hidden
     if (this.isHidden) {
       return;
@@ -288,7 +303,7 @@ export default class Perfume {
     // Send metric to custom Analytics service,
     // the default choice is Google Analytics
     if (this.config.analyticsTracker) {
-      this.config.analyticsTracker(metricName, duration, browser);
+      this.config.analyticsTracker({ metricName, duration, browser });
     }
     // Stop sending timing to GA if not enabled
     if (!this.config.googleAnalytics.enable) {
@@ -562,10 +577,10 @@ export default class Perfume {
     this.observers[metricName](duration2Decimal);
 
     // Logs the metric in the internal console.log
-    this.log(logText, duration2Decimal, suffix);
+    this.log({ metricName: logText, duration: duration2Decimal, suffix });
 
     // Sends the metric to an external tracking service
-    this.sendTiming(metricName, duration2Decimal);
+    this.sendTiming({ metricName, duration: duration2Decimal });
   }
 
   /**
