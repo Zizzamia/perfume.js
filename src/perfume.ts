@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v3.0.0-rc.7 (http://zizzamia.github.io/perfume)
+ * Perfume.js v3.0.0-rc.10 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -42,11 +42,7 @@ export interface IPerfumeOptions {
   firstPaint?: boolean;
   dataConsumption?: boolean;
   // Analytics
-  analyticsTracker?: (
-    metricName: string,
-    duration: number,
-    browser?: BrowserInfo | any,
-  ) => void;
+  analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   browserTracker?: boolean;
   googleAnalytics?: IGoogleAnalyticsConfig;
   // Logging
@@ -100,12 +96,12 @@ export declare interface IPerformanceEntry {
   duration: number;
   entryType: IPerformanceObserverType;
   initiatorType?:
-    | 'css'
-    | 'fetch'
-    | 'img'
-    | 'other'
-    | 'script'
-    | 'xmlhttprequest';
+  | 'css'
+  | 'fetch'
+  | 'img'
+  | 'other'
+  | 'script'
+  | 'xmlhttprequest';
   name: string;
   startTime: number;
 }

@@ -30,7 +30,7 @@ export class NgPerfume {
   firstPaintDuration = 0;
   firstContentfulPaintDuration = 0;
   firstInputDelayDuration = 0;
-  dataConsumption: number = 0;
+  dataConsumption = 0;
   observeFirstPaint: Promise<number>;
   observeFirstContentfulPaint: Promise<number>;
   observeFirstInputDelay: Promise<number>;
@@ -97,7 +97,7 @@ export class PerfumeModule {
 // tslint:disable-next-line:interface-name
 export interface AfterViewInitable {
   prototype: AfterViewInit;
-  new (...args: any[]): AfterViewInit;
+  new(...args: any[]): AfterViewInit;
 }
 
 /**
@@ -120,7 +120,7 @@ export function PerfumeAfterViewInit(targetName?: string) {
 
     // The new ngAfterViewInit behavior
     const ngAfterViewInit = target.prototype.ngAfterViewInit;
-    target.prototype.ngAfterViewInit = function(...args) {
+    target.prototype.ngAfterViewInit = function (...args) {
       // tslint:disable-next-line:no-unused-expression
       ngAfterViewInit && ngAfterViewInit.apply(this, args);
       perfume.end(targetName || target.name);
