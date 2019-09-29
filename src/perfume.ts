@@ -91,17 +91,19 @@ export type IPerformanceObserverType =
   | 'resource'
   | 'first-input';
 
-export declare interface IPerformanceEntry {
-  decodedBodySize?: number;
-  duration: number;
-  entryType: IPerformanceObserverType;
-  initiatorType?:
+export type IPerformanceEntryInitiatorType =
   | 'css'
   | 'fetch'
   | 'img'
   | 'other'
   | 'script'
   | 'xmlhttprequest';
+
+export declare interface IPerformanceEntry {
+  decodedBodySize?: number;
+  duration: number;
+  entryType: IPerformanceObserverType;
+  initiatorType?: IPerformanceEntryInitiatorType;
   name: string;
   startTime: number;
 }
