@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-rc.10 (2019-9-29)
+
+* **feat:** added more flexibility for log, sendTiming and analyticsTracker arguments [#70](https://github.com/Zizzamia/perfume.js/issues/70)
+
+### Breaking Changes
+
+* **refactor:** log, sendTiming and analyticsTrackerg gets one solo options object instead of the original arguments
+
 ## 3.0.0-rc.5 (2019-9-26)
 
 * **feat:** Added initial support for Data Consumption [#85](https://github.com/Zizzamia/perfume.js/issues/85)
