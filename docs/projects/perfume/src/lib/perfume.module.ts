@@ -6,7 +6,11 @@ import {
   ModuleWithProviders,
   NgModule,
 } from '@angular/core';
-import Perfume, { IPerfumeConfig } from 'perfume.js';
+import Perfume, {
+  ILogOptions,
+  IPerfumeConfig,
+  ISendTimingOptions,
+} from 'perfume.js';
 
 export let perfume;
 
@@ -58,12 +62,12 @@ export class NgPerfume {
     return perfume.endPaint(metricName);
   }
 
-  log(metricName: string, duration: number): void {
-    perfume.log(metricName, duration);
+  log(options: ILogOptions): void {
+    perfume.log(options);
   }
 
-  sendTiming(metricName: string, duration: number): void {
-    perfume.sendTiming(metricName, duration);
+  sendTiming(options: ISendTimingOptions): void {
+    perfume.sendTiming(options);
   }
 }
 

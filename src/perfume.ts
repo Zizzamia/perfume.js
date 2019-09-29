@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v3.0.0-rc.6 (http://zizzamia.github.io/perfume)
+ * Perfume.js v3.0.0-rc.7 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -9,7 +9,7 @@ import { IdleQueue } from './idle-queue';
 
 import Performance from './performance';
 
-interface IAnalyticsTrackerOptions {
+export interface IAnalyticsTrackerOptions {
   metricName: string;
   duration: number;
   browser?: BrowserInfo | any;
@@ -64,7 +64,7 @@ export interface IGoogleAnalyticsConfig {
   timingVar: string;
 }
 
-interface ILogOptions {
+export interface ILogOptions {
   metricName: string;
   duration: number;
   suffix?: string;
@@ -110,7 +110,7 @@ export declare interface IPerformanceEntry {
   startTime: number;
 }
 
-interface ISendTimingOptions {
+export interface ISendTimingOptions {
   metricName: string;
   duration: number;
 }

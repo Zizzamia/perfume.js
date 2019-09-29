@@ -13,7 +13,7 @@ import { PerfumeModule } from 'perfume.js/angular';
 // import Perfume from '../../../';
 
 // Supports AOT and DI
-export function analyticsTracker(metricName: string, duration: number, browser) {
+export function analyticsTracker({ metricName, duration, browser }) {
   console.log('Analytics Tracker', metricName, duration, browser.name, browser.os);
 }
 export const PerfumeConfig = {
