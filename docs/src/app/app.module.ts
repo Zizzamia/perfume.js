@@ -24,10 +24,6 @@ export const PerfumeConfig = {
   navigationTiming: true,
   analyticsTracker,
   browserTracker: true,
-  googleAnalytics: {
-    enable: true,
-    timingVar: 'userId',
-  },
 };
 
 /*

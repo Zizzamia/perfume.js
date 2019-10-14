@@ -12,7 +12,7 @@
         <li>🚿 Filters out false positive/negative results</li>
         <li>🔭 Browser tracker built-in</li>
         <li>🤙 Support for async/await syntax</li>
-        <li>🛰 Flexible tracking tool</li>
+        <li>🛰 Flexible analytics tool</li>
         <li>
           ⚡️ Waste-zero ms with 
           <a href="https://philipwalton.com/articles/idle-until-urgent/" target="_blank">Idle Until Urgent</a> 
@@ -30,6 +30,8 @@
         <li>First Paint (FP)</li>
         <li>First Contentful Paint (FCP)</li>
         <li>First Input Delay (FID)</li>
+        <li>Navigation Timing</li>
+        <li>Framework components lifecycle monitoring</li>
       </ul>
       <picture class="box-img">
         <source srcset="{{ path }}assets/first-paint-and-first-input-delay-700.webp" type="image/webp" />
@@ -208,7 +210,7 @@ perfume.<span class="violet">end</span>('fibonacci');
 perfume.<span class="blue">start</span>('fibonacci');
 <span class="violet">fibonacci</span>(<span class="blue">400</span>);
 <span class="red">const</span> duration <span class="red">=</span> perfume.<span class="violet">end</span>('fibonacci');
-perfume.<span class="violet">log</span>('Custom logging', duration);
+perfume.<span class="violet">log</span>({ metricName: 'Custom logging', duration });
 <span class="gray">// 🍹 HayesValley.js: Custom logging 0.14 ms</span></pre>
               </td>
             </tr>
@@ -371,7 +373,7 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> (metricName, duration, browser) => {{'{'}}
+  <span class="violet">analyticsTracker</span><span class="red">:</span> ({ metricName, data, duration, browser }) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, duration, browser.name, browser.os);
   {{'}'}})
 {{'}'}});</pre>
@@ -401,17 +403,16 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
   firstContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
   firstPaint<span class="red">:</span> <span class="blue">false</span>,
   firstInputDelay<span class="red">:</span> <span class="blue">false</span>,
+  dataConsumption<span class="red">:</span> <span class="blue">false</span>,
+  navigationTiming<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Analytics</span>
-  analyticsTracker<span class="red">:</span> <span class="blue">undefined</span>,
+  analyticsTracker<span class="red">:</span> options => {},
   browserTracker<span class="red">:</span> <span class="blue">false</span>,
-  googleAnalytics<span class="red">:</span> {{'{'}}
-    enable<span class="red">:</span> <span class="blue">false</span>,
-    timingVar<span class="red">:</span> "name"
-  {{'}'}},
   <span class="gray">// Logging</span>
   logPrefix<span class="red">:</span> "Perfume.js:"
   logging<span class="red">:</span> <span class="blue">true</span>,
   maxMeasureTime<span class="red">:</span> 18000,
+  maxDataConsumption<span class="red">:</span> 18000,
   warning<span class="red">:</span> <span class="blue">false</span>,
   debugging<span class="red">:</span> <span class="blue">false</span>,
 {{'}'}};</pre>

@@ -6,7 +6,7 @@
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
-> A flexible library for measuring <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID) and components lifecycle performance. Report real user measurements to your ideal tracking tool.
+> A flexible library for measuring <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID), Navigation Timing and components lifecycle performance. Report real user measurements to your favorite analytics tool.
 
 <br />
 <br />
@@ -14,13 +14,14 @@
 English | [简体中文](./README-zh_CN.md)
 ## Why Perfume.js?
 
-- ⏰ Latest Performance APIs for precise metrics
+- ⏰ Supported latest Performance APIs for precise metrics
 - 🔨 Cross browser tested
 - 🚿 Filters out false positive/negative results
 - 🔭 Browser tracker built-in
 - 🤙 Support for async/await syntax
-- 🛰 Flexible tracking tool
+- 🛰 Flexible analytics tool
 - ⚡️ Waste-zero ms with [Idle Until Urgent](https://philipwalton.com/articles/idle-until-urgent/) strategy built-in
+<br />
 
 ## User-centric performance metrics
 
@@ -29,6 +30,7 @@ English | [简体中文](./README-zh_CN.md)
 * First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Input Delay (FID)
+* Navigation Timing
 * Framework components lifecycle monitoring
 
 ![first paint and first input delay](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-paint-and-first-input-delay.png)
@@ -52,6 +54,7 @@ Universal Module Definition:
 ```javascript
 import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 ```
+<br />
 
 ## Start measuring
 
@@ -125,9 +128,10 @@ const perfume = new Perfume({
 perfume.start('fibonacci');
 fibonacci(400);
 const duration = this.perfume.end('fibonacci');
-perfume.log('Custom logging', duration);
+perfume.log({ metricName: 'Custom logging', duration });
 // 🍹 HayesValley.js: Custom logging 0.14 ms
 ```
+<br />
 
 ## Frameworks
 
@@ -226,6 +230,7 @@ export default class App extends React.Component {
   }
 }
 ```
+<br />
 
 ## Analytics
 
@@ -233,11 +238,12 @@ Configurable analytics callback to use Perfume.js with any platform.
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: (metricName, duration, browser) => {
+  analyticsTracker: ({ metricName, data, duration, browser }) => {
     myAnalyticsTool.track(metricName, duration, browser.name, browser.os);
   })
 });
 ```
+<br />
 
 ## Customize & Utilities
 
@@ -251,17 +257,16 @@ const options = {
   firstContentfulPaint: false,
   firstPaint: false,
   firstInputDelay: false,
+  dataConsumption: false,
+  navigationTiming: false,
   // Analytics
-  analyticsTracker: undefined,
+  analyticsTracker: options => {},
   browserTracker: false,
-  googleAnalytics: {
-    enable: false,
-    timingVar: 'name',
-  },
   // Logging
   logPrefix: 'Perfume.js:',
   logging: true,
   maxMeasureTime: 15000,
+  maxDataConsumption: 20000,
   warning: false,
   debugging: false,
 };
@@ -289,6 +294,7 @@ const durationFID = await perfume.observeFirstInputDelay;
 // Send Custom User timing measure to Google Analytics
 perfume.sendTiming(metricName, durationFCP);
 ```
+<br />
 
 ## Develop
 
@@ -297,11 +303,13 @@ perfume.sendTiming(metricName, durationFCP);
 * `npm run test:watch`: Run test suite in [interactive watch mode](http://facebook.github.io/jest/docs/cli.html#watch)
 * `npm run build`: Generate bundles and typings
 * `npm run lint`: Lints code
+<br />
 
 ## Articles
 
 * [First (Contentful) Paint with a touch of Perfume(.js)](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f)
 * [Time to Interactive with RUM](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c)
+<br />
 
 ## Credits and Specs
 
@@ -325,10 +333,12 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 
 <a href="https://opencollective.com/perfumejs#backers" target="_blank"><img src="https://opencollective.com/perfumejs/backers.svg?width=890"></a>
 
+<br />
 
 ## Copyright and license
 
 Code and documentation copyright 2019 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
+<br />
 
 ## Team
 

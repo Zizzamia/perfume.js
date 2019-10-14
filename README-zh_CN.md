@@ -125,7 +125,7 @@ const perfume = new Perfume({
 perfume.start('fibonacci');
 fibonacci(400);
 const duration = this.perfume.end('fibonacci');
-perfume.log('Custom logging', duration);
+perfume.log({ metricName: 'Custom logging', duration });
 // 🍹 HayesValley.js: Custom logging 0.14 ms
 ```
 
@@ -236,7 +236,7 @@ export default class App extends React.Component {
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: (metricName, duration, browser) => {
+  analyticsTracker: ({ metricName, data, duration, browser }) => {
     myAnalyticsTool.track(metricName, duration, browser.name, browser.os);
   })
 });
@@ -254,17 +254,16 @@ const options = {
   firstContentfulPaint: false,
   firstPaint: false,
   firstInputDelay: false,
+  dataConsumption: false,
+  navigationTiming: false,
   // Analytics
-  analyticsTracker: undefined,
+  analyticsTracker: options => {},
   browserTracker: false,
-  googleAnalytics: {
-    enable: false,
-    timingVar: 'name',
-  },
   // Logging
   logPrefix: 'Perfume.js:',
   logging: true,
   maxMeasureTime: 15000,
+  maxDataConsumption: 20000,
   warning: false,
   debugging: false,
 };

@@ -23,8 +23,8 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
         <p>
         A flexible library for measuring <b>First Contentful Paint</b>
           (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f"
-          target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID) and components lifecycle performance.
-          Report real user measurements to <b>Google Analytics</b> or your ideal tracking tool.
+          target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID), Navigation Timing and components lifecycle performance.
+          Report real user measurements to your favorite analytics tool.
         </p>
         <a class="github-button" href="https://github.com/zizzamia/perfume.js"
         data-size="large" data-show-count="true"
