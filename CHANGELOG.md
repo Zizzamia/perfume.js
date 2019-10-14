@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-rc.11 (2019-10-13)
+
+* **feat:** added Navigation Timing [#83](https://github.com/Zizzamia/perfume.js/issues/83)
+
+### Breaking Changes
+
+* **refactor:** removed default Google Analytics support, instead analyticsTracker will be the default method to communicate with the backend.
+
 ## 3.0.0-rc.10 (2019-9-29)
 
 * **feat:** added more flexibility for log, sendTiming and analyticsTracker arguments [#70](https://github.com/Zizzamia/perfume.js/issues/70)

@@ -50,6 +50,10 @@ export class NgPerfume {
     this.timeToInteractiveDuration = perfume.timeToInteractiveDuration;
   }
 
+  get navigationTiming() {
+    return perfume.navigationTiming;
+  }
+
   start(metricName: string): void {
     perfume.start(metricName);
   }

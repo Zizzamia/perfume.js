@@ -10,7 +10,7 @@ import { IntroComponent } from './intro/intro.component';
 import { CfpComponent } from './cfp/cfp.component';
 
 import { PerfumeModule } from 'perfume.js/angular';
-import Perfume from '../../../';
+// import Perfume from '../../../';
 
 // Supports AOT and DI
 export function analyticsTracker({ metricName, duration, browser }) {
@@ -21,6 +21,7 @@ export const PerfumeConfig = {
   firstContentfulPaint: true,
   firstInputDelay: true,
   dataConsumption: true,
+  navigationTiming: true,
   analyticsTracker,
   browserTracker: true,
   googleAnalytics: {
@@ -29,11 +30,13 @@ export const PerfumeConfig = {
   },
 };
 
+/*
 new Perfume({ ...PerfumeConfig, ...{
   navigationTiming: true,
   pageResource: true,
   logPrefix: 'Perfume Vanilla:',
 }});
+*/
 
 @NgModule({
   declarations: [
