@@ -7,11 +7,17 @@
 import { BrowserInfo, detect } from './detect-browser';
 import { IdleQueue } from './idle-queue';
 
-import Performance from './performance';
+import Performance, {
+  IMetricEntry,
+  IPerformanceEntry,
+  IPerformanceObserverType,
+  IPerfumeNavigationTiming,
+} from './performance';
 
 export interface IAnalyticsTrackerOptions {
   metricName: string;
-  duration: number;
+  data?: any;
+  duration?: number;
   browser?: BrowserInfo | any;
 }
 
@@ -21,10 +27,10 @@ export interface IPerfumeConfig {
   firstInputDelay: boolean;
   firstPaint: boolean;
   dataConsumption: boolean;
+  navigationTiming: boolean;
   // Analytics
-  analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
+  analyticsTracker: (options: IAnalyticsTrackerOptions) => void;
   browserTracker?: boolean;
-  googleAnalytics: IGoogleAnalyticsConfig;
   // Logging
   logPrefix: string;
   logging: boolean;
@@ -41,10 +47,10 @@ export interface IPerfumeOptions {
   firstInputDelay?: boolean;
   firstPaint?: boolean;
   dataConsumption?: boolean;
+  navigationTiming?: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   browserTracker?: boolean;
-  googleAnalytics?: IGoogleAnalyticsConfig;
   // Logging
   logPrefix?: string;
   logging?: boolean;
@@ -55,20 +61,11 @@ export interface IPerfumeOptions {
   debugging?: boolean;
 }
 
-export interface IGoogleAnalyticsConfig {
-  enable: boolean;
-  timingVar: string;
-}
-
 export interface ILogOptions {
   metricName: string;
-  duration: number;
+  duration?: number;
+  data?: any;
   suffix?: string;
-}
-
-export interface IMetricEntry {
-  start: number;
-  end: number;
 }
 
 export interface IMetricMap {
@@ -83,47 +80,16 @@ export interface IPerfObservers {
   [metricName: string]: any;
 }
 
-export type IPerformanceObserverType =
-  | 'longtask'
-  | 'measure'
-  | 'navigation'
-  | 'paint'
-  | 'resource'
-  | 'first-input';
-
-export type IPerformanceEntryInitiatorType =
-  | 'css'
-  | 'fetch'
-  | 'img'
-  | 'other'
-  | 'script'
-  | 'xmlhttprequest';
-
-export declare interface IPerformanceEntry {
-  decodedBodySize?: number;
-  duration: number;
-  entryType: IPerformanceObserverType;
-  initiatorType?: IPerformanceEntryInitiatorType;
-  name: string;
-  startTime: number;
-}
-
 export interface ISendTimingOptions {
   metricName: string;
-  duration: number;
+  data?: any;
+  duration?: number;
 }
 
 export type IPerfumeMetrics =
   | 'firstContentfulPaint'
   | 'firstPaint'
   | 'firstInputDelay';
-
-declare global {
-  // tslint:disable-next-line:interface-name
-  interface Window {
-    ga: any;
-  }
-}
 
 export default class Perfume {
   config: IPerfumeConfig = {
@@ -132,11 +98,9 @@ export default class Perfume {
     firstPaint: false,
     firstInputDelay: false,
     dataConsumption: false,
+    navigationTiming: false,
     // Analytics
-    googleAnalytics: {
-      enable: false,
-      timingVar: 'name',
-    },
+    analyticsTracker: (options) => {},
     browserTracker: false,
     // Logging
     logPrefix: 'Perfume.js:',
@@ -167,7 +131,7 @@ export default class Perfume {
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
-    this.perf = new Performance(this.config);
+    this.perf = new Performance();
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!Performance.supported()) {
@@ -191,6 +155,18 @@ export default class Perfume {
     // is in a state where it might soon be unloaded.
     // https://philipwalton.com/articles/idle-until-urgent/
     this.queue = new IdleQueue({ ensureTasksRun: true });
+
+    // Log Navigation Timing
+    if (this.config.navigationTiming) {
+      this.logNavigationTiming();
+    }
+  }
+
+  get navigationTiming(): IPerfumeNavigationTiming {
+    if (!this.config.navigationTiming) {
+      return {};
+    }
+    return this.perf.navigationTiming;
   }
 
   /**
@@ -257,7 +233,7 @@ export default class Perfume {
    * Coloring Text in Browser Console
    */
   log(options: ILogOptions): void {
-    const { metricName, duration, suffix } = { suffix: 'ms', ...options };
+    const { metricName, data, duration, suffix } = { suffix: 'ms', ...options };
     // Don't log when page is hidden or has disabled logging
     if (this.isHidden || !this.config.logging) {
       return;
@@ -266,10 +242,15 @@ export default class Perfume {
       this.logWarn(this.logMetricWarn);
       return;
     }
-    const durationMs = duration.toFixed(2);
     const style = 'color: #ff6d00;font-size:11px;';
-    const text = `%c ${this.config.logPrefix} ${metricName} ${durationMs} ${suffix}`;
-    window.console.log(text, style);
+    let text = `%c ${this.config.logPrefix} ${metricName} `;
+    if (duration) {
+      const durationMs = duration.toFixed(2);
+      text += `${durationMs} ${suffix}`;
+      window.console.log(text, style);
+    } else if (data) {
+      window.console.log(text, style, data);
+    } 
   }
 
   /**
@@ -283,14 +264,10 @@ export default class Perfume {
   }
 
   /**
-   * Sends the User timing measure to Google Analytics.
-   * ga('send', 'timing', [timingCategory], [timingVar], [timingValue])
-   * timingCategory: metricName
-   * timingVar: googleAnalytics.timingVar
-   * timingValue: The value of duration rounded to the nearest integer
+   * Sends the User timing measure to analyticsTracker
    */
   sendTiming(options: ISendTimingOptions): void {
-    const { metricName, duration } = options;
+    const { metricName, data, duration } = options;
     // Doesn't send timing when page is hidden
     if (this.isHidden) {
       return;
@@ -298,27 +275,8 @@ export default class Perfume {
     // Get Browser from userAgent
     const browser = this.config.browserTracker ? this.browser : undefined;
     const metricNameWithBrowser = this.addBrowserToMetricName(metricName);
-    // Send metric to custom Analytics service,
-    // the default choice is Google Analytics
-    if (this.config.analyticsTracker) {
-      this.config.analyticsTracker({ metricName, duration, browser });
-    }
-    // Stop sending timing to GA if not enabled
-    if (!this.config.googleAnalytics.enable) {
-      return;
-    }
-    if (!window.ga) {
-      this.logWarn('Google Analytics has not been loaded');
-      return;
-    }
-    const durationInteger = Math.round(duration);
-    window.ga(
-      'send',
-      'timing',
-      metricNameWithBrowser,
-      this.config.googleAnalytics.timingVar,
-      durationInteger,
-    );
+    // Send metric to custom Analytics service
+    this.config.analyticsTracker({ metricName, data, duration, browser });
   }
 
   private initPerformanceObserver(): void {
@@ -579,6 +537,14 @@ export default class Perfume {
 
     // Sends the metric to an external tracking service
     this.sendTiming({ metricName, duration: duration2Decimal });
+  }
+
+  private logNavigationTiming() {
+    const metricName = 'NavigationTiming';
+    // Logs the metric in the internal console.log
+    this.log({ metricName, data: this.navigationTiming, suffix: '' });
+    // Sends the metric to an external tracking service
+    this.sendTiming({ metricName, data: this.navigationTiming });
   }
 
   /**

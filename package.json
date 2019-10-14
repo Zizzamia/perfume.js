@@ -4,7 +4,6 @@
   "description": "JavaScript library that measures First (Contentful) Paint (FP/FCP) and First Input Delay (FID). Annotates components’ performance for Vanilla and Angular applications, into the DevTools timeline. Reports all the results to Google Analytics or your favorite tracking tool.",
   "keywords": [
     "performance-metrics",
-    "google-analytics",
     "metrics",
     "first-paint",
     "first-contentful-paint",
@@ -13,7 +12,8 @@
     "user-timing",
     "web-performance",
     "webperf",
-    "angular"
+    "angular",
+    "react"
   ],
   "iife": "dist/perfume.iife.min.js",
   "main": "dist/perfume.min.js",

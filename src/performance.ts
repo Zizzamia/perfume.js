@@ -1,10 +1,33 @@
 // Types
-import {
-  IMetricEntry,
-  IPerformanceEntry,
-  IPerformanceObserverType,
-  IPerfumeConfig,
-} from './perfume';
+export interface IMetricEntry {
+  start: number;
+  end: number;
+}
+
+export type IPerformanceObserverType =
+  | 'longtask'
+  | 'measure'
+  | 'navigation'
+  | 'paint'
+  | 'resource'
+  | 'first-input';
+
+export type IPerformanceEntryInitiatorType =
+  | 'css'
+  | 'fetch'
+  | 'img'
+  | 'other'
+  | 'script'
+  | 'xmlhttprequest';
+
+export declare interface IPerformanceEntry {
+  decodedBodySize?: number;
+  duration: number;
+  entryType: IPerformanceObserverType;
+  initiatorType?: IPerformanceEntryInitiatorType;
+  name: string;
+  startTime: number;
+}
 
 export interface IPerformancePaintTiming {
   name: string;
@@ -26,7 +49,19 @@ export interface IPerformanceObserver {
   disconnect: () => void;
 }
 
+export interface IPerfumeNavigationTiming {
+  fetchTime?: number;
+  workerTime?: number;
+  totalTime?: number;
+  downloadTime?: number;
+  timeToFirstByte?: number;
+  headerSize?: number;
+  dnsLookupTime?: number;
+}
+
 export default class Performance {
+  navigationTimingCached: IPerfumeNavigationTiming = {};
+
   /**
    * True if the browser supports the Navigation Timing API,
    * User Timing API and the PerformanceObserver Interface.
@@ -34,9 +69,15 @@ export default class Performance {
    * so the DevTools timeline will not be annotated with marks.
    * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
    * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
+   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
    */
   static supported(): boolean {
-    return window.performance && !!performance.now && !!performance.mark;
+    return (
+      window.performance &&
+      !!performance.getEntriesByType &&
+      !!performance.now &&
+      !!performance.mark
+    );
   }
 
   /**
@@ -50,7 +91,47 @@ export default class Performance {
 
   private perfObserver: any;
 
-  constructor(public config: IPerfumeConfig) {}
+  /**
+   * Navigation Timing API provides performance metrics for HTML documents.
+   * w3c.github.io/navigation-timing/
+   * developers.google.com/web/fundamentals/performance/navigation-and-resource-timing
+   */
+  get navigationTiming(): IPerfumeNavigationTiming {
+    if (
+      !Performance.supported() ||
+      Object.keys(this.navigationTimingCached).length
+    ) {
+      return this.navigationTimingCached;
+    }
+    // There is an open issue to type correctly getEntriesByType
+    // github.com/microsoft/TypeScript/issues/33866
+    const n = performance.getEntriesByType('navigation')[0] as any;
+    // We cache the navigation time for future times
+    this.navigationTimingCached = {
+      // fetchStart marks when the browser starts to fetch a resource
+      // responseEnd is when the last byte of the response arrives
+      fetchTime: parseFloat((n.responseEnd - n.fetchStart).toFixed(2)),
+      // Service worker time plus response time
+      workerTime: parseFloat(
+        (n.workerStart > 0 ? n.responseEnd - n.workerStart : 0).toFixed(2),
+      ),
+      // Request plus response time (network only)
+      totalTime: parseFloat((n.responseEnd - n.requestStart).toFixed(2)),
+      // Response time only (download)
+      downloadTime: parseFloat((n.responseEnd - n.responseStart).toFixed(2)),
+      // Time to First Byte (TTFB)
+      timeToFirstByte: parseFloat(
+        (n.responseStart - n.requestStart).toFixed(2),
+      ),
+      // HTTP header size
+      headerSize: parseFloat((n.transferSize - n.encodedBodySize).toFixed(2)),
+      // Measuring DNS lookup time
+      dnsLookupTime: parseFloat(
+        (n.domainLookupEnd - n.domainLookupStart).toFixed(2),
+      ),
+    };
+    return this.navigationTimingCached;
+  }
 
   /**
    * When performance API available

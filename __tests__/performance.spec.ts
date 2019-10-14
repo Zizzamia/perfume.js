@@ -1,5 +1,4 @@
-import Performance from '../src/performance';
-import { IPerformanceEntry, IPerfumeConfig } from '../src/perfume';
+import Performance, { IPerformanceEntry } from '../src/performance';
 import mock from './_mock';
 
 describe('Performance', () => {
@@ -7,9 +6,7 @@ describe('Performance', () => {
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
-    service = new Performance({
-      ...mock.defaultPerfumeConfig,
-    } as IPerfumeConfig);
+    service = new Performance();
     mock.performance();
     (window as any).PerformanceObserver = mock.PerformanceObserver;
   });
@@ -35,6 +32,32 @@ describe('Performance', () => {
       window.performance.mark = () => 1;
       delete window.performance.now;
       expect(Performance.supported()).toEqual(false);
+    });
+  });
+
+  describe('.navigationTiming()', () => {
+    it('when performance is not supported should return an empty object', () => {
+      delete window.performance.mark;
+      expect(service.navigationTiming).toEqual({});
+    });
+
+    it('when performance is supported should return the correct value', () => {
+      expect(service.navigationTiming).toEqual({
+        dnsLookupTime: 0,
+        downloadTime: 0.69,
+        fetchTime: 4.44,
+        headerSize: 0,
+        timeToFirstByte: 3.75,
+        totalTime: 4.44,
+        workerTime: 4.44,
+      });
+    });
+
+    it('when workerStart is 0 should return 0', () => {
+      jest.spyOn(window.performance, 'getEntriesByType').mockReturnValue([{
+        workerTime: 0,
+      }] as any);
+      expect(service.navigationTiming.workerTime).toEqual(0);
     });
   });
 

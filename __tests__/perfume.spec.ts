@@ -33,23 +33,19 @@ describe('Perfume', () => {
     const instance = new Perfume();
 
     it('should be defined', () => {
-      expect(instance.config).toEqual({
-        firstContentfulPaint: false,
-        firstPaint: false,
-        firstInputDelay: false,
-        dataConsumption: false,
-        browserTracker: false,
-        googleAnalytics: {
-          enable: false,
-          timingVar: 'name',
-        },
-        logPrefix: 'Perfume.js:',
-        logging: true,
-        maxMeasureTime: 15000,
-        maxDataConsumption: 20000,
-        warning: false,
-        debugging: false,
-      });
+      expect(instance.config.firstContentfulPaint).toEqual(false);
+      expect(instance.config.firstPaint).toEqual(false);
+      expect(instance.config.firstInputDelay).toEqual(false);
+      expect(instance.config.dataConsumption).toEqual(false);
+      expect(instance.config.navigationTiming).toEqual(false);
+      expect(instance.config.analyticsTracker).toBeDefined();
+      expect(instance.config.browserTracker).toEqual(false);
+      expect(instance.config.logPrefix).toEqual('Perfume.js:');
+      expect(instance.config.logging).toEqual(true);
+      expect(instance.config.maxMeasureTime).toEqual(15000);
+      expect(instance.config.maxDataConsumption).toEqual(20000);
+      expect(instance.config.warning).toEqual(false);
+      expect(instance.config.debugging).toEqual(false);
     });
   });
 
@@ -91,6 +87,18 @@ describe('Perfume', () => {
         firstInputDelay: true,
         dataConsumption: true,
         browserTracker: true,
+        warning: true,
+        debugging: true,
+      });
+    });
+
+    it('should run with config version E', () => {
+      new Perfume({
+        firstContentfulPaint: true,
+        firstPaint: true,
+        firstInputDelay: true,
+        dataConsumption: true,
+        navigationTiming: true,
         warning: true,
         debugging: true,
       });
@@ -285,6 +293,17 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(text, style);
     });
+
+    it('should call window.console.log() with data', () => {
+      const data = {};
+      perfume.config.logging = true;
+      spy = jest.spyOn(window.console, 'log');
+      perfume.log({ metricName: 'metricName', data });
+      const text = '%c Perfume.js: metricName ';
+      const style = 'color: #ff6d00;font-size:11px;';
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(text, style, data);
+    });
   });
 
   describe('.logDebug()', () => {
@@ -323,29 +342,6 @@ describe('Perfume', () => {
         metricName: 'metricName',
         duration: 123,
       });
-    });
-
-    it('should not call global.logWarn() if googleAnalytics is disable', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      (perfume as any).sendTiming('metricName', 10);
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should call global.logWarn() if googleAnalytics is disable with the correct arguments', () => {
-      perfume.config.googleAnalytics.enable = true;
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      (perfume as any).sendTiming('metricName', 10);
-      const text = 'Google Analytics has not been loaded';
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text);
-    });
-
-    it('should not call global.logWarn() if googleAnalytics is enable and ga is present', () => {
-      perfume.config.googleAnalytics.enable = true;
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      window.ga = () => true;
-      (perfume as any).sendTiming('metricName', 123);
-      expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call analyticsTracker with the browse Object when browserTracker is true', () => {
@@ -848,6 +844,29 @@ describe('Perfume', () => {
     it('should perfume.firstInputDelayDuration be equal to duration', () => {
       (perfume as any).logMetric(2, 'First Input Delay', 'firstInputDelay');
       expect(perfume.firstInputDelayDuration).toEqual(2);
+    });
+  });
+
+  describe('.logNavigationTiming()', () => {
+    it('should call log() with the correct arguments', () => {
+      spy = jest.spyOn(perfume, 'log');
+      (perfume as any).logNavigationTiming();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith({
+        metricName: 'NavigationTiming',
+        data: {},
+        suffix: '',
+      });
+    });
+
+    it('should call sendTiming() with the correct arguments', () => {
+      spy = jest.spyOn(perfume, 'sendTiming');
+      (perfume as any).logNavigationTiming();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith({
+        metricName: 'NavigationTiming',
+        data: {},
+      });
     });
   });
 

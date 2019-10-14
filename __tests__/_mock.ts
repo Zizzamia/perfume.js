@@ -53,6 +53,45 @@ export default {
         { duration: 12345, entryType: 'measure' },
         { duration: 12346, entryType: 'measure' },
       ],
+      getEntriesByType: (entryType: string) => {
+        if (entryType === 'navigation') {
+          return [{
+            connectEnd: 1.7850000876933336,
+            connectStart: 1.7850000876933336,
+            decodedBodySize: 0,
+            domComplete: 1371.8750001862645,
+            domContentLoadedEventEnd: 613.175000064075,
+            domContentLoadedEventStart: 613.175000064075,
+            domInteractive: 613.1550001446158,
+            domainLookupEnd: 1.7850000876933336,
+            domainLookupStart: 1.7850000876933336,
+            duration: 1378.7500001490116,
+            encodedBodySize: 0,
+            entryType: 'navigation',
+            fetchStart: 1.7850000876933336,
+            initiatorType: "navigation",
+            loadEventEnd: 1378.7500001490116,
+            loadEventStart: 1378.5850000567734,
+            name: "https://developers.google.com",
+            nextHopProtocol: "",
+            redirectCount: 0,
+            redirectEnd: 0,
+            redirectStart: 0,
+            requestStart: 1.7850000876933336,
+            responseEnd: 6.2200000975281,
+            responseStart: 5.530000198632479,
+            secureConnectionStart: 0,
+            serverTiming: [],
+            startTime: 0,
+            transferSize: 0,
+            type: "reload",
+            unloadEventEnd: 10.075000114738941,
+            unloadEventStart: 8.545000106096268,
+            workerStart: 1.7850000876933336,
+          }]
+        }
+        return [];
+      },
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark
       mark: () => 12345,
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure
@@ -73,11 +112,7 @@ export default {
     firstContentfulPaint: false,
     firstPaint: false,
     firstInputDelay: false,
-    analyticsTracker: undefined,
-    googleAnalytics: {
-      enable: false,
-      timingVar: 'name',
-    },
+    analyticsTracker: jest.fn(),
     logPrefix: 'Perfume.js:',
     logging: true,
     warning: false,
