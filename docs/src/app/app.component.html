@@ -210,7 +210,7 @@ perfume.<span class="violet">end</span>('fibonacci');
 perfume.<span class="blue">start</span>('fibonacci');
 <span class="violet">fibonacci</span>(<span class="blue">400</span>);
 <span class="red">const</span> duration <span class="red">=</span> perfume.<span class="violet">end</span>('fibonacci');
-perfume.<span class="violet">log</span>({ metricName: 'Custom logging', duration });
+perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', duration {{'}'}});
 <span class="gray">// 🍹 HayesValley.js: Custom logging 0.14 ms</span></pre>
               </td>
             </tr>
@@ -362,7 +362,7 @@ perfume.<span class="violet">log</span>({ metricName: 'Custom logging', duration
       </div>
 
     <div class="box">
-      <h2 class="box-title">Analytics</h2>
+      <h2 class="box-title" id="/analytics/">Analytics</h2>
     </div>
 
     <div class="box">
@@ -373,7 +373,7 @@ perfume.<span class="violet">log</span>({ metricName: 'Custom logging', duration
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({ metricName, data, duration, browser }) => {{'{'}}
+  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data, duration, browser {{'}'}}) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, duration, browser.name, browser.os);
   {{'}'}})
 {{'}'}});</pre>
@@ -406,7 +406,7 @@ perfume.<span class="violet">log</span>({ metricName: 'Custom logging', duration
   dataConsumption<span class="red">:</span> <span class="blue">false</span>,
   navigationTiming<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Analytics</span>
-  analyticsTracker<span class="red">:</span> options => {},
+  analyticsTracker<span class="red">:</span> options => {{'{}'}},
   browserTracker<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Logging</span>
   logPrefix<span class="red">:</span> "Perfume.js:"

@@ -50,12 +50,9 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       [class.active]="navSelected === navOptions.react"
       (click)="activeNav(navOptions.react)">React</a>
       <br />
-      <a href="{{ path }}#/google-analytics/" class="part-three"
-      [class.active]="navSelected === navOptions.ga"
-      (click)="activeNav(navOptions.ga)">Google Analytics</a>
-      <a href="{{ path }}#/analytics-support/" class="part-three"
+      <a href="{{ path }}#/analytics/" class="part-three"
       [class.active]="navSelected === navOptions.as"
-      (click)="activeNav(navOptions.as)">Analytics Support</a>
+      (click)="activeNav(navOptions.as)">Analytics</a>
       <br />
       <a href="{{ path }}#/default-options/" class="part-four"
       [class.active]="navSelected === navOptions.options"
@@ -144,8 +141,7 @@ export class NavigationComponent implements AfterViewInit {
       log: 'custom-logging',
       angular: 'angular',
       react: 'react',
-      ga: 'google-analytics',
-      as: 'analytics-support',
+      as: 'analytics',
       options: 'default-options',
       utilities: 'utilities',
       copyright: 'copyright-and-license',
