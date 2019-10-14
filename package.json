@@ -34,7 +34,7 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "lint": "tslint --project tsconfig.json -t codeFrame 'src/emulated-performance.ts' 'src/perfume.ts' 'src/performance.ts' '__tests__/**/*.ts'",
+    "lint": "tslint --project tsconfig.json -t codeFrame 'src/perfume.ts' 'src/performance.ts' '__tests__/**/*.ts'",
     "prebuild": "rimraf dist",
     "build": "tsc && tsc --module commonjs --outDir dist/lib && rollup -c rollup.config.ts",
     "start": "tsc -w & rollup -c rollup.config.ts -w",

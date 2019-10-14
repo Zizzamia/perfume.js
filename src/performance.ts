@@ -60,8 +60,6 @@ export interface IPerfumeNavigationTiming {
 }
 
 export default class Performance {
-  navigationTimingCached: IPerfumeNavigationTiming = {};
-
   /**
    * True if the browser supports the Navigation Timing API,
    * User Timing API and the PerformanceObserver Interface.
@@ -89,6 +87,7 @@ export default class Performance {
     return (window as any).chrome && 'PerformanceObserver' in window;
   }
 
+  navigationTimingCached: IPerfumeNavigationTiming = {};
   private perfObserver: any;
 
   /**

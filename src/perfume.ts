@@ -250,7 +250,7 @@ export default class Perfume {
       window.console.log(text, style);
     } else if (data) {
       window.console.log(text, style, data);
-    } 
+    }
   }
 
   /**
