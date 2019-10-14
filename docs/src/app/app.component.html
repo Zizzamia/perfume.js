@@ -364,40 +364,6 @@ perfume.<span class="violet">log</span>('Custom logging', duration);
     </div>
 
     <div class="box">
-      <h3 class="box-title" id="/google-analytics/">
-        <a href="{{ path }}#/google-analytics/">Google Analytics</a>
-      </h3>
-      <p>To enable Perfume to send your measures to Google Analytics User timing, set the option
-        <b>enable:true</b> and a custom
-        <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingVar" target="_blank">user timing variable</a> <b>timingVar:"name"</b>.
-      </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  googleAnalytics<span class="red">:</span> {{'{'}}
-    enable<span class="red">:</span> <span class="blue">true</span>,
-    timingVar<span class="red">:</span> "userId"
-  {{'}'}}
-{{'}'}});</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <picture class="box-img">
-        <source srcset="{{ path }}assets/performance-analytics.webp" type="image/webp" />
-        <source srcset="{{ path }}assets/performance-analytics.png" type="image/png" />
-        <img src="{{ path }}assets/performance-analytics.png" alt="Google Analytics User timing" />
-      </picture>
-    </div>
-
-    <div class="box">
-      <h3 class="box-title" id="/analytics-support/">
-        <a href="{{ path }}#/analytics-support/">Generic analytics platform support</a>
-      </h3>
       <p>Configurable analytics callback to use Perfume.js with any platform.</p>
       <div class="box-code js">
         <table>
@@ -480,7 +446,7 @@ perfume.firstInputDelayDuration;
 <span class="blue">const</span> durationFCP <span class="red">= await</span> perfume.<span class="blue">observeFirstContentfulPaint</span>;
 <span class="blue">const</span> durationFID <span class="red">= await</span> perfume.<span class="blue">observeFirstInputDelay</span>;
 
-<span class="gray">// Send Custom User timing measure to Google Analytics</span>
+<span class="gray">// Send Custom User timing measure to your Analytics Tracker</span>
 perfume.<span class="blue">sendTiming</span>(metricName, durationFCP);</pre>
               </td>
             </tr>

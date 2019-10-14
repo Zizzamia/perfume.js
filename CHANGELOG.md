@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.0.0 (2019-10-14)
+
+* **feat:** added Navigation Timing [#83](https://github.com/Zizzamia/perfume.js/issues/83)
+* **feat:** added more flexibility for log, sendTiming and analyticsTracker arguments [#70](https://github.com/Zizzamia/perfume.js/issues/70)
+* **feat:** Added initial support for Data Consumption [#85](https://github.com/Zizzamia/perfume.js/issues/85)
+* **feat:** Added support to retrieve buffered FP/FCP events [#81](https://github.com/Zizzamia/perfume.js/issues/81)
+* **feat:** Added support for first-input and removed EmulatedPerformance [#60](https://github.com/Zizzamia/perfume.js/issues/60) [#82](https://github.com/Zizzamia/perfume.js/issues/82)
+* **feat:** Replace Map by plain old objects to support more browsers [#78](https://github.com/Zizzamia/perfume.js/pull/78)
+
+### Breaking Changes
+
+* **refactor:** removed default Google Analytics support, instead analyticsTracker will be the default method to communicate with the backend.
+* **refactor:** log, sendTiming and analyticsTrackerg gets one solo options object instead of the original arguments
+* **refactor:** Dropped support for EmulatedPerformance
+* **feat:** Discard queued tasks if running them as microtasks isn't supported [#77](https://github.com/Zizzamia/perfume.js/pull/77)
+
 ## 3.0.0-rc.11 (2019-10-13)
 
 * **feat:** added Navigation Timing [#83](https://github.com/Zizzamia/perfume.js/issues/83)
