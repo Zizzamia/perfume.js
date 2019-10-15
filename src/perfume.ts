@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v3.0.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v3.0.1 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -173,7 +173,7 @@ export default class Perfume {
    * Start performance measurement
    */
   start(metricName: string): void {
-    if (!this.checkMetricName(metricName)) {
+    if (!this.checkMetricName(metricName) || !Performance.supported()) {
       return;
     }
     if (this.metrics[metricName]) {
@@ -194,7 +194,7 @@ export default class Perfume {
    * End performance measurement
    */
   end(metricName: string): void | number {
-    if (!this.checkMetricName(metricName)) {
+    if (!this.checkMetricName(metricName) || !Performance.supported()) {
       return;
     }
     const metric = this.metrics[metricName];

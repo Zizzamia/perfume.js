@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1 (2019-10-14)
+
+* **fix:** check if `window.performance.mark` is supported when used `.start()` or `.end()` 
+
 ## 3.0.0 (2019-10-14)
 
 * **feat:** added Navigation Timing [#83](https://github.com/Zizzamia/perfume.js/issues/83)
@@ -12,8 +16,8 @@
 ### Breaking Changes
 
 * **refactor:** removed default Google Analytics support, instead analyticsTracker will be the default method to communicate with the backend.
-* **refactor:** log, sendTiming and analyticsTrackerg gets one solo options object instead of the original arguments
-* **refactor:** Dropped support for EmulatedPerformance
+* **refactor:** `log`, `sendTiming` and `analyticsTracker` gets one solo options object instead of the original arguments
+* **refactor:** Dropped support for **EmulatedPerformance**
 * **feat:** Discard queued tasks if running them as microtasks isn't supported [#77](https://github.com/Zizzamia/perfume.js/pull/77)
 
 ## 3.0.0-rc.11 (2019-10-13)
@@ -26,11 +30,11 @@
 
 ## 3.0.0-rc.10 (2019-9-29)
 
-* **feat:** added more flexibility for log, sendTiming and analyticsTracker arguments [#70](https://github.com/Zizzamia/perfume.js/issues/70)
+* **feat:** added more flexibility for log, `sendTiming` and `analyticsTracker` arguments [#70](https://github.com/Zizzamia/perfume.js/issues/70)
 
 ### Breaking Changes
 
-* **refactor:** log, sendTiming and analyticsTrackerg gets one solo options object instead of the original arguments
+* **refactor:** `log`, `sendTiming` and `analyticsTracker` gets one solo options object instead of the original arguments
 
 ## 3.0.0-rc.5 (2019-9-26)
 
