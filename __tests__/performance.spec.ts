@@ -59,6 +59,11 @@ describe('Performance', () => {
       }] as any);
       expect(service.navigationTiming.workerTime).toEqual(0);
     });
+
+    it('when Navigation Timing is not supported yet should return an empty object', () => {
+      jest.spyOn(window.performance, 'getEntriesByType').mockReturnValue([] as any);
+      expect(service.navigationTiming).toEqual({});
+    });
   });
 
   describe('.now()', () => {

@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v3.0.1 (http://zizzamia.github.io/perfume)
+ * Perfume.js v3.0.2 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license

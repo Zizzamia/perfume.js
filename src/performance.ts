@@ -105,6 +105,10 @@ export default class Performance {
     // There is an open issue to type correctly getEntriesByType
     // github.com/microsoft/TypeScript/issues/33866
     const n = performance.getEntriesByType('navigation')[0] as any;
+    // In Safari version 11.2 Navigation Timing isn't supported yet
+    if (!n) {
+      return this.navigationTimingCached;
+    }
     // We cache the navigation time for future times
     this.navigationTimingCached = {
       // fetchStart marks when the browser starts to fetch a resource
