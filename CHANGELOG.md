@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.2 (2019-10-14)
+
+* **fix:** added check in case Navigation Timing is not supported
+
 ## 3.0.1 (2019-10-14)
 
 * **fix:** check if `window.performance.mark` is supported when used `.start()` or `.end()` 
