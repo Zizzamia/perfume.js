@@ -13,6 +13,7 @@ import Performance, {
   IPerformanceObserverType,
   IPerfumeNavigationTiming,
 } from './performance';
+import { classBody } from '@babel/types';
 
 export interface IAnalyticsTrackerOptions {
   metricName: string;
@@ -209,7 +210,7 @@ export default class Perfume {
     const duration = this.perf.measure(metricName, metric);
     const duration2Decimal = parseFloat(duration.toFixed(2));
     delete this.metrics[metricName];
-    this.queue.pushTask(() => {
+    this.pushTask(() => {
       // Log to console, delete metric and send to analytics tracker
       this.log({ metricName, duration: duration2Decimal });
       this.sendTiming({ metricName, duration: duration2Decimal });
@@ -354,7 +355,7 @@ export default class Perfume {
   }): void {
     this.logDebug('performanceObserverCb', options);
     options.entries.forEach((performanceEntry: IPerformanceEntry) => {
-      this.queue.pushTask(() => {
+      this.pushTask(() => {
         if (
           this.config[options.metricName] &&
           (!options.entryName ||
@@ -556,5 +557,19 @@ export default class Perfume {
       return;
     }
     window.console.warn(this.config.logPrefix, message);
+  }
+
+  /**
+   * Prevents cases when queue or pushTask is undefined.
+   * Could happen for old browsers or hot-reloading
+   */
+  private pushTask(cb: any): void {
+    if (this.queue && this.queue.pushTask) {
+      this.queue.pushTask(() => {
+        cb();
+      });
+    } else {
+      cb();
+    }
   }
 }
