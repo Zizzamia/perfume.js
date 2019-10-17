@@ -13,7 +13,6 @@ import Performance, {
   IPerformanceObserverType,
   IPerfumeNavigationTiming,
 } from './performance';
-import { classBody } from '@babel/types';
 
 export interface IAnalyticsTrackerOptions {
   metricName: string;
