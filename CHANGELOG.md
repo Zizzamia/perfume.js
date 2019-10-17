@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.3 (2019-10-17)
+
+* **fix:**  pushTask is undefined during hot-reloading [#88](https://github.com/Zizzamia/perfume.js/issues/88)
+
 ## 3.0.2 (2019-10-14)
 
 * **fix:** added check in case Navigation Timing is not supported
