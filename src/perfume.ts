@@ -100,7 +100,7 @@ export default class Perfume {
     dataConsumption: false,
     navigationTiming: false,
     // Analytics
-    analyticsTracker: options => { },
+    analyticsTracker: options => {},
     browserTracker: false,
     // Logging
     logPrefix: 'Perfume.js:',
