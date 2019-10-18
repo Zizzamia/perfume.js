@@ -73,6 +73,39 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
+      <h3 class="box-title" id="/navigation-timing/">
+        <a href="{{ path }}#/navigation-timing/">
+          Navigation Timing
+        </a>
+      </h3>
+      <p>Navigation Timing collects performance metrics for the life and timings of a network request.</p>
+      <p>Perfume helps expose some of the key metrics you might need.</p>
+      <ul>
+        <li><b>DNS lookup</b>: When a user requests a URL, the Domain Name System (DNS) is queried to translate a domain to an IP address.</li>
+        <li>...</li>
+        <li><b>Time to First Byte</b>: The amount of time it takes after the client sends an HTTP GET request to receive the first byte of the requested resource from the server.
+          It is the largest web page load time component taking 40 to 60% of total web page latency.</li>
+      </ul>
+      <p class="box-demo">
+        Perfume.js: NavigationTiming {{ perfume.navigationTiming | json }}
+      </p>
+      <div class="box-code js">
+        <table>
+          <tbody>
+            <tr>
+              <td class="code">
+                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
+  navigationTiming<span class="red">:</span> <span class="blue">true</span>
+{{'}'}});
+<span class="gray">// Perfume.js: NavigationTiming {{'{'}} ... timeToFirstByte: 192.65 {{'}'}}</span></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box">
       <h3 class="box-title" id="/first-paint/">
         <a href="{{ path }}#/first-paint/">
           First Paint (FP)

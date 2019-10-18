@@ -21,6 +21,9 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       [class.active]="navSelected === navOptions.installing"
       (click)="activeNav(navOptions.installing)">Installing and Imports</a>
       <br />
+      <a href="{{ path }}#/navigation-timing/" class="part-two"
+      [class.active]="navSelected === navOptions.navTime"
+      (click)="activeNav(navOptions.navTime)">Navigation Timing</a>
       <a href="{{ path }}#/first-paint/" class="part-two"
       [class.active]="navSelected === navOptions.fp"
       (click)="activeNav(navOptions.fp)">First Paint</a>
@@ -132,6 +135,7 @@ export class NavigationComponent implements AfterViewInit {
     this.navOptions = {
       userCentric: 'user-centric-metrics',
       installing: 'installing-and-imports',
+      navTime: 'navigation-timing',
       fp: 'first-paint',
       fcp: 'first-contentful-paint',
       fid: 'first-input-delay',
@@ -149,7 +153,7 @@ export class NavigationComponent implements AfterViewInit {
     };
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() { }
 
   activeNav(selected) {
     this.navSelected = selected;

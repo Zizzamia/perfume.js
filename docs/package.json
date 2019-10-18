@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -18,13 +18,13 @@
     "@angular/compiler": "8.2.11",
     "@angular/core": "8.2.11",
     "@angular/forms": "8.2.11",
-    "@angular/material": "8.2.1",
+    "@angular/material": "8.2.3",
     "@angular/platform-browser": "8.2.11",
     "@angular/platform-browser-dynamic": "8.2.11",
     "@angular/router": "8.2.11",
     "core-js": "3.1.4",
     "ng-packagr": "5.5.1",
-    "perfume.js": "3.0.2",
+    "perfume.js": "3.0.4",
     "rxjs": "6.5.3",
     "tsickle": "0.35.0",
     "typescript": "3.5.3",

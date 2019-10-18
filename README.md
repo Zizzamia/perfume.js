@@ -1,12 +1,12 @@
 <a href="http://www.perfumejs.com/">
-  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v2-1-2.png" align="left" width="200" />
+  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v3-0-0.png" align="left" width="200" />
 </a>
 
-# [Perfume.js v3.0.3](http://perfumejs.com)
+# [Perfume.js v3.0.4](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
-> A flexible library for measuring <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID), Navigation Timing and components lifecycle performance. Report real user measurements to your favorite analytics tool.
+> A flexible library for measuring <b>Navigation Timing</b>, <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID) and components lifecycle performance. Report real user measurements to your favorite analytics tool.
 
 <br />
 <br />
@@ -27,10 +27,10 @@ English | [简体中文](./README-zh_CN.md)
 
 **Perfume** leverage the latest W3C Performance Drafts (like [PerformanceObserver](https://w3c.github.io/performance-timeline/)), for measuring performance that matters! ⚡️
 
+* Navigation Timing
 * First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Input Delay (FID)
-* Navigation Timing
 * Framework components lifecycle monitoring
 
 ![first paint and first input delay](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-paint-and-first-input-delay.png)

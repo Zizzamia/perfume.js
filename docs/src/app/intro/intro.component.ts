@@ -14,9 +14,9 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <div class="box box--intro" id="/home/">
         <a href="https://github.com/zizzamia/perfume.js" target="_blank">
           <picture class="logo">
-            <source srcset="{{ path }}assets/perfume-logo-v2-1-2.webp" type="image/webp" />
-            <source srcset="{{ path }}assets/perfume-logo-v2-1-2.png" type="image/png" />
-            <img src="{{ path }}assets/perfume-logo-v2-1-2.png" alt="Perfume.js logo" />
+            <source srcset="{{ path }}assets/perfume-logo-v3-0-0.webp" type="image/webp" />
+            <source srcset="{{ path }}assets/perfume-logo-v3-0-0.png" type="image/png" />
+            <img src="{{ path }}assets/perfume-logo-v3-0-0.png" alt="Perfume.js logo" />
           </picture>
         </a>
         <h1 class="title">Perfume.js</h1>
@@ -90,5 +90,5 @@ export class IntroComponent implements AfterViewInit {
     this.path = window.location.href.split('#')[0];
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() { }
 }

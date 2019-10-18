@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v3.0.3 (http://zizzamia.github.io/perfume)
+ * Perfume.js v3.0.4 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -100,7 +100,7 @@ export default class Perfume {
     dataConsumption: false,
     navigationTiming: false,
     // Analytics
-    analyticsTracker: options => {},
+    analyticsTracker: options => { },
     browserTracker: false,
     // Logging
     logPrefix: 'Perfume.js:',
