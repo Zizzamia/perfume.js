@@ -31,7 +31,7 @@ export class NgPerfume {
   firstContentfulPaintDuration = 0;
   firstInputDelayDuration = 0;
   dataConsumption = 0;
-  largestContentfulPaint = 0;
+  largestContentfulPaintDuration = 0;
   observeFirstPaint: Promise<number>;
   observeFirstContentfulPaint: Promise<number>;
   observeFirstInputDelay: Promise<number>;
@@ -44,7 +44,7 @@ export class NgPerfume {
     this.firstPaintDuration = perfume.firstPaintDuration;
     this.firstContentfulPaintDuration = perfume.firstContentfulPaintDuration;
     this.firstInputDelayDuration = perfume.firstInputDelayDuration;
-    this.largestContentfulPaint = perfume.largestContentfulPaint;
+    this.largestContentfulPaintDuration = perfume.largestContentfulPaintDuration;
     this.dataConsumption = perfume.dataConsumption;
     this.observeFirstPaint = perfume.observeFirstPaint;
     this.observeFirstContentfulPaint = perfume.observeFirstContentfulPaint;
