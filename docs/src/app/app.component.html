@@ -159,6 +159,32 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
+      <h3 class="box-title" id="/largest-contentful-paint/">
+        <a href="{{ path }}#/largest-contentful-paint/">
+          Largest Contentful Paint (LCP)
+        </a>
+      </h3>
+      <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
+      <p class="box-demo">
+        Perfume.js: Largest Contentful Paint {{ largestContentfulPaint || 0 }} ms
+      </p>
+      <div class="box-code js">
+        <table>
+          <tbody>
+            <tr>
+              <td class="code">
+                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
+  firstContentfulPaint<span class="red">:</span> <span class="blue">true</span>
+{{'}'}});
+<span class="gray">// Perfume.js: First Contentful Paint 2029.00 ms</span></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box">
       <h3 class="box-title" id="/first-input-delay/">
         <a href="{{ path }}#/first-input-delay/">First Input Delay (FID)</a>
       </h3>
@@ -437,6 +463,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
   firstPaint<span class="red">:</span> <span class="blue">false</span>,
   firstInputDelay<span class="red">:</span> <span class="blue">false</span>,
   dataConsumption<span class="red">:</span> <span class="blue">false</span>,
+  largestContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
   navigationTiming<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Analytics</span>
   analyticsTracker<span class="red">:</span> options => {{'{}'}},

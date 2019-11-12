@@ -7,5 +7,8 @@
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
+  ],
+  "plugin": [
+    { "transform": "ts-transformer-keys/transformer" }
   ]
 }

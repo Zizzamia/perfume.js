@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 
 import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ export class AppComponent implements AfterViewInit {
   firstPaint: number;
   firstContentfulPaint: number;
   firstInputDelay: number;
+  largestContentfulPaint: number;
   path: string;
 
   constructor(
@@ -33,6 +35,7 @@ export class AppComponent implements AfterViewInit {
     this.observeFP();
     this.observeFCP();
     this.observeFID();
+    this.observeLCP();
     this.path = window.location.href.split('#')[0];
   }
 
@@ -65,6 +68,11 @@ export class AppComponent implements AfterViewInit {
 
   private async observeFID() {
     this.firstInputDelay = await this.perfume.observeFirstInputDelay;
+    this.ref.detectChanges();
+  }
+
+  private async observeLCP() {
+    this.largestContentfulPaint = await this.perfume.observeLargestContentfulPaint;
     this.ref.detectChanges();
   }
 
