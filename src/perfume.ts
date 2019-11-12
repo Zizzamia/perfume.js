@@ -103,7 +103,7 @@ export default class Perfume {
     largestContentfulPaint: false,
     navigationTiming: false,
     // Analytics
-    analyticsTracker: options => { },
+    analyticsTracker: options => {},
     browserTracker: false,
     // Logging
     logPrefix: 'Perfume.js:',
@@ -447,8 +447,10 @@ export default class Perfume {
       metricName: 'firstInputDelay',
       valueLog: 'duration',
     });
-    if (this.config.largestContentfulPaint &&
-      this.largestContentfulPaintDuration) {
+    if (
+      this.config.largestContentfulPaint &&
+      this.largestContentfulPaintDuration
+    ) {
       this.logMetric(
         this.largestContentfulPaintDuration,
         'Largest Contentful Paint',
