@@ -464,8 +464,9 @@ export default class Perfume {
    * `Timing-Allow-Origin` header.)
    */
   private digestLargestContentfulPaint(entries: IPerformanceEntry[]): void {
-    const lastEntry = entries[entries.length - 1];
-    this.largestContentfulPaintDuration = lastEntry.renderTime || lastEntry.loadTime;
+    const lastPerformanceEntry = entries[entries.length - 1];
+    this.largestContentfulPaintDuration =
+      lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
   }
 
   private initFirstInputDelay(): void {
