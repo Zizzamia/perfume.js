@@ -12,7 +12,7 @@ export type IPerformanceObserverType =
   | 'navigation'
   | 'paint'
   | 'resource';
-  
+
 export type IPerformanceEntryInitiatorType =
   | 'css'
   | 'fetch'
