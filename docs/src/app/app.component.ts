@@ -35,7 +35,7 @@ export class AppComponent implements AfterViewInit {
     this.observeFP();
     this.observeFCP();
     this.observeFID();
-    //this.observeLCP();
+    this.observeLCP();
     this.path = window.location.href.split('#')[0];
   }
 
@@ -72,7 +72,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   private async observeLCP() {
-    // this.largestContentfulPaint = await this.perfume.largestContentfulPaintDuration;
+    this.largestContentfulPaint = await this.perfume.largestContentfulPaintDuration;
     this.ref.detectChanges();
   }
 
