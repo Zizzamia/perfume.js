@@ -10,6 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
     "declarationDir": "dist/types",
     "outDir": "dist/es",
     "typeRoots": [

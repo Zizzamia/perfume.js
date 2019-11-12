@@ -10,7 +10,6 @@ import { IdleQueue } from './idle-queue';
 import Performance, {
   IMetricEntry,
   IPerformanceEntry,
-  IPerformanceObserverType,
   IPerfumeNavigationTiming,
 } from './performance';
 
