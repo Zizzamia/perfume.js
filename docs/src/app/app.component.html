@@ -82,7 +82,11 @@ npm install perfume.js --save-dev
       <p>Perfume helps expose some of the key metrics you might need.</p>
       <ul>
         <li><b>DNS lookup</b>: When a user requests a URL, the Domain Name System (DNS) is queried to translate a domain to an IP address.</li>
-        <li>...</li>
+        <li><b>Header size</b>: HTTP header size</li>
+        <li><b>Fetch time</b>: Cache seek plus response time</li>
+        <li><b>Worker time</b>: Service worker time plus response time</li>
+        <li><b>Total time</b>: Request plus response time (network only)</li>
+        <li><b>Download time</b>: Response time only (download)</li>
         <li><b>Time to First Byte</b>: The amount of time it takes after the client sends an HTTP GET request to receive the first byte of the requested resource from the server.
           It is the largest web page load time component taking 40 to 60% of total web page latency.</li>
       </ul>
@@ -114,7 +118,7 @@ npm install perfume.js --save-dev
       <p>FP is the exact time the browser renders anything as visually different from what was
       on the screen before navigation, e.g. a background change after a long blank white screen time.</p>
       <p class="box-demo">
-        Perfume.js: First Paint {{ observeFirstPaint || 0 }} ms
+        Perfume.js: First Paint {{ (perfume.observeFirstPaint | async) || 0 }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -140,7 +144,7 @@ npm install perfume.js --save-dev
       </h3>
       <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
       <p class="box-demo">
-        Perfume.js: First Contentful Paint {{ firstContentfulPaint || 0 }} ms
+        Perfume.js: First Contentful Paint {{ (perfume.observeFirstContentfulPaint | async) || 0 }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -164,9 +168,12 @@ npm install perfume.js --save-dev
           Largest Contentful Paint (LCP)
         </a>
       </h3>
-      <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
+      <p>Largest Contentful Paint (LCP) is an important, 
+        user-centric metric for measuring perceived load speed because 
+        it marks the point in the page load timeline when the page's main 
+        content has likely loaded—a fast LCP helps reassure the user that the page is useful.</p>
       <p class="box-demo">
-        Perfume.js: Largest Contentful Paint {{ largestContentfulPaint || 0 }} ms
+        Perfume.js: Largest Contentful Paint {{ (perfume.observeLargestContentfulPaint | async) || 0 }} ms
       </p>
       <div class="box-code js">
         <table>
@@ -174,9 +181,9 @@ npm install perfume.js --save-dev
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  firstContentfulPaint<span class="red">:</span> <span class="blue">true</span>
+  largestContentfulPaint<span class="red">:</span> <span class="blue">true</span>
 {{'}'}});
-<span class="gray">// Perfume.js: First Contentful Paint 2029.00 ms</span></pre>
+<span class="gray">// Perfume.js: Largest Contentful Paint 2429.00 ms</span></pre>
               </td>
             </tr>
           </tbody>
@@ -504,7 +511,9 @@ perfume.firstContentfulPaintDuration;
 perfume.firstInputDelayDuration;
 
 <span class="gray">// Async/Await Values (don't forget to use "async" with "await")</span>
+<span class="blue">const</span> durationFP <span class="red">= await</span> perfume.<span class="blue">observeFirstPaint</span>;
 <span class="blue">const</span> durationFCP <span class="red">= await</span> perfume.<span class="blue">observeFirstContentfulPaint</span>;
+<span class="blue">const</span> durationLCP <span class="red">= await</span> perfume.<span class="blue">observeLargestContentfulPaint</span>;
 <span class="blue">const</span> durationFID <span class="red">= await</span> perfume.<span class="blue">observeFirstInputDelay</span>;
 
 <span class="gray">// Send Custom User timing measure to your Analytics Tracker</span>
@@ -555,7 +564,7 @@ perfume.<span class="blue">sendTiming</span>(metricName, durationFCP);</pre>
         <div>
           <h3>Leonardo Zizzamia</h3>
           <h4>
-            🌕Web Tech Lead at <a href="https://www.coinbase.com" target="_blank">Coinbase</a> ☁️✨<br />
+            🌕 Web Tech Lead at <a href="https://www.coinbase.com" target="_blank">Coinbase</a> ☁️✨<br />
             Continuous learning about DApps and web performance ✨🔭<br />
             Curator of <a href="https://www.twitter.com/NGRomeConf" target="_blank">@NGRomeConf</a> & 
             <a href="https://www.twitter.com/AngularSF" target="_blank">@AngularSF</a>

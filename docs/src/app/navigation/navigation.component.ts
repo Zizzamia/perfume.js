@@ -30,6 +30,9 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <a href="{{ path }}#/first-contentful-paint/" class="part-two"
       [class.active]="navSelected === navOptions.fcp"
       (click)="activeNav(navOptions.fcp)">First Contentful Paint</a>
+      <a href="{{ path }}#/largest-contentful-paint/" class="part-two"
+      [class.active]="navSelected === navOptions.lcp"
+      (click)="activeNav(navOptions.lcp)">Largest Contentful Paint</a>
       <a href="{{ path }}#/first-input-delay/" class="part-two"
       [class.active]="navSelected === navOptions.fid"
       (click)="activeNav(navOptions.fid)">First Input Delay</a>
@@ -138,6 +141,7 @@ export class NavigationComponent implements AfterViewInit {
       navTime: 'navigation-timing',
       fp: 'first-paint',
       fcp: 'first-contentful-paint',
+      lcp: 'largest-contentful-paint',
       fid: 'first-input-delay',
       tti: 'time-to-interactive',
       cfp: 'component-first-paint',

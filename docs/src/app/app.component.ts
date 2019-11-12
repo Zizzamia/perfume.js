@@ -31,12 +31,11 @@ export class AppComponent implements AfterViewInit {
     private zone: NgZone,
     public perfume: NgPerfume,
   ) {
-    // Perfume
-    this.observeFP();
-    this.observeFCP();
-    this.observeFID();
-    this.observeLCP();
     this.path = window.location.href.split('#')[0];
+    perfume.observeFirstInputDelay.then((result) => {
+      this.firstInputDelay = result;
+      this.ref.detectChanges();
+    });
   }
 
   ngAfterViewInit() {}
@@ -54,26 +53,6 @@ export class AppComponent implements AfterViewInit {
     const duration = this.perfume.end('fibonacci') as number;
     this.perfume.log({ metricName: 'Custom logging', duration });
     this.logCustom = `🍹 HayesValley.js: Custom logging ${duration} ms`;
-  }
-
-  private async observeFP() {
-    this.firstPaint = await this.perfume.observeFirstPaint;
-    this.ref.detectChanges();
-  }
-
-  private async observeFCP() {
-    this.firstContentfulPaint = await this.perfume.observeFirstContentfulPaint;
-    this.ref.detectChanges();
-  }
-
-  private async observeFID() {
-    this.firstInputDelay = await this.perfume.observeFirstInputDelay;
-    this.ref.detectChanges();
-  }
-
-  private async observeLCP() {
-    this.largestContentfulPaint = await this.perfume.largestContentfulPaintDuration;
-    this.ref.detectChanges();
   }
 
   /**

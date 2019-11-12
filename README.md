@@ -2,11 +2,11 @@
   <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v3-0-0.png" align="left" width="200" />
 </a>
 
-# [Perfume.js v3.1.3](http://perfumejs.com)
+# [Perfume.js v3.1.5](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
-> A flexible library for measuring <b>Navigation Timing</b>, <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>First Input Delay</b> (FID) and components lifecycle performance. Report real user measurements to your favorite analytics tool.
+> A flexible library for measuring <b>Navigation Timing</b>, <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>Largest Contentful Paint</b> (LCP), <b>First Input Delay</b> (FID) and components lifecycle performance. Report real user measurements to your favorite analytics tool.
 
 <br />
 <br />
@@ -58,6 +58,28 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 
 ## Start measuring
 
+### Navigation Timing
+Navigation Timing collects performance metrics for the life and timings of a network request.
+Perfume helps expose some of the key metrics you might need.
+
+<ul>
+  <li><b>DNS lookup</b>: When a user requests a URL, the Domain Name System (DNS) is queried to translate a domain to an IP address.</li>
+  <li><b>Header size</b>: HTTP header size</li>
+  <li><b>Fetch time</b>: Cache seek plus response time</li>
+  <li><b>Worker time</b>: Service worker time plus response time</li>
+  <li><b>Total time</b>: Request plus response time (network only)</li>
+  <li><b>Download time</b>: Response time only (download)</li>
+  <li><b>Time to First Byte</b>: The amount of time it takes after the client sends an HTTP GET request to receive the first byte of the requested resource from the server.
+    It is the largest web page load time component taking 40 to 60% of total web page latency.</li>
+</ul>
+
+```javascript
+const perfume = new Perfume({
+  navigationTiming: true
+});
+// Perfume.js: NavigationTiming {{'{'}} ... timeToFirstByte: 192.65 {{'}'}}
+```
+
 ### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 
 **FP** is the exact time the browser renders anything as visually different from what was on the screen before navigation, e.g. a background change after a long blank white screen time.
@@ -78,6 +100,19 @@ const perfume = new Perfume({
   firstContentfulPaint: true
 });
 // Perfume.js: First Contentful Paint 2029.00 ms
+```
+
+### Largest Contentful Paint (LCP)
+
+Largest Contentful Paint (LCP) is an important, user-centric metric for measuring 
+perceived load speed because it marks the point in the page load timeline when the page's main 
+content has likely loaded—a fast LCP helps reassure the user that the page is useful.
+
+```javascript
+const perfume = new Perfume({
+  largestContentfulPaint: true
+});
+// Perfume.js: Largest Contentful Paint 2429.00 ms
 ```
 
 ### First Input Delay (FID)
@@ -291,7 +326,7 @@ perfume.firstInputDelayDuration;
 const durationFCP = await perfume.observeFirstContentfulPaint;
 const durationFID = await perfume.observeFirstInputDelay;
 
-// Send Custom User timing measure to Google Analytics
+// Send Custom User timing measure to your Analytics Tracker
 perfume.sendTiming(metricName, durationFCP);
 ```
 <br />

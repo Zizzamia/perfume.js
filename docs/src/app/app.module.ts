@@ -33,7 +33,6 @@ export const PerfumeConfig = {
 
 /*
 new Perfume({ ...PerfumeConfig, ...{
-  navigationTiming: true,
   pageResource: true,
   logPrefix: 'Perfume Vanilla:',
 }});

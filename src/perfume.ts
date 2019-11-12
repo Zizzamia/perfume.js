@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v3.1.3 (http://zizzamia.github.io/perfume)
+ * Perfume.js v3.1.5 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -103,7 +103,7 @@ export default class Perfume {
     largestContentfulPaint: false,
     navigationTiming: false,
     // Analytics
-    analyticsTracker: options => {},
+    analyticsTracker: options => { },
     browserTracker: false,
     // Logging
     logPrefix: 'Perfume.js:',
@@ -447,10 +447,11 @@ export default class Perfume {
       metricName: 'firstInputDelay',
       valueLog: 'duration',
     });
-    if (this.config.largestContentfulPaint) {
+    if (this.config.largestContentfulPaint &&
+      this.largestContentfulPaintDuration) {
       this.logMetric(
         this.largestContentfulPaintDuration,
-        'Largest ontentful Paint',
+        'Largest Contentful Paint',
         'largestContentfulPaint',
       );
     }
@@ -560,7 +561,6 @@ export default class Perfume {
     ) {
       return;
     }
-
     // Save metrics in Duration property
     if (metricName === 'firstPaint') {
       this.firstPaintDuration = duration2Decimal;
