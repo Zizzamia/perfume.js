@@ -29,12 +29,13 @@ export const PerfumeConfig = {
   navigationTiming: true,
   analyticsTracker,
   browserTracker: true,
+  debugging: true,
 };
 
 /*
 new Perfume({ ...PerfumeConfig, ...{
   pageResource: true,
-  logPrefix: 'Perfume Vanilla:',
+  logPrefix: 'Vanilla',
 }});
 */
 

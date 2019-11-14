@@ -20,7 +20,7 @@
 - 🔭 浏览器跟踪器内置
 - 🤙 支持 async/await 语法
 - 🛰 灵活的跟踪工具
-- ⚡️ 内置[Idle Until Urgent](https://philipwalton.com/articles/idle-until-urgent/)策略，0 毫秒浪费
+- ⚡️ 内置[requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback)策略，0 毫秒浪费
 
 ## 以用户为中心的性能指标
 

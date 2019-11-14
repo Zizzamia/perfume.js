@@ -20,7 +20,7 @@ English | [简体中文](./README-zh_CN.md)
 - 🔭 Browser tracker built-in
 - 🤙 Support for async/await syntax
 - 🛰 Flexible analytics tool
-- ⚡️ Waste-zero ms with [Idle Until Urgent](https://philipwalton.com/articles/idle-until-urgent/) strategy built-in
+- ⚡️ Waste-zero ms with [requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback) strategy built-in
 <br />
 
 ## User-centric performance metrics

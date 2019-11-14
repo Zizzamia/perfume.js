@@ -5,7 +5,6 @@
  * @license
  */
 import { BrowserInfo, detect } from './detect-browser';
-import { IdleQueue } from './idle-queue';
 
 import Performance, {
   IMetricEntry,
@@ -126,7 +125,6 @@ export default class Perfume {
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
   private logMetricWarn = 'Please provide a metric name';
-  private queue: any;
   private metrics: IMetricMap = {};
   private observers: IObservers = {};
   private perf: Performance;
@@ -154,11 +152,6 @@ export default class Perfume {
 
     // Init visibilitychange listener
     this.onVisibilityChange();
-
-    // Ensures the queue is run immediately whenever the page
-    // is in a state where it might soon be unloaded.
-    // https://philipwalton.com/articles/idle-until-urgent/
-    this.queue = new IdleQueue({ ensureTasksRun: true });
 
     // Log Navigation Timing
     if (this.config.navigationTiming) {
@@ -264,7 +257,7 @@ export default class Perfume {
     if (!this.config.debugging) {
       return;
     }
-    window.console.log(`Perfume.js debugging ${methodName}:`, debugValue);
+    window.console.log(`${this.config.logPrefix} debugging ${methodName}:`, debugValue);
   }
 
   /**
@@ -466,6 +459,7 @@ export default class Perfume {
    * `Timing-Allow-Origin` header.)
    */
   private digestLargestContentfulPaint(entries: IPerformanceEntry[]): void {
+    this.logDebug('digestLargestContentfulPaint', entries);
     const lastPerformanceEntry = entries[entries.length - 1];
     this.largestContentfulPaintDuration =
       lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
@@ -489,7 +483,7 @@ export default class Perfume {
         this.digestLargestContentfulPaint.bind(this),
       );
     } catch (e) {
-      this.logWarn('initFirstInputDelay failed');
+      this.logWarn('initLargestContentfulPaint failed');
     }
   }
 
@@ -601,14 +595,11 @@ export default class Perfume {
   }
 
   /**
-   * Prevents cases when queue or pushTask is undefined.
-   * Could happen for old browsers or hot-reloading
+   * PushTask to requestIdleCallback
    */
   private pushTask(cb: any): void {
-    if (this.queue && this.queue.pushTask) {
-      this.queue.pushTask(() => {
-        cb();
-      });
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(cb, { timeout: 3000 });
     } else {
       cb();
     }

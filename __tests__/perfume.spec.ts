@@ -16,9 +16,6 @@ describe('Perfume', () => {
     perfume['observers']['firstContentfulPaint'] = () => 400;
     perfume['observers']['firstInputDelay'] = () => 400;
     perfume['observers']['dataConsumption'] = () => 400;
-    perfume['queue'] = {
-      pushTask: (cb: any) => cb(),
-    };
     perfume['perfObservers'] = {};
   });
 
@@ -115,7 +112,6 @@ describe('Perfume', () => {
         firstInputDelay: true,
       });
       perfume['observers']['firstInputDelay'] = () => 400;
-      perfume['queue'].pushTask = (cb: any) => cb();
     });
 
     it('should be a promise', () => {
@@ -318,7 +314,7 @@ describe('Perfume', () => {
       perfume.config.debugging = true;
       spy = jest.spyOn(window.console, 'log');
       perfume.logDebug('metricName', 1235);
-      const text = `Perfume.js debugging metricName:`;
+      const text = `Perfume.js: debugging metricName:`;
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(text, 1235);
     });

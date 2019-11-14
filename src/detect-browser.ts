@@ -55,10 +55,6 @@ type OperatingSystem =
   | 'BlackBerry OS'
   | 'Windows Mobile'
   | 'Amazon OS'
-  | 'Windows 3.11'
-  | 'Windows 95'
-  | 'Windows 98'
-  | 'Windows 2000'
   | 'Windows XP'
   | 'Windows Server 2003'
   | 'Windows Vista'
@@ -116,10 +112,6 @@ const operatingSystemRules: OperatingSystemRule[] = [
   ['BlackBerry OS', /BlackBerry|BB10/],
   ['Windows Mobile', /IEMobile/],
   ['Amazon OS', /Kindle/],
-  ['Windows 3.11', /Win16/],
-  ['Windows 95', /(Windows 95)|(Win95)|(Windows_95)/],
-  ['Windows 98', /(Windows 98)|(Win98)/],
-  ['Windows 2000', /(Windows NT 5.0)|(Windows 2000)/],
   ['Windows XP', /(Windows NT 5.1)|(Windows XP)/],
   ['Windows Server 2003', /(Windows NT 5.2)/],
   ['Windows Vista', /(Windows NT 6.0)/],

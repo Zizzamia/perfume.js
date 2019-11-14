@@ -62,7 +62,6 @@
       "_mock.ts",
       "/docs/",
       "detect-browser.ts",
-      "idle-queue.ts",
       "/node_modules/"
     ],
     "moduleFileExtensions": [
@@ -76,7 +75,6 @@
     "coveragePathIgnorePatterns": [
       "/docs/",
       "detect-browser.ts",
-      "idle-queue.ts",
       "/node_modules/",
       "/test/"
     ],
@@ -91,8 +89,7 @@
     "collectCoverage": true
   },
   "dependencies": {
-    "detect-browser": "4.5.1",
-    "idlize": "0.1.1"
+    "detect-browser": "4.5.1"
   },
   "devDependencies": {
     "@angular/core": "8.1.0",
