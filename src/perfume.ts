@@ -257,7 +257,10 @@ export default class Perfume {
     if (!this.config.debugging) {
       return;
     }
-    window.console.log(`${this.config.logPrefix} debugging ${methodName}:`, debugValue);
+    window.console.log(
+      `${this.config.logPrefix} debugging ${methodName}:`,
+      debugValue,
+    );
   }
 
   /**
