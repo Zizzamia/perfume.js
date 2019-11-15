@@ -120,7 +120,7 @@ export function PerfumeAfterViewInit(targetName?: string) {
     const newConstructor: any = function newCtor(...args) {
       perfume.start(targetName || target.name);
       const c: any = function childConstuctor() {
-        return new target(...arguments);
+        return target.apply(this, arguments);
       };
       c.prototype = Object.create(target.prototype);
       return new c(...args);
