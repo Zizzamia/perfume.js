@@ -14,6 +14,7 @@ import Performance, {
 
 export interface IAnalyticsTrackerOptions {
   metricName: string;
+  metricNameWithBrowser?: string;
   data?: any;
   duration?: number;
   browser?: BrowserInfo | any;
@@ -276,7 +277,7 @@ export default class Perfume {
     const browser = this.config.browserTracker ? this.browser : undefined;
     const metricNameWithBrowser = this.addBrowserToMetricName(metricName);
     // Send metric to custom Analytics service
-    this.config.analyticsTracker({ metricName, data, duration, browser });
+    this.config.analyticsTracker({ metricName, metricNameWithBrowser, data, duration, browser });
   }
 
   private initPerformanceObserver(): void {
