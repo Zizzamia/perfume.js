@@ -27,31 +27,9 @@ export class PerfumeRootModule {
 export class NgPerfume {
   perfume: Perfume;
   config: IPerfumeConfig;
-  firstPaintDuration = 0;
-  firstContentfulPaintDuration = 0;
-  firstInputDelayDuration = 0;
-  dataConsumption = 0;
-  largestContentfulPaintDuration = 0;
-  observeFirstPaint: Promise<number>;
-  observeFirstContentfulPaint: Promise<number>;
-  observeFirstInputDelay: Promise<number>;
-  observeLargestContentfulPaint: Promise<number>;
-  observeTimeToInteractive?: Promise<number>;
-  timeToInteractiveDuration = 0;
 
   constructor() {
     this.config = perfume.config;
-    this.firstPaintDuration = perfume.firstPaintDuration;
-    this.firstContentfulPaintDuration = perfume.firstContentfulPaintDuration;
-    this.firstInputDelayDuration = perfume.firstInputDelayDuration;
-    this.largestContentfulPaintDuration = perfume.largestContentfulPaintDuration;
-    this.dataConsumption = perfume.dataConsumption;
-    this.observeFirstPaint = perfume.observeFirstPaint;
-    this.observeFirstContentfulPaint = perfume.observeFirstContentfulPaint;
-    this.observeFirstInputDelay = perfume.observeFirstInputDelay;
-    this.observeLargestContentfulPaint = perfume.observeLargestContentfulPaint;
-    this.observeTimeToInteractive = perfume.observeTimeToInteractive;
-    this.timeToInteractiveDuration = perfume.timeToInteractiveDuration;
   }
 
   get navigationTiming() {

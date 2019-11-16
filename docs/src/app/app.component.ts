@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 
 import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-root',
@@ -28,14 +27,13 @@ export class AppComponent implements AfterViewInit {
 
   constructor(
     private ref: ChangeDetectorRef,
-    private zone: NgZone,
     public perfume: NgPerfume,
   ) {
     this.path = window.location.href.split('#')[0];
-    perfume.observeFirstInputDelay.then((result) => {
-      this.firstInputDelay = result;
-      this.ref.detectChanges();
-    });
+    // perfume.observeFirstInputDelay.then((result) => {
+    //   this.firstInputDelay = result;
+    //   this.ref.detectChanges();
+    // });
   }
 
   ngAfterViewInit() {}

@@ -10,15 +10,10 @@ import { IntroComponent } from './intro/intro.component';
 import { CfpComponent } from './cfp/cfp.component';
 
 import { PerfumeModule } from 'perfume.js/angular';
-// import Perfume from '../../../';
 
 // Supports AOT and DI
 export function analyticsTracker({ metricName, data, duration, browser }) {
-  if (data) {
-    console.log(`Analytics ${metricName}, Browser ${browser.name}, OS ${browser.os}:`, data);
-  } else {
-    console.log(`Analytics ${metricName}, Browser ${browser.name}, OS ${browser.os}:`, duration);
-  }
+  console.log(`Analytics ${metricName}`, data || duration);
 }
 export const PerfumeConfig = {
   firstPaint: true,
@@ -31,13 +26,6 @@ export const PerfumeConfig = {
   browserTracker: true,
   debugging: true,
 };
-
-/*
-new Perfume({ ...PerfumeConfig, ...{
-  pageResource: true,
-  logPrefix: 'Vanilla',
-}});
-*/
 
 @NgModule({
   declarations: [
