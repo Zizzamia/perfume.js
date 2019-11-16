@@ -180,9 +180,7 @@ export default class Performance {
    * Get the duration of the timing metric or -1 if there a measurement has
    * not been made by the User Timing API
    */
-  private getDurationByMetric(
-    metricName: string,
-  ): number {
+  private getDurationByMetric(metricName: string): number {
     const entry = this.getMeasurementForGivenName(metricName);
     if (entry && entry.entryType === 'measure') {
       return entry.duration;
