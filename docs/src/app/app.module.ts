@@ -8,24 +8,10 @@ import { DialogComponent } from './dialog/dialog.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { IntroComponent } from './intro/intro.component';
 import { CfpComponent } from './cfp/cfp.component';
+import { PerfumeConfig } from './perfume.config';
 
 import { PerfumeModule } from 'perfume.js/angular';
-
-// Supports AOT and DI
-export function analyticsTracker({ metricName, data, duration, browser }) {
-  console.log(`Analytics ${metricName}`, data || duration);
-}
-export const PerfumeConfig = {
-  firstPaint: true,
-  firstContentfulPaint: true,
-  firstInputDelay: true,
-  dataConsumption: true,
-  largestContentfulPaint: true,
-  navigationTiming: true,
-  analyticsTracker,
-  browserTracker: true,
-  debugging: true,
-};
+// import { PerfumeModule } from '../../projects/perfume/src/lib/perfume.module';
 
 @NgModule({
   declarations: [

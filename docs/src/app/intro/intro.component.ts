@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import { PerfumeAfterViewInit } from 'perfume.js/angular';
+// import { PerfumeAfterViewInit } from '../../../projects/perfume/src/lib/perfume.module';
 
 @Component({
   selector: 'app-intro',

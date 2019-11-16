@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.0.0-rc1 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.0.0-rc2 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -179,7 +179,7 @@ export default class Perfume {
     metric.end = this.perf.now();
     this.perf.mark(metricName, 'end');
     // Get duration and change it to a two decimal value
-    const duration = this.perf.measure(metricName, metric);
+    const duration = this.perf.measure(metricName);
     const duration2Decimal = parseFloat(duration.toFixed(2));
     delete this.metrics[metricName];
     this.pushTask(() => {
@@ -203,30 +203,6 @@ export default class Perfume {
   }
 
   /**
-   * Coloring Text in Browser Console
-   */
-  log(options: ILogOptions): void {
-    const { metricName, data, duration, suffix } = { suffix: 'ms', ...options };
-    // Don't log when page is hidden or has disabled logging
-    if (this.isHidden || !this.config.logging) {
-      return;
-    }
-    if (!metricName) {
-      this.logWarn(this.logMetricWarn);
-      return;
-    }
-    const style = 'color: #ff6d00;font-size:11px;';
-    let text = `%c ${this.config.logPrefix} ${metricName} `;
-    if (duration) {
-      const durationMs = duration.toFixed(2);
-      text += `${durationMs} ${suffix}`;
-      window.console.log(text, style);
-    } else if (data) {
-      window.console.log(text, style, data);
-    }
-  }
-
-  /**
    * Coloring Debugging Text in Browser Console
    */
   logDebug(methodName: string, debugValue: any = ''): void {
@@ -237,19 +213,6 @@ export default class Perfume {
       `${this.config.logPrefix} debugging ${methodName}:`,
       debugValue,
     );
-  }
-
-  /**
-   * Sends the User timing measure to analyticsTracker
-   */
-  sendTiming(options: ISendTimingOptions): void {
-    const { metricName, data, duration } = options;
-    // Doesn't send timing when page is hidden
-    if (this.isHidden) {
-      return;
-    }
-    // Send metric to custom Analytics service
-    this.config.analyticsTracker({ metricName, data, duration });
   }
 
   private initPerformanceObserver(): void {
@@ -290,7 +253,7 @@ export default class Perfume {
     metricName: IPerfumeMetrics;
     valueLog: 'duration' | 'startTime';
   }): void {
-    this.logDebug('performanceObserver', options);
+    this.logDebug('PerformanceEntry', options);
     options.entries.forEach((performanceEntry: IPerformanceEntry) => {
       this.pushTask(() => {
         if (
@@ -323,7 +286,7 @@ export default class Perfume {
   private performanceObserverResourceCb(options: {
     entries: IPerformanceEntry[];
   }): void {
-    this.logDebug('performanceObserverResource', options);
+    this.logDebug('PerformanceEntry:resource', options);
     options.entries.forEach((performanceEntry: IPerformanceEntry) => {
       if (performanceEntry.decodedBodySize) {
         const decodedBodySize = parseFloat(
@@ -393,7 +356,7 @@ export default class Perfume {
    * `Timing-Allow-Origin` header.)
    */
   private digestLargestContentfulPaint(entries: IPerformanceEntry[]): void {
-    this.logDebug('largestContentfulPaint', entries);
+    this.logDebug('PerformanceEntry:LCP', entries);
     const lastPerformanceEntry = entries[entries.length - 1];
     this.largestContentfulPaintDuration =
       lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
@@ -468,6 +431,30 @@ export default class Perfume {
   }
 
   /**
+   * Coloring Text in Browser Console
+   */
+  private log(options: ILogOptions): void {
+    const { metricName, data, duration, suffix } = { suffix: 'ms', ...options };
+    // Don't log when page is hidden or has disabled logging
+    if (this.isHidden || !this.config.logging) {
+      return;
+    }
+    if (!metricName) {
+      this.logWarn(this.logMetricWarn);
+      return;
+    }
+    const style = 'color: #ff6d00;font-size:11px;';
+    let text = `%c ${this.config.logPrefix} ${metricName} `;
+    if (duration) {
+      const durationMs = duration.toFixed(2);
+      text += `${durationMs} ${suffix}`;
+      window.console.log(text, style);
+    } else if (data) {
+      window.console.log(text, style, data);
+    }
+  }
+
+  /**
    * Dispatches the metric duration into internal logs
    * and the external time tracking service.
    */
@@ -498,7 +485,7 @@ export default class Perfume {
   }
 
   private logNavigationTiming() {
-    const metricName = 'NavigationTiming';
+    const metricName = 'navigationTiming';
     // Logs the metric in the internal console.log
     this.log({ metricName, data: this.navigationTiming, suffix: '' });
     // Sends the metric to an external tracking service
@@ -525,5 +512,18 @@ export default class Perfume {
     } else {
       cb();
     }
+  }
+
+  /**
+   * Sends the User timing measure to analyticsTracker
+   */
+  private sendTiming(options: ISendTimingOptions): void {
+    const { metricName, data, duration } = options;
+    // Doesn't send timing when page is hidden
+    if (this.isHidden) {
+      return;
+    }
+    // Send metric to custom Analytics service
+    this.config.analyticsTracker({ metricName, data, duration });
   }
 }

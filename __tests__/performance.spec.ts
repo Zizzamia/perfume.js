@@ -109,7 +109,7 @@ describe('Performance', () => {
       service.measure('fibonacci', {});
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toBe(1);
-      expect(spy).toHaveBeenCalledWith('fibonacci', {});
+      expect(spy).toHaveBeenCalledWith('fibonacci');
     });
   });
 

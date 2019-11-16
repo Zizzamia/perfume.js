@@ -4,9 +4,6 @@ import sourceMaps from 'rollup-plugin-sourcemaps';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
-const ensureArray = maybeArr =>
-  Array.isArray(maybeArr) ? maybeArr : [maybeArr];
-
 const createConfig = ({ output, min = false }) => {
   const minify =
     min &&
@@ -21,7 +18,14 @@ const createConfig = ({ output, min = false }) => {
             'endPaint',
             'log',
             'logDebug',
-            'sendTiming'
+            'sendTiming',
+            'fetchTime',
+            'workerTime',
+            'totalTime',
+            'downloadTime',
+            'timeToFirstByte',
+            'headerSize',
+            'dnsLookupTime'
           ]
         } 
       },

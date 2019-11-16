@@ -153,11 +153,11 @@ export default class Performance {
     (window.performance.mark as any)(mark);
   }
 
-  measure(metricName: string, metric: IMetricEntry): number {
+  measure(metricName: string): number {
     const startMark = `mark_${metricName}_start`;
     const endMark = `mark_${metricName}_end`;
     (window.performance.measure as any)(metricName, startMark, endMark);
-    return this.getDurationByMetric(metricName, metric);
+    return this.getDurationByMetric(metricName);
   }
 
   /**
@@ -182,7 +182,6 @@ export default class Performance {
    */
   private getDurationByMetric(
     metricName: string,
-    metric: IMetricEntry,
   ): number {
     const entry = this.getMeasurementForGivenName(metricName);
     if (entry && entry.entryType === 'measure') {

@@ -14,10 +14,14 @@
     <tbody>
       <tr>
         <td class="code">
-          <pre>perfume.<span class="blue">start</span>('openDialog');
+          <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
+  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
+    myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
+  {{'}'}})
+{{'}'}});
+perfume.<span class="blue">start</span>('openDialog');
 <span class="violet">this</span>.dialog.<span class="violet">open</span>();
-perfume.<span class="violet">endPaint</span>('openDialog');
-<span class="gray">// Perfume.js: openDialog 10.54 ms</span></pre>
+perfume.<span class="violet">endPaint</span>('openDialog');</pre>
         </td>
       </tr>
     </tbody>

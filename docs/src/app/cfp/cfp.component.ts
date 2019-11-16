@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { DialogComponent } from '../dialog/dialog.component';
 
 import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
+// import { NgPerfume, PerfumeAfterViewInit } from '../../../projects/perfume/src/lib/perfume.module';
 
 @Component({
   selector: 'app-cfp',

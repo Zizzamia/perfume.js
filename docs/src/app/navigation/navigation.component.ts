@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import { PerfumeAfterViewInit } from 'perfume.js/angular';
+// import { PerfumeAfterViewInit } from '../../../projects/perfume/src/lib/perfume.module';
 
 @Component({
   selector: 'app-navigation',
@@ -36,9 +37,6 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <a href="{{ path }}#/first-input-delay/" class="part-two"
       [class.active]="navSelected === navOptions.fid"
       (click)="activeNav(navOptions.fid)">First Input Delay</a>
-      <a href="{{ path }}#/time-to-interactive/" class="part-two"
-      [class.active]="navSelected === navOptions.tti"
-      (click)="activeNav(navOptions.tti)">Time to Interactive</a>
       <a href="{{ path }}#/annotate-metrics/" class="part-two"
       [class.active]="navSelected === navOptions.annotate"
       (click)="activeNav(navOptions.annotate)">Annotate metrics</a>
@@ -63,15 +61,12 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <a href="{{ path }}#/default-options/" class="part-four"
       [class.active]="navSelected === navOptions.options"
       (click)="activeNav(navOptions.options)">Default Options</a>
-      <a href="{{ path }}#/default-options/" class="part-four"
-      [class.active]="navSelected === navOptions.utilities"
-      (click)="activeNav(navOptions.utilities)">Utilities</a>
       <a href="{{ path }}#/copyright-and-license/" class="part-four"
       [class.active]="navSelected === navOptions.copyright"
       (click)="activeNav(navOptions.copyright)">Copyright and licenses</a>
       <a href="{{ path }}#/articles/" class="part-four"
       [class.active]="navSelected === navOptions.articles"
-      (click)="activeNav(navOptions.articles)">articles</a>
+      (click)="activeNav(navOptions.articles)">Articles</a>
     </div>
   `,
   styles: [
@@ -143,7 +138,6 @@ export class NavigationComponent implements AfterViewInit {
       fcp: 'first-contentful-paint',
       lcp: 'largest-contentful-paint',
       fid: 'first-input-delay',
-      tti: 'time-to-interactive',
       cfp: 'component-first-paint',
       annotate: 'annotate-metrics',
       log: 'custom-logging',
@@ -151,7 +145,6 @@ export class NavigationComponent implements AfterViewInit {
       react: 'react',
       as: 'analytics',
       options: 'default-options',
-      utilities: 'utilities',
       copyright: 'copyright-and-license',
       articles: 'articles',
     };

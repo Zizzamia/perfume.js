@@ -7,6 +7,9 @@ import {
 } from '@angular/core';
 
 import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
+// import { NgPerfume, PerfumeAfterViewInit } from '../../projects/perfume/src/lib/perfume.module';
+
+import { navigationTiming, fp, fcp, lcp, fid } from './perfume.config';
 
 @Component({
   selector: 'app-root',
@@ -17,12 +20,13 @@ import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
 export class AppComponent implements AfterViewInit {
   @ViewChild('p', { static: true })
   // Component
+  navigationTiming = {};
   logCustom: string;
   logFibonacci: string;
-  firstPaint: number;
-  firstContentfulPaint: number;
-  firstInputDelay: number;
-  largestContentfulPaint: number;
+  fp: number;
+  fcp: number;
+  fid: number;
+  lcp: number;
   path: string;
 
   constructor(
@@ -30,13 +34,30 @@ export class AppComponent implements AfterViewInit {
     public perfume: NgPerfume,
   ) {
     this.path = window.location.href.split('#')[0];
-    // perfume.observeFirstInputDelay.then((result) => {
-    //   this.firstInputDelay = result;
-    //   this.ref.detectChanges();
-    // });
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    navigationTiming.subscribe((result) => {
+      this.navigationTiming = result;
+      this.ref.detectChanges();
+    });
+    fp.subscribe((result) => {
+      this.fp = result;
+      this.ref.detectChanges();
+    });
+    fcp.subscribe((result) => {
+      this.fcp = result;
+      this.ref.detectChanges();
+    });
+    lcp.subscribe((result) => {
+      this.lcp = result;
+      this.ref.detectChanges();
+    });
+    fid.subscribe((result) => {
+      this.fid = result;
+      this.ref.detectChanges();
+    });
+  }
 
   measureFibonacci() {
     this.perfume.start('fibonacci');

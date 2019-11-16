@@ -11,6 +11,10 @@ import Perfume, {
   IPerfumeConfig,
   ISendTimingOptions,
 } from 'perfume.js';
+// type ILogOptions = any;
+// type IPerfumeConfig = any;
+// type ISendTimingOptions = any;
+// import Perfume from '../../../../../dist/es/perfume'
 
 export let perfume;
 
@@ -46,14 +50,6 @@ export class NgPerfume {
 
   endPaint(metricName: string): Promise<void | number> {
     return perfume.endPaint(metricName);
-  }
-
-  log(options: ILogOptions): void {
-    perfume.log(options);
-  }
-
-  sendTiming(options: ISendTimingOptions): void {
-    perfume.sendTiming(options);
   }
 }
 
