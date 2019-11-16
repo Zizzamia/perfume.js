@@ -12,10 +12,6 @@ describe('Perfume', () => {
     (window as any).PerformanceObserver = mock.PerformanceObserver;
     (window as any).console.log = (n: any) => n;
     (window as any).console.warn = (n: any) => n;
-    perfume['observers']['firstPaint'] = () => 400;
-    perfume['observers']['firstContentfulPaint'] = () => 400;
-    perfume['observers']['firstInputDelay'] = () => 400;
-    perfume['observers']['dataConsumption'] = () => 400;
     perfume['perfObservers'] = {};
   });
 
@@ -36,7 +32,6 @@ describe('Perfume', () => {
       expect(instance.config.dataConsumption).toEqual(false);
       expect(instance.config.navigationTiming).toEqual(false);
       expect(instance.config.analyticsTracker).toBeDefined();
-      expect(instance.config.browserTracker).toEqual(false);
       expect(instance.config.logPrefix).toEqual('Perfume.js:');
       expect(instance.config.logging).toEqual(true);
       expect(instance.config.maxMeasureTime).toEqual(15000);
@@ -62,7 +57,6 @@ describe('Perfume', () => {
         firstPaint: true,
         firstInputDelay: true,
         dataConsumption: true,
-        browserTracker: true,
       });
     });
 
@@ -72,7 +66,6 @@ describe('Perfume', () => {
         firstPaint: true,
         firstInputDelay: true,
         dataConsumption: true,
-        browserTracker: true,
         logging: false,
       });
     });
@@ -83,7 +76,6 @@ describe('Perfume', () => {
         firstPaint: true,
         firstInputDelay: true,
         dataConsumption: true,
-        browserTracker: true,
         warning: true,
         debugging: true,
       });
@@ -99,24 +91,6 @@ describe('Perfume', () => {
         warning: true,
         debugging: true,
       });
-    });
-  });
-
-  describe('.observeFirstInputDelay', () => {
-    (window as any).chrome = true;
-
-    beforeEach(() => {
-      perfume = new Perfume({
-        firstPaint: false,
-        firstContentfulPaint: false,
-        firstInputDelay: true,
-      });
-      perfume['observers']['firstInputDelay'] = () => 400;
-    });
-
-    it('should be a promise', () => {
-      const promise = perfume.observeFirstInputDelay;
-      expect(promise).toBeInstanceOf(Promise);
     });
   });
 
@@ -339,105 +313,6 @@ describe('Perfume', () => {
         duration: 123,
       });
     });
-
-    it('should call analyticsTracker with the browse Object when browserTracker is true', () => {
-      perfume.config.analyticsTracker = ({ metricName, duration }) => {};
-      perfume.config.browserTracker = true;
-      (perfume as any).browser = {
-        name: 'browserName',
-        os: 'browserOS',
-      };
-      spy = jest.spyOn(perfume.config, 'analyticsTracker');
-      (perfume as any).sendTiming({ metricName: 'metricName', duration: 123 });
-      expect(spy).toHaveBeenCalled();
-      expect(spy).toHaveBeenCalledWith({
-        metricName: 'metricName',
-        duration: 123,
-        browser: (perfume as any).browser,
-      });
-    });
-
-    it('should call analyticsTracker with the browse undefined when browserTracker is false', () => {
-      perfume.config.analyticsTracker = ({ metricName, duration }) => {};
-      perfume.config.browserTracker = false;
-      (perfume as any).browser = {
-        name: 'browserName',
-        os: 'browserOS',
-      };
-      spy = jest.spyOn(perfume.config, 'analyticsTracker');
-      (perfume as any).sendTiming({ metricName: 'metricName', duration: 123 });
-      expect(spy).toHaveBeenCalled();
-      expect(spy).toHaveBeenCalledWith({
-        metricName: 'metricName',
-        duration: 123,
-      });
-    });
-  });
-
-  describe('.initPerformanceObserver()', () => {
-    it('should set observeFirstPaint when firstPaint is true', () => {
-      perfume.config.firstPaint = true;
-      (perfume as any).initPerformanceObserver();
-      expect(perfume.observeFirstPaint).toBeDefined();
-    });
-
-    it('should set observeFirstPaint when firstContentfulPaint is true', () => {
-      perfume.config.firstContentfulPaint = true;
-      (perfume as any).initPerformanceObserver();
-      expect(perfume.observeFirstPaint).toBeDefined();
-    });
-
-    it('should not set observeFirstPaint when firstPaint or firstContentfulPaint are false', () => {
-      perfume.config.firstPaint = false;
-      perfume.config.firstContentfulPaint = false;
-      (perfume as any).initPerformanceObserver();
-      expect(perfume.observeFirstPaint).not.toBeDefined();
-    });
-
-    it('should set observeDataConsumption when dataConsumption is true', () => {
-      perfume.config.dataConsumption = true;
-      (perfume as any).initPerformanceObserver();
-      expect(perfume.observeDataConsumption).toBeDefined();
-    });
-
-    it('should not set observeDataConsumption when dataConsumption is false', () => {
-      perfume.config.dataConsumption = false;
-      (perfume as any).initPerformanceObserver();
-      expect(perfume.observeDataConsumption).not.toBeDefined();
-    });
-  });
-
-  describe('.addBrowserToMetricName()', () => {
-    it('should return "metricName" when config.browserTracker is false', () => {
-      const value = (perfume as any).addBrowserToMetricName('metricName');
-      expect(value).toEqual('metricName');
-    });
-
-    it('should return "metricName" when config.browserTracker is true and browser.name is undefined', () => {
-      perfume.config.browserTracker = true;
-      (perfume as any).browser = {};
-      const value = (perfume as any).addBrowserToMetricName('metricName');
-      expect(value).toEqual('metricName');
-    });
-
-    it('should return "metricName.browserName" when browser.name is defined', () => {
-      perfume.config.browserTracker = true;
-      (perfume as any).browser = {
-        name: 'browserName',
-      };
-      const value = (perfume as any).addBrowserToMetricName('metricName');
-      expect(value).toEqual('metricName.browserName');
-    });
-
-    it('should return "metricName.browserName.browserOS" when browser.browserOS is defined', () => {
-      perfume.config.browserTracker = true;
-      (perfume as any).browser = {
-        name: 'browserName',
-        os: 'browserOS',
-      };
-      const value = (perfume as any).addBrowserToMetricName('metricName');
-      expect(value).toEqual('metricName.browserName.browserOS');
-    });
   });
 
   describe('.checkMetricName()', () => {
@@ -577,11 +452,11 @@ describe('Perfume', () => {
       (perfume as any).performanceObserverResourceCb({
         entries: [],
       });
-      expect(perfume.dataConsumption).toEqual(0);
+      expect((perfume as any).dataConsumption).toEqual(0);
     });
 
     it('should float the dataConsumption result', () => {
-      perfume.dataConsumption = 0;
+      (perfume as any).dataConsumption = 0;
       (perfume as any).performanceObserverResourceCb({
         entries: [
           {
@@ -589,11 +464,11 @@ describe('Perfume', () => {
           },
         ],
       });
-      expect(perfume.dataConsumption).toEqual(12.35);
+      expect((perfume as any).dataConsumption).toEqual(12.35);
     });
 
     it('should sum the dataConsumption result', () => {
-      perfume.dataConsumption = 0;
+      (perfume as any).dataConsumption = 0;
       (perfume as any).performanceObserverResourceCb({
         entries: [
           {
@@ -604,7 +479,7 @@ describe('Perfume', () => {
           },
         ],
       });
-      expect(perfume.dataConsumption).toEqual(22.35);
+      expect((perfume as any).dataConsumption).toEqual(22.35);
     });
   });
 
@@ -651,7 +526,7 @@ describe('Perfume', () => {
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstPaint']();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('initFirstPaint failed');
+      expect(spy).toHaveBeenCalledWith('FP:failed');
     });
   });
 
@@ -695,13 +570,13 @@ describe('Perfume', () => {
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstInputDelay']();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('initFirstInputDelay failed');
+      expect(spy).toHaveBeenCalledWith('FID:failed');
     });
   });
 
   describe('.disconnectDataConsumption()', () => {
     beforeEach(() => {
-      perfume.dataConsumption = 10;
+      (perfume as any).dataConsumption = 10;
       (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
     });
 
@@ -710,7 +585,7 @@ describe('Perfume', () => {
       (perfume as any).disconnectDataConsumption();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
-        perfume.dataConsumption,
+        (perfume as any).dataConsumption,
         'Data Consumption',
         'dataConsumption',
         'Kb',
@@ -758,7 +633,7 @@ describe('Perfume', () => {
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initDataConsumption']();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('initDataConsumption failed');
+      expect(spy).toHaveBeenCalledWith('DataConsumption:failed');
     });
   });
 
@@ -793,7 +668,7 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         metricName: 'First Contentful Paint',
-        duration: perfume.firstContentfulPaintDuration,
+        duration: 1,
         suffix: 'ms',
       });
     });
@@ -808,7 +683,7 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         metricName: 'firstContentfulPaint',
-        duration: perfume.firstContentfulPaintDuration,
+        duration: 1,
       });
     });
 
@@ -826,20 +701,6 @@ describe('Perfume', () => {
       spy = jest.spyOn(perfume as any, 'sendTiming');
       (perfume as any).logMetric(25000, 'Data Consumption', 'dataConsumption');
       expect(spy.mock.calls.length).toEqual(0);
-    });
-
-    it('should perfume.firstContentfulPaintDuration be equal to duration', () => {
-      (perfume as any).logMetric(
-        1,
-        'First Contentful Paint',
-        'firstContentfulPaint',
-      );
-      expect(perfume.firstContentfulPaintDuration).toEqual(1);
-    });
-
-    it('should perfume.firstInputDelayDuration be equal to duration', () => {
-      (perfume as any).logMetric(2, 'First Input Delay', 'firstInputDelay');
-      expect(perfume.firstInputDelayDuration).toEqual(2);
     });
   });
 

@@ -1,11 +1,9 @@
 /*!
- * Perfume.js v3.2.1 (http://zizzamia.github.io/perfume)
+ * Perfume.js v3.1.5 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
-import { BrowserInfo, detect } from './detect-browser';
-
 import Performance, {
   IMetricEntry,
   IPerformanceEntry,
@@ -16,7 +14,6 @@ export interface IAnalyticsTrackerOptions {
   metricName: string;
   data?: any;
   duration?: number;
-  browser?: BrowserInfo | any;
 }
 
 export interface IPerfumeConfig {
@@ -29,7 +26,6 @@ export interface IPerfumeConfig {
   navigationTiming: boolean;
   // Analytics
   analyticsTracker: (options: IAnalyticsTrackerOptions) => void;
-  browserTracker?: boolean;
   // Logging
   logPrefix: string;
   logging: boolean;
@@ -50,7 +46,6 @@ export interface IPerfumeOptions {
   navigationTiming?: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
-  browserTracker?: boolean;
   // Logging
   logPrefix?: string;
   logging?: boolean;
@@ -70,10 +65,6 @@ export interface ILogOptions {
 
 export interface IMetricMap {
   [metricName: string]: IMetricEntry;
-}
-
-export interface IObservers {
-  [metricName: string]: any;
 }
 
 export interface IPerfObservers {
@@ -102,7 +93,6 @@ export default class Perfume {
     navigationTiming: false,
     // Analytics
     analyticsTracker: options => {},
-    browserTracker: false,
     // Logging
     logPrefix: 'Perfume.js:',
     logging: true,
@@ -111,22 +101,13 @@ export default class Perfume {
     warning: false,
     debugging: false,
   };
-  firstPaintDuration: number = 0;
-  firstContentfulPaintDuration: number = 0;
-  firstInputDelayDuration: number = 0;
-  dataConsumption: number = 0;
-  largestContentfulPaintDuration: number = 0;
-  observeFirstPaint?: Promise<number>;
-  observeFirstContentfulPaint?: Promise<number>;
-  observeFirstInputDelay?: Promise<number>;
-  observeLargestContentfulPaint?: Promise<number>;
-  observeDataConsumption?: Promise<number>;
-  private browser: BrowserInfo | any;
+  private dataConsumption: number = 0;
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
+  private largestContentfulPaintDuration: number = 0;
   private logMetricWarn = 'Please provide a metric name';
+  private logPrefixRecording = 'Recording already';
   private metrics: IMetricMap = {};
-  private observers: IObservers = {};
   private perf: Performance;
   private perfObservers: IPerfObservers = {};
 
@@ -138,11 +119,6 @@ export default class Perfume {
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!Performance.supported()) {
       return;
-    }
-
-    // In case we want to track Browser version and OS
-    if (this.config.browserTracker) {
-      this.browser = detect();
     }
 
     // Checks if use Performance or the EmulatedPerformance instance
@@ -174,7 +150,7 @@ export default class Perfume {
       return;
     }
     if (this.metrics[metricName]) {
-      this.logWarn('Recording already started.');
+      this.logWarn(`${this.logPrefixRecording} started.`);
       return;
     }
     this.metrics[metricName] = {
@@ -196,7 +172,7 @@ export default class Perfume {
     }
     const metric = this.metrics[metricName];
     if (!metric) {
-      this.logWarn('Recording already stopped.');
+      this.logWarn(`${this.logPrefixRecording} stopped.`);
       return;
     }
     // End Performance Mark
@@ -272,66 +248,22 @@ export default class Perfume {
     if (this.isHidden) {
       return;
     }
-    // Get Browser from userAgent
-    const browser = this.config.browserTracker ? this.browser : undefined;
-    const metricNameWithBrowser = this.addBrowserToMetricName(metricName);
     // Send metric to custom Analytics service
-    this.config.analyticsTracker({ metricName, data, duration, browser });
+    this.config.analyticsTracker({ metricName, data, duration });
   }
 
   private initPerformanceObserver(): void {
-    // Init observe FCP  and creates the Promise to observe metric
     if (this.config.firstPaint || this.config.firstContentfulPaint) {
-      this.observeFirstPaint = new Promise(resolve => {
-        this.logDebug('observeFirstPaint');
-        this.observers['firstPaint'] = resolve;
-      });
-      this.observeFirstContentfulPaint = new Promise(resolve => {
-        this.logDebug('observeFirstContentfulPaint');
-        this.observers['firstContentfulPaint'] = resolve;
-        this.initFirstPaint();
-      });
+      this.initFirstPaint();
     }
-
-    // FID needs to be initialized as soon as Perfume is available,
-    // which returns a Promise that can be observed.
+    // FID needs to be initialized as soon as Perfume is available
     // DataConsumption resolves after FID is triggered
-    this.observeFirstInputDelay = new Promise(resolve => {
-      this.observers['firstInputDelay'] = resolve;
-      this.initFirstInputDelay();
-    });
-
-    // Largest Contentful Paint
-    this.observeLargestContentfulPaint = new Promise(resolve => {
-      this.observers['largestContentfulPaint'] = resolve;
-      this.initLargestContentfulPaint();
-    });
-
+    this.initFirstInputDelay();
+    this.initLargestContentfulPaint();
     // Collects KB information related to resources on the page
     if (this.config.dataConsumption) {
-      this.observeDataConsumption = new Promise(resolve => {
-        this.observers['dataConsumption'] = resolve;
-        this.initDataConsumption();
-      });
+      this.initDataConsumption();
     }
-  }
-
-  private addBrowserToMetricName(metricName: string): string {
-    if (!this.config.browserTracker) {
-      return metricName;
-    }
-    let metricNameWithBrowser = metricName;
-    // Check if Browser Name exist
-    if (this.browser.name) {
-      const browserName = this.browser.name.replace(/\s/g, '');
-      metricNameWithBrowser += `.${browserName}`;
-      // Check if Browser OS exist
-      if (this.browser.os) {
-        const browserOS = this.browser.os.replace(/\s/g, '');
-        metricNameWithBrowser += `.${browserOS}`;
-      }
-    }
-    return metricNameWithBrowser;
   }
 
   private checkMetricName(metricName: string): boolean {
@@ -358,7 +290,7 @@ export default class Perfume {
     metricName: IPerfumeMetrics;
     valueLog: 'duration' | 'startTime';
   }): void {
-    this.logDebug('performanceObserverCb', options);
+    this.logDebug('performanceObserver', options);
     options.entries.forEach((performanceEntry: IPerformanceEntry) => {
       this.pushTask(() => {
         if (
@@ -391,7 +323,7 @@ export default class Perfume {
   private performanceObserverResourceCb(options: {
     entries: IPerformanceEntry[];
   }): void {
-    this.logDebug('performanceObserverResourceCb', options);
+    this.logDebug('performanceObserverResource', options);
     options.entries.forEach((performanceEntry: IPerformanceEntry) => {
       if (performanceEntry.decodedBodySize) {
         const decodedBodySize = parseFloat(
@@ -424,14 +356,13 @@ export default class Perfume {
    * the biggest above-the-fold layout change has happened.
    */
   private initFirstPaint(): void {
-    this.logDebug('initFirstPaint');
     try {
       this.perfObservers.firstContentfulPaint = this.perf.performanceObserver(
         'paint',
         this.digestFirstPaintEntries.bind(this),
       );
     } catch (e) {
-      this.logWarn('initFirstPaint failed');
+      this.logWarn('FP:failed');
     }
   }
 
@@ -462,7 +393,7 @@ export default class Perfume {
    * `Timing-Allow-Origin` header.)
    */
   private digestLargestContentfulPaint(entries: IPerformanceEntry[]): void {
-    this.logDebug('digestLargestContentfulPaint', entries);
+    this.logDebug('largestContentfulPaint', entries);
     const lastPerformanceEntry = entries[entries.length - 1];
     this.largestContentfulPaintDuration =
       lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
@@ -475,7 +406,7 @@ export default class Perfume {
         this.digestFirstInputDelayEntries.bind(this),
       );
     } catch (e) {
-      this.logWarn('initFirstInputDelay failed');
+      this.logWarn('FID:failed');
     }
   }
 
@@ -486,7 +417,7 @@ export default class Perfume {
         this.digestLargestContentfulPaint.bind(this),
       );
     } catch (e) {
-      this.logWarn('initLargestContentfulPaint failed');
+      this.logWarn('LCP:failed');
     }
   }
 
@@ -517,7 +448,7 @@ export default class Perfume {
         this.digestDataConsumptionEntries.bind(this),
       );
     } catch (e) {
-      this.logWarn('initDataConsumption failed');
+      this.logWarn('DataConsumption:failed');
     }
     this.dataConsumptionTimeout = setTimeout(() => {
       this.disconnectDataConsumption();
@@ -559,18 +490,6 @@ export default class Perfume {
     ) {
       return;
     }
-    // Save metrics in Duration property
-    if (metricName === 'firstPaint') {
-      this.firstPaintDuration = duration2Decimal;
-    }
-    if (metricName === 'firstContentfulPaint') {
-      this.firstContentfulPaintDuration = duration2Decimal;
-    }
-    if (metricName === 'firstInputDelay') {
-      this.firstInputDelayDuration = duration2Decimal;
-    }
-    this.observers[metricName](duration2Decimal);
-
     // Logs the metric in the internal console.log
     this.log({ metricName: logText, duration: duration2Decimal, suffix });
 

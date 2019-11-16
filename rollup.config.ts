@@ -7,10 +7,24 @@ import pkg from './package.json';
 const ensureArray = maybeArr =>
   Array.isArray(maybeArr) ? maybeArr : [maybeArr];
 
-const createConfig = ({ output, includeExternals = false, min = false }) => {
+const createConfig = ({ output, min = false }) => {
   const minify =
     min &&
     terser({
+      mangle: { 
+        properties: { 
+          reserved: [
+            'config',
+            'navigationTiming',
+            'start',
+            'end',
+            'endPaint',
+            'log',
+            'logDebug',
+            'sendTiming'
+          ]
+        } 
+      },
       output: {
         comments(node, { text, type }) {
           if (type === 'comment2') {
@@ -42,13 +56,6 @@ const createConfig = ({ output, includeExternals = false, min = false }) => {
       name: 'Perfume',
       sourcemap: true,
     },
-    // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
-    external: includeExternals
-      ? []
-      : [
-          ...Object.keys(pkg.dependencies || {}),
-          ...Object.keys(pkg.peerDependencies || {}),
-        ],
     watch: { include: 'dist/es/**' },
     plugins: plugins.filter(Boolean),
   };
@@ -71,20 +78,16 @@ export default [
   }),
   createConfig({
     output: { file: pkg.iife, format: 'iife' },
-    includeExternals: true,
   }),
   createConfig({
     output: { file: 'dist/perfume.iife.min.js', format: 'iife' },
-    includeExternals: true,
     min: true,
   }),
   createConfig({
     output: { file: pkg.unpkg, format: 'umd' },
-    includeExternals: true,
   }),
   createConfig({
     output: { file: 'dist/perfume.umd.min.js', format: 'umd' },
-    includeExternals: true,
     min: true,
   }),
 ];

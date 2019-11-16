@@ -61,7 +61,6 @@
     "testPathIgnorePatterns": [
       "_mock.ts",
       "/docs/",
-      "detect-browser.ts",
       "/node_modules/"
     ],
     "moduleFileExtensions": [
@@ -74,22 +73,18 @@
     },
     "coveragePathIgnorePatterns": [
       "/docs/",
-      "detect-browser.ts",
       "/node_modules/",
       "/test/"
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 96,
-        "functions": 96,
-        "lines": 96,
-        "statements": 96
+        "branches": 92,
+        "functions": 92,
+        "lines": 92,
+        "statements": 92
       }
     },
     "collectCoverage": true
-  },
-  "dependencies": {
-    "detect-browser": "4.5.1"
   },
   "devDependencies": {
     "@angular/core": "8.1.0",
