@@ -230,7 +230,10 @@ export default class Perfume {
     if (!this.config.navigationTiming) {
       return {};
     }
-    if (!this.isPerformanceSupported || Object.keys(this.navigationTimingCached).length) {
+    if (
+      !this.isPerformanceSupported ||
+      Object.keys(this.navigationTimingCached).length
+    ) {
       return this.navigationTimingCached;
     }
     // There is an open issue to type correctly getEntriesByType
@@ -256,9 +259,7 @@ export default class Perfume {
       // Response time only (download)
       downloadTime: parseFloat((responseEnd - responseStart).toFixed(2)),
       // Time to First Byte (TTFB)
-      timeToFirstByte: parseFloat(
-        (responseStart - n.requestStart).toFixed(2),
-      ),
+      timeToFirstByte: parseFloat((responseStart - n.requestStart).toFixed(2)),
       // HTTP header size
       headerSize: parseFloat((n.transferSize - n.encodedBodySize).toFixed(2)),
       // Measuring DNS lookup time
@@ -613,10 +614,12 @@ export default class Perfume {
     eventType: IPerformanceObserverType,
     cb: (entries: any[]) => void,
   ): IPerformanceObserver {
-    this.perfObserver = new PerformanceObserver((entryList: IPerformanceObserverEntryList) => {
-      const entries = entryList.getEntries();
-      cb(entries);
-    });
+    this.perfObserver = new PerformanceObserver(
+      (entryList: IPerformanceObserverEntryList) => {
+        const entries = entryList.getEntries();
+        cb(entries);
+      },
+    );
     // Retrieve buffered events and subscribe to newer events for Paint Timing
     this.perfObserver.observe({ type: eventType, buffered: true });
     return this.perfObserver;
