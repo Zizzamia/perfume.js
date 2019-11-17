@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.0.0-rc4 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.0.0-rc8 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -139,10 +139,6 @@ export interface IPerfumeNavigationTiming {
   dnsLookupTime?: number;
 }
 
-const d = document;
-const w = window;
-const c = window.console;
-
 export default class Perfume {
   config: IPerfumeConfig = {
     // Metrics
@@ -162,6 +158,8 @@ export default class Perfume {
     warning: false,
     debugging: false,
   };
+  private c = window.console;
+  private d = document;
   private dataConsumption: number = 0;
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
@@ -172,6 +170,7 @@ export default class Perfume {
   private navigationTimingCached: IPerfumeNavigationTiming = {};
   private perfObserver: any;
   private perfObservers: IPerfObservers = {};
+  private w = window;
   private wp = window.performance;
 
   constructor(options: IPerfumeOptions = {}) {
@@ -218,7 +217,7 @@ export default class Perfume {
    * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
    */
   get isPerformanceObserverSupported(): boolean {
-    return (w as any).chrome && 'PerformanceObserver' in w;
+    return (this.w as any).chrome && 'PerformanceObserver' in this.w;
   }
 
   /**
@@ -339,8 +338,8 @@ export default class Perfume {
   }
 
   private didVisibilityChange = () => {
-    if (d.hidden) {
-      this.isHidden = d.hidden;
+    if (this.d.hidden) {
+      this.isHidden = this.d.hidden;
     }
   };
 
@@ -547,9 +546,9 @@ export default class Perfume {
     if (duration) {
       const durationMs = duration.toFixed(2);
       text += `${durationMs} ${suffix}`;
-      c.log(text, style);
+      this.c.log(text, style);
     } else if (data) {
-      c.log(text, style, data);
+      this.c.log(text, style, data);
     }
   }
 
@@ -560,7 +559,7 @@ export default class Perfume {
     if (!this.config.debugging) {
       return;
     }
-    c.log(`${this.config.logPrefix} debugging ${methodName}:`, debugValue);
+    this.c.log(`${this.config.logPrefix} debugging ${methodName}:`, debugValue);
   }
 
   private logNavigationTiming() {
@@ -579,7 +578,7 @@ export default class Perfume {
     if (!this.config.warning || !this.config.logging) {
       return;
     }
-    c.warn(this.config.logPrefix, message);
+    this.c.warn(this.config.logPrefix, message);
   }
 
   /**
@@ -588,9 +587,9 @@ export default class Perfume {
    * use the wrong "hidden" value when send timing or logging.
    */
   private onVisibilityChange() {
-    if (typeof d.hidden !== 'undefined') {
+    if (typeof this.d.hidden !== 'undefined') {
       // Opera 12.10 and Firefox 18 and later support
-      d.addEventListener('visibilitychange', this.didVisibilityChange);
+      this.d.addEventListener('visibilitychange', this.didVisibilityChange);
     }
   }
 
@@ -683,8 +682,8 @@ export default class Perfume {
    * PushTask to requestIdleCallback
    */
   private pushTask(cb: any): void {
-    if ('requestIdleCallback' in w) {
-      (w as any).requestIdleCallback(cb, { timeout: 3000 });
+    if ('requestIdleCallback' in this.w) {
+      (this.w as any).requestIdleCallback(cb, { timeout: 3000 });
     } else {
       cb();
     }

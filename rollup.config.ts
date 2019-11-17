@@ -8,8 +8,8 @@ const createConfig = ({ output, min = false }) => {
   const minify =
     min &&
     terser({
-      mangle: { 
-        properties: { 
+      mangle: {
+        properties: {
           reserved: [
             'config',
             'navigationTiming',
@@ -23,9 +23,13 @@ const createConfig = ({ output, min = false }) => {
             'downloadTime',
             'timeToFirstByte',
             'headerSize',
-            'dnsLookupTime'
+            'dnsLookupTime',
+            'chrome',
+            'hidden',
+            'addEventListener',
+            'requestIdleCallback'
           ]
-        } 
+        }
       },
       output: {
         comments(node, { text, type }) {
@@ -36,7 +40,7 @@ const createConfig = ({ output, min = false }) => {
         },
       },
     });
-  
+
   const plugins = [
     // https://github.com/rollup/rollup-plugin-node-resolve#usage
     resolve(),
