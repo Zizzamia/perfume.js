@@ -1,15 +1,9 @@
 /*!
- * Perfume.js v4.0.0-rc3 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.0.0-rc4 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
-import Performance, {
-  IMetricEntry,
-  IPerformanceEntry,
-  IPerfumeNavigationTiming,
-} from './performance';
-
 export interface IAnalyticsTrackerOptions {
   metricName: string;
   data?: any;
@@ -82,6 +76,70 @@ export type IPerfumeMetrics =
   | 'firstPaint'
   | 'firstInputDelay';
 
+export interface IMetricEntry {
+  start: number;
+  end: number;
+}
+
+export type IPerformanceObserverType =
+  | 'first-input'
+  | 'largest-contentful-paint'
+  | 'longtask'
+  | 'measure'
+  | 'navigation'
+  | 'paint'
+  | 'resource';
+
+export type IPerformanceEntryInitiatorType =
+  | 'css'
+  | 'fetch'
+  | 'img'
+  | 'other'
+  | 'script'
+  | 'xmlhttprequest';
+
+export declare interface IPerformanceEntry {
+  decodedBodySize?: number;
+  duration: number;
+  entryType: IPerformanceObserverType;
+  initiatorType?: IPerformanceEntryInitiatorType;
+  loadTime: number;
+  name: string;
+  renderTime: number;
+  startTime: number;
+}
+
+export interface IPerformancePaintTiming {
+  name: string;
+  entryType: string;
+  startTime: number;
+  duration: number;
+}
+
+declare const PerformanceObserver: any;
+
+declare interface IPerformanceObserverEntryList {
+  getEntries: any;
+  getEntriesByName: any;
+  getEntriesByType: any;
+}
+
+export interface IPerformanceObserver {
+  observer: () => void;
+  disconnect: () => void;
+}
+
+export interface IPerfumeNavigationTiming {
+  fetchTime?: number;
+  workerTime?: number;
+  totalTime?: number;
+  downloadTime?: number;
+  timeToFirstByte?: number;
+  headerSize?: number;
+  dnsLookupTime?: number;
+}
+
+const d = document;
 const w = window;
 const c = window.console;
 
@@ -108,24 +166,25 @@ export default class Perfume {
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
   private largestContentfulPaintDuration: number = 0;
-  private logMetricWarn = 'Please provide a metric name';
+  private logMetricWarn = 'Missing metric name';
   private logPrefixRecording = 'Recording already';
   private metrics: IMetricMap = {};
-  private perf: Performance;
+  private navigationTimingCached: IPerfumeNavigationTiming = {};
+  private perfObserver: any;
   private perfObservers: IPerfObservers = {};
+  private wp = window.performance;
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
-    this.perf = new Performance();
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
-    if (!this.perf.isSupported) {
+    if (!this.isPerformanceSupported) {
       return;
     }
 
     // Checks if use Performance or the EmulatedPerformance instance
-    if (this.perf.isSupportedPerformanceObserver) {
+    if (this.isPerformanceObserverSupported) {
       this.initPerformanceObserver();
     }
 
@@ -138,18 +197,83 @@ export default class Perfume {
     }
   }
 
+  /**
+   * True if the browser supports the Navigation Timing API,
+   * User Timing API and the PerformanceObserver Interface.
+   * In Safari, the User Timing API (performance.mark()) is not available,
+   * so the DevTools timeline will not be annotated with marks.
+   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
+   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
+   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
+   */
+  get isPerformanceSupported(): boolean {
+    return (
+      this.wp && !!this.wp.getEntriesByType && !!this.wp.now && !!this.wp.mark
+    );
+  }
+
+  /**
+   * For now only Chrome fully support the PerformanceObserver interface
+   * and the entryType "paint".
+   * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
+   */
+  get isPerformanceObserverSupported(): boolean {
+    return (w as any).chrome && 'PerformanceObserver' in w;
+  }
+
+  /**
+   * Navigation Timing API provides performance metrics for HTML documents.
+   * w3c.github.io/navigation-timing/
+   * developers.google.com/web/fundamentals/performance/navigation-and-resource-timing
+   */
   get navigationTiming(): IPerfumeNavigationTiming {
     if (!this.config.navigationTiming) {
       return {};
     }
-    return this.perf.navigationTiming;
+    if (!this.isPerformanceSupported || Object.keys(this.navigationTimingCached).length) {
+      return this.navigationTimingCached;
+    }
+    // There is an open issue to type correctly getEntriesByType
+    // github.com/microsoft/TypeScript/issues/33866
+    const n = performance.getEntriesByType('navigation')[0] as any;
+    // In Safari version 11.2 Navigation Timing isn't supported yet
+    if (!n) {
+      return this.navigationTimingCached;
+    }
+    const responseStart = n.responseStart;
+    const responseEnd = n.responseEnd;
+    // We cache the navigation time for future times
+    this.navigationTimingCached = {
+      // fetchStart marks when the browser starts to fetch a resource
+      // responseEnd is when the last byte of the response arrives
+      fetchTime: parseFloat((responseEnd - n.fetchStart).toFixed(2)),
+      // Service worker time plus response time
+      workerTime: parseFloat(
+        (n.workerStart > 0 ? responseEnd - n.workerStart : 0).toFixed(2),
+      ),
+      // Request plus response time (network only)
+      totalTime: parseFloat((responseEnd - n.requestStart).toFixed(2)),
+      // Response time only (download)
+      downloadTime: parseFloat((responseEnd - responseStart).toFixed(2)),
+      // Time to First Byte (TTFB)
+      timeToFirstByte: parseFloat(
+        (responseStart - n.requestStart).toFixed(2),
+      ),
+      // HTTP header size
+      headerSize: parseFloat((n.transferSize - n.encodedBodySize).toFixed(2)),
+      // Measuring DNS lookup time
+      dnsLookupTime: parseFloat(
+        (n.domainLookupEnd - n.domainLookupStart).toFixed(2),
+      ),
+    };
+    return this.navigationTimingCached;
   }
 
   /**
    * Start performance measurement
    */
   start(metricName: string): void {
-    if (!this.checkMetricName(metricName) || !this.perf.isSupported) {
+    if (!this.checkMetricName(metricName) || !this.isPerformanceSupported) {
       return;
     }
     if (this.metrics[metricName]) {
@@ -158,10 +282,10 @@ export default class Perfume {
     }
     this.metrics[metricName] = {
       end: 0,
-      start: this.perf.now(),
+      start: this.wp.now(),
     };
     // Creates a timestamp in the browser's performance entry buffer
-    this.perf.mark(metricName, 'start');
+    this.performanceMark(metricName, 'start');
     // Reset hidden value
     this.isHidden = false;
   }
@@ -170,7 +294,7 @@ export default class Perfume {
    * End performance measurement
    */
   end(metricName: string): void | number {
-    if (!this.checkMetricName(metricName) || !this.perf.isSupported) {
+    if (!this.checkMetricName(metricName) || !this.isPerformanceSupported) {
       return;
     }
     const metric = this.metrics[metricName];
@@ -179,10 +303,10 @@ export default class Perfume {
       return;
     }
     // End Performance Mark
-    metric.end = this.perf.now();
-    this.perf.mark(metricName, 'end');
+    metric.end = this.wp.now();
+    this.performanceMark(metricName, 'end');
     // Get duration and change it to a two decimal value
-    const duration = this.perf.measure(metricName);
+    const duration = this.performanceMeasure(metricName);
     const duration2Decimal = parseFloat(duration.toFixed(2));
     delete this.metrics[metricName];
     this.pushTask(() => {
@@ -205,6 +329,141 @@ export default class Perfume {
     });
   }
 
+  private checkMetricName(metricName: string): boolean {
+    if (metricName) {
+      return true;
+    }
+    this.logWarn(this.logMetricWarn);
+    return false;
+  }
+
+  private didVisibilityChange = () => {
+    if (d.hidden) {
+      this.isHidden = d.hidden;
+    }
+  };
+
+  private digestDataConsumptionEntries(entries: IPerformanceEntry[]): void {
+    this.performanceObserverResourceCb({
+      entries,
+    });
+  }
+
+  private digestFirstInputDelayEntries(entries: IPerformanceEntry[]): void {
+    this.performanceObserverCb({
+      entries,
+      metricLog: 'First Input Delay',
+      metricName: 'firstInputDelay',
+      valueLog: 'duration',
+    });
+    if (
+      this.config.largestContentfulPaint &&
+      this.largestContentfulPaintDuration
+    ) {
+      this.logMetric(
+        this.largestContentfulPaintDuration,
+        'Largest Contentful Paint',
+        'largestContentfulPaint',
+      );
+    }
+    this.disconnectDataConsumption();
+  }
+
+  private digestFirstPaintEntries(entries: IPerformanceEntry[]): void {
+    this.performanceObserverCb({
+      entries,
+      entryName: 'first-paint',
+      metricLog: 'First Paint',
+      metricName: 'firstPaint',
+      valueLog: 'startTime',
+    });
+    this.performanceObserverCb({
+      entries,
+      entryName: 'first-contentful-paint',
+      metricLog: 'First Contentful Paint',
+      metricName: 'firstContentfulPaint',
+      valueLog: 'startTime',
+    });
+  }
+
+  /**
+   * Update `lcp` to the latest value, using `renderTime` if it's available,
+   * otherwise using `loadTime`. (Note: `renderTime` may not be available if
+   * the element is an image and it's loaded cross-origin without the
+   * `Timing-Allow-Origin` header.)
+   */
+  private digestLargestContentfulPaint(entries: IPerformanceEntry[]): void {
+    this.logDebug('PerformanceEntry:LCP', entries);
+    const lastPerformanceEntry = entries[entries.length - 1];
+    this.largestContentfulPaintDuration =
+      lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
+  }
+
+  private disconnectDataConsumption(): void {
+    clearTimeout(this.dataConsumptionTimeout);
+    if (!this.perfObservers.dataConsumption || !this.dataConsumption) {
+      return;
+    }
+    this.logMetric(
+      this.dataConsumption,
+      'Data Consumption',
+      'dataConsumption',
+      'Kb',
+    );
+    this.perfObservers.dataConsumption.disconnect();
+  }
+
+  private initDataConsumption(): void {
+    try {
+      this.perfObservers.dataConsumption = this.performanceObserver(
+        'resource',
+        this.digestDataConsumptionEntries.bind(this),
+      );
+    } catch (e) {
+      this.logWarn('DataConsumption:failed');
+    }
+    this.dataConsumptionTimeout = setTimeout(() => {
+      this.disconnectDataConsumption();
+    }, 15000);
+  }
+
+  private initFirstInputDelay(): void {
+    try {
+      this.perfObservers.firstInputDelay = this.performanceObserver(
+        'first-input',
+        this.digestFirstInputDelayEntries.bind(this),
+      );
+    } catch (e) {
+      this.logWarn('FID:failed');
+    }
+  }
+
+  /**
+   * First Paint is essentially the paint after which
+   * the biggest above-the-fold layout change has happened.
+   */
+  private initFirstPaint(): void {
+    try {
+      this.perfObservers.firstContentfulPaint = this.performanceObserver(
+        'paint',
+        this.digestFirstPaintEntries.bind(this),
+      );
+    } catch (e) {
+      this.logWarn('FP:failed');
+    }
+  }
+
+  private initLargestContentfulPaint(): void {
+    try {
+      this.perfObservers.largestContentfulPaint = this.performanceObserver(
+        'largest-contentful-paint',
+        this.digestLargestContentfulPaint.bind(this),
+      );
+    } catch (e) {
+      this.logWarn('LCP:failed');
+    }
+  }
+
   private initPerformanceObserver(): void {
     if (this.config.firstPaint || this.config.firstContentfulPaint) {
       this.initFirstPaint();
@@ -219,19 +478,79 @@ export default class Perfume {
     }
   }
 
-  private checkMetricName(metricName: string): boolean {
-    if (metricName) {
-      return true;
+  /**
+   * Get the duration of the timing metric or -1 if there a measurement has
+   * not been made by the User Timing API
+   */
+  private getDurationByMetric(metricName: string): number {
+    const entry = this.getMeasurementForGivenName(metricName);
+    if (entry && entry.entryType === 'measure') {
+      return entry.duration;
     }
-    this.logWarn(this.logMetricWarn);
-    return false;
+    return -1;
   }
 
-  private didVisibilityChange = () => {
-    if (document.hidden) {
-      this.isHidden = document.hidden;
+  /**
+   * Return the last PerformanceEntry objects for the given name.
+   */
+  private getMeasurementForGivenName(metricName: string): PerformanceEntry {
+    const entries = this.wp.getEntriesByName(metricName);
+    return entries[entries.length - 1];
+  }
+
+  /**
+   * Dispatches the metric duration into internal logs
+   * and the external time tracking service.
+   */
+  private logMetric(
+    duration: number,
+    logText: string,
+    metricName: string,
+    suffix: string = 'ms',
+  ): void {
+    const duration2Decimal = parseFloat(duration.toFixed(2));
+    // Stop Analytics and Logging for false negative metrics
+    if (
+      metricName !== 'dataConsumption' &&
+      duration2Decimal > this.config.maxMeasureTime
+    ) {
+      return;
+    } else if (
+      metricName === 'dataConsumption' &&
+      duration2Decimal > this.config.maxDataConsumption
+    ) {
+      return;
     }
-  };
+    // Logs the metric in the internal console.log
+    this.log({ metricName: logText, duration: duration2Decimal, suffix });
+
+    // Sends the metric to an external tracking service
+    this.sendTiming({ metricName, duration: duration2Decimal });
+  }
+
+  /**
+   * Coloring Text in Browser Console
+   */
+  private log(options: ILogOptions): void {
+    const { metricName, data, duration, suffix } = { suffix: 'ms', ...options };
+    // Don't log when page is hidden or has disabled logging
+    if (this.isHidden || !this.config.logging) {
+      return;
+    }
+    if (!metricName) {
+      this.logWarn(this.logMetricWarn);
+      return;
+    }
+    const style = 'color: #ff6d00;font-size:11px;';
+    let text = `%c ${this.config.logPrefix} ${metricName} `;
+    if (duration) {
+      const durationMs = duration.toFixed(2);
+      text += `${durationMs} ${suffix}`;
+      c.log(text, style);
+    } else if (data) {
+      c.log(text, style, data);
+    }
+  }
 
   /**
    * Coloring Debugging Text in Browser Console
@@ -241,6 +560,66 @@ export default class Perfume {
       return;
     }
     c.log(`${this.config.logPrefix} debugging ${methodName}:`, debugValue);
+  }
+
+  private logNavigationTiming() {
+    const metricName = 'navigationTiming';
+    // Logs the metric in the internal console.log
+    this.log({ metricName, data: this.navigationTiming, suffix: '' });
+    // Sends the metric to an external tracking service
+    this.sendTiming({ metricName, data: this.navigationTiming });
+  }
+
+  /**
+   * Ensures console.warn exist and logging is enable for
+   * warning messages
+   */
+  private logWarn(message: string): void {
+    if (!this.config.warning || !this.config.logging) {
+      return;
+    }
+    c.warn(this.config.logPrefix, message);
+  }
+
+  /**
+   * From visibilitychange listener it saves only when
+   * the page gets hidden, because it's important to not
+   * use the wrong "hidden" value when send timing or logging.
+   */
+  private onVisibilityChange() {
+    if (typeof d.hidden !== 'undefined') {
+      // Opera 12.10 and Firefox 18 and later support
+      d.addEventListener('visibilitychange', this.didVisibilityChange);
+    }
+  }
+
+  private performanceMark(metricName: string, type: string): void {
+    const mark = `mark_${metricName}_${type}`;
+    this.wp.mark(mark);
+  }
+
+  private performanceMeasure(metricName: string): number {
+    const startMark = `mark_${metricName}_start`;
+    const endMark = `mark_${metricName}_end`;
+    this.wp.measure(metricName, startMark, endMark);
+    return this.getDurationByMetric(metricName);
+  }
+
+  /**
+   * PerformanceObserver subscribes to performance events as they happen
+   * and respond to them asynchronously.
+   */
+  private performanceObserver(
+    eventType: IPerformanceObserverType,
+    cb: (entries: any[]) => void,
+  ): IPerformanceObserver {
+    this.perfObserver = new PerformanceObserver((entryList: IPerformanceObserverEntryList) => {
+      const entries = entryList.getEntries();
+      cb(entries);
+    });
+    // Retrieve buffered events and subscribe to newer events for Paint Timing
+    this.perfObserver.observe({ type: eventType, buffered: true });
+    return this.perfObserver;
   }
 
   /**
@@ -295,212 +674,6 @@ export default class Perfume {
         this.dataConsumption += decodedBodySize;
       }
     });
-  }
-
-  private digestFirstPaintEntries(entries: IPerformanceEntry[]): void {
-    this.performanceObserverCb({
-      entries,
-      entryName: 'first-paint',
-      metricLog: 'First Paint',
-      metricName: 'firstPaint',
-      valueLog: 'startTime',
-    });
-    this.performanceObserverCb({
-      entries,
-      entryName: 'first-contentful-paint',
-      metricLog: 'First Contentful Paint',
-      metricName: 'firstContentfulPaint',
-      valueLog: 'startTime',
-    });
-  }
-
-  /**
-   * First Paint is essentially the paint after which
-   * the biggest above-the-fold layout change has happened.
-   */
-  private initFirstPaint(): void {
-    try {
-      this.perfObservers.firstContentfulPaint = this.perf.performanceObserver(
-        'paint',
-        this.digestFirstPaintEntries.bind(this),
-      );
-    } catch (e) {
-      this.logWarn('FP:failed');
-    }
-  }
-
-  private digestFirstInputDelayEntries(entries: IPerformanceEntry[]): void {
-    this.performanceObserverCb({
-      entries,
-      metricLog: 'First Input Delay',
-      metricName: 'firstInputDelay',
-      valueLog: 'duration',
-    });
-    if (
-      this.config.largestContentfulPaint &&
-      this.largestContentfulPaintDuration
-    ) {
-      this.logMetric(
-        this.largestContentfulPaintDuration,
-        'Largest Contentful Paint',
-        'largestContentfulPaint',
-      );
-    }
-    this.disconnectDataConsumption();
-  }
-
-  /**
-   * Update `lcp` to the latest value, using `renderTime` if it's available,
-   * otherwise using `loadTime`. (Note: `renderTime` may not be available if
-   * the element is an image and it's loaded cross-origin without the
-   * `Timing-Allow-Origin` header.)
-   */
-  private digestLargestContentfulPaint(entries: IPerformanceEntry[]): void {
-    this.logDebug('PerformanceEntry:LCP', entries);
-    const lastPerformanceEntry = entries[entries.length - 1];
-    this.largestContentfulPaintDuration =
-      lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
-  }
-
-  private initFirstInputDelay(): void {
-    try {
-      this.perfObservers.firstInputDelay = this.perf.performanceObserver(
-        'first-input',
-        this.digestFirstInputDelayEntries.bind(this),
-      );
-    } catch (e) {
-      this.logWarn('FID:failed');
-    }
-  }
-
-  private initLargestContentfulPaint(): void {
-    try {
-      this.perfObservers.largestContentfulPaint = this.perf.performanceObserver(
-        'largest-contentful-paint',
-        this.digestLargestContentfulPaint.bind(this),
-      );
-    } catch (e) {
-      this.logWarn('LCP:failed');
-    }
-  }
-
-  private digestDataConsumptionEntries(entries: IPerformanceEntry[]): void {
-    this.performanceObserverResourceCb({
-      entries,
-    });
-  }
-
-  private disconnectDataConsumption(): void {
-    clearTimeout(this.dataConsumptionTimeout);
-    if (!this.perfObservers.dataConsumption || !this.dataConsumption) {
-      return;
-    }
-    this.logMetric(
-      this.dataConsumption,
-      'Data Consumption',
-      'dataConsumption',
-      'Kb',
-    );
-    this.perfObservers.dataConsumption.disconnect();
-  }
-
-  private initDataConsumption(): void {
-    try {
-      this.perfObservers.dataConsumption = this.perf.performanceObserver(
-        'resource',
-        this.digestDataConsumptionEntries.bind(this),
-      );
-    } catch (e) {
-      this.logWarn('DataConsumption:failed');
-    }
-    this.dataConsumptionTimeout = setTimeout(() => {
-      this.disconnectDataConsumption();
-    }, 15000);
-  }
-
-  /**
-   * From visibilitychange listener it saves only when
-   * the page gets hidden, because it's important to not
-   * use the wrong "hidden" value when send timing or logging.
-   */
-  private onVisibilityChange() {
-    if (typeof document.hidden !== 'undefined') {
-      // Opera 12.10 and Firefox 18 and later support
-      document.addEventListener('visibilitychange', this.didVisibilityChange);
-    }
-  }
-
-  /**
-   * Coloring Text in Browser Console
-   */
-  private log(options: ILogOptions): void {
-    const { metricName, data, duration, suffix } = { suffix: 'ms', ...options };
-    // Don't log when page is hidden or has disabled logging
-    if (this.isHidden || !this.config.logging) {
-      return;
-    }
-    if (!metricName) {
-      this.logWarn(this.logMetricWarn);
-      return;
-    }
-    const style = 'color: #ff6d00;font-size:11px;';
-    let text = `%c ${this.config.logPrefix} ${metricName} `;
-    if (duration) {
-      const durationMs = duration.toFixed(2);
-      text += `${durationMs} ${suffix}`;
-      c.log(text, style);
-    } else if (data) {
-      c.log(text, style, data);
-    }
-  }
-
-  /**
-   * Dispatches the metric duration into internal logs
-   * and the external time tracking service.
-   */
-  private logMetric(
-    duration: number,
-    logText: string,
-    metricName: string,
-    suffix: string = 'ms',
-  ): void {
-    const duration2Decimal = parseFloat(duration.toFixed(2));
-    // Stop Analytics and Logging for false negative metrics
-    if (
-      metricName !== 'dataConsumption' &&
-      duration2Decimal > this.config.maxMeasureTime
-    ) {
-      return;
-    } else if (
-      metricName === 'dataConsumption' &&
-      duration2Decimal > this.config.maxDataConsumption
-    ) {
-      return;
-    }
-    // Logs the metric in the internal console.log
-    this.log({ metricName: logText, duration: duration2Decimal, suffix });
-
-    // Sends the metric to an external tracking service
-    this.sendTiming({ metricName, duration: duration2Decimal });
-  }
-
-  private logNavigationTiming() {
-    const metricName = 'navigationTiming';
-    // Logs the metric in the internal console.log
-    this.log({ metricName, data: this.navigationTiming, suffix: '' });
-    // Sends the metric to an external tracking service
-    this.sendTiming({ metricName, data: this.navigationTiming });
-  }
-
-  /**
-   * Ensures console.warn exist and logging is enable for
-   * warning messages
-   */
-  private logWarn(message: string): void {
-    if (!this.config.warning || !this.config.logging) {
-      return;
-    }
-    c.warn(this.config.logPrefix, message);
   }
 
   /**

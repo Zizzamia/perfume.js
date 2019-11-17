@@ -1,6 +1,6 @@
 {
   "name": "perfume.js",
-  "version": "4.0.0-rc3",
+  "version": "4.0.0-rc4",
   "description": "JavaScript library that measures Navigation Timing, First (Contentful) Paint (FP/FCP), First Input Delay (FID) and components lifecycle performance. Report real user measurements to your favorite analytics tool.",
   "keywords": [
     "performance-metrics",

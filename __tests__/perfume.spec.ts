@@ -104,7 +104,7 @@ describe('Perfume', () => {
       perfume.start('');
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('Please provide a metric name');
+      expect(spy).toHaveBeenCalledWith('Missing metric name');
     });
 
     it('should not throw a logWarn if param is correct', () => {
@@ -113,8 +113,8 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(0);
     });
 
-    it('should call perf.mark', () => {
-      spy = jest.spyOn((perfume as any).perf, 'mark');
+    it('should call performanceMark', () => {
+      spy = jest.spyOn((perfume as any), 'performanceMark');
       perfume.start('metricName');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith('metricName', 'start');
@@ -134,7 +134,7 @@ describe('Perfume', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       perfume.end('');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('Please provide a metric name');
+      expect(spy).toHaveBeenCalledWith('Missing metric name');
     });
 
     it('should throw a logWarn if param is correct and recording already stopped', () => {
@@ -190,15 +190,15 @@ describe('Perfume', () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should call perf.mark() twice with the correct arguments', () => {
-      spy = jest.spyOn((perfume as any).perf, 'mark');
+    it('should call performanceMark() twice with the correct arguments', () => {
+      spy = jest.spyOn((perfume as any), 'performanceMark');
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(2);
     });
 
-    it('should call perf.measure() with the correct arguments', () => {
-      spy = jest.spyOn((perfume as any).perf, 'measure');
+    it('should call performanceMeasure() with the correct arguments', () => {
+      spy = jest.spyOn((perfume as any), 'performanceMeasure');
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
@@ -240,7 +240,7 @@ describe('Perfume', () => {
     it('should call logWarn if params are not correct', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       (perfume as any).log({ metricName: '', duration: 0 });
-      const text = 'Please provide a metric name';
+      const text = 'Missing metric name';
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(text);
     });
@@ -322,7 +322,7 @@ describe('Perfume', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       (perfume as any).checkMetricName();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('Please provide a metric name');
+      expect(spy).toHaveBeenCalledWith('Missing metric name');
     });
 
     it('should return "false" when not provided a metric name', () => {
@@ -509,7 +509,7 @@ describe('Perfume', () => {
     });
 
     it('should call performanceObserver()', () => {
-      spy = jest.spyOn(perfume['perf'], 'performanceObserver');
+      spy = jest.spyOn(perfume as any, 'performanceObserver');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstPaint']();
@@ -553,7 +553,7 @@ describe('Perfume', () => {
     });
 
     it('should call performanceObserver()', () => {
-      spy = jest.spyOn(perfume['perf'], 'performanceObserver');
+      spy = jest.spyOn(perfume as any, 'performanceObserver');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstInputDelay']();
@@ -606,7 +606,7 @@ describe('Perfume', () => {
     });
 
     it('should call performanceObserver()', () => {
-      spy = jest.spyOn(perfume['perf'], 'performanceObserver');
+      spy = jest.spyOn(perfume as any, 'performanceObserver');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initDataConsumption']();
@@ -614,7 +614,7 @@ describe('Perfume', () => {
     });
 
     it('should call disconnectDataConsumption() after the setTimeout', () => {
-      jest.spyOn(perfume['perf'], 'performanceObserver');
+      jest.spyOn(perfume as any, 'performanceObserver');
       spy = jest.spyOn(perfume as any, 'disconnectDataConsumption');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
@@ -749,6 +749,125 @@ describe('Perfume', () => {
       (perfume as any).logWarn('message');
       expect(spy.mock.calls.length).toEqual(0);
       expect(spy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('.isPerformanceSupported()', () => {
+    it('should return true if the browser supports the Navigation Timing API', () => {
+      expect(perfume.isPerformanceSupported).toEqual(true);
+    });
+
+    it('should return false if the browser does not supports performance.mark', () => {
+      delete window.performance.mark;
+      expect(perfume.isPerformanceSupported).toEqual(false);
+    });
+
+    it('should return false if the browser does not supports performance.now', () => {
+      window.performance.mark = () => 1;
+      delete window.performance.now;
+      expect(perfume.isPerformanceSupported).toEqual(false);
+    });
+  });
+
+  describe('.navigationTiming()', () => {
+    it('when performance is not supported should return an empty object', () => {
+      delete window.performance.mark;
+      expect(perfume.navigationTiming).toEqual({});
+    });
+
+    it('when performance is supported should return the correct value', () => {
+      perfume.config.navigationTiming = true;
+      expect(perfume.navigationTiming).toEqual({
+        dnsLookupTime: 0,
+        downloadTime: 0.69,
+        fetchTime: 4.44,
+        headerSize: 0,
+        timeToFirstByte: 3.75,
+        totalTime: 4.44,
+        workerTime: 4.44,
+      });
+    });
+
+    it('when workerStart is 0 should return 0', () => {
+      perfume.config.navigationTiming = true;
+      jest.spyOn(window.performance, 'getEntriesByType').mockReturnValue([{
+        workerTime: 0,
+      }] as any);
+      expect(perfume.navigationTiming.workerTime).toEqual(0);
+    });
+
+    it('when Navigation Timing is not supported yet should return an empty object', () => {
+      perfume.config.navigationTiming = true;
+      jest.spyOn(window.performance, 'getEntriesByType').mockReturnValue([] as any);
+      expect(perfume.navigationTiming).toEqual({});
+    });
+  });
+
+  describe('.performanceMark()', () => {
+    it('should call window.performance.mark with undefined argument', () => {
+      spy = jest.spyOn((perfume as any).wp, 'mark');
+      (perfume as any).performanceMark('fibonacci');
+      expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls.length).toBe(1);
+      expect(spy).toHaveBeenCalledWith('mark_fibonacci_undefined');
+    });
+
+    it('should call window.performance.mark with the correct argument', () => {
+      spy = jest.spyOn((perfume as any).wp, 'mark');
+      (perfume as any).performanceMark('fibonacci', 'fast');
+      expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls.length).toBe(1);
+      expect(spy).toHaveBeenCalledWith('mark_fibonacci_fast');
+    });
+  });
+
+  describe('.performanceMeasure()', () => {
+    it('should call window.performance.measure with the correct arguments', () => {
+      spy = jest.spyOn((perfume as any).wp, 'measure');
+      (perfume as any).performanceMeasure('fibonacci');
+      const start = 'mark_fibonacci_start';
+      const end = 'mark_fibonacci_end';
+      expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls.length).toBe(1);
+      expect(spy).toHaveBeenCalledWith('fibonacci', start, end);
+    });
+
+    it('should call getDurationByMetric with the correct arguments', () => {
+      spy = jest.spyOn(perfume as any, 'getDurationByMetric');
+      (perfume as any).performanceMeasure('fibonacci', {});
+      expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls.length).toBe(1);
+      expect(spy).toHaveBeenCalledWith('fibonacci');
+    });
+  });
+
+  describe('.performanceObserver()', () => {
+    it('should call PerformanceObserver', () => {
+      spy = jest.spyOn(window, 'PerformanceObserver' as any);
+      (perfume as any).performanceObserver('paint', () => 0);
+      expect(spy).toHaveBeenCalled();
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('.getDurationByMetric()', () => {
+    it('should return entry.duration when entryType is not measure', () => {
+      window.performance.getEntriesByName = () =>
+        [{ duration: 12345, entryType: 'notMeasure' } as any] as any[];
+      const value = (perfume as any).getDurationByMetric('metricName');
+      expect(value).toEqual(-1);
+    });
+
+    it('should return -1 when entryType is a measure', () => {
+      const value = (perfume as any).getDurationByMetric('metricName');
+      expect(value).toEqual(12346);
+    });
+  });
+
+  describe('.getMeasurementForGivenName()', () => {
+    it('should return the first PerformanceEntry objects for the given name', () => {
+      const value = (perfume as any).getMeasurementForGivenName('metricName');
+      expect(value).toEqual({ duration: 12346, entryType: 'measure' });
     });
   });
 });
