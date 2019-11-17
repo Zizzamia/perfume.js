@@ -74,10 +74,7 @@ export default class Performance {
    * developers.google.com/web/fundamentals/performance/navigation-and-resource-timing
    */
   get navigationTiming(): IPerfumeNavigationTiming {
-    if (
-      !this.isSupported ||
-      Object.keys(this.navigationTimingCached).length
-    ) {
+    if (!this.isSupported || Object.keys(this.navigationTimingCached).length) {
       return this.navigationTimingCached;
     }
     // There is an open issue to type correctly getEntriesByType
@@ -124,12 +121,7 @@ export default class Performance {
    * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
    */
   get isSupported(): boolean {
-    return (
-      this.wp &&
-      !!this.wp.getEntriesByType &&
-      !!this.wp.now &&
-      !!this.wp.mark
-    );
+    return (this.wp && !!this.wp.getEntriesByType && !!this.wp.now && !!this.wp.mark);
   }
 
   /**
