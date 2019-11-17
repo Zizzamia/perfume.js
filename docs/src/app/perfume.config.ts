@@ -8,7 +8,6 @@ export const fid = new BehaviorSubject(0);
 
 // Supports AOT and DI
 export function analyticsTracker({ metricName, data, duration }) {
-  console.log(`Analytics ${metricName}`, data);
   switch(metricName) {
     case 'navigationTiming':
       navigationTiming.next(data);

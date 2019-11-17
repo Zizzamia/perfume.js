@@ -28,7 +28,20 @@ const createConfig = ({ output, min = false }) => {
             'hidden',
             'addEventListener',
             'requestIdleCallback',
-            'metricName'
+            'metricName',
+            'firstContentfulPaint',
+            'firstInputDelay',
+            'firstPaint',
+            'dataConsumption',
+            'largestContentfulPaint',
+            'navigationTiming',
+            'analyticsTracker',
+            'logPrefix',
+            'logging',
+            'maxMeasureTime',
+            'maxDataConsumption',
+            'warning',
+            'debugging',
           ]
         }
       },
