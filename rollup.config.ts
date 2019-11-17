@@ -27,7 +27,8 @@ const createConfig = ({ output, min = false }) => {
             'chrome',
             'hidden',
             'addEventListener',
-            'requestIdleCallback'
+            'requestIdleCallback',
+            'metricName'
           ]
         }
       },

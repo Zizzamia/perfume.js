@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.0.0-rc8 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.0.0-rc.10 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -57,6 +57,11 @@ export interface ILogOptions {
   suffix?: string;
 }
 
+export interface IMetricEntry {
+  start: number;
+  end: number;
+}
+
 export interface IMetricMap {
   [metricName: string]: IMetricEntry;
 }
@@ -75,11 +80,6 @@ export type IPerfumeMetrics =
   | 'firstContentfulPaint'
   | 'firstPaint'
   | 'firstInputDelay';
-
-export interface IMetricEntry {
-  start: number;
-  end: number;
-}
 
 export type IPerformanceObserverType =
   | 'first-input'
@@ -178,12 +178,12 @@ export default class Perfume {
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
-    if (!this.isPerformanceSupported) {
+    if (!this.isPerformanceSupported()) {
       return;
     }
 
     // Checks if use Performance or the EmulatedPerformance instance
-    if (this.isPerformanceObserverSupported) {
+    if (this.isPerformanceObserverSupported()) {
       this.initPerformanceObserver();
     }
 
@@ -197,83 +197,10 @@ export default class Perfume {
   }
 
   /**
-   * True if the browser supports the Navigation Timing API,
-   * User Timing API and the PerformanceObserver Interface.
-   * In Safari, the User Timing API (performance.mark()) is not available,
-   * so the DevTools timeline will not be annotated with marks.
-   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
-   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
-   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
-   */
-  get isPerformanceSupported(): boolean {
-    return (
-      this.wp && !!this.wp.getEntriesByType && !!this.wp.now && !!this.wp.mark
-    );
-  }
-
-  /**
-   * For now only Chrome fully support the PerformanceObserver interface
-   * and the entryType "paint".
-   * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
-   */
-  get isPerformanceObserverSupported(): boolean {
-    return (this.w as any).chrome && 'PerformanceObserver' in this.w;
-  }
-
-  /**
-   * Navigation Timing API provides performance metrics for HTML documents.
-   * w3c.github.io/navigation-timing/
-   * developers.google.com/web/fundamentals/performance/navigation-and-resource-timing
-   */
-  get navigationTiming(): IPerfumeNavigationTiming {
-    if (!this.config.navigationTiming) {
-      return {};
-    }
-    if (
-      !this.isPerformanceSupported ||
-      Object.keys(this.navigationTimingCached).length
-    ) {
-      return this.navigationTimingCached;
-    }
-    // There is an open issue to type correctly getEntriesByType
-    // github.com/microsoft/TypeScript/issues/33866
-    const n = performance.getEntriesByType('navigation')[0] as any;
-    // In Safari version 11.2 Navigation Timing isn't supported yet
-    if (!n) {
-      return this.navigationTimingCached;
-    }
-    const responseStart = n.responseStart;
-    const responseEnd = n.responseEnd;
-    // We cache the navigation time for future times
-    this.navigationTimingCached = {
-      // fetchStart marks when the browser starts to fetch a resource
-      // responseEnd is when the last byte of the response arrives
-      fetchTime: parseFloat((responseEnd - n.fetchStart).toFixed(2)),
-      // Service worker time plus response time
-      workerTime: parseFloat(
-        (n.workerStart > 0 ? responseEnd - n.workerStart : 0).toFixed(2),
-      ),
-      // Request plus response time (network only)
-      totalTime: parseFloat((responseEnd - n.requestStart).toFixed(2)),
-      // Response time only (download)
-      downloadTime: parseFloat((responseEnd - responseStart).toFixed(2)),
-      // Time to First Byte (TTFB)
-      timeToFirstByte: parseFloat((responseStart - n.requestStart).toFixed(2)),
-      // HTTP header size
-      headerSize: parseFloat((n.transferSize - n.encodedBodySize).toFixed(2)),
-      // Measuring DNS lookup time
-      dnsLookupTime: parseFloat(
-        (n.domainLookupEnd - n.domainLookupStart).toFixed(2),
-      ),
-    };
-    return this.navigationTimingCached;
-  }
-
-  /**
    * Start performance measurement
    */
   start(metricName: string): void {
-    if (!this.checkMetricName(metricName) || !this.isPerformanceSupported) {
+    if (!this.checkMetricName(metricName) || !this.isPerformanceSupported()) {
       return;
     }
     if (this.metrics[metricName]) {
@@ -294,7 +221,7 @@ export default class Perfume {
    * End performance measurement
    */
   end(metricName: string): void | number {
-    if (!this.checkMetricName(metricName) || !this.isPerformanceSupported) {
+    if (!this.checkMetricName(metricName) || !this.isPerformanceSupported()) {
       return;
     }
     const metric = this.metrics[metricName];
@@ -343,12 +270,6 @@ export default class Perfume {
     }
   };
 
-  private digestDataConsumptionEntries(entries: IPerformanceEntry[]): void {
-    this.performanceObserverResourceCb({
-      entries,
-    });
-  }
-
   private digestFirstInputDelayEntries(entries: IPerformanceEntry[]): void {
     this.performanceObserverCb({
       entries,
@@ -369,36 +290,6 @@ export default class Perfume {
     this.disconnectDataConsumption();
   }
 
-  private digestFirstPaintEntries(entries: IPerformanceEntry[]): void {
-    this.performanceObserverCb({
-      entries,
-      entryName: 'first-paint',
-      metricLog: 'First Paint',
-      metricName: 'firstPaint',
-      valueLog: 'startTime',
-    });
-    this.performanceObserverCb({
-      entries,
-      entryName: 'first-contentful-paint',
-      metricLog: 'First Contentful Paint',
-      metricName: 'firstContentfulPaint',
-      valueLog: 'startTime',
-    });
-  }
-
-  /**
-   * Update `lcp` to the latest value, using `renderTime` if it's available,
-   * otherwise using `loadTime`. (Note: `renderTime` may not be available if
-   * the element is an image and it's loaded cross-origin without the
-   * `Timing-Allow-Origin` header.)
-   */
-  private digestLargestContentfulPaint(entries: IPerformanceEntry[]): void {
-    this.logDebug('PerformanceEntry:LCP', entries);
-    const lastPerformanceEntry = entries[entries.length - 1];
-    this.largestContentfulPaintDuration =
-      lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
-  }
-
   private disconnectDataConsumption(): void {
     clearTimeout(this.dataConsumptionTimeout);
     if (!this.perfObservers.dataConsumption || !this.dataConsumption) {
@@ -417,7 +308,11 @@ export default class Perfume {
     try {
       this.perfObservers.dataConsumption = this.performanceObserver(
         'resource',
-        this.digestDataConsumptionEntries.bind(this),
+        (entries: IPerformanceEntry[]) => {
+          this.performanceObserverResourceCb({
+            entries,
+          });
+        },
       );
     } catch (e) {
       this.logWarn('DataConsumption:failed');
@@ -446,7 +341,22 @@ export default class Perfume {
     try {
       this.perfObservers.firstContentfulPaint = this.performanceObserver(
         'paint',
-        this.digestFirstPaintEntries.bind(this),
+        (entries: IPerformanceEntry[]) => {
+          this.performanceObserverCb({
+            entries,
+            entryName: 'first-paint',
+            metricLog: 'First Paint',
+            metricName: 'firstPaint',
+            valueLog: 'startTime',
+          });
+          this.performanceObserverCb({
+            entries,
+            entryName: 'first-contentful-paint',
+            metricLog: 'First Contentful Paint',
+            metricName: 'firstContentfulPaint',
+            valueLog: 'startTime',
+          });
+        },
       );
     } catch (e) {
       this.logWarn('FP:failed');
@@ -457,7 +367,12 @@ export default class Perfume {
     try {
       this.perfObservers.largestContentfulPaint = this.performanceObserver(
         'largest-contentful-paint',
-        this.digestLargestContentfulPaint.bind(this),
+        (entries: IPerformanceEntry[]) => {
+          this.logDebug('PerformanceEntry:LCP', entries);
+          const lastPerformanceEntry = entries[entries.length - 1];
+          this.largestContentfulPaintDuration =
+            lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
+        },
       );
     } catch (e) {
       this.logWarn('LCP:failed');
@@ -479,11 +394,36 @@ export default class Perfume {
   }
 
   /**
+   * True if the browser supports the Navigation Timing API,
+   * User Timing API and the PerformanceObserver Interface.
+   * In Safari, the User Timing API (performance.mark()) is not available,
+   * so the DevTools timeline will not be annotated with marks.
+   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
+   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
+   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
+   */
+  private isPerformanceSupported(): boolean {
+    return (
+      this.wp && !!this.wp.getEntriesByType && !!this.wp.now && !!this.wp.mark
+    );
+  }
+
+  /**
+   * For now only Chrome fully support the PerformanceObserver interface
+   * and the entryType "paint".
+   * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
+   */
+  private isPerformanceObserverSupported(): boolean {
+    return (this.w as any).chrome && 'PerformanceObserver' in this.w;
+  }
+
+  /**
    * Get the duration of the timing metric or -1 if there a measurement has
    * not been made by the User Timing API
    */
   private getDurationByMetric(metricName: string): number {
-    const entry = this.getMeasurementForGivenName(metricName);
+    const entries = this.wp.getEntriesByName(metricName);
+    const entry = entries[entries.length - 1];
     if (entry && entry.entryType === 'measure') {
       return entry.duration;
     }
@@ -491,11 +431,52 @@ export default class Perfume {
   }
 
   /**
-   * Return the last PerformanceEntry objects for the given name.
+   * Navigation Timing API provides performance metrics for HTML documents.
+   * w3c.github.io/navigation-timing/
+   * developers.google.com/web/fundamentals/performance/navigation-and-resource-timing
    */
-  private getMeasurementForGivenName(metricName: string): PerformanceEntry {
-    const entries = this.wp.getEntriesByName(metricName);
-    return entries[entries.length - 1];
+  private getNavigationTiming(): IPerfumeNavigationTiming {
+    if (!this.config.navigationTiming) {
+      return {};
+    }
+    if (
+      !this.isPerformanceSupported() ||
+      Object.keys(this.navigationTimingCached).length
+    ) {
+      return this.navigationTimingCached;
+    }
+    // There is an open issue to type correctly getEntriesByType
+    // github.com/microsoft/TypeScript/issues/33866
+    const n = performance.getEntriesByType('navigation')[0] as any;
+    // In Safari version 11.2 Navigation Timing isn't supported yet
+    if (!n) {
+      return this.navigationTimingCached;
+    }
+    const responseStart = n.responseStart;
+    const responseEnd = n.responseEnd;
+    // We cache the navigation time for future times
+    this.navigationTimingCached = {
+      // fetchStart marks when the browser starts to fetch a resource
+      // responseEnd is when the last byte of the response arrives
+      fetchTime: parseFloat((responseEnd - n.fetchStart).toFixed(2)),
+      // Service worker time plus response time
+      workerTime: parseFloat(
+        (n.workerStart > 0 ? responseEnd - n.workerStart : 0).toFixed(2),
+      ),
+      // Request plus response time (network only)
+      totalTime: parseFloat((responseEnd - n.requestStart).toFixed(2)),
+      // Response time only (download)
+      downloadTime: parseFloat((responseEnd - responseStart).toFixed(2)),
+      // Time to First Byte (TTFB)
+      timeToFirstByte: parseFloat((responseStart - n.requestStart).toFixed(2)),
+      // HTTP header size
+      headerSize: parseFloat((n.transferSize - n.encodedBodySize).toFixed(2)),
+      // Measuring DNS lookup time
+      dnsLookupTime: parseFloat(
+        (n.domainLookupEnd - n.domainLookupStart).toFixed(2),
+      ),
+    };
+    return this.navigationTimingCached;
   }
 
   /**
@@ -523,7 +504,6 @@ export default class Perfume {
     }
     // Logs the metric in the internal console.log
     this.log({ metricName: logText, duration: duration2Decimal, suffix });
-
     // Sends the metric to an external tracking service
     this.sendTiming({ metricName, duration: duration2Decimal });
   }
@@ -565,9 +545,9 @@ export default class Perfume {
   private logNavigationTiming() {
     const metricName = 'navigationTiming';
     // Logs the metric in the internal console.log
-    this.log({ metricName, data: this.navigationTiming, suffix: '' });
+    this.log({ metricName, data: this.getNavigationTiming(), suffix: '' });
     // Sends the metric to an external tracking service
-    this.sendTiming({ metricName, data: this.navigationTiming });
+    this.sendTiming({ metricName, data: this.getNavigationTiming() });
   }
 
   /**

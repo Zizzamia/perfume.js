@@ -70,7 +70,6 @@ export class AppComponent implements AfterViewInit {
     this.perfume.start('fibonacci');
     this.fibonacci(800);
     const duration = this.perfume.end('fibonacci') as number;
-    this.perfume.log({ metricName: 'Custom logging', duration });
     this.logCustom = `🍹 HayesValley.js: Custom logging ${duration} ms`;
   }
 

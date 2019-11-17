@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "4.0.0-rc8",
+  "version": "4.0.0-rc.10",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -24,10 +24,10 @@
     "@angular/router": "8.2.11",
     "core-js": "3.1.4",
     "ng-packagr": "5.5.1",
-    "perfume.js": "7",
+    "perfume.js": "4.0.0-rc.10",
     "rxjs": "6.5.3",
     "tsickle": "0.35.0",
-    "typescript": "3.7.2",
+    "typescript": "3.5.3",
     "zone.js": "0.9.1"
   },
   "devDependencies": {

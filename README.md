@@ -163,7 +163,6 @@ const perfume = new Perfume({
 perfume.start('fibonacci');
 fibonacci(400);
 const duration = perfume.end('fibonacci');
-perfume.log({ metricName: 'Custom logging', duration });
 // 🍹 HayesValley.js: Custom logging 0.14 ms
 ```
 <br />

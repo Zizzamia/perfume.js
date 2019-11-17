@@ -480,28 +480,6 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.digestFirstPaintEntries()', () => {
-    it('should call performanceObserver()', () => {
-      spy = jest.spyOn(perfume as any, 'performanceObserverCb');
-      perfume['digestFirstPaintEntries']([]);
-      expect(spy.mock.calls.length).toEqual(2);
-      expect(spy).toHaveBeenCalledWith({
-        entries: [],
-        entryName: 'first-paint',
-        metricLog: 'First Paint',
-        metricName: 'firstPaint',
-        valueLog: 'startTime',
-      });
-      expect(spy).toHaveBeenCalledWith({
-        entries: [],
-        entryName: 'first-contentful-paint',
-        metricLog: 'First Contentful Paint',
-        metricName: 'firstContentfulPaint',
-        valueLog: 'startTime',
-      });
-    });
-  });
-
   describe('.initFirstPaint()', () => {
     beforeEach(() => {
       perfume.config.firstPaint = true;
@@ -754,30 +732,30 @@ describe('Perfume', () => {
 
   describe('.isPerformanceSupported()', () => {
     it('should return true if the browser supports the Navigation Timing API', () => {
-      expect(perfume.isPerformanceSupported).toEqual(true);
+      expect((perfume as any).isPerformanceSupported()).toEqual(true);
     });
 
     it('should return false if the browser does not supports performance.mark', () => {
       delete window.performance.mark;
-      expect(perfume.isPerformanceSupported).toEqual(false);
+      expect((perfume as any).isPerformanceSupported()).toEqual(false);
     });
 
     it('should return false if the browser does not supports performance.now', () => {
       window.performance.mark = () => 1;
       delete window.performance.now;
-      expect(perfume.isPerformanceSupported).toEqual(false);
+      expect((perfume as any).isPerformanceSupported()).toEqual(false);
     });
   });
 
-  describe('.navigationTiming()', () => {
+  describe('.getNavigationTiming()', () => {
     it('when performance is not supported should return an empty object', () => {
       delete window.performance.mark;
-      expect(perfume.navigationTiming).toEqual({});
+      expect((perfume as any).getNavigationTiming()).toEqual({});
     });
 
     it('when performance is supported should return the correct value', () => {
       perfume.config.navigationTiming = true;
-      expect(perfume.navigationTiming).toEqual({
+      expect((perfume as any).getNavigationTiming()).toEqual({
         dnsLookupTime: 0,
         downloadTime: 0.69,
         fetchTime: 4.44,
@@ -793,13 +771,13 @@ describe('Perfume', () => {
       jest.spyOn(window.performance, 'getEntriesByType').mockReturnValue([{
         workerTime: 0,
       }] as any);
-      expect(perfume.navigationTiming.workerTime).toEqual(0);
+      expect((perfume as any).getNavigationTiming().workerTime).toEqual(0);
     });
 
     it('when Navigation Timing is not supported yet should return an empty object', () => {
       perfume.config.navigationTiming = true;
       jest.spyOn(window.performance, 'getEntriesByType').mockReturnValue([] as any);
-      expect(perfume.navigationTiming).toEqual({});
+      expect((perfume as any).getNavigationTiming()).toEqual({});
     });
   });
 
@@ -861,13 +839,6 @@ describe('Perfume', () => {
     it('should return -1 when entryType is a measure', () => {
       const value = (perfume as any).getDurationByMetric('metricName');
       expect(value).toEqual(12346);
-    });
-  });
-
-  describe('.getMeasurementForGivenName()', () => {
-    it('should return the first PerformanceEntry objects for the given name', () => {
-      const value = (perfume as any).getMeasurementForGivenName('metricName');
-      expect(value).toEqual({ duration: 12346, entryType: 'measure' });
     });
   });
 });
