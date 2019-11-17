@@ -1,13 +1,13 @@
 import Perfume from '../src/perfume';
-import mock, { MockDateNowValue } from './_mock';
+import mock from './_mock';
 
 describe('Perfume', () => {
   let perfume: Perfume;
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
-    perfume = new Perfume({ ...mock.defaultPerfumeConfig });
     mock.performance();
+    perfume = new Perfume({ ...mock.defaultPerfumeConfig });
     (window as any).ga = undefined;
     (window as any).PerformanceObserver = mock.PerformanceObserver;
     (window as any).console.log = (n: any) => n;
@@ -277,14 +277,14 @@ describe('Perfume', () => {
     it('should not call window.console.log() if debugging is disabled', () => {
       perfume.config.debugging = false;
       spy = jest.spyOn(window.console, 'log');
-      perfume.logDebug('', 0);
+      (perfume as any).logDebug('', 0);
       expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call window.console.log() if debugging is enabled', () => {
       perfume.config.debugging = true;
       spy = jest.spyOn(window.console, 'log');
-      perfume.logDebug('metricName', 1235);
+      (perfume as any).logDebug('metricName', 1235);
       const text = `Perfume.js: debugging metricName:`;
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(text, 1235);

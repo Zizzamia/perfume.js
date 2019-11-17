@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.0.0-rc2 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.0.0-rc3 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -82,6 +82,9 @@ export type IPerfumeMetrics =
   | 'firstPaint'
   | 'firstInputDelay';
 
+const w = window;
+const c = window.console;
+
 export default class Perfume {
   config: IPerfumeConfig = {
     // Metrics
@@ -117,12 +120,12 @@ export default class Perfume {
     this.perf = new Performance();
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
-    if (!Performance.supported()) {
+    if (!this.perf.isSupported) {
       return;
     }
 
     // Checks if use Performance or the EmulatedPerformance instance
-    if (Performance.supportedPerformanceObserver()) {
+    if (this.perf.isSupportedPerformanceObserver) {
       this.initPerformanceObserver();
     }
 
@@ -146,7 +149,7 @@ export default class Perfume {
    * Start performance measurement
    */
   start(metricName: string): void {
-    if (!this.checkMetricName(metricName) || !Performance.supported()) {
+    if (!this.checkMetricName(metricName) || !this.perf.isSupported) {
       return;
     }
     if (this.metrics[metricName]) {
@@ -167,7 +170,7 @@ export default class Perfume {
    * End performance measurement
    */
   end(metricName: string): void | number {
-    if (!this.checkMetricName(metricName) || !Performance.supported()) {
+    if (!this.checkMetricName(metricName) || !this.perf.isSupported) {
       return;
     }
     const metric = this.metrics[metricName];
@@ -202,19 +205,6 @@ export default class Perfume {
     });
   }
 
-  /**
-   * Coloring Debugging Text in Browser Console
-   */
-  logDebug(methodName: string, debugValue: any = ''): void {
-    if (!this.config.debugging) {
-      return;
-    }
-    window.console.log(
-      `${this.config.logPrefix} debugging ${methodName}:`,
-      debugValue,
-    );
-  }
-
   private initPerformanceObserver(): void {
     if (this.config.firstPaint || this.config.firstContentfulPaint) {
       this.initFirstPaint();
@@ -242,6 +232,19 @@ export default class Perfume {
       this.isHidden = document.hidden;
     }
   };
+
+  /**
+   * Coloring Debugging Text in Browser Console
+   */
+  private logDebug(methodName: string, debugValue: any = ''): void {
+    if (!this.config.debugging) {
+      return;
+    }
+    c.log(
+      `${this.config.logPrefix} debugging ${methodName}:`,
+      debugValue,
+    );
+  }
 
   /**
    * Logging Performance Paint Timing
@@ -448,9 +451,9 @@ export default class Perfume {
     if (duration) {
       const durationMs = duration.toFixed(2);
       text += `${durationMs} ${suffix}`;
-      window.console.log(text, style);
+      c.log(text, style);
     } else if (data) {
-      window.console.log(text, style, data);
+      c.log(text, style, data);
     }
   }
 
@@ -500,15 +503,15 @@ export default class Perfume {
     if (!this.config.warning || !this.config.logging) {
       return;
     }
-    window.console.warn(this.config.logPrefix, message);
+    c.warn(this.config.logPrefix, message);
   }
 
   /**
    * PushTask to requestIdleCallback
    */
   private pushTask(cb: any): void {
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(cb, { timeout: 3000 });
+    if ('requestIdleCallback' in w) {
+      (w as any).requestIdleCallback(cb, { timeout: 3000 });
     } else {
       cb();
     }

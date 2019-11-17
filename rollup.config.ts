@@ -16,8 +16,6 @@ const createConfig = ({ output, min = false }) => {
             'start',
             'end',
             'endPaint',
-            'log',
-            'logDebug',
             'sendTiming',
             'fetchTime',
             'workerTime',

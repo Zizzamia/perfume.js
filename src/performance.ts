@@ -63,35 +63,10 @@ export interface IPerfumeNavigationTiming {
 }
 
 export default class Performance {
-  /**
-   * True if the browser supports the Navigation Timing API,
-   * User Timing API and the PerformanceObserver Interface.
-   * In Safari, the User Timing API (performance.mark()) is not available,
-   * so the DevTools timeline will not be annotated with marks.
-   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
-   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
-   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
-   */
-  static supported(): boolean {
-    return (
-      window.performance &&
-      !!performance.getEntriesByType &&
-      !!performance.now &&
-      !!performance.mark
-    );
-  }
-
-  /**
-   * For now only Chrome fully support the PerformanceObserver interface
-   * and the entryType "paint".
-   * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
-   */
-  static supportedPerformanceObserver(): boolean {
-    return (window as any).chrome && 'PerformanceObserver' in window;
-  }
-
   navigationTimingCached: IPerfumeNavigationTiming = {};
   private perfObserver: any;
+  private w = window;
+  private wp = window.performance;
 
   /**
    * Navigation Timing API provides performance metrics for HTML documents.
@@ -100,7 +75,7 @@ export default class Performance {
    */
   get navigationTiming(): IPerfumeNavigationTiming {
     if (
-      !Performance.supported() ||
+      !this.isSupported ||
       Object.keys(this.navigationTimingCached).length
     ) {
       return this.navigationTimingCached;
@@ -137,6 +112,33 @@ export default class Performance {
       ),
     };
     return this.navigationTimingCached;
+  }
+
+  /**
+   * True if the browser supports the Navigation Timing API,
+   * User Timing API and the PerformanceObserver Interface.
+   * In Safari, the User Timing API (performance.mark()) is not available,
+   * so the DevTools timeline will not be annotated with marks.
+   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
+   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
+   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
+   */
+  get isSupported(): boolean {
+    return (
+      this.wp &&
+      !!this.wp.getEntriesByType &&
+      !!this.wp.now &&
+      !!this.wp.mark
+    );
+  }
+
+  /**
+   * For now only Chrome fully support the PerformanceObserver interface
+   * and the entryType "paint".
+   * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
+   */
+  get isSupportedPerformanceObserver(): boolean {
+    return (this.w as any).chrome && 'PerformanceObserver' in this.w;
   }
 
   /**

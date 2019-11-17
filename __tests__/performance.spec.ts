@@ -1,4 +1,4 @@
-import Performance, { IPerformanceEntry } from '../src/performance';
+import Performance from '../src/performance';
 import mock from './_mock';
 
 describe('Performance', () => {
@@ -6,8 +6,8 @@ describe('Performance', () => {
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
-    service = new Performance();
     mock.performance();
+    service = new Performance();
     (window as any).PerformanceObserver = mock.PerformanceObserver;
   });
 
@@ -18,20 +18,20 @@ describe('Performance', () => {
     }
   });
 
-  describe('.supported()', () => {
+  describe('.isSupported()', () => {
     it('should return true if the browser supports the Navigation Timing API', () => {
-      expect(Performance.supported()).toEqual(true);
+      expect(service.isSupported).toEqual(true);
     });
 
     it('should return false if the browser does not supports performance.mark', () => {
       delete window.performance.mark;
-      expect(Performance.supported()).toEqual(false);
+      expect(service.isSupported).toEqual(false);
     });
 
     it('should return false if the browser does not supports performance.now', () => {
       window.performance.mark = () => 1;
       delete window.performance.now;
-      expect(Performance.supported()).toEqual(false);
+      expect(service.isSupported).toEqual(false);
     });
   });
 
