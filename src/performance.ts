@@ -121,7 +121,9 @@ export default class Performance {
    * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
    */
   get isSupported(): boolean {
-    return (this.wp && !!this.wp.getEntriesByType && !!this.wp.now && !!this.wp.mark);
+    return (
+      this.wp && !!this.wp.getEntriesByType && !!this.wp.now && !!this.wp.mark
+    );
   }
 
   /**
