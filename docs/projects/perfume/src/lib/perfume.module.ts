@@ -36,10 +36,6 @@ export class NgPerfume {
     this.config = perfume.config;
   }
 
-  get navigationTiming() {
-    return perfume.navigationTiming;
-  }
-
   start(metricName: string): void {
     perfume.start(metricName);
   }
