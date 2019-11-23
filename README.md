@@ -41,7 +41,8 @@ With Perfume.js, you can collect those metrics and have a deep understanding eve
 
 ![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
 
-#### Installing
+
+## Installing
 
 npm (https://www.npmjs.com/package/perfume.js):
 
