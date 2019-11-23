@@ -340,36 +340,12 @@ const options = {
   debugging: false,
 };
 ```
-
-#### Utilities
-
-Perfume.js expose some methods and properties which may be useful to people extending the library.
-
-```javascript
-const perfume = new Perfume({
-  firstContentfulPaint: true,
-  firstInputDelay: true,
-});
-
-// Values
-perfume.firstPaintDuration;
-perfume.firstContentfulPaintDuration;
-perfume.firstInputDelayDuration;
-
-// Aync Values
-const durationFCP = await perfume.observeFirstContentfulPaint;
-const durationFID = await perfume.observeFirstInputDelay;
-
-// Send Custom User timing measure to your Analytics Tracker
-perfume.sendTiming(metricName, durationFCP);
-```
 <br />
 
 ## Develop
 
 * `npm start`: Run `npm run build` in watch mode
 * `npm run test`: Run test suite
-* `npm run test:watch`: Run test suite in [interactive watch mode](http://facebook.github.io/jest/docs/cli.html#watch)
 * `npm run build`: Generate bundles and typings
 * `npm run lint`: Lints code
 <br />
