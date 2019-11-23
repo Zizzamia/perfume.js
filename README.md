@@ -38,7 +38,7 @@ English | [简体中文](./README-zh_CN.md)
 <br />
 With Perfume.js, you can collect those metrics and have a deep understanding everywhere in the world how your customers perceive web performance for your application. Use your favorite analytics tool to visualize the data between countries,here below how it might look a sample data for <b>FCP</b> between the United States, Italy, Indonesia, and Nigeria.
 <br />
-![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.jpg)
+![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
 
 #### Installing
 
