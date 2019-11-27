@@ -22,8 +22,8 @@
     </div>
 
     <div class="box">
-      <h3 class="box-title" id="/real-user-measurement/">
-        <a href="{{ path }}#/real-user-measurement/">The latest in metrics & Real User Measurement</a>
+      <h3 class="box-title" id="/real-user-measurements/">
+        <a href="{{ path }}#/real-user-measurements/">The latest in metrics & Real User Measurement</a>
       </h3>
       <p><b>Perfume</b> leverage the latest W3C Performance Drafts (e.g. 
         <a href="https://w3c.github.io/performance-timeline/" target="_blank">PerformanceObserver</a>),
@@ -40,7 +40,7 @@
         <source srcset="{{ path }}assets/first-paint-and-first-input-delay-700.webp" type="image/webp" />
         <source srcset="{{ path }}assets/first-paint-and-first-input-delay.png" type="image/png" />
         <img src="{{ path }}assets/first-paint-and-first-input-delay.png" 
-        alt="First Paint and First Input Delay" loading="lazy" />
+        alt="First Paint and First Input Delay" loading="lazy" width="700" height="326" />
       </picture>
       <br />
       <p>
@@ -55,7 +55,7 @@
         <source srcset="{{ path }}assets/first-contentful-paint-desktop.webp" type="image/webp" />
         <source srcset="{{ path }}assets/first-contentful-paint-desktop.png" type="image/png" />
         <img src="{{ path }}assets/first-contentful-paint-desktop.png"
-        alt="First Contentful Paint" loading="lazy" />
+        alt="First Contentful Paint" loading="lazy" width="700" height="255" />
       </picture>
     </div>
 
@@ -116,6 +116,36 @@ npm install perfume.js --save-dev
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   navigationTiming<span class="red">:</span> <span class="blue">true</span>,
+  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data {{'}'}}) => {{'{'}}
+    myAnalyticsTool.<span class="violet">track</span>(metricName, data);
+  {{'}'}})
+{{'}'}});</pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/resource-timing/">
+        <a href="{{ path }}#/resource-timing/">
+          Resource Timing
+        </a>
+      </h3>
+      <p>Resource Timing collects performance metrics for document-dependent resources. Stuff like style sheets, scripts, images, et cetera.</p>
+      <p>Perfume helps expose all PerformanceResourceTiming entries and group data <b>data consumption</b> by Kb used.</p>
+      <p class="box-demo">
+        Perfume.js: dataConsumption {{ dataConsumption | json }}
+      </p>
+      <div class="box-code js">
+        <table>
+          <tbody>
+            <tr>
+              <td class="code">
+                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
+  resourceTiming<span class="red">:</span> <span class="blue">true</span>,
+  dataConsumption<span class="red">:</span> <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data {{'}'}}) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, data);
   {{'}'}})
@@ -280,7 +310,7 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
         <source srcset="{{ path }}assets/performance-mark.webp" type="image/webp" />
         <source srcset="{{ path }}assets/performance-mark.png" type="image/png" />
         <img src="{{ path }}assets/performance-mark.png"
-        alt="Annotate metrics in the DevTools" loading="lazy" />
+        alt="Annotate metrics in the DevTools" loading="lazy" width="700" height="303" />
       </picture>
     </div>
 
@@ -411,7 +441,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
         <source srcset="{{ path }}assets/angular-performance-decorator.webp" type="image/webp" />
         <source srcset="{{ path }}assets/angular-performance-decorator.png" type="image/png" />
         <img src="{{ path }}assets/angular-performance-decorator.png"
-        alt="Angular Performance Decorator" loading="lazy" />
+        alt="Angular Performance Decorator" loading="lazy" width="700" height="265" />
       </picture>
     </div>
 
@@ -524,7 +554,6 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
   logPrefix<span class="red">:</span> "Perfume.js:"
   logging<span class="red">:</span> <span class="blue">true</span>,
   maxMeasureTime<span class="red">:</span> 15000,
-  maxDataConsumption<span class="red">:</span> 20000,
   warning<span class="red">:</span> <span class="blue">false</span>,
   debugging<span class="red">:</span> <span class="blue">false</span>,
 {{'}'}};</pre>

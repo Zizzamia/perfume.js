@@ -25,7 +25,7 @@ export class CfpComponent implements AfterViewInit {
 
   async openDialog() {
     this.perfume.start('openDialog');
-    const dialogRef = this.dialog.open(DialogComponent, {
+    this.dialog.open(DialogComponent, {
       data: { gifIndex: this.gifIndex },
       width: '50%',
     });

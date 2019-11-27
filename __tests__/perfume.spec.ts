@@ -31,13 +31,12 @@ describe('Perfume', () => {
       expect(instance.config.firstInputDelay).toEqual(false);
       expect(instance.config.dataConsumption).toEqual(false);
       expect(instance.config.navigationTiming).toEqual(false);
+      expect(instance.config.resourceTiming).toEqual(false);
       expect(instance.config.analyticsTracker).toBeDefined();
       expect(instance.config.logPrefix).toEqual('Perfume.js:');
       expect(instance.config.logging).toEqual(true);
       expect(instance.config.maxMeasureTime).toEqual(15000);
-      expect(instance.config.maxDataConsumption).toEqual(20000);
       expect(instance.config.warning).toEqual(false);
-      expect(instance.config.debugging).toEqual(false);
     });
   });
 
@@ -57,6 +56,7 @@ describe('Perfume', () => {
         firstPaint: true,
         firstInputDelay: true,
         dataConsumption: true,
+        resourceTiming: true,
       });
     });
 
@@ -77,7 +77,6 @@ describe('Perfume', () => {
         firstInputDelay: true,
         dataConsumption: true,
         warning: true,
-        debugging: true,
       });
     });
 
@@ -89,7 +88,6 @@ describe('Perfume', () => {
         dataConsumption: true,
         navigationTiming: true,
         warning: true,
-        debugging: true,
       });
     });
   });
@@ -273,24 +271,6 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.logDebug()', () => {
-    it('should not call window.console.log() if debugging is disabled', () => {
-      perfume.config.debugging = false;
-      spy = jest.spyOn(window.console, 'log');
-      (perfume as any).logDebug('', 0);
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should call window.console.log() if debugging is enabled', () => {
-      perfume.config.debugging = true;
-      spy = jest.spyOn(window.console, 'log');
-      (perfume as any).logDebug('metricName', 1235);
-      const text = `Perfume.js: debugging metricName:`;
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text, 1235);
-    });
-  });
-
   describe('.sendTiming()', () => {
     it('should not call analyticsTracker() if isHidden is true', () => {
       perfume.config.analyticsTracker = ({ metricName, duration }) => {};
@@ -441,6 +421,10 @@ describe('Perfume', () => {
 
   describe('.performanceObserverResourceCb()', () => {
     beforeEach(() => {
+      (perfume as any).dataConsumption = {
+        css: 0,
+        fetch: 0,
+      };
       perfume.config.dataConsumption = true;
       (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
     });
@@ -449,34 +433,44 @@ describe('Perfume', () => {
       (perfume as any).performanceObserverResourceCb({
         entries: [],
       });
-      expect((perfume as any).dataConsumption).toEqual(0);
+      expect((perfume as any).dataConsumption).toEqual({
+        css: 0,
+        fetch: 0,
+      });
     });
 
     it('should float the dataConsumption result', () => {
-      (perfume as any).dataConsumption = 0;
       (perfume as any).performanceObserverResourceCb({
         entries: [
           {
-            decodedBodySize: 12345,
+            decodedBodySize: 12345678,
+            initiatorType: 'css'
           },
         ],
       });
-      expect((perfume as any).dataConsumption).toEqual(12.35);
+      expect((perfume as any).dataConsumption).toEqual({
+        css: 12345.678,
+        fetch: 0,
+      });
     });
 
     it('should sum the dataConsumption result', () => {
-      (perfume as any).dataConsumption = 0;
       (perfume as any).performanceObserverResourceCb({
         entries: [
           {
-            decodedBodySize: 12345,
+            decodedBodySize: 12345678,
+            initiatorType: 'css'
           },
           {
-            decodedBodySize: 10000,
+            decodedBodySize: 10000678,
+            initiatorType: 'fetch'
           },
         ],
       });
-      expect((perfume as any).dataConsumption).toEqual(22.35);
+      expect((perfume as any).dataConsumption).toEqual({
+        css: 12345.678,
+        fetch: 10000.678,
+      });
     });
   });
 
@@ -551,33 +545,21 @@ describe('Perfume', () => {
 
   describe('.disconnectDataConsumption()', () => {
     beforeEach(() => {
-      (perfume as any).dataConsumption = 10;
-      (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
+      (perfume as any).dataConsumptionTimeout = 12345;
     });
 
-    it('should call logMetric() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'logMetric');
+    it('should call logData() with the correct arguments', () => {
+      spy = jest.spyOn(perfume as any, 'logData');
       (perfume as any).disconnectDataConsumption();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
-        (perfume as any).dataConsumption,
-        'Data Consumption',
         'dataConsumption',
-        'Kb',
+        (perfume as any).dataConsumption,
       );
-    });
-
-    it('should call disconnect()', () => {
-      spy = jest.spyOn(
-        (perfume as any).perfObservers.dataConsumption,
-        'disconnect',
-      );
-      (perfume as any).disconnectDataConsumption();
-      expect(spy.mock.calls.length).toEqual(1);
     });
   });
 
-  describe('.initDataConsumption()', () => {
+  describe('.initResourceTiming()', () => {
     beforeEach(() => {
       perfume.config.dataConsumption = true;
       (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
@@ -587,7 +569,7 @@ describe('Perfume', () => {
       spy = jest.spyOn(perfume as any, 'performanceObserver');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
-      perfume['initDataConsumption']();
+      perfume['initResourceTiming']();
       expect(spy.mock.calls.length).toEqual(1);
     });
 
@@ -596,7 +578,7 @@ describe('Perfume', () => {
       spy = jest.spyOn(perfume as any, 'disconnectDataConsumption');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
-      perfume['initDataConsumption']();
+      perfume['initResourceTiming']();
       jest.runAllTimers();
       expect(spy.mock.calls.length).toEqual(1);
     });
@@ -606,7 +588,7 @@ describe('Perfume', () => {
       (window as any).chrome = true;
       mock.PerformanceObserver.simulateErrorOnObserve = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
-      perfume['initDataConsumption']();
+      perfume['initResourceTiming']();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith('DataConsumption:failed');
     });
@@ -671,35 +653,6 @@ describe('Perfume', () => {
       );
       expect(spy.mock.calls.length).toEqual(0);
     });
-
-    it('should not call sendTiming() when dataConsumption is higher of config.maxDataConsumption', () => {
-      spy = jest.spyOn(perfume as any, 'sendTiming');
-      (perfume as any).logMetric(25000, 'Data Consumption', 'dataConsumption');
-      expect(spy.mock.calls.length).toEqual(0);
-    });
-  });
-
-  describe('.logNavigationTiming()', () => {
-    it('should call log() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'log');
-      (perfume as any).logNavigationTiming();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({
-        metricName: 'navigationTiming',
-        data: {},
-        suffix: '',
-      });
-    });
-
-    it('should call sendTiming() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'sendTiming');
-      (perfume as any).logNavigationTiming();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({
-        metricName: 'navigationTiming',
-        data: {},
-      });
-    });
   });
 
   describe('.logWarn()', () => {
@@ -757,12 +710,12 @@ describe('Perfume', () => {
       perfume.config.navigationTiming = true;
       expect((perfume as any).getNavigationTiming()).toEqual({
         dnsLookupTime: 0,
-        downloadTime: 0.69,
-        fetchTime: 4.44,
+        downloadTime: 0.6899998988956213,
+        fetchTime: 4.435000009834766,
         headerSize: 0,
-        timeToFirstByte: 3.75,
-        totalTime: 4.44,
-        workerTime: 4.44,
+        timeToFirstByte: 3.745000110939145,
+        totalTime: 4.435000009834766,
+        workerTime: 4.435000009834766,
       });
     });
 

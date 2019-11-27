@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.0.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.1.0 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -18,16 +18,14 @@ export interface IPerfumeConfig {
   dataConsumption: boolean;
   largestContentfulPaint: boolean;
   navigationTiming: boolean;
+  resourceTiming: boolean;
   // Analytics
   analyticsTracker: (options: IAnalyticsTrackerOptions) => void;
   // Logging
   logPrefix: string;
   logging: boolean;
   maxMeasureTime: number;
-  maxDataConsumption: number;
   warning: boolean;
-  // Debugging
-  debugging: boolean;
 }
 
 export interface IPerfumeOptions {
@@ -38,16 +36,14 @@ export interface IPerfumeOptions {
   dataConsumption?: boolean;
   largestContentfulPaint?: boolean;
   navigationTiming?: boolean;
+  resourceTiming?: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   // Logging
   logPrefix?: string;
   logging?: boolean;
   maxMeasureTime?: number;
-  maxDataConsumption?: number;
   warning?: boolean;
-  // Debugging
-  debugging?: boolean;
 }
 
 export interface ILogOptions {
@@ -91,6 +87,7 @@ export type IPerformanceObserverType =
   | 'resource';
 
 export type IPerformanceEntryInitiatorType =
+  | 'beacon'
   | 'css'
   | 'fetch'
   | 'img'
@@ -139,6 +136,17 @@ export interface IPerfumeNavigationTiming {
   dnsLookupTime?: number;
 }
 
+export interface IPerfumeDataConsumption {
+  beacon: number;
+  css: number;
+  fetch: number;
+  img: number;
+  other: number;
+  script: number;
+  total: number;
+  xmlhttprequest: number;
+}
+
 export default class Perfume {
   config: IPerfumeConfig = {
     // Metrics
@@ -148,19 +156,27 @@ export default class Perfume {
     dataConsumption: false,
     largestContentfulPaint: false,
     navigationTiming: false,
+    resourceTiming: false,
     // Analytics
     analyticsTracker: options => {},
     // Logging
     logPrefix: 'Perfume.js:',
     logging: true,
     maxMeasureTime: 15000,
-    maxDataConsumption: 20000,
     warning: false,
-    debugging: false,
   };
   private c = window.console;
   private d = document;
-  private dataConsumption: number = 0;
+  private dataConsumption: IPerfumeDataConsumption = {
+    beacon: 0,
+    css: 0,
+    fetch: 0,
+    img: 0,
+    other: 0,
+    script: 0,
+    total: 0,
+    xmlhttprequest: 0,
+  };
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
   private largestContentfulPaintDuration: number = 0;
@@ -192,7 +208,7 @@ export default class Perfume {
 
     // Log Navigation Timing
     if (this.config.navigationTiming) {
-      this.logNavigationTiming();
+      this.logData('navigationTiming', this.getNavigationTiming());
     }
   }
 
@@ -291,35 +307,11 @@ export default class Perfume {
   }
 
   private disconnectDataConsumption(): void {
-    clearTimeout(this.dataConsumptionTimeout);
-    if (!this.perfObservers.dataConsumption || !this.dataConsumption) {
+    if (!this.dataConsumptionTimeout) {
       return;
     }
-    this.logMetric(
-      this.dataConsumption,
-      'Data Consumption',
-      'dataConsumption',
-      'Kb',
-    );
-    this.perfObservers.dataConsumption.disconnect();
-  }
-
-  private initDataConsumption(): void {
-    try {
-      this.perfObservers.dataConsumption = this.performanceObserver(
-        'resource',
-        (entries: IPerformanceEntry[]) => {
-          this.performanceObserverResourceCb({
-            entries,
-          });
-        },
-      );
-    } catch (e) {
-      this.logWarn('DataConsumption:failed');
-    }
-    this.dataConsumptionTimeout = setTimeout(() => {
-      this.disconnectDataConsumption();
-    }, 15000);
+    clearTimeout(this.dataConsumptionTimeout);
+    this.logData('dataConsumption', this.dataConsumption);
   }
 
   private initFirstInputDelay(): void {
@@ -368,7 +360,6 @@ export default class Perfume {
       this.perfObservers.largestContentfulPaint = this.performanceObserver(
         'largest-contentful-paint',
         (entries: IPerformanceEntry[]) => {
-          this.logDebug('PerformanceEntry:LCP', entries);
           const lastPerformanceEntry = entries[entries.length - 1];
           this.largestContentfulPaintDuration =
             lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
@@ -388,9 +379,24 @@ export default class Perfume {
     this.initFirstInputDelay();
     this.initLargestContentfulPaint();
     // Collects KB information related to resources on the page
-    if (this.config.dataConsumption) {
-      this.initDataConsumption();
+    if (this.config.resourceTiming || this.config.dataConsumption) {
+      this.initResourceTiming();
     }
+  }
+
+  private initResourceTiming(): void {
+    try {
+      this.performanceObserver('resource', (entries: IPerformanceEntry[]) => {
+        this.performanceObserverResourceCb({
+          entries,
+        });
+      });
+    } catch (e) {
+      this.logWarn('DataConsumption:failed');
+    }
+    this.dataConsumptionTimeout = setTimeout(() => {
+      this.disconnectDataConsumption();
+    }, 15000);
   }
 
   /**
@@ -458,25 +464,35 @@ export default class Perfume {
     this.navigationTimingCached = {
       // fetchStart marks when the browser starts to fetch a resource
       // responseEnd is when the last byte of the response arrives
-      fetchTime: parseFloat((responseEnd - n.fetchStart).toFixed(2)),
+      fetchTime: responseEnd - n.fetchStart,
       // Service worker time plus response time
-      workerTime: parseFloat(
-        (n.workerStart > 0 ? responseEnd - n.workerStart : 0).toFixed(2),
-      ),
+      workerTime: n.workerStart > 0 ? responseEnd - n.workerStart : 0,
       // Request plus response time (network only)
-      totalTime: parseFloat((responseEnd - n.requestStart).toFixed(2)),
+      totalTime: responseEnd - n.requestStart,
       // Response time only (download)
-      downloadTime: parseFloat((responseEnd - responseStart).toFixed(2)),
+      downloadTime: responseEnd - responseStart,
       // Time to First Byte (TTFB)
-      timeToFirstByte: parseFloat((responseStart - n.requestStart).toFixed(2)),
+      timeToFirstByte: responseStart - n.requestStart,
       // HTTP header size
-      headerSize: parseFloat((n.transferSize - n.encodedBodySize).toFixed(2)),
+      headerSize: n.transferSize - n.encodedBodySize,
       // Measuring DNS lookup time
-      dnsLookupTime: parseFloat(
-        (n.domainLookupEnd - n.domainLookupStart).toFixed(2),
-      ),
+      dnsLookupTime: n.domainLookupEnd - n.domainLookupStart,
     };
     return this.navigationTimingCached;
+  }
+
+  private logData(metricName: string, data: any): void {
+    Object.keys(data).forEach(key => {
+      if (typeof data[key] === 'number') {
+        data[key] = parseFloat(data[key].toFixed(2));
+      }
+    });
+    this.pushTask(() => {
+      // Logs the metric in the internal console.log
+      this.log({ metricName, data, suffix: '' });
+      // Sends the metric to an external tracking service
+      this.sendTiming({ metricName, data });
+    });
   }
 
   /**
@@ -491,21 +507,15 @@ export default class Perfume {
   ): void {
     const duration2Decimal = parseFloat(duration.toFixed(2));
     // Stop Analytics and Logging for false negative metrics
-    if (
-      metricName !== 'dataConsumption' &&
-      duration2Decimal > this.config.maxMeasureTime
-    ) {
-      return;
-    } else if (
-      metricName === 'dataConsumption' &&
-      duration2Decimal > this.config.maxDataConsumption
-    ) {
+    if (duration2Decimal > this.config.maxMeasureTime) {
       return;
     }
-    // Logs the metric in the internal console.log
-    this.log({ metricName: logText, duration: duration2Decimal, suffix });
-    // Sends the metric to an external tracking service
-    this.sendTiming({ metricName, duration: duration2Decimal });
+    this.pushTask(() => {
+      // Logs the metric in the internal console.log
+      this.log({ metricName: logText, duration: duration2Decimal, suffix });
+      // Sends the metric to an external tracking service
+      this.sendTiming({ metricName, duration: duration2Decimal });
+    });
   }
 
   /**
@@ -530,24 +540,6 @@ export default class Perfume {
     } else if (data) {
       this.c.log(text, style, data);
     }
-  }
-
-  /**
-   * Coloring Debugging Text in Browser Console
-   */
-  private logDebug(methodName: string, debugValue: any = ''): void {
-    if (!this.config.debugging) {
-      return;
-    }
-    this.c.log(`${this.config.logPrefix} debugging ${methodName}:`, debugValue);
-  }
-
-  private logNavigationTiming() {
-    const metricName = 'navigationTiming';
-    // Logs the metric in the internal console.log
-    this.log({ metricName, data: this.getNavigationTiming(), suffix: '' });
-    // Sends the metric to an external tracking service
-    this.sendTiming({ metricName, data: this.getNavigationTiming() });
   }
 
   /**
@@ -614,21 +606,18 @@ export default class Perfume {
     metricName: IPerfumeMetrics;
     valueLog: 'duration' | 'startTime';
   }): void {
-    this.logDebug('PerformanceEntry', options);
     options.entries.forEach((performanceEntry: IPerformanceEntry) => {
-      this.pushTask(() => {
-        if (
-          this.config[options.metricName] &&
-          (!options.entryName ||
-            (options.entryName && performanceEntry.name === options.entryName))
-        ) {
-          this.logMetric(
-            performanceEntry[options.valueLog],
-            options.metricLog,
-            options.metricName,
-          );
-        }
-      });
+      if (
+        this.config[options.metricName] &&
+        (!options.entryName ||
+          (options.entryName && performanceEntry.name === options.entryName))
+      ) {
+        this.logMetric(
+          performanceEntry[options.valueLog],
+          options.metricLog,
+          options.metricName,
+        );
+      }
       if (
         this.perfObservers.firstContentfulPaint &&
         performanceEntry.name === 'first-contentful-paint'
@@ -647,13 +636,17 @@ export default class Perfume {
   private performanceObserverResourceCb(options: {
     entries: IPerformanceEntry[];
   }): void {
-    this.logDebug('PerformanceEntry:resource', options);
     options.entries.forEach((performanceEntry: IPerformanceEntry) => {
-      if (performanceEntry.decodedBodySize) {
-        const decodedBodySize = parseFloat(
-          (performanceEntry.decodedBodySize / 1000).toFixed(2),
-        );
-        this.dataConsumption += decodedBodySize;
+      if (this.config.resourceTiming) {
+        this.logData('resourceTiming', performanceEntry);
+      }
+      if (
+        this.config.dataConsumption &&
+        performanceEntry.decodedBodySize &&
+        performanceEntry.initiatorType
+      ) {
+        this.dataConsumption[performanceEntry.initiatorType] +=
+          performanceEntry.decodedBodySize / 1000;
       }
     });
   }

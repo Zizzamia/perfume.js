@@ -13,6 +13,7 @@ const createConfig = ({ output, min = false }) => {
           reserved: [
             'config',
             'navigationTiming',
+            'resourceTiming',
             'start',
             'end',
             'endPaint',
@@ -39,9 +40,17 @@ const createConfig = ({ output, min = false }) => {
             'logPrefix',
             'logging',
             'maxMeasureTime',
-            'maxDataConsumption',
             'warning',
-            'debugging',
+            'beacon',
+            'css',
+            'fetch',
+            'img',
+            'other',
+            'script',
+            'total',
+            'xmlhttprequest',
+            'initiatorType',
+            'decodedBodySize',
           ]
         }
       },

@@ -3,13 +3,12 @@ import {
   ChangeDetectorRef,
   Component,
   ViewChild,
-  NgZone,
 } from '@angular/core';
 
 import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
 // import { NgPerfume, PerfumeAfterViewInit } from '../../projects/perfume/src/lib/perfume.module';
 
-import { navigationTiming, fp, fcp, lcp, fid } from './perfume.config';
+import { navigationTiming, dataConsumption, fp, fcp, lcp, fid } from './perfume.config';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +20,7 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('p', { static: true })
   // Component
   navigationTiming = {};
+  dataConsumption = {};
   logCustom: string;
   logFibonacci: string;
   fp: number;
@@ -39,6 +39,10 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit() {
     navigationTiming.subscribe((result) => {
       this.navigationTiming = result;
+      this.ref.detectChanges();
+    });
+    dataConsumption.subscribe((result) => {
+      this.dataConsumption = result;
       this.ref.detectChanges();
     });
     fp.subscribe((result) => {

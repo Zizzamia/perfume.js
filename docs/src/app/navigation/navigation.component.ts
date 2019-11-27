@@ -15,8 +15,8 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <a href="{{ path }}#/home/"
       [class.active]="navSelected === navOptions.home"
       (click)="activeNav(navOptions.home)">Home</a>
-      <a href="{{ path }}#/user-centric-metrics/"
-      [class.active]="navSelected === navOptions.userCentric"
+      <a href="{{ path }}#/real-user-measurements/"
+      [class.active]="navSelected === navOptions.rum"
       (click)="activeNav(navOptions.userCentric)">Real User Measurement</a>
       <a href="{{ path }}#/installing-and-imports/"
       [class.active]="navSelected === navOptions.installing"
@@ -25,6 +25,9 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <a href="{{ path }}#/navigation-timing/" class="part-two"
       [class.active]="navSelected === navOptions.navTime"
       (click)="activeNav(navOptions.navTime)">Navigation Timing</a>
+      <a href="{{ path }}#/resource-timing/" class="part-two"
+      [class.active]="navSelected === navOptions.resTime"
+      (click)="activeNav(navOptions.resTime)">Resource Timing</a>
       <a href="{{ path }}#/first-paint/" class="part-two"
       [class.active]="navSelected === navOptions.fp"
       (click)="activeNav(navOptions.fp)">First Paint</a>
@@ -131,9 +134,10 @@ export class NavigationComponent implements AfterViewInit {
   constructor() {
     this.path = window.location.href.split('#')[0];
     this.navOptions = {
-      userCentric: 'user-centric-metrics',
+      rum: 'real-user-measurement',
       installing: 'installing-and-imports',
       navTime: 'navigation-timing',
+      resTime: 'resource-timing',
       fp: 'first-paint',
       fcp: 'first-contentful-paint',
       lcp: 'largest-contentful-paint',
