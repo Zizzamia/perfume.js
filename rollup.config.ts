@@ -17,7 +17,6 @@ const createConfig = ({ output, min = false }) => {
             'start',
             'end',
             'endPaint',
-            'sendTiming',
             'fetchTime',
             'workerTime',
             'totalTime',
@@ -51,6 +50,8 @@ const createConfig = ({ output, min = false }) => {
             'xmlhttprequest',
             'initiatorType',
             'decodedBodySize',
+            'renderTime',
+            'loadTime',
           ]
         }
       },

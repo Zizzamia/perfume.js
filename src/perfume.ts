@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.1.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.2.0 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -179,7 +179,7 @@ export default class Perfume {
   };
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
-  private largestContentfulPaintDuration: number = 0;
+  private lcpDuration: number = 0;
   private logMetricWarn = 'Missing metric name';
   private logPrefixRecording = 'Recording already';
   private metrics: IMetricMap = {};
@@ -286,23 +286,15 @@ export default class Perfume {
     }
   };
 
-  private digestFirstInputDelayEntries(entries: IPerformanceEntry[]): void {
+  private digestFirstInputDelayEntries(
+    performanceEntries: IPerformanceEntry[],
+  ): void {
     this.performanceObserverCb({
-      entries,
-      metricLog: 'First Input Delay',
+      performanceEntries,
       metricName: 'firstInputDelay',
       valueLog: 'duration',
     });
-    if (
-      this.config.largestContentfulPaint &&
-      this.largestContentfulPaintDuration
-    ) {
-      this.logMetric(
-        this.largestContentfulPaintDuration,
-        'Largest Contentful Paint',
-        'largestContentfulPaint',
-      );
-    }
+    this.disconnectlargestContentfulPaint();
     this.disconnectDataConsumption();
   }
 
@@ -311,12 +303,20 @@ export default class Perfume {
       return;
     }
     clearTimeout(this.dataConsumptionTimeout);
+    this.dataConsumptionTimeout = undefined;
     this.logData('dataConsumption', this.dataConsumption);
+  }
+
+  private disconnectlargestContentfulPaint(): void {
+    if (this.perfObservers.lcp && this.lcpDuration) {
+      this.logMetric(this.lcpDuration, 'largestContentfulPaint');
+      this.perfObservers.lcp.disconnect();
+    }
   }
 
   private initFirstInputDelay(): void {
     try {
-      this.perfObservers.firstInputDelay = this.performanceObserver(
+      this.perfObservers.fid = this.performanceObserver(
         'first-input',
         this.digestFirstInputDelayEntries.bind(this),
       );
@@ -331,20 +331,18 @@ export default class Perfume {
    */
   private initFirstPaint(): void {
     try {
-      this.perfObservers.firstContentfulPaint = this.performanceObserver(
+      this.perfObservers.fcp = this.performanceObserver(
         'paint',
-        (entries: IPerformanceEntry[]) => {
+        (performanceEntries: IPerformanceEntry[]) => {
           this.performanceObserverCb({
-            entries,
+            performanceEntries,
             entryName: 'first-paint',
-            metricLog: 'First Paint',
             metricName: 'firstPaint',
             valueLog: 'startTime',
           });
           this.performanceObserverCb({
-            entries,
+            performanceEntries,
             entryName: 'first-contentful-paint',
-            metricLog: 'First Contentful Paint',
             metricName: 'firstContentfulPaint',
             valueLog: 'startTime',
           });
@@ -357,12 +355,13 @@ export default class Perfume {
 
   private initLargestContentfulPaint(): void {
     try {
-      this.perfObservers.largestContentfulPaint = this.performanceObserver(
+      this.perfObservers.lcp = this.performanceObserver(
         'largest-contentful-paint',
-        (entries: IPerformanceEntry[]) => {
-          const lastPerformanceEntry = entries[entries.length - 1];
-          this.largestContentfulPaintDuration =
-            lastPerformanceEntry.renderTime || lastPerformanceEntry.loadTime;
+        (performanceEntries: IPerformanceEntry[]) => {
+          const lastEntry = performanceEntries.pop();
+          if (lastEntry) {
+            this.lcpDuration = lastEntry.renderTime || lastEntry.loadTime;
+          }
         },
       );
     } catch (e) {
@@ -386,11 +385,14 @@ export default class Perfume {
 
   private initResourceTiming(): void {
     try {
-      this.performanceObserver('resource', (entries: IPerformanceEntry[]) => {
-        this.performanceObserverResourceCb({
-          entries,
-        });
-      });
+      this.performanceObserver(
+        'resource',
+        (performanceEntries: IPerformanceEntry[]) => {
+          this.performanceObserverResourceCb({
+            performanceEntries,
+          });
+        },
+      );
     } catch (e) {
       this.logWarn('DataConsumption:failed');
     }
@@ -428,8 +430,8 @@ export default class Perfume {
    * not been made by the User Timing API
    */
   private getDurationByMetric(metricName: string): number {
-    const entries = this.wp.getEntriesByName(metricName);
-    const entry = entries[entries.length - 1];
+    const performanceEntries = this.wp.getEntriesByName(metricName);
+    const entry = performanceEntries[performanceEntries.length - 1];
     if (entry && entry.entryType === 'measure') {
       return entry.duration;
     }
@@ -474,7 +476,7 @@ export default class Perfume {
       // Time to First Byte (TTFB)
       timeToFirstByte: responseStart - n.requestStart,
       // HTTP header size
-      headerSize: n.transferSize - n.encodedBodySize,
+      headerSize: n.transferSize - n.encodedBodySize || 0,
       // Measuring DNS lookup time
       dnsLookupTime: n.domainLookupEnd - n.domainLookupStart,
     };
@@ -501,18 +503,20 @@ export default class Perfume {
    */
   private logMetric(
     duration: number,
-    logText: string,
     metricName: string,
     suffix: string = 'ms',
   ): void {
     const duration2Decimal = parseFloat(duration.toFixed(2));
     // Stop Analytics and Logging for false negative metrics
-    if (duration2Decimal > this.config.maxMeasureTime) {
+    if (
+      duration2Decimal > this.config.maxMeasureTime ||
+      duration2Decimal <= 0
+    ) {
       return;
     }
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ metricName: logText, duration: duration2Decimal, suffix });
+      this.log({ metricName, duration: duration2Decimal, suffix });
       // Sends the metric to an external tracking service
       this.sendTiming({ metricName, duration: duration2Decimal });
     });
@@ -522,23 +526,22 @@ export default class Perfume {
    * Coloring Text in Browser Console
    */
   private log(options: ILogOptions): void {
-    const { metricName, data, duration, suffix } = { suffix: 'ms', ...options };
     // Don't log when page is hidden or has disabled logging
     if (this.isHidden || !this.config.logging) {
       return;
     }
-    if (!metricName) {
+    if (!options.metricName) {
       this.logWarn(this.logMetricWarn);
       return;
     }
-    const style = 'color: #ff6d00;font-size:11px;';
-    let text = `%c ${this.config.logPrefix} ${metricName} `;
-    if (duration) {
-      const durationMs = duration.toFixed(2);
-      text += `${durationMs} ${suffix}`;
+    const style = 'color:#ff6d00;font-size:11px;';
+    let text = `%c ${this.config.logPrefix} ${options.metricName} `;
+    if (options.duration) {
+      const durationMs = options.duration.toFixed(2);
+      text += `${durationMs} ${options.suffix || 'ms'}`;
       this.c.log(text, style);
-    } else if (data) {
-      this.c.log(text, style, data);
+    } else if (options.data) {
+      this.c.log(text, style, options.data);
     }
   }
 
@@ -583,12 +586,12 @@ export default class Perfume {
    */
   private performanceObserver(
     eventType: IPerformanceObserverType,
-    cb: (entries: any[]) => void,
+    cb: (performanceEntries: any[]) => void,
   ): IPerformanceObserver {
     this.perfObserver = new PerformanceObserver(
       (entryList: IPerformanceObserverEntryList) => {
-        const entries = entryList.getEntries();
-        cb(entries);
+        const performanceEntries = entryList.getEntries();
+        cb(performanceEntries);
       },
     );
     // Retrieve buffered events and subscribe to newer events for Paint Timing
@@ -600,55 +603,54 @@ export default class Perfume {
    * Logging Performance Paint Timing
    */
   private performanceObserverCb(options: {
-    entries: IPerformanceEntry[];
+    performanceEntries: IPerformanceEntry[];
     entryName?: string;
-    metricLog: string;
     metricName: IPerfumeMetrics;
     valueLog: 'duration' | 'startTime';
   }): void {
-    options.entries.forEach((performanceEntry: IPerformanceEntry) => {
-      if (
-        this.config[options.metricName] &&
-        (!options.entryName ||
-          (options.entryName && performanceEntry.name === options.entryName))
-      ) {
-        this.logMetric(
-          performanceEntry[options.valueLog],
-          options.metricLog,
-          options.metricName,
-        );
-      }
-      if (
-        this.perfObservers.firstContentfulPaint &&
-        performanceEntry.name === 'first-contentful-paint'
-      ) {
-        this.perfObservers.firstContentfulPaint.disconnect();
-      }
-    });
-    if (
-      this.perfObservers.firstInputDelay &&
-      options.metricName === 'firstInputDelay'
-    ) {
-      this.perfObservers.firstInputDelay.disconnect();
+    options.performanceEntries.forEach(
+      (performanceEntry: IPerformanceEntry) => {
+        if (
+          this.config[options.metricName] &&
+          (!options.entryName ||
+            (options.entryName && performanceEntry.name === options.entryName))
+        ) {
+          this.logMetric(
+            performanceEntry[options.valueLog],
+            options.metricName,
+          );
+        }
+        if (
+          this.perfObservers.fcp &&
+          performanceEntry.name === 'first-contentful-paint'
+        ) {
+          this.perfObservers.fcp.disconnect();
+        }
+      },
+    );
+    if (this.perfObservers.fid && options.metricName === 'firstInputDelay') {
+      this.perfObservers.fid.disconnect();
     }
   }
 
   private performanceObserverResourceCb(options: {
-    entries: IPerformanceEntry[];
+    performanceEntries: IPerformanceEntry[];
   }): void {
-    options.entries.forEach((performanceEntry: IPerformanceEntry) => {
-      if (this.config.resourceTiming) {
-        this.logData('resourceTiming', performanceEntry);
-      }
-      if (
-        this.config.dataConsumption &&
-        performanceEntry.decodedBodySize &&
-        performanceEntry.initiatorType
-      ) {
-        this.dataConsumption[performanceEntry.initiatorType] +=
-          performanceEntry.decodedBodySize / 1000;
-      }
-    });
+    options.performanceEntries.forEach(
+      (performanceEntry: IPerformanceEntry) => {
+        if (this.config.resourceTiming) {
+          this.logData('resourceTiming', performanceEntry);
+        }
+        if (
+          this.config.dataConsumption &&
+          performanceEntry.decodedBodySize &&
+          performanceEntry.initiatorType
+        ) {
+          this.dataConsumption[performanceEntry.initiatorType] +=
+            performanceEntry.decodedBodySize / 1000;
+        }
+      },
+    );
   }
 
   /**
