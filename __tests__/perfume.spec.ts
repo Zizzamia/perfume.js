@@ -93,7 +93,7 @@ describe('Perfume', () => {
     beforeEach(() => {
       perfume = new Perfume({ ...mock.defaultPerfumeConfig });
     });
-    
+
     it('should call performanceMark', () => {
       spy = jest.spyOn(perfume as any, 'performanceMark');
       perfume.start('metricName');
@@ -348,7 +348,7 @@ describe('Perfume', () => {
 
   describe('.performanceObserverResourceCb()', () => {
     beforeEach(() => {
-      (perfume as any).dataConsumption = {
+      (perfume as any).perfResourceTiming = {
         css: 0,
         fetch: 0,
         total: 0,
@@ -361,7 +361,7 @@ describe('Perfume', () => {
       (perfume as any).performanceObserverResourceCb({
         performanceEntries: [],
       });
-      expect((perfume as any).dataConsumption).toEqual({
+      expect((perfume as any).perfResourceTiming).toEqual({
         css: 0,
         fetch: 0,
         total: 0,
@@ -377,7 +377,7 @@ describe('Perfume', () => {
           },
         ],
       });
-      expect((perfume as any).dataConsumption).toEqual({
+      expect((perfume as any).perfResourceTiming).toEqual({
         css: 12345.678,
         fetch: 0,
         total: 12345.678,
@@ -397,7 +397,7 @@ describe('Perfume', () => {
           },
         ],
       });
-      expect((perfume as any).dataConsumption).toEqual({
+      expect((perfume as any).perfResourceTiming).toEqual({
         css: 12345.678,
         fetch: 10000.678,
         total: 22346.356,
@@ -464,7 +464,7 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
         'dataConsumption',
-        (perfume as any).dataConsumption,
+        (perfume as any).perfResourceTiming,
       );
     });
   });

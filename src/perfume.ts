@@ -164,7 +164,15 @@ export default class Perfume {
   };
   private c = window.console;
   private d = document;
-  private dataConsumption: IPerfumeDataConsumption = {
+  private dataConsumptionTimeout: any;
+  private isHidden: boolean = false;
+  private lcpDuration: number = 0;
+  private logPrefixRecording = 'Recording already';
+  private metrics: IMetricMap = {};
+  private navigationTimingCached: IPerfumeNavigationTiming = {};
+  private perfObserver: any;
+  private perfObservers: IPerfObservers = {};
+  private perfResourceTiming: IPerfumeDataConsumption = {
     beacon: 0,
     css: 0,
     fetch: 0,
@@ -174,14 +182,6 @@ export default class Perfume {
     total: 0,
     xmlhttprequest: 0,
   };
-  private dataConsumptionTimeout: any;
-  private isHidden: boolean = false;
-  private lcpDuration: number = 0;
-  private logPrefixRecording = 'Recording already';
-  private metrics: IMetricMap = {};
-  private navigationTimingCached: IPerfumeNavigationTiming = {};
-  private perfObserver: any;
-  private perfObservers: IPerfObservers = {};
   private w = window;
   private wp = window.performance;
 
@@ -298,7 +298,7 @@ export default class Perfume {
     }
     clearTimeout(this.dataConsumptionTimeout);
     this.dataConsumptionTimeout = undefined;
-    this.logData('dataConsumption', this.dataConsumption);
+    this.logData('dataConsumption', this.perfResourceTiming);
   }
 
   private disconnectlargestContentfulPaint(): void {
@@ -621,8 +621,8 @@ export default class Perfume {
           performanceEntry.initiatorType
         ) {
           const bodySize = performanceEntry.decodedBodySize / 1000;
-          this.dataConsumption[performanceEntry.initiatorType] += bodySize;
-          this.dataConsumption.total += bodySize;
+          this.perfResourceTiming[performanceEntry.initiatorType] += bodySize;
+          this.perfResourceTiming.total += bodySize;
         }
       },
     );
