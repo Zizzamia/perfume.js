@@ -17,7 +17,7 @@ English | [简体中文](./README-zh_CN.md)
 - ⏰ Supported latest Performance APIs for precise metrics
 - 🔨 Cross browser tested
 - 🚿 Filters out false positive/negative results
-- 🤙 Only 1.9Kb gzip
+- 🤙 Only 2Kb gzip
 - 🛰 Flexible analytics tool
 - ⚡️ Waste-zero ms with [requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback) strategy built-in
 <br />

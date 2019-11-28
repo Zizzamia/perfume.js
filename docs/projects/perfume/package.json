@@ -4,6 +4,6 @@
   "peerDependencies": {
     "@angular/common": "^6.0.0",
     "@angular/core": "^6.0.0",
-    "perfume.js": "4.2.0"
+    "perfume.js": "4.3.0"
   }
 }
