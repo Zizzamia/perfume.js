@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.2.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.3.0 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -47,7 +47,7 @@ export interface IPerfumeOptions {
 }
 
 export interface ILogOptions {
-  metricName: string;
+  measureName: string;
   duration?: number;
   data?: any;
   suffix?: string;
@@ -67,7 +67,7 @@ export interface IPerfObservers {
 }
 
 export interface ISendTimingOptions {
-  metricName: string;
+  measureName: string;
   data?: any;
   duration?: number;
 }
@@ -215,20 +215,20 @@ export default class Perfume {
   /**
    * Start performance measurement
    */
-  start(metricName: string): void {
-    if (!this.checkMetricName(metricName) || !this.isPerformanceSupported()) {
+  start(markName: string): void {
+    if (!this.checkMetricName(markName) || !this.isPerformanceSupported()) {
       return;
     }
-    if (this.metrics[metricName]) {
+    if (this.metrics[markName]) {
       this.logWarn(`${this.logPrefixRecording} started.`);
       return;
     }
-    this.metrics[metricName] = {
+    this.metrics[markName] = {
       end: 0,
       start: this.wp.now(),
     };
     // Creates a timestamp in the browser's performance entry buffer
-    this.performanceMark(metricName, 'start');
+    this.performanceMark(markName, 'start');
     // Reset hidden value
     this.isHidden = false;
   }
@@ -236,26 +236,26 @@ export default class Perfume {
   /**
    * End performance measurement
    */
-  end(metricName: string): void | number {
-    if (!this.checkMetricName(metricName) || !this.isPerformanceSupported()) {
+  end(markName: string): void | number {
+    if (!this.checkMetricName(markName) || !this.isPerformanceSupported()) {
       return;
     }
-    const metric = this.metrics[metricName];
+    const metric = this.metrics[markName];
     if (!metric) {
       this.logWarn(`${this.logPrefixRecording} stopped.`);
       return;
     }
     // End Performance Mark
     metric.end = this.wp.now();
-    this.performanceMark(metricName, 'end');
+    this.performanceMark(markName, 'end');
     // Get duration and change it to a two decimal value
-    const duration = this.performanceMeasure(metricName);
+    const duration = this.performanceMeasure(markName);
     const duration2Decimal = parseFloat(duration.toFixed(2));
-    delete this.metrics[metricName];
+    delete this.metrics[markName];
     this.pushTask(() => {
       // Log to console, delete metric and send to analytics tracker
-      this.log({ metricName, duration: duration2Decimal });
-      this.sendTiming({ metricName, duration: duration2Decimal });
+      this.log({ measureName: markName, duration: duration2Decimal });
+      this.sendTiming({ measureName: markName, duration: duration2Decimal });
     });
     return duration2Decimal;
   }
@@ -483,7 +483,7 @@ export default class Perfume {
     return this.navigationTimingCached;
   }
 
-  private logData(metricName: string, data: any): void {
+  private logData(measureName: string, data: any): void {
     Object.keys(data).forEach(key => {
       if (typeof data[key] === 'number') {
         data[key] = parseFloat(data[key].toFixed(2));
@@ -491,9 +491,9 @@ export default class Perfume {
     });
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ metricName, data, suffix: '' });
+      this.log({ measureName, data, suffix: '' });
       // Sends the metric to an external tracking service
-      this.sendTiming({ metricName, data });
+      this.sendTiming({ measureName, data });
     });
   }
 
@@ -503,7 +503,7 @@ export default class Perfume {
    */
   private logMetric(
     duration: number,
-    metricName: string,
+    measureName: string,
     suffix: string = 'ms',
   ): void {
     const duration2Decimal = parseFloat(duration.toFixed(2));
@@ -516,9 +516,9 @@ export default class Perfume {
     }
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ metricName, duration: duration2Decimal, suffix });
+      this.log({ measureName, duration: duration2Decimal, suffix });
       // Sends the metric to an external tracking service
-      this.sendTiming({ metricName, duration: duration2Decimal });
+      this.sendTiming({ measureName, duration: duration2Decimal });
     });
   }
 
@@ -530,12 +530,12 @@ export default class Perfume {
     if (this.isHidden || !this.config.logging) {
       return;
     }
-    if (!options.metricName) {
+    if (!options.measureName) {
       this.logWarn(this.logMetricWarn);
       return;
     }
     const style = 'color:#ff6d00;font-size:11px;';
-    let text = `%c ${this.config.logPrefix} ${options.metricName} `;
+    let text = `%c ${this.config.logPrefix} ${options.measureName} `;
     if (options.duration) {
       const durationMs = options.duration.toFixed(2);
       text += `${durationMs} ${options.suffix || 'ms'}`;
@@ -646,8 +646,9 @@ export default class Perfume {
           performanceEntry.decodedBodySize &&
           performanceEntry.initiatorType
         ) {
-          this.dataConsumption[performanceEntry.initiatorType] +=
-            performanceEntry.decodedBodySize / 1000;
+          const bodySize = performanceEntry.decodedBodySize / 1000;
+          this.dataConsumption[performanceEntry.initiatorType] += bodySize;
+          this.dataConsumption.total += bodySize;
         }
       },
     );
@@ -668,12 +669,12 @@ export default class Perfume {
    * Sends the User timing measure to analyticsTracker
    */
   private sendTiming(options: ISendTimingOptions): void {
-    const { metricName, data, duration } = options;
+    const { measureName, data, duration } = options;
     // Doesn't send timing when page is hidden
     if (this.isHidden) {
       return;
     }
     // Send metric to custom Analytics service
-    this.config.analyticsTracker({ metricName, data, duration });
+    this.config.analyticsTracker({ metricName: measureName, data, duration });
   }
 }
