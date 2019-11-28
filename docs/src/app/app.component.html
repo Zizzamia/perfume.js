@@ -10,7 +10,7 @@
         <li>⏰ Latest Performance APIs for precise metrics</li>
         <li>🔨 Cross browser tested</li>
         <li>🚿 Filters out false positive/negative results</li>
-        <li>🤙 Only 2.1Kb gzip</li>
+        <li>🤙 Only 1.9Kb gzip</li>
         <li>🛰 Flexible analytics tool</li>
         <li>
           ⚡️ Waste-zero ms with 
@@ -30,6 +30,7 @@
       for measuring performance that matters!</p>
       <ul>
         <li>Navigation Timing</li>
+        <li>Resource Timing</li>
         <li>First Paint (FP)</li>
         <li>First Contentful Paint (FCP)</li>
         <li>Largest Contentful Paint (LCP)</li>
@@ -415,6 +416,12 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
     case 'navigationTiming':
       myAnalyticsTool.<span class="violet">track</span>(metricName, data);
       break;
+    case 'resourceTiming':
+      myAnalyticsTool.<span class="violet">track</span>(metricName, data);
+      break;
+    case 'dataConsumption':
+      myAnalyticsTool.<span class="violet">track</span>(metricName, data);
+      break;
     default:
       myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
       break;
@@ -423,6 +430,9 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
 <span class="red">export</span> <span class="blue">const</span> PerfumeConfig <span class="red">=</span> {{'{'}}
   firstContentfulPaint: <span class="blue">true</span>,
   firstInputDelay: <span class="blue">true</span>,
+  dataConsumption: <span class="blue">true</span>,
+  navigationTiming: <span class="blue">true</span>,
+  resourceTiming: <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span>,
 {{'}'}};
 
@@ -467,9 +477,30 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
 
 <span class="red">import</span> {{'{'}} AppApi {{'}'}} <span class="red">from</span> 'AppApi.js';
 
+<span class="blue">const</span> analyticsTracker <span class="red">=</span> function ({{'{'}} metricName, data, duration {{'}'}}) {{'{'}}
+  switch(metricName) {{'{'}}
+    case 'navigationTiming':
+      myAnalyticsTool.<span class="violet">track</span>(metricName, data);
+      break;
+    case 'resourceTiming':
+      myAnalyticsTool.<span class="violet">track</span>(metricName, data);
+      break;
+    case 'dataConsumption':
+      myAnalyticsTool.<span class="violet">track</span>(metricName, data);
+      break;
+    default:
+      myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
+      break;
+  {{'}'}}
+{{'}'}})
+
 <span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  firstContentfulPaint<span class="red">:</span> <span class="blue">true</span>
-  firstInputDelay<span class="red">:</span> <span class="blue">true</span>
+  firstContentfulPaint: <span class="blue">true</span>,
+  firstInputDelay: <span class="blue">true</span>,
+  dataConsumption: <span class="blue">true</span>,
+  navigationTiming: <span class="blue">true</span>,
+  resourceTiming: <span class="blue">true</span>,
+  <span class="violet">analyticsTracker</span>,
 {{'}'}});
 
 <span class="red">export</span> default <span class="red">class</span> App extends React.Component {{'{'}}
@@ -548,6 +579,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
   dataConsumption<span class="red">:</span> <span class="blue">false</span>,
   largestContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
   navigationTiming<span class="red">:</span> <span class="blue">false</span>,
+  resourceTiming<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Analytics</span>
   analyticsTracker<span class="red">:</span> options => {{'{}'}},
   <span class="gray">// Logging</span>
@@ -555,7 +587,6 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
   logging<span class="red">:</span> <span class="blue">true</span>,
   maxMeasureTime<span class="red">:</span> 15000,
   warning<span class="red">:</span> <span class="blue">false</span>,
-  debugging<span class="red">:</span> <span class="blue">false</span>,
 {{'}'}};</pre>
               </td>
             </tr>

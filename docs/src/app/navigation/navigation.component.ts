@@ -17,7 +17,7 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       (click)="activeNav(navOptions.home)">Home</a>
       <a href="{{ path }}#/real-user-measurements/"
       [class.active]="navSelected === navOptions.rum"
-      (click)="activeNav(navOptions.userCentric)">Real User Measurement</a>
+      (click)="activeNav(navOptions.rum)">Real User Measurement</a>
       <a href="{{ path }}#/installing-and-imports/"
       [class.active]="navSelected === navOptions.installing"
       (click)="activeNav(navOptions.installing)">Installing and Imports</a>

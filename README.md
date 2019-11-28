@@ -6,7 +6,7 @@
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
-> A flexible library for measuring <b>Navigation Timing</b>, <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>Largest Contentful Paint</b> (LCP), <b>First Input Delay</b> (FID) and components lifecycle performance. Report real user measurements to your favorite analytics tool.
+> A flexible library for measuring <b>Navigation Timing</b>, <b>Navigation Timing</b>, <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>Largest Contentful Paint</b> (LCP), <b>First Input Delay</b> (FID) and report real user measurements to your favorite analytics tool.
 
 <br />
 <br />
@@ -17,7 +17,7 @@ English | [简体中文](./README-zh_CN.md)
 - ⏰ Supported latest Performance APIs for precise metrics
 - 🔨 Cross browser tested
 - 🚿 Filters out false positive/negative results
-- 🤙 Only 2.1Kb gzip
+- 🤙 Only 1.9Kb gzip
 - 🛰 Flexible analytics tool
 - ⚡️ Waste-zero ms with [requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback) strategy built-in
 <br />
@@ -27,6 +27,7 @@ English | [简体中文](./README-zh_CN.md)
 **Perfume** leverage the latest W3C Performance Drafts (e.g. [PerformanceObserver](https://w3c.github.io/performance-timeline/)), for measuring performance that matters! Also known as **field data**, they allow to understand what real-world users are actually experiencing.
 
 * Navigation Timing
+* Resource Timing
 * First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * Largest Contentful Paint (LCP)
@@ -88,6 +89,21 @@ const perfume = new Perfume({
   })
 });
 // Perfume.js: NavigationTiming {{'{'}} ... timeToFirstByte: 192.65 {{'}'}}
+```
+
+### Resource Timing
+Resource Timing collects performance metrics for document-dependent resources. Stuff like style sheets, scripts, images, et cetera.
+Perfume helps expose all PerformanceResourceTiming entries and group data data consumption by Kb used.
+
+```javascript
+const perfume = new Perfume({
+  resourceTiming: true,
+  dataConsumption: true,
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
+  })
+});
+// Perfume.js: dataConsumption { "css": 185.95, "fetch": 0, "img": 377.93, ... , "script": 8344.95 }
 ```
 
 ### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
@@ -243,9 +259,29 @@ export class AppComponent implements AfterViewInit {
 }
 
 // Perfume.js config, supports AOT and DI
+const analyticsTracker = function ({ metricName, data, duration }) {
+  switch(metricName) {
+    case 'navigationTiming':
+      myAnalyticsTool.track(metricName, data);
+      break;
+    case 'resourceTiming':
+      myAnalyticsTool.track(metricName, data);
+      break;
+    case 'dataConsumption':
+      myAnalyticsTool.track(metricName, data);
+      break;
+    default:
+      myAnalyticsTool.track(metricName, duration);
+      break;
+  }
+})
 export const PerfumeConfig = {
   firstContentfulPaint: true,
   firstInputDelay: true,
+  dataConsumption: true,
+  navigationTiming: true,
+  resourceTiming: true,
+  analyticsTracker,
 };
 
 @NgModule({
@@ -269,9 +305,30 @@ import Perfume from 'perfume.js';
 
 import { AppApi } from './AppApi';
 
+const analyticsTracker = function ({ metricName, data, duration }) {
+  switch(metricName) {
+    case 'navigationTiming':
+      myAnalyticsTool.track(metricName, data);
+      break;
+    case 'resourceTiming':
+      myAnalyticsTool.track(metricName, data);
+      break;
+    case 'dataConsumption':
+      myAnalyticsTool.track(metricName, data);
+      break;
+    default:
+      myAnalyticsTool.track(metricName, duration);
+      break;
+  }
+})
+
 const perfume = new Perfume({
   firstContentfulPaint: true,
-  firstInputDelay: true
+  firstInputDelay: true,
+  dataConsumption: true,
+  navigationTiming: true,
+  resourceTiming: true,
+  analyticsTracker,
 });
 
 export default class App extends React.Component {
@@ -329,6 +386,7 @@ const options = {
   dataConsumption: false,
   largestContentfulPaint: false,
   navigationTiming: false,
+  resourceTiming: false,
   // Analytics
   analyticsTracker: options => {},
   // Logging
@@ -336,14 +394,12 @@ const options = {
   logging: true,
   maxMeasureTime: 15000,
   warning: false,
-  debugging: false,
 };
 ```
 <br />
 
 ## Develop
 
-* `npm start`: Run `npm run build` in watch mode
 * `npm run test`: Run test suite
 * `npm run build`: Generate bundles and typings
 * `npm run lint`: Lints code
