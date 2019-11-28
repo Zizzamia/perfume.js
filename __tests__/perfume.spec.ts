@@ -36,7 +36,6 @@ describe('Perfume', () => {
       expect(instance.config.logPrefix).toEqual('Perfume.js:');
       expect(instance.config.logging).toEqual(true);
       expect(instance.config.maxMeasureTime).toEqual(15000);
-      expect(instance.config.warning).toEqual(false);
     });
   });
 
@@ -76,7 +75,6 @@ describe('Perfume', () => {
         firstPaint: true,
         firstInputDelay: true,
         dataConsumption: true,
-        warning: true,
       });
     });
 
@@ -87,7 +85,6 @@ describe('Perfume', () => {
         firstInputDelay: true,
         dataConsumption: true,
         navigationTiming: true,
-        warning: true,
       });
     });
   });
@@ -96,21 +93,7 @@ describe('Perfume', () => {
     beforeEach(() => {
       perfume = new Perfume({ ...mock.defaultPerfumeConfig });
     });
-
-    it('should throw a logWarn if metricName is not passed', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      perfume.start('');
-      expect(spy).toHaveBeenCalled();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('Missing metric name');
-    });
-
-    it('should not throw a logWarn if param is correct', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      perfume.start('metricName');
-      expect(spy.mock.calls.length).toEqual(0);
-    });
-
+    
     it('should call performanceMark', () => {
       spy = jest.spyOn(perfume as any, 'performanceMark');
       perfume.start('metricName');
@@ -128,13 +111,6 @@ describe('Perfume', () => {
   });
 
   describe('.end()', () => {
-    it('should throw a logWarn if param is not correct', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      perfume.end('');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('Missing metric name');
-    });
-
     it('should throw a logWarn if param is correct and recording already stopped', () => {
       spy = jest.spyOn(perfume as any, 'logWarn');
       perfume.end('metricName');
@@ -181,13 +157,6 @@ describe('Perfume', () => {
   });
 
   describe('.start() and .end()', () => {
-    it('should not throw a logWarn if param is correct', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      perfume.start('metricName');
-      perfume.end('metricName');
-      expect(spy).not.toHaveBeenCalled();
-    });
-
     it('should call performanceMark() twice with the correct arguments', () => {
       spy = jest.spyOn(perfume as any, 'performanceMark');
       perfume.start('metricName');
@@ -233,14 +202,6 @@ describe('Perfume', () => {
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(text, style);
-    });
-
-    it('should call logWarn if params are not correct', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      (perfume as any).log({ measureName: '', duration: 0 });
-      const text = 'Missing metric name';
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text);
     });
 
     it('should not call window.console.log() if params are not correct', () => {
@@ -290,25 +251,6 @@ describe('Perfume', () => {
         data: undefined,
         duration: 123,
       });
-    });
-  });
-
-  describe('.checkMetricName()', () => {
-    it('should return "true" when provided a metric name', () => {
-      const value = (perfume as any).checkMetricName('metricName');
-      expect(value).toEqual(true);
-    });
-
-    it('should call logWarn when not provided a metric name', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      (perfume as any).checkMetricName();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('Missing metric name');
-    });
-
-    it('should return "false" when not provided a metric name', () => {
-      const value = (perfume as any).checkMetricName();
-      expect(value).toEqual(false);
     });
   });
 
@@ -476,16 +418,6 @@ describe('Perfume', () => {
       perfume['initFirstPaint']();
       expect(spy.mock.calls.length).toEqual(1);
     });
-
-    it('should throw a logWarn if fails', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      (window as any).chrome = true;
-      mock.PerformanceObserver.simulateErrorOnObserve = true;
-      (window as any).PerformanceObserver = mock.PerformanceObserver;
-      perfume['initFirstPaint']();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('FP:failed');
-    });
   });
 
   describe('.digestFirstInputDelayEntries()', () => {
@@ -518,16 +450,6 @@ describe('Perfume', () => {
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstInputDelay']();
       expect(spy.mock.calls.length).toEqual(1);
-    });
-
-    it('should throw a logWarn if fails', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      (window as any).chrome = true;
-      mock.PerformanceObserver.simulateErrorOnObserve = true;
-      (window as any).PerformanceObserver = mock.PerformanceObserver;
-      perfume['initFirstInputDelay']();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('FID:failed');
     });
   });
 
@@ -569,16 +491,6 @@ describe('Perfume', () => {
       perfume['initResourceTiming']();
       jest.runAllTimers();
       expect(spy.mock.calls.length).toEqual(1);
-    });
-
-    it('should throw a logWarn if fails', () => {
-      spy = jest.spyOn(perfume as any, 'logWarn');
-      (window as any).chrome = true;
-      mock.PerformanceObserver.simulateErrorOnObserve = true;
-      (window as any).PerformanceObserver = mock.PerformanceObserver;
-      perfume['initResourceTiming']();
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('DataConsumption:failed');
     });
   });
 
@@ -634,24 +546,14 @@ describe('Perfume', () => {
   describe('.logWarn()', () => {
     it('should throw a console.warn if config.warning is true', () => {
       spy = jest.spyOn(window.console, 'warn');
-      perfume.config.warning = true;
       (perfume as any).logWarn('message');
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, 'message');
     });
 
-    it('should not throw a console.warn if config.warning is false', () => {
-      spy = jest.spyOn(window.console, 'warn');
-      perfume.config.warning = false;
-      (perfume as any).logWarn('message');
-      expect(spy.mock.calls.length).toEqual(0);
-      expect(spy).not.toHaveBeenCalled();
-    });
-
     it('should not throw a console.warn if config.logging is false', () => {
       spy = jest.spyOn(window.console, 'warn');
-      perfume.config.warning = true;
       perfume.config.logging = false;
       (perfume as any).logWarn('message');
       expect(spy.mock.calls.length).toEqual(0);

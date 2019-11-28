@@ -6,7 +6,7 @@
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
-> A flexible library for measuring <b>Navigation Timing</b>, <b>Navigation Timing</b>, <b>First Contentful Paint</b> (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>), <b>Largest Contentful Paint</b> (LCP), <b>First Input Delay</b> (FID) and report real user measurements to your favorite analytics tool.
+> Perfume is a tiny, web performance monitoring library which reports field data like Navigation Timing, Resource Timing, First Contentful Paint (FP/FCP), Largest Contentful Paint (LCP), First Input Delay (FID) back to your favorite analytics tool.
 
 <br />
 <br />

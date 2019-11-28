@@ -25,7 +25,6 @@ export interface IPerfumeConfig {
   logPrefix: string;
   logging: boolean;
   maxMeasureTime: number;
-  warning: boolean;
 }
 
 export interface IPerfumeOptions {
@@ -43,7 +42,6 @@ export interface IPerfumeOptions {
   logPrefix?: string;
   logging?: boolean;
   maxMeasureTime?: number;
-  warning?: boolean;
 }
 
 export interface ILogOptions {
@@ -163,7 +161,6 @@ export default class Perfume {
     logPrefix: 'Perfume.js:',
     logging: true,
     maxMeasureTime: 15000,
-    warning: false,
   };
   private c = window.console;
   private d = document;
@@ -180,7 +177,6 @@ export default class Perfume {
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
   private lcpDuration: number = 0;
-  private logMetricWarn = 'Missing metric name';
   private logPrefixRecording = 'Recording already';
   private metrics: IMetricMap = {};
   private navigationTimingCached: IPerfumeNavigationTiming = {};
@@ -200,7 +196,13 @@ export default class Perfume {
 
     // Checks if use Performance or the EmulatedPerformance instance
     if (this.isPerformanceObserverSupported()) {
-      this.initPerformanceObserver();
+      try {
+        this.initPerformanceObserver();
+      } catch (e) {
+        if (this.config.logging) {
+          this.c.warn(this.config.logPrefix, e);
+        }
+      }
     }
 
     // Init visibilitychange listener
@@ -216,7 +218,7 @@ export default class Perfume {
    * Start performance measurement
    */
   start(markName: string): void {
-    if (!this.checkMetricName(markName) || !this.isPerformanceSupported()) {
+    if (!this.isPerformanceSupported()) {
       return;
     }
     if (this.metrics[markName]) {
@@ -237,7 +239,7 @@ export default class Perfume {
    * End performance measurement
    */
   end(markName: string): void | number {
-    if (!this.checkMetricName(markName) || !this.isPerformanceSupported()) {
+    if (!this.isPerformanceSupported()) {
       return;
     }
     const metric = this.metrics[markName];
@@ -270,14 +272,6 @@ export default class Perfume {
         resolve(duration);
       });
     });
-  }
-
-  private checkMetricName(metricName: string): boolean {
-    if (metricName) {
-      return true;
-    }
-    this.logWarn(this.logMetricWarn);
-    return false;
   }
 
   private didVisibilityChange = () => {
@@ -315,14 +309,10 @@ export default class Perfume {
   }
 
   private initFirstInputDelay(): void {
-    try {
-      this.perfObservers.fid = this.performanceObserver(
-        'first-input',
-        this.digestFirstInputDelayEntries.bind(this),
-      );
-    } catch (e) {
-      this.logWarn('FID:failed');
-    }
+    this.perfObservers.fid = this.performanceObserver(
+      'first-input',
+      this.digestFirstInputDelayEntries.bind(this),
+    );
   }
 
   /**
@@ -330,43 +320,35 @@ export default class Perfume {
    * the biggest above-the-fold layout change has happened.
    */
   private initFirstPaint(): void {
-    try {
-      this.perfObservers.fcp = this.performanceObserver(
-        'paint',
-        (performanceEntries: IPerformanceEntry[]) => {
-          this.performanceObserverCb({
-            performanceEntries,
-            entryName: 'first-paint',
-            metricName: 'firstPaint',
-            valueLog: 'startTime',
-          });
-          this.performanceObserverCb({
-            performanceEntries,
-            entryName: 'first-contentful-paint',
-            metricName: 'firstContentfulPaint',
-            valueLog: 'startTime',
-          });
-        },
-      );
-    } catch (e) {
-      this.logWarn('FP:failed');
-    }
+    this.perfObservers.fcp = this.performanceObserver(
+      'paint',
+      (performanceEntries: IPerformanceEntry[]) => {
+        this.performanceObserverCb({
+          performanceEntries,
+          entryName: 'first-paint',
+          metricName: 'firstPaint',
+          valueLog: 'startTime',
+        });
+        this.performanceObserverCb({
+          performanceEntries,
+          entryName: 'first-contentful-paint',
+          metricName: 'firstContentfulPaint',
+          valueLog: 'startTime',
+        });
+      },
+    );
   }
 
   private initLargestContentfulPaint(): void {
-    try {
-      this.perfObservers.lcp = this.performanceObserver(
-        'largest-contentful-paint',
-        (performanceEntries: IPerformanceEntry[]) => {
-          const lastEntry = performanceEntries.pop();
-          if (lastEntry) {
-            this.lcpDuration = lastEntry.renderTime || lastEntry.loadTime;
-          }
-        },
-      );
-    } catch (e) {
-      this.logWarn('LCP:failed');
-    }
+    this.perfObservers.lcp = this.performanceObserver(
+      'largest-contentful-paint',
+      (performanceEntries: IPerformanceEntry[]) => {
+        const lastEntry = performanceEntries.pop();
+        if (lastEntry) {
+          this.lcpDuration = lastEntry.renderTime || lastEntry.loadTime;
+        }
+      },
+    );
   }
 
   private initPerformanceObserver(): void {
@@ -384,18 +366,14 @@ export default class Perfume {
   }
 
   private initResourceTiming(): void {
-    try {
-      this.performanceObserver(
-        'resource',
-        (performanceEntries: IPerformanceEntry[]) => {
-          this.performanceObserverResourceCb({
-            performanceEntries,
-          });
-        },
-      );
-    } catch (e) {
-      this.logWarn('DataConsumption:failed');
-    }
+    this.performanceObserver(
+      'resource',
+      (performanceEntries: IPerformanceEntry[]) => {
+        this.performanceObserverResourceCb({
+          performanceEntries,
+        });
+      },
+    );
     this.dataConsumptionTimeout = setTimeout(() => {
       this.disconnectDataConsumption();
     }, 15000);
@@ -530,10 +508,6 @@ export default class Perfume {
     if (this.isHidden || !this.config.logging) {
       return;
     }
-    if (!options.measureName) {
-      this.logWarn(this.logMetricWarn);
-      return;
-    }
     const style = 'color:#ff6d00;font-size:11px;';
     let text = `%c ${this.config.logPrefix} ${options.measureName} `;
     if (options.duration) {
@@ -550,7 +524,7 @@ export default class Perfume {
    * warning messages
    */
   private logWarn(message: string): void {
-    if (!this.config.warning || !this.config.logging) {
+    if (!this.config.logging) {
       return;
     }
     this.c.warn(this.config.logPrefix, message);
