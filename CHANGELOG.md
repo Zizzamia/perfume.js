@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.0 (2019-11-17)
+
+* **fix:** total value for data consumption
+
 ## 4.2.0 (2019-11-17)
 
 * **feat:** added Resource Timining support
