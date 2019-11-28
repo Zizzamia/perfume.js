@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.2.0 (2019-11-17)
+
+* **feat:** added Resource Timining support
+* **feat:** added Data Consumption metric
+* **feat:** added Largest Contentful Paint support
+* **refactor:** reduced the library from over 4Kb to 1.9Kb gzip
+
 ## 3.0.3 (2019-10-17)
 
 * **fix:**  pushTask is undefined during hot-reloading [#88](https://github.com/Zizzamia/perfume.js/issues/88)
