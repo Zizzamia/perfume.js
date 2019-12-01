@@ -258,7 +258,11 @@ export default class Perfume {
     const duration2Decimal = parseFloat(duration.toFixed(2));
     delete this.metrics[markName];
     this.pushTask(() => {
-      const options = { measureName: markName, duration: duration2Decimal, customProperties };
+      const options = {
+        measureName: markName,
+        duration: duration2Decimal,
+        customProperties,
+      };
       // Log to console, delete metric and send to analytics tracker
       this.log(options);
       this.sendTiming(options);
@@ -650,6 +654,11 @@ export default class Perfume {
     const { measureName, data, duration, customProperties } = options;
     const eventProperties = customProperties ? customProperties : {};
     // Send metric to custom Analytics service
-    this.config.analyticsTracker({ metricName: measureName, data, duration, eventProperties });
+    this.config.analyticsTracker({
+      metricName: measureName,
+      data,
+      duration,
+      eventProperties,
+    });
   }
 }
