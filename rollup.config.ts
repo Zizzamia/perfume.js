@@ -53,6 +53,9 @@ const createConfig = ({ output, min = false }) => {
             'renderTime',
             'loadTime',
             'eventProperties',
+            'navigator',
+            'connection',
+            'networkInformation'
           ]
         }
       },

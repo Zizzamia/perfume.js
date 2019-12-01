@@ -700,6 +700,7 @@ describe('Perfume', () => {
         data: undefined,
         duration: 123,
         eventProperties: {},
+        networkInformation: {},
       });
     });
   });

@@ -9,6 +9,7 @@ export interface IAnalyticsTrackerOptions {
   data?: any;
   duration?: number;
   eventProperties?: object;
+  networkInformation?: IPerfumeNetworkInformation;
 }
 
 export interface IPerfumeConfig {
@@ -132,6 +133,16 @@ export interface IPerfumeNavigationTiming {
   dnsLookupTime?: number;
 }
 
+type EffectiveConnectionType = '2g' | '3g' | '4g' | 'slow-2g';
+
+export interface IPerfumeNetworkInformation {
+  downlink?: number;
+  effectiveType?: EffectiveConnectionType;
+  onchange?: () => void;
+  rtt?: number;
+  saveData?: boolean;
+}
+
 export interface IPerfumeDataConsumption {
   beacon: number;
   css: number;
@@ -182,6 +193,7 @@ export default class Perfume {
   };
   private w = window;
   private wp = window.performance;
+  private wn = window.navigator;
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
@@ -461,6 +473,13 @@ export default class Perfume {
     return this.navigationTimingCached;
   }
 
+  private getNavigatorconnection(): IPerfumeNetworkInformation {
+    if ('connection' in this.wn) {
+      return (this.wn as any).connection;
+    }
+    return {};
+  }
+
   private logData(measureName: string, data: any): void {
     Object.keys(data).forEach(key => {
       if (typeof data[key] === 'number') {
@@ -644,12 +663,14 @@ export default class Perfume {
     }
     const { measureName, data, duration, customProperties } = options;
     const eventProperties = customProperties ? customProperties : {};
+    const networkInformation = this.getNavigatorconnection();
     // Send metric to custom Analytics service
     this.config.analyticsTracker({
       metricName: measureName,
       data,
       duration,
       eventProperties,
+      networkInformation,
     });
   }
 }
