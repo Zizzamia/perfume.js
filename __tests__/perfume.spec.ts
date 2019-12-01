@@ -94,11 +94,11 @@ describe('Perfume', () => {
       perfume = new Perfume({ ...mock.defaultPerfumeConfig });
     });
 
-    it('should call performanceMark', () => {
-      spy = jest.spyOn(perfume as any, 'performanceMark');
-      perfume.start('metricName');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('metricName', 'start');
+    it('should call window.performance.mark with the correct argument', () => {
+      spy = jest.spyOn((perfume as any).wp, 'mark');
+      perfume.start('metric_moon');
+      expect(spy.mock.calls.length).toBe(1);
+      expect(spy).toHaveBeenCalledWith('mark_metric_moon_start');
     });
 
     it('should throw a logWarn if recording already started', () => {
@@ -130,6 +130,15 @@ describe('Perfume', () => {
       });
     });
 
+    it('should call window.performance.mark with the correct argument', () => {
+      spy = jest.spyOn((perfume as any).wp, 'mark');
+      perfume.start('metric_moon');
+      perfume.end('metric_moon');
+      expect(spy.mock.calls.length).toBe(2);
+      expect(spy).toHaveBeenCalledWith('mark_metric_moon_start');
+      expect(spy).toHaveBeenCalledWith('mark_metric_moon_end');
+    });
+
     it('should call sendTiming() with correct params', () => {
       spy = jest.spyOn(perfume as any, 'sendTiming');
       perfume.config.logging = true;
@@ -156,23 +165,6 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.start() and .end()', () => {
-    it('should call performanceMark() twice with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'performanceMark');
-      perfume.start('metricName');
-      perfume.end('metricName');
-      expect(spy.mock.calls.length).toEqual(2);
-    });
-
-    it('should call performanceMeasure() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'performanceMeasure');
-      perfume.start('metricName');
-      perfume.end('metricName');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('metricName');
-    });
-  });
-
   describe('.endPaint()', () => {
     beforeEach(() => {
       jest.useFakeTimers();
@@ -183,6 +175,20 @@ describe('Perfume', () => {
       perfume.endPaint('test');
       jest.runAllTimers();
       expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('.clear()', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    it('should call clearMarks() twice and with the correct arguments', () => {
+      spy = jest.spyOn((perfume as any).wp, 'clearMarks');
+      perfume.clear('measure_moon');
+      expect(spy.mock.calls.length).toEqual(2);
+      expect(spy).toHaveBeenCalledWith('mark_measure_moon_start');
+      expect(spy).toHaveBeenCalledWith('mark_measure_moon_end');
     });
   });
 
@@ -229,29 +235,6 @@ describe('Perfume', () => {
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(text, style, data);
-    });
-  });
-
-  describe('.sendTiming()', () => {
-    it('should not call analyticsTracker() if isHidden is true', () => {
-      perfume.config.analyticsTracker = () => {};
-      spy = jest.spyOn(perfume.config, 'analyticsTracker');
-      perfume['isHidden'] = true;
-      (perfume as any).sendTiming({ measureName: 'metricName', duration: 123 });
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should call analyticsTracker() if analyticsTracker is defined', () => {
-      perfume.config.analyticsTracker = () => {};
-      spy = jest.spyOn(perfume.config, 'analyticsTracker');
-      (perfume as any).sendTiming({ measureName: 'metricName', duration: 123 });
-      expect(spy).toHaveBeenCalled();
-      expect(spy).toHaveBeenCalledWith({
-        metricName: 'metricName',
-        data: undefined,
-        duration: 123,
-        eventProperties: {},
-      });
     });
   });
 
@@ -344,65 +327,6 @@ describe('Perfume', () => {
         valueLog: 'duration',
       });
       expect(spy.mock.calls.length).toEqual(1);
-    });
-  });
-
-  describe('.performanceObserverResourceCb()', () => {
-    beforeEach(() => {
-      (perfume as any).perfResourceTiming = {
-        css: 0,
-        fetch: 0,
-        total: 0,
-      };
-      perfume.config.dataConsumption = true;
-      (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
-    });
-
-    it('should dataConsumption be 0 when entries are empty', () => {
-      (perfume as any).performanceObserverResourceCb({
-        performanceEntries: [],
-      });
-      expect((perfume as any).perfResourceTiming).toEqual({
-        css: 0,
-        fetch: 0,
-        total: 0,
-      });
-    });
-
-    it('should float the dataConsumption result', () => {
-      (perfume as any).performanceObserverResourceCb({
-        performanceEntries: [
-          {
-            decodedBodySize: 12345678,
-            initiatorType: 'css',
-          },
-        ],
-      });
-      expect((perfume as any).perfResourceTiming).toEqual({
-        css: 12345.678,
-        fetch: 0,
-        total: 12345.678,
-      });
-    });
-
-    it('should sum the dataConsumption result', () => {
-      (perfume as any).performanceObserverResourceCb({
-        performanceEntries: [
-          {
-            decodedBodySize: 12345678,
-            initiatorType: 'css',
-          },
-          {
-            decodedBodySize: 10000678,
-            initiatorType: 'fetch',
-          },
-        ],
-      });
-      expect((perfume as any).perfResourceTiming).toEqual({
-        css: 12345.678,
-        fetch: 10000.678,
-        total: 22346.356,
-      });
     });
   });
 
@@ -548,7 +472,6 @@ describe('Perfume', () => {
     it('should throw a console.warn if config.warning is true', () => {
       spy = jest.spyOn(window.console, 'warn');
       (perfume as any).logWarn('message');
-      expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(perfume.config.logPrefix, 'message');
     });
@@ -617,24 +540,6 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.performanceMark()', () => {
-    it('should call window.performance.mark with undefined argument', () => {
-      spy = jest.spyOn((perfume as any).wp, 'mark');
-      (perfume as any).performanceMark('fibonacci');
-      expect(spy).toHaveBeenCalled();
-      expect(spy.mock.calls.length).toBe(1);
-      expect(spy).toHaveBeenCalledWith('mark_fibonacci_undefined');
-    });
-
-    it('should call window.performance.mark with the correct argument', () => {
-      spy = jest.spyOn((perfume as any).wp, 'mark');
-      (perfume as any).performanceMark('fibonacci', 'fast');
-      expect(spy).toHaveBeenCalled();
-      expect(spy.mock.calls.length).toBe(1);
-      expect(spy).toHaveBeenCalledWith('mark_fibonacci_fast');
-    });
-  });
-
   describe('.performanceMeasure()', () => {
     it('should call window.performance.measure with the correct arguments', () => {
       spy = jest.spyOn((perfume as any).wp, 'measure');
@@ -675,6 +580,127 @@ describe('Perfume', () => {
     it('should return -1 when entryType is a measure', () => {
       const value = (perfume as any).getDurationByMetric('metricName');
       expect(value).toEqual(12346);
+    });
+  });
+
+  describe('.performanceObserverResourceCb()', () => {
+    beforeEach(() => {
+      perfume = new Perfume({
+        ...mock.defaultPerfumeConfig,
+        resourceTiming: true,
+      });
+    });
+
+    beforeEach(() => {
+      (perfume as any).perfResourceTiming = {
+        css: 0,
+        fetch: 0,
+        total: 0,
+      };
+      perfume.config.dataConsumption = true;
+      (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
+    });
+
+    it('should dataConsumption be 0 when entries are empty', () => {
+      (perfume as any).performanceObserverResourceCb({
+        performanceEntries: [],
+      });
+      expect((perfume as any).perfResourceTiming).toEqual({
+        css: 0,
+        fetch: 0,
+        total: 0,
+      });
+    });
+
+    it('should float the dataConsumption result', () => {
+      (perfume as any).performanceObserverResourceCb({
+        performanceEntries: [
+          {
+            decodedBodySize: 12345678,
+            initiatorType: 'css',
+          },
+        ],
+      });
+      expect((perfume as any).perfResourceTiming).toEqual({
+        css: 12345.678,
+        fetch: 0,
+        total: 12345.678,
+      });
+    });
+
+    it('should sum the dataConsumption result', () => {
+      (perfume as any).performanceObserverResourceCb({
+        performanceEntries: [
+          {
+            decodedBodySize: 12345678,
+            initiatorType: 'css',
+          },
+          {
+            decodedBodySize: 10000678,
+            initiatorType: 'fetch',
+          },
+        ],
+      });
+      expect((perfume as any).perfResourceTiming).toEqual({
+        css: 12345.678,
+        fetch: 10000.678,
+        total: 22346.356,
+      });
+    });
+
+    it('should call logData for each performanceEntry', () => {
+      spy = jest.spyOn(perfume as any, 'logData');
+      (perfume as any).performanceObserverResourceCb({
+        performanceEntries: [
+          {
+            decodedBodySize: 12345678,
+            initiatorType: 'css',
+          },
+          {
+            decodedBodySize: 10000678,
+            initiatorType: 'fetch',
+          },
+        ],
+      });
+      expect(spy.mock.calls.length).toEqual(2);
+    });
+  });
+
+  describe('.pushTask()', () => {
+    it('should call cb() if requestIdleCallback is undefined', () => {
+      spy = jest.fn();
+      perfume['pushTask'](spy);
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+
+    it('should call requestIdleCallback if is defined', () => {
+      spy = jest.fn();
+      (window as any).requestIdleCallback = spy;
+      perfume['pushTask'](() => {});
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('.sendTiming()', () => {
+    it('should not call analyticsTracker() if isHidden is true', () => {
+      perfume.config.analyticsTracker = () => {};
+      spy = jest.spyOn(perfume.config, 'analyticsTracker');
+      perfume['isHidden'] = true;
+      (perfume as any).sendTiming({ measureName: 'metricName', duration: 123 });
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should call analyticsTracker() if analyticsTracker is defined', () => {
+      perfume.config.analyticsTracker = () => {};
+      spy = jest.spyOn(perfume.config, 'analyticsTracker');
+      (perfume as any).sendTiming({ measureName: 'metricName', duration: 123 });
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith({
+        metricName: 'metricName',
+        data: undefined,
+        duration: 123,
+        eventProperties: {},
+      });
     });
   });
 });

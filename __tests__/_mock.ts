@@ -48,6 +48,7 @@ export default {
   performance: () => {
     delete (window as any).performance;
     const performance = {
+      clearMarks: jest.fn(),
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByName
       getEntriesByName: () => [
         { duration: 12345, entryType: 'measure' },

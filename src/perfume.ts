@@ -53,13 +53,8 @@ export interface ILogOptions {
   customProperties?: object;
 }
 
-export interface IMetricEntry {
-  start: number;
-  end: number;
-}
-
 export interface IMetricMap {
-  [measureName: string]: IMetricEntry;
+  [measureName: string]: boolean;
 }
 
 export interface IPerfObservers {
@@ -228,12 +223,9 @@ export default class Perfume {
       this.logWarn(`${this.logPrefixRecording} started.`);
       return;
     }
-    this.metrics[markName] = {
-      end: 0,
-      start: this.wp.now(),
-    };
+    this.metrics[markName] = true;
     // Creates a timestamp in the browser's performance entry buffer
-    this.performanceMark(markName, 'start');
+    this.wp.mark(`mark_${markName}_start`);
     // Reset hidden value
     this.isHidden = false;
   }
@@ -245,17 +237,15 @@ export default class Perfume {
     if (!this.isPerformanceSupported()) {
       return;
     }
-    const metric = this.metrics[markName];
-    if (!metric) {
+    if (!this.metrics[markName]) {
       this.logWarn(`${this.logPrefixRecording} stopped.`);
       return;
     }
     // End Performance Mark
-    metric.end = this.wp.now();
-    this.performanceMark(markName, 'end');
+    this.wp.mark(`mark_${markName}_end`);
     // Get duration and change it to a two decimal value
-    const duration = this.performanceMeasure(markName);
-    const duration2Decimal = parseFloat(duration.toFixed(2));
+    const durationByMetric = this.performanceMeasure(markName);
+    const duration2Decimal = parseFloat(durationByMetric.toFixed(2));
     delete this.metrics[markName];
     this.pushTask(() => {
       const options = {
@@ -272,10 +262,16 @@ export default class Perfume {
   /**
    * End performance measurement after first paint from the beging of it
    */
-  endPaint(measureName: string, customProperties?: object): void {
+  endPaint(markName: string, customProperties?: object): void {
     setTimeout(() => {
-      this.end(measureName, customProperties);
+      this.end(markName, customProperties);
     });
+  }
+
+  clear(markName: string): void {
+    this.wp.clearMarks(`mark_${markName}_start`);
+    this.wp.clearMarks(`mark_${markName}_end`);
+    delete this.metrics[markName];
   }
 
   private didVisibilityChange = () => {
@@ -544,11 +540,6 @@ export default class Perfume {
       // Opera 12.10 and Firefox 18 and later support
       this.d.addEventListener('visibilitychange', this.didVisibilityChange);
     }
-  }
-
-  private performanceMark(measureName: string, type: string): void {
-    const mark = `mark_${measureName}_${type}`;
-    this.wp.mark(mark);
   }
 
   private performanceMeasure(measureName: string): number {
