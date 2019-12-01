@@ -52,6 +52,7 @@ const createConfig = ({ output, min = false }) => {
             'decodedBodySize',
             'renderTime',
             'loadTime',
+            'eventProperties',
           ]
         }
       },

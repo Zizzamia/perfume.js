@@ -8,6 +8,7 @@ export interface IAnalyticsTrackerOptions {
   metricName: string;
   data?: any;
   duration?: number;
+  eventProperties?: object;
 }
 
 export interface IPerfumeConfig {
@@ -49,6 +50,7 @@ export interface ILogOptions {
   duration?: number;
   data?: any;
   suffix?: string;
+  customProperties?: object;
 }
 
 export interface IMetricEntry {
@@ -57,17 +59,18 @@ export interface IMetricEntry {
 }
 
 export interface IMetricMap {
-  [metricName: string]: IMetricEntry;
+  [measureName: string]: IMetricEntry;
 }
 
 export interface IPerfObservers {
-  [metricName: string]: any;
+  [measureName: string]: any;
 }
 
 export interface ISendTimingOptions {
   measureName: string;
   data?: any;
   duration?: number;
+  customProperties?: object;
 }
 
 export type IPerfumeMetrics =
@@ -238,7 +241,7 @@ export default class Perfume {
   /**
    * End performance measurement
    */
-  end(markName: string): void | number {
+  end(markName: string, customProperties?: object): void {
     if (!this.isPerformanceSupported()) {
       return;
     }
@@ -255,22 +258,19 @@ export default class Perfume {
     const duration2Decimal = parseFloat(duration.toFixed(2));
     delete this.metrics[markName];
     this.pushTask(() => {
+      const options = { measureName: markName, duration: duration2Decimal, customProperties };
       // Log to console, delete metric and send to analytics tracker
-      this.log({ measureName: markName, duration: duration2Decimal });
-      this.sendTiming({ measureName: markName, duration: duration2Decimal });
+      this.log(options);
+      this.sendTiming(options);
     });
-    return duration2Decimal;
   }
 
   /**
    * End performance measurement after first paint from the beging of it
    */
-  endPaint(metricName: string): Promise<void | number> {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        const duration = this.end(metricName);
-        resolve(duration);
-      });
+  endPaint(measureName: string, customProperties?: object): void {
+    setTimeout(() => {
+      this.end(measureName, customProperties);
     });
   }
 
@@ -285,7 +285,7 @@ export default class Perfume {
   ): void {
     this.performanceObserverCb({
       performanceEntries,
-      metricName: 'firstInputDelay',
+      measureName: 'firstInputDelay',
       valueLog: 'duration',
     });
     this.disconnectlargestContentfulPaint();
@@ -326,13 +326,13 @@ export default class Perfume {
         this.performanceObserverCb({
           performanceEntries,
           entryName: 'first-paint',
-          metricName: 'firstPaint',
+          measureName: 'firstPaint',
           valueLog: 'startTime',
         });
         this.performanceObserverCb({
           performanceEntries,
           entryName: 'first-contentful-paint',
-          metricName: 'firstContentfulPaint',
+          measureName: 'firstContentfulPaint',
           valueLog: 'startTime',
         });
       },
@@ -407,8 +407,8 @@ export default class Perfume {
    * Get the duration of the timing metric or -1 if there a measurement has
    * not been made by the User Timing API
    */
-  private getDurationByMetric(metricName: string): number {
-    const performanceEntries = this.wp.getEntriesByName(metricName);
+  private getDurationByMetric(measureName: string): number {
+    const performanceEntries = this.wp.getEntriesByName(measureName);
     const entry = performanceEntries[performanceEntries.length - 1];
     if (entry && entry.entryType === 'measure') {
       return entry.duration;
@@ -542,16 +542,16 @@ export default class Perfume {
     }
   }
 
-  private performanceMark(metricName: string, type: string): void {
-    const mark = `mark_${metricName}_${type}`;
+  private performanceMark(measureName: string, type: string): void {
+    const mark = `mark_${measureName}_${type}`;
     this.wp.mark(mark);
   }
 
-  private performanceMeasure(metricName: string): number {
-    const startMark = `mark_${metricName}_start`;
-    const endMark = `mark_${metricName}_end`;
-    this.wp.measure(metricName, startMark, endMark);
-    return this.getDurationByMetric(metricName);
+  private performanceMeasure(measureName: string): number {
+    const startMark = `mark_${measureName}_start`;
+    const endMark = `mark_${measureName}_end`;
+    this.wp.measure(measureName, startMark, endMark);
+    return this.getDurationByMetric(measureName);
   }
 
   /**
@@ -579,19 +579,19 @@ export default class Perfume {
   private performanceObserverCb(options: {
     performanceEntries: IPerformanceEntry[];
     entryName?: string;
-    metricName: IPerfumeMetrics;
+    measureName: IPerfumeMetrics;
     valueLog: 'duration' | 'startTime';
   }): void {
     options.performanceEntries.forEach(
       (performanceEntry: IPerformanceEntry) => {
         if (
-          this.config[options.metricName] &&
+          this.config[options.measureName] &&
           (!options.entryName ||
             (options.entryName && performanceEntry.name === options.entryName))
         ) {
           this.logMetric(
             performanceEntry[options.valueLog],
-            options.metricName,
+            options.measureName,
           );
         }
         if (
@@ -602,7 +602,7 @@ export default class Perfume {
         }
       },
     );
-    if (this.perfObservers.fid && options.metricName === 'firstInputDelay') {
+    if (this.perfObservers.fid && options.measureName === 'firstInputDelay') {
       this.perfObservers.fid.disconnect();
     }
   }
@@ -643,12 +643,13 @@ export default class Perfume {
    * Sends the User timing measure to analyticsTracker
    */
   private sendTiming(options: ISendTimingOptions): void {
-    const { measureName, data, duration } = options;
     // Doesn't send timing when page is hidden
     if (this.isHidden) {
       return;
     }
+    const { measureName, data, duration, customProperties } = options;
+    const eventProperties = customProperties ? customProperties : {};
     // Send metric to custom Analytics service
-    this.config.analyticsTracker({ metricName: measureName, data, duration });
+    this.config.analyticsTracker({ metricName: measureName, data, duration, eventProperties });
   }
 }

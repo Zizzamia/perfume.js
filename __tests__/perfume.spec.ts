@@ -180,7 +180,7 @@ describe('Perfume', () => {
 
     it('should call end() after the first setTimeout', () => {
       spy = jest.spyOn(perfume, 'end');
-      perfume.endPaint('test').catch(console.error);
+      perfume.endPaint('test');
       jest.runAllTimers();
       expect(spy.mock.calls.length).toEqual(1);
     });
@@ -250,6 +250,7 @@ describe('Perfume', () => {
         metricName: 'metricName',
         data: undefined,
         duration: 123,
+        eventProperties: {},
       });
     });
   });
@@ -292,13 +293,13 @@ describe('Perfume', () => {
       (perfume as any).performanceObserverCb({
         performanceEntries: mock.entries,
         entryName: 'first-paint',
-        metricName: 'firstPaint',
+        measureName: 'firstPaint',
         valueLog: 'startTime',
       });
       (perfume as any).performanceObserverCb({
         performanceEntries: mock.entries,
         entryName: 'first-contentful-paint',
-        metricName: 'firstContentfulPaint',
+        measureName: 'firstContentfulPaint',
         valueLog: 'startTime',
       });
       expect(spy.mock.calls.length).toEqual(2);
@@ -313,33 +314,33 @@ describe('Perfume', () => {
       (perfume as any).performanceObserverCb({
         performanceEntries: mock.entries,
         entryName: 'first-paint',
-        metricName: 'firstPaint',
+        measureName: 'firstPaint',
         valueLog: 'startTime',
       });
       (perfume as any).performanceObserverCb({
         performanceEntries: mock.entries,
         entryName: 'first-contentful-paint',
-        metricName: 'firstContentfulPaint',
+        measureName: 'firstContentfulPaint',
         valueLog: 'startTime',
       });
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should call disconnect() for firstInputDelay when metricName is firstInputDelay', () => {
+    it('should call disconnect() for firstInputDelay when measureName is firstInputDelay', () => {
       spy = jest.spyOn((perfume as any).perfObservers.fid, 'disconnect');
       (perfume as any).performanceObserverCb({
         performanceEntries: [],
-        metricName: 'firstInputDelay',
+        measureName: 'firstInputDelay',
         valueLog: 'duration',
       });
       expect(spy.mock.calls.length).toEqual(1);
     });
 
-    it('should not call disconnect() for firstInputDelay when metricName is not firstInputDelay', () => {
+    it('should not call disconnect() for firstInputDelay when measureName is not firstInputDelay', () => {
       spy = jest.spyOn((perfume as any).perfObservers.fid, 'disconnect');
       (perfume as any).performanceObserverCb({
         performanceEntries: [],
-        metricName: 'firstInputDelay',
+        measureName: 'firstInputDelay',
         valueLog: 'duration',
       });
       expect(spy.mock.calls.length).toEqual(1);
@@ -427,7 +428,7 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         performanceEntries: [],
-        metricName: 'firstInputDelay',
+        measureName: 'firstInputDelay',
         valueLog: 'duration',
       });
     });
