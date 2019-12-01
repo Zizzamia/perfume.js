@@ -6,9 +6,22 @@ import {
 } from '@angular/core';
 
 import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
-// import { NgPerfume, PerfumeAfterViewInit } from '../../projects/perfume/src/lib/perfume.module';
+// import {
+//   NgPerfume,
+//   PerfumeAfterViewInit,
+// } from '../../projects/perfume/src/lib/perfume.module';
 
-import { navigationTiming, dataConsumption, fp, fcp, lcp, fid } from './perfume.config';
+import {
+  navigationTiming,
+  dataConsumption,
+  fp,
+  fcp,
+  lcp,
+  fid,
+  fibonacci,
+  custom_fibonacci,
+  networkInformation,
+} from './perfume.config';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +33,7 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('p', { static: true })
   // Component
   navigationTiming = {};
+  networkInformation = {};
   dataConsumption = {};
   logCustom: string;
   logFibonacci: string;
@@ -29,36 +43,45 @@ export class AppComponent implements AfterViewInit {
   lcp: number;
   path: string;
 
-  constructor(
-    private ref: ChangeDetectorRef,
-    public perfume: NgPerfume,
-  ) {
+  constructor(private ref: ChangeDetectorRef, public perfume: NgPerfume) {
     this.path = window.location.href.split('#')[0];
   }
 
   ngAfterViewInit() {
-    navigationTiming.subscribe((result) => {
+    navigationTiming.subscribe(result => {
       this.navigationTiming = result;
       this.ref.detectChanges();
     });
-    dataConsumption.subscribe((result) => {
+    networkInformation.subscribe(result => {
+      this.networkInformation = result;
+      this.ref.detectChanges();
+    });
+    dataConsumption.subscribe(result => {
       this.dataConsumption = result;
       this.ref.detectChanges();
     });
-    fp.subscribe((result) => {
+    fp.subscribe(result => {
       this.fp = result;
       this.ref.detectChanges();
     });
-    fcp.subscribe((result) => {
+    fcp.subscribe(result => {
       this.fcp = result;
       this.ref.detectChanges();
     });
-    lcp.subscribe((result) => {
+    lcp.subscribe(result => {
       this.lcp = result;
       this.ref.detectChanges();
     });
-    fid.subscribe((result) => {
+    fid.subscribe(result => {
       this.fid = result;
+      this.ref.detectChanges();
+    });
+    fibonacci.subscribe(result => {
+      this.logFibonacci = `Perfume.js: fibonacci ${result} ms`;
+      this.ref.detectChanges();
+    });
+    custom_fibonacci.subscribe(result => {
+      this.logCustom = `🍹 HayesValley.js: Custom logging ${result} ms`;
       this.ref.detectChanges();
     });
   }
@@ -66,15 +89,13 @@ export class AppComponent implements AfterViewInit {
   measureFibonacci() {
     this.perfume.start('fibonacci');
     this.fibonacci(800);
-    const duration = this.perfume.end('fibonacci');
-    this.logFibonacci = `Perfume.js: fibonacci ${duration} ms`;
+    this.perfume.end('fibonacci');
   }
 
   customLogging() {
-    this.perfume.start('fibonacci');
+    this.perfume.start('custom_fibonacci');
     this.fibonacci(800);
-    const duration = this.perfume.end('fibonacci') as number;
-    this.logCustom = `🍹 HayesValley.js: Custom logging ${duration} ms`;
+    this.perfume.end('custom_fibonacci');
   }
 
   /**

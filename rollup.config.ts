@@ -55,7 +55,11 @@ const createConfig = ({ output, min = false }) => {
             'eventProperties',
             'navigator',
             'connection',
-            'networkInformation'
+            'networkInformation',
+            'downlink',
+            'effectiveType',
+            'rtt',
+            'saveData',
           ]
         }
       },

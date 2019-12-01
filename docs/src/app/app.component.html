@@ -129,6 +129,37 @@ npm install perfume.js --save-dev
     </div>
 
     <div class="box">
+      <h3 class="box-title" id="/network-information/">
+        <a href="{{ path }}#/network-information/">
+          Network Information
+        </a>
+      </h3>
+      <p>
+        The Network Information API enables web applications to access 
+        information about the network connection in use by the device.
+      </p>
+      <p class="box-demo">
+        Perfume.js: NetworkInformation {{ networkInformation | json }}
+      </p>
+      <div class="box-code js">
+        <table>
+          <tbody>
+            <tr>
+              <td class="code">
+                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
+  networkInformation<span class="red">:</span> <span class="blue">true</span>,
+  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data {{'}'}}) => {{'{'}}
+    myAnalyticsTool.<span class="violet">track</span>(metricName, data);
+  {{'}'}})
+{{'}'}});</pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box">
       <h3 class="box-title" id="/resource-timing/">
         <a href="{{ path }}#/resource-timing/">
           Resource Timing
@@ -579,6 +610,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
   dataConsumption<span class="red">:</span> <span class="blue">false</span>,
   largestContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
   navigationTiming<span class="red">:</span> <span class="blue">false</span>,
+  networkInformation<span class="red">:</span> <span class="blue">false</span>,
   resourceTiming<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Analytics</span>
   analyticsTracker<span class="red">:</span> options => {{'{}'}},
@@ -586,7 +618,6 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
   logPrefix<span class="red">:</span> "Perfume.js:"
   logging<span class="red">:</span> <span class="blue">true</span>,
   maxMeasureTime<span class="red">:</span> 15000,
-  warning<span class="red">:</span> <span class="blue">false</span>,
 {{'}'}};</pre>
               </td>
             </tr>

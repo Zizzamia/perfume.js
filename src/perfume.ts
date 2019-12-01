@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.3.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.4.0 (http://zizzamia.github.io/perfume)
  * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -20,6 +20,7 @@ export interface IPerfumeConfig {
   dataConsumption: boolean;
   largestContentfulPaint: boolean;
   navigationTiming: boolean;
+  networkInformation: boolean;
   resourceTiming: boolean;
   // Analytics
   analyticsTracker: (options: IAnalyticsTrackerOptions) => void;
@@ -37,6 +38,7 @@ export interface IPerfumeOptions {
   dataConsumption?: boolean;
   largestContentfulPaint?: boolean;
   navigationTiming?: boolean;
+  networkInformation?: boolean;
   resourceTiming?: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
@@ -48,9 +50,7 @@ export interface IPerfumeOptions {
 
 export interface ILogOptions {
   measureName: string;
-  duration?: number;
   data?: any;
-  suffix?: string;
   customProperties?: object;
 }
 
@@ -163,6 +163,7 @@ export default class Perfume {
     dataConsumption: false,
     largestContentfulPaint: false,
     navigationTiming: false,
+    networkInformation: false,
     resourceTiming: false,
     // Analytics
     analyticsTracker: options => {},
@@ -178,7 +179,6 @@ export default class Perfume {
   private lcpDuration: number = 0;
   private logPrefixRecording = 'Recording already';
   private metrics: IMetricMap = {};
-  private navigationTimingCached: IPerfumeNavigationTiming = {};
   private perfObserver: any;
   private perfObservers: IPerfObservers = {};
   private perfResourceTiming: IPerfumeDataConsumption = {
@@ -222,6 +222,10 @@ export default class Perfume {
     if (this.config.navigationTiming) {
       this.logData('navigationTiming', this.getNavigationTiming());
     }
+    // Log Network Information
+    if (this.config.networkInformation) {
+      this.logData('networkInformation', this.getNetworkInformation());
+    }
   }
 
   /**
@@ -262,6 +266,7 @@ export default class Perfume {
     this.pushTask(() => {
       const options = {
         measureName: markName,
+        data: duration2Decimal,
         duration: duration2Decimal,
         customProperties,
       };
@@ -434,26 +439,20 @@ export default class Perfume {
    * developers.google.com/web/fundamentals/performance/navigation-and-resource-timing
    */
   private getNavigationTiming(): IPerfumeNavigationTiming {
-    if (!this.config.navigationTiming) {
+    if (!this.isPerformanceSupported()) {
       return {};
-    }
-    if (
-      !this.isPerformanceSupported() ||
-      Object.keys(this.navigationTimingCached).length
-    ) {
-      return this.navigationTimingCached;
     }
     // There is an open issue to type correctly getEntriesByType
     // github.com/microsoft/TypeScript/issues/33866
     const n = performance.getEntriesByType('navigation')[0] as any;
     // In Safari version 11.2 Navigation Timing isn't supported yet
     if (!n) {
-      return this.navigationTimingCached;
+      return {};
     }
     const responseStart = n.responseStart;
     const responseEnd = n.responseEnd;
     // We cache the navigation time for future times
-    this.navigationTimingCached = {
+    return {
       // fetchStart marks when the browser starts to fetch a resource
       // responseEnd is when the last byte of the response arrives
       fetchTime: responseEnd - n.fetchStart,
@@ -470,12 +469,20 @@ export default class Perfume {
       // Measuring DNS lookup time
       dnsLookupTime: n.domainLookupEnd - n.domainLookupStart,
     };
-    return this.navigationTimingCached;
   }
 
-  private getNavigatorconnection(): IPerfumeNetworkInformation {
+  private getNetworkInformation(): IPerfumeNetworkInformation {
     if ('connection' in this.wn) {
-      return (this.wn as any).connection;
+      const dataConnection = (this.wn as any).connection;
+      if (typeof dataConnection !== 'object') {
+        return {};
+      }
+      return {
+        downlink: dataConnection.downlink,
+        effectiveType: dataConnection.effectiveType,
+        rtt: dataConnection.rtt,
+        saveData: !!dataConnection.saveData,
+      };
     }
     return {};
   }
@@ -488,7 +495,7 @@ export default class Perfume {
     });
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ measureName, data, suffix: '' });
+      this.log({ measureName, data });
       // Sends the metric to an external tracking service
       this.sendTiming({ measureName, data });
     });
@@ -513,7 +520,7 @@ export default class Perfume {
     }
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ measureName, duration: duration2Decimal, suffix });
+      this.log({ measureName, data: `${duration2Decimal} ${suffix}` });
       // Sends the metric to an external tracking service
       this.sendTiming({ measureName, duration: duration2Decimal });
     });
@@ -528,14 +535,11 @@ export default class Perfume {
       return;
     }
     const style = 'color:#ff6d00;font-size:11px;';
-    let text = `%c ${this.config.logPrefix} ${options.measureName} `;
-    if (options.duration) {
-      const durationMs = options.duration.toFixed(2);
-      text += `${durationMs} ${options.suffix || 'ms'}`;
-      this.c.log(text, style);
-    } else if (options.data) {
-      this.c.log(text, style, options.data);
-    }
+    this.c.log(
+      `%c ${this.config.logPrefix} ${options.measureName} `,
+      style,
+      options.data,
+    );
   }
 
   /**
@@ -663,14 +667,12 @@ export default class Perfume {
     }
     const { measureName, data, duration, customProperties } = options;
     const eventProperties = customProperties ? customProperties : {};
-    const networkInformation = this.getNavigatorconnection();
     // Send metric to custom Analytics service
     this.config.analyticsTracker({
       metricName: measureName,
       data,
       duration,
       eventProperties,
-      networkInformation,
     });
   }
 }

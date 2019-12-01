@@ -1,9 +1,16 @@
-import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ViewEncapsulation,
+} from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { DialogComponent } from '../dialog/dialog.component';
 
-import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
-// import { NgPerfume, PerfumeAfterViewInit } from '../../../projects/perfume/src/lib/perfume.module';
+import { NgPerfume } from 'perfume.js/angular';
+// import { NgPerfume } from '../../../projects/perfume/src/lib/perfume.module';
+
+import { openDialog$ } from '../perfume.config';
 
 @Component({
   selector: 'app-cfp',
@@ -11,19 +18,27 @@ import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
   styles: [``],
   encapsulation: ViewEncapsulation.None,
 })
-@PerfumeAfterViewInit('CfpComponent')
 export class CfpComponent implements AfterViewInit {
   logOpenDialog: string;
   path: string;
   private gifIndex = 0;
 
-  constructor(public dialog: MatDialog, public perfume: NgPerfume) {
+  constructor(
+    private ref: ChangeDetectorRef,
+    public dialog: MatDialog,
+    public perfume: NgPerfume,
+  ) {
     this.path = window.location.href.split('#')[0];
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    openDialog$.subscribe(result => {
+      this.logOpenDialog = `Perfume.js: openDialog ${result} ms`;
+      this.ref.detectChanges();
+    });
+  }
 
-  async openDialog() {
+  openDialog() {
     this.perfume.start('openDialog');
     this.dialog.open(DialogComponent, {
       data: { gifIndex: this.gifIndex },
@@ -31,7 +46,6 @@ export class CfpComponent implements AfterViewInit {
     });
     // Increment or reset index
     this.gifIndex = this.gifIndex === 4 ? 0 : this.gifIndex + 1;
-    const duration = await this.perfume.endPaint('openDialog');
-    this.logOpenDialog = `Perfume.js: openDialog ${duration} ms`;
+    this.perfume.endPaint('openDialog');
   }
 }

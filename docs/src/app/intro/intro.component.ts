@@ -5,9 +5,6 @@ import {
   AfterViewInit,
 } from '@angular/core';
 
-import { PerfumeAfterViewInit } from 'perfume.js/angular';
-// import { PerfumeAfterViewInit } from '../../../projects/perfume/src/lib/perfume.module';
-
 @Component({
   selector: 'app-intro',
   template: `
@@ -81,7 +78,6 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-@PerfumeAfterViewInit('IntroComponent')
 export class IntroComponent implements AfterViewInit {
   @HostBinding('class.layout--intro')
   classHost = true;

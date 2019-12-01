@@ -5,9 +5,6 @@ import {
   AfterViewInit,
 } from '@angular/core';
 
-import { PerfumeAfterViewInit } from 'perfume.js/angular';
-// import { PerfumeAfterViewInit } from '../../../projects/perfume/src/lib/perfume.module';
-
 @Component({
   selector: 'app-navigation',
   template: `
@@ -25,6 +22,9 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
       <a href="{{ path }}#/navigation-timing/" class="part-two"
       [class.active]="navSelected === navOptions.navTime"
       (click)="activeNav(navOptions.navTime)">Navigation Timing</a>
+      <a href="{{ path }}#/network-information/" class="part-two"
+      [class.active]="navSelected === navOptions.netInfo"
+      (click)="activeNav(navOptions.netInfo)">Network Information</a>
       <a href="{{ path }}#/resource-timing/" class="part-two"
       [class.active]="navSelected === navOptions.resTime"
       (click)="activeNav(navOptions.resTime)">Resource Timing</a>
@@ -121,7 +121,6 @@ import { PerfumeAfterViewInit } from 'perfume.js/angular';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-@PerfumeAfterViewInit('NavigationComponent')
 export class NavigationComponent implements AfterViewInit {
   @HostBinding('class.layout-nav')
   classHost = true;
@@ -137,6 +136,7 @@ export class NavigationComponent implements AfterViewInit {
       rum: 'real-user-measurement',
       installing: 'installing-and-imports',
       navTime: 'navigation-timing',
+      netInfo: 'network-information',
       resTime: 'resource-timing',
       fp: 'first-paint',
       fcp: 'first-contentful-paint',

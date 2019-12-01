@@ -36,12 +36,12 @@ export class NgPerfume {
     perfume.start(metricName);
   }
 
-  end(metricName: string): void | number {
-    return perfume.end(metricName);
+  end(metricName: string): void {
+    perfume.end(metricName);
   }
 
-  endPaint(metricName: string): Promise<void | number> {
-    return perfume.endPaint(metricName);
+  endPaint(metricName: string): void {
+    perfume.endPaint(metricName);
   }
 }
 

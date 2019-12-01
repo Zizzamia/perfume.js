@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.4.0 (2019-11-30)
+
+* **feat:** added network information support #94
+* **feat:** added Clear method #71
+* **feat:** allowed `endPaint` to accept an `eventProperties` object to do custom reporting #68
+
 ## 4.3.0 (2019-11-17)
 
 * **fix:** total value for data consumption
