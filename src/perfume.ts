@@ -249,7 +249,7 @@ export default class Perfume {
   /**
    * End performance measurement
    */
-  end(markName: string, customProperties?: object): void {
+  end(markName: string, customProperties = {}): void {
     if (!this.isPerformanceSupported()) {
       return;
     }

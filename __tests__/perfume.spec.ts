@@ -87,6 +87,17 @@ describe('Perfume', () => {
         navigationTiming: true,
       });
     });
+
+    it('should run with config version F', () => {
+      new Perfume({
+        firstContentfulPaint: true,
+        firstPaint: true,
+        firstInputDelay: true,
+        dataConsumption: true,
+        navigationTiming: true,
+        networkInformation: true,
+      });
+    });
   });
 
   describe('.start()', () => {
@@ -126,7 +137,9 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         measureName: 'metricName',
+        data: 12346,
         duration: 12346,
+        customProperties: {}
       });
     });
 
@@ -147,7 +160,9 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         measureName: 'metricName',
+        data: 12346,
         duration: 12346,
+        customProperties: {}
       });
     });
 
@@ -196,34 +211,28 @@ describe('Perfume', () => {
     it('should not call window.console.log() if logging is disabled', () => {
       perfume.config.logging = false;
       spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ metricName: '', duration: 0 });
+      (perfume as any).log({ metricName: '', data: '0 ms' });
       expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call window.console.log() if logging is enabled', () => {
       perfume.config.logging = true;
       spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ measureName: 'metricName', duration: 1235 });
-      const text = '%c Perfume.js: metricName 1235.00 ms';
+      (perfume as any).log({ measureName: 'metricName', data: '1235.00 ms' });
+      const text = '%c Perfume.js: metricName ';
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text, style);
-    });
-
-    it('should not call window.console.log() if params are not correct', () => {
-      spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ measureName: '', duration: 0 });
-      expect(spy).not.toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith(text, style, '1235.00 ms');
     });
 
     it('should call window.console.log() if params are correct', () => {
       perfume.config.logging = true;
       spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ measureName: 'metricName', duration: 1245 });
-      const text = '%c Perfume.js: metricName 1245.00 ms';
+      (perfume as any).log({ measureName: 'metricName', data: '1245.00 ms' });
+      const text = '%c Perfume.js: metricName ';
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text, style);
+      expect(spy).toHaveBeenCalledWith(text, style, '1245.00 ms');
     });
 
     it('should call window.console.log() with data', () => {
@@ -446,8 +455,7 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         measureName: 'firstContentfulPaint',
-        duration: 1,
-        suffix: 'ms',
+        data: '1 ms',
       });
     });
 
@@ -537,6 +545,12 @@ describe('Perfume', () => {
         .spyOn(window.performance, 'getEntriesByType')
         .mockReturnValue([] as any);
       expect((perfume as any).getNavigationTiming()).toEqual({});
+    });
+  });
+
+  describe('.getNetworkInformation()', () => {
+    it('when connection is not supported should return an empty object', () => {
+      expect((perfume as any).getNetworkInformation()).toEqual({});
     });
   });
 
@@ -700,7 +714,6 @@ describe('Perfume', () => {
         data: undefined,
         duration: 123,
         eventProperties: {},
-        networkInformation: {},
       });
     });
   });
