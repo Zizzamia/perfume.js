@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.4.0 (2019-12-1)
+
+* **fix:** transferSize value in getNavigationTiming
+
 ## 4.4.0 (2019-11-30)
 
 * **feat:** added network information support #94
