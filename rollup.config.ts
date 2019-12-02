@@ -39,7 +39,6 @@ const createConfig = ({ output, min = false }) => {
             'logPrefix',
             'logging',
             'maxMeasureTime',
-            'warning',
             'beacon',
             'css',
             'fetch',
@@ -60,6 +59,9 @@ const createConfig = ({ output, min = false }) => {
             'effectiveType',
             'rtt',
             'saveData',
+            'workerStart',
+            'transferSize',
+            'encodedBodySize',
           ]
         }
       },
