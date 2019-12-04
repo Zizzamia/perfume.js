@@ -411,7 +411,8 @@ const options = {
 * [Time to Interactive with RUM](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c)
 <br />
 
-## Articles
+## Plugins
+
 * [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
 <br />
 
