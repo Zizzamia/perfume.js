@@ -62,6 +62,7 @@ const createConfig = ({ output, min = false }) => {
             'workerStart',
             'transferSize',
             'encodedBodySize',
+            'Perfume',
           ]
         }
       },
