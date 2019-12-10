@@ -416,10 +416,10 @@ const options = {
 * [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
 <br />
 
-## Companies
-
+## Perfume is used by
 * [Coinbase](https://www.coinbase.com)
 * [Plan](https://getplan.co)
+* Add your company name :)
 <br />
 
 ## Credits and Specs
@@ -449,7 +449,6 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 ## Copyright and license
 
 Code and documentation copyright 2019 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
-<br />
 
 ## Team
 
