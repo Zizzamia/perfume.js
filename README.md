@@ -416,6 +416,12 @@ const options = {
 * [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
 <br />
 
+## Companies
+
+* [Coinbase](https://www.coinbase.com)
+* [Plan](https://getplan.co)
+<br />
+
 ## Credits and Specs
 
 Made with ☕️ by [@zizzamia](https://twitter.com/zizzamia) and

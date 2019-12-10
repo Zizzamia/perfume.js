@@ -1,14 +1,18 @@
 # Changelog
 
-## 4.4.0 (2019-12-1)
+## 4.6.0 (2019-12-3)
+
+* **fix:** restore UMD module breaking [#95](https://github.com/Zizzamia/perfume.js/issues/95)
+
+## 4.5.0 (2019-12-1)
 
 * **fix:** transferSize value in getNavigationTiming
 
 ## 4.4.0 (2019-11-30)
 
-* **feat:** added network information support #94
-* **feat:** added Clear method #71
-* **feat:** allowed `endPaint` to accept an `eventProperties` object to do custom reporting #68
+* **feat:** added network information support [#94](https://github.com/Zizzamia/perfume.js/issues/94)
+* **feat:** added Clear method [#71](https://github.com/Zizzamia/perfume.js/issues/71)
+* **feat:** allowed `endPaint` to accept an `eventProperties` object to do custom reporting [#68](https://github.com/Zizzamia/perfume.js/issues/68)
 
 ## 4.3.0 (2019-11-17)
 
