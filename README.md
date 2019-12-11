@@ -419,6 +419,7 @@ const options = {
 ## Perfume is used by
 * [Coinbase](https://www.coinbase.com)
 * [Plan](https://getplan.co)
+* [Conio](https://business.conio.com/)
 * Add your company name :)
 <br />
 
