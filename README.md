@@ -47,7 +47,7 @@ With Perfume.js, you can collect those metrics and have a deep understanding eve
 
 npm (https://www.npmjs.com/package/perfume.js):
 
-    npm install perfume.js --save-dev
+    npm install perfume.js --save
 
 ### Importing library
 
