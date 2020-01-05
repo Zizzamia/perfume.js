@@ -420,6 +420,7 @@ const options = {
 * [Coinbase](https://www.coinbase.com)
 * [Plan](https://getplan.co)
 * [Conio](https://business.conio.com/)
+* [Hearst](https://www.cosmopolitan.com/)
 * Add your company name :)
 <br />
 
