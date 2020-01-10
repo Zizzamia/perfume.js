@@ -57,8 +57,6 @@ export const PerfumeConfig = {
   firstInputDelay: true,
   dataConsumption: true,
   largestContentfulPaint: true,
-  navigationTiming: true,
-  networkInformation: true,
   resourceTiming: true,
   analyticsTracker,
 };

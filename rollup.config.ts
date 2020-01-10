@@ -34,7 +34,6 @@ const createConfig = ({ output, min = false }) => {
             'firstPaint',
             'dataConsumption',
             'largestContentfulPaint',
-            'navigationTiming',
             'analyticsTracker',
             'logPrefix',
             'logging',
@@ -63,6 +62,9 @@ const createConfig = ({ output, min = false }) => {
             'transferSize',
             'encodedBodySize',
             'Perfume',
+            'deviceMemory',
+            'userAgent',
+            'hardwareConcurrency'
           ]
         }
       },

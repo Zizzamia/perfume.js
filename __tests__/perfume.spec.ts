@@ -6,6 +6,7 @@ describe('Perfume', () => {
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
+    mock.navigator();
     mock.performance();
     perfume = new Perfume({ ...mock.defaultPerfumeConfig });
     (window as any).ga = undefined;
@@ -30,7 +31,6 @@ describe('Perfume', () => {
       expect(instance.config.firstPaint).toEqual(false);
       expect(instance.config.firstInputDelay).toEqual(false);
       expect(instance.config.dataConsumption).toEqual(false);
-      expect(instance.config.navigationTiming).toEqual(false);
       expect(instance.config.resourceTiming).toEqual(false);
       expect(instance.config.analyticsTracker).toBeDefined();
       expect(instance.config.logPrefix).toEqual('Perfume.js:');
@@ -77,27 +77,6 @@ describe('Perfume', () => {
         dataConsumption: true,
       });
     });
-
-    it('should run with config version E', () => {
-      new Perfume({
-        firstContentfulPaint: true,
-        firstPaint: true,
-        firstInputDelay: true,
-        dataConsumption: true,
-        navigationTiming: true,
-      });
-    });
-
-    it('should run with config version F', () => {
-      new Perfume({
-        firstContentfulPaint: true,
-        firstPaint: true,
-        firstInputDelay: true,
-        dataConsumption: true,
-        navigationTiming: true,
-        networkInformation: true,
-      });
-    });
   });
 
   describe('.start()', () => {
@@ -139,7 +118,11 @@ describe('Perfume', () => {
         measureName: 'metricName',
         data: 12346,
         duration: 12346,
-        customProperties: {}
+        customProperties: {},
+        navigatorInfo: {
+          deviceMemory: 8,
+          hardwareConcurrency: 12,
+        },
       });
     });
 
@@ -162,7 +145,11 @@ describe('Perfume', () => {
         measureName: 'metricName',
         data: 12346,
         duration: 12346,
-        customProperties: {}
+        customProperties: {},
+        navigatorInfo: {
+          deviceMemory: 8,
+          hardwareConcurrency: 12,
+        },
       });
     });
 
@@ -218,32 +205,32 @@ describe('Perfume', () => {
     it('should call window.console.log() if logging is enabled', () => {
       perfume.config.logging = true;
       spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ measureName: 'metricName', data: '1235.00 ms' });
+      (perfume as any).log({ measureName: 'metricName', data: '1235.00 ms', navigatorInfo: {} });
       const text = '%c Perfume.js: metricName ';
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text, style, '1235.00 ms');
+      expect(spy).toHaveBeenCalledWith(text, style, '1235.00 ms', {});
     });
 
     it('should call window.console.log() if params are correct', () => {
       perfume.config.logging = true;
       spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ measureName: 'metricName', data: '1245.00 ms' });
+      (perfume as any).log({ measureName: 'metricName', data: '1245.00 ms', navigatorInfo: {} });
       const text = '%c Perfume.js: metricName ';
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text, style, '1245.00 ms');
+      expect(spy).toHaveBeenCalledWith(text, style, '1245.00 ms', {});
     });
 
     it('should call window.console.log() with data', () => {
       const data = {};
       perfume.config.logging = true;
       spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ measureName: 'metricName', data });
+      (perfume as any).log({ measureName: 'metricName', data, navigatorInfo: {} });
       const text = '%c Perfume.js: metricName ';
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text, style, data);
+      expect(spy).toHaveBeenCalledWith(text, style, data, {});
     });
   });
 
@@ -454,8 +441,12 @@ describe('Perfume', () => {
       (perfume as any).logMetric(1, 'firstContentfulPaint');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
-        measureName: 'firstContentfulPaint',
         data: '1 ms',
+        measureName: 'firstContentfulPaint',
+        navigatorInfo: {
+          deviceMemory: 8,
+          hardwareConcurrency: 12,
+        },
       });
     });
 
@@ -464,8 +455,12 @@ describe('Perfume', () => {
       (perfume as any).logMetric(1, 'firstContentfulPaint');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
-        measureName: 'firstContentfulPaint',
         duration: 1,
+        measureName: 'firstContentfulPaint',
+        navigatorInfo: {
+          deviceMemory: 8,
+          hardwareConcurrency: 12,
+        },
       });
     });
 
@@ -511,13 +506,27 @@ describe('Perfume', () => {
   });
 
   describe('.getNavigationTiming()', () => {
+    it('when navigator is not supported should return an empty object', () => {
+      delete (perfume as any).wn;
+      expect((perfume as any).getNavigatorInfo()).toEqual({});
+    });
+
+    it('when navigator is supported should return the correct value', () => {
+      mock.navigator();
+      expect((perfume as any).getNavigatorInfo()).toEqual({
+        deviceMemory: 8,
+        hardwareConcurrency: 12,
+      });
+    });
+  });
+
+  describe('.getNavigationTiming()', () => {
     it('when performance is not supported should return an empty object', () => {
       delete window.performance.mark;
       expect((perfume as any).getNavigationTiming()).toEqual({});
     });
 
     it('when performance is supported should return the correct value', () => {
-      perfume.config.navigationTiming = true;
       expect((perfume as any).getNavigationTiming()).toEqual({
         dnsLookupTime: 0,
         downloadTime: 0.6899998988956213,
@@ -530,7 +539,6 @@ describe('Perfume', () => {
     });
 
     it('when workerStart is 0 should return 0', () => {
-      perfume.config.navigationTiming = true;
       jest.spyOn(window.performance, 'getEntriesByType').mockReturnValue([
         {
           workerTime: 0,
@@ -540,7 +548,6 @@ describe('Perfume', () => {
     });
 
     it('when Navigation Timing is not supported yet should return an empty object', () => {
-      perfume.config.navigationTiming = true;
       jest
         .spyOn(window.performance, 'getEntriesByType')
         .mockReturnValue([] as any);
@@ -550,7 +557,24 @@ describe('Perfume', () => {
 
   describe('.getNetworkInformation()', () => {
     it('when connection is not supported should return an empty object', () => {
+      delete (perfume as any).wn.connection;
       expect((perfume as any).getNetworkInformation()).toEqual({});
+    });
+
+    it('when connection is not supported should return an empty object', () => {
+      mock.navigator();
+      (perfume as any).wn.connection = undefined;
+      expect((perfume as any).getNetworkInformation()).toEqual({});
+    });
+
+    it('when connection is supported should return the correct value', () => {
+      mock.navigator();
+      expect((perfume as any).getNetworkInformation()).toEqual({
+        effectiveType: '4g',
+        rtt: 50,
+        downlink: 2.3,
+        saveData: false
+      });
     });
   });
 

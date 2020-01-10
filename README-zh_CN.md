@@ -254,7 +254,6 @@ const options = {
   firstPaint: false,
   firstInputDelay: false,
   dataConsumption: false,
-  navigationTiming: false,
   // Analytics
   analyticsTracker: options => {},
   browserTracker: false,

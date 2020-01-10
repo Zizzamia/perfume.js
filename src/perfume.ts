@@ -9,7 +9,7 @@ export interface IAnalyticsTrackerOptions {
   data?: any;
   duration?: number;
   eventProperties?: object;
-  networkInformation?: IPerfumeNetworkInformation;
+  navigatorInformation?: object;
 }
 
 export interface IPerfumeConfig {
@@ -19,8 +19,6 @@ export interface IPerfumeConfig {
   firstPaint: boolean;
   dataConsumption: boolean;
   largestContentfulPaint: boolean;
-  navigationTiming: boolean;
-  networkInformation: boolean;
   resourceTiming: boolean;
   // Analytics
   analyticsTracker: (options: IAnalyticsTrackerOptions) => void;
@@ -37,8 +35,6 @@ export interface IPerfumeOptions {
   firstPaint?: boolean;
   dataConsumption?: boolean;
   largestContentfulPaint?: boolean;
-  navigationTiming?: boolean;
-  networkInformation?: boolean;
   resourceTiming?: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
@@ -52,6 +48,7 @@ export interface ILogOptions {
   measureName: string;
   data?: any;
   customProperties?: object;
+  navigatorInfo?: object;
 }
 
 export interface IMetricMap {
@@ -67,6 +64,7 @@ export interface ISendTimingOptions {
   data?: any;
   duration?: number;
   customProperties?: object;
+  navigatorInfo?: object;
 }
 
 export type IPerfumeMetrics =
@@ -162,8 +160,6 @@ export default class Perfume {
     firstInputDelay: false,
     dataConsumption: false,
     largestContentfulPaint: false,
-    navigationTiming: false,
-    networkInformation: false,
     resourceTiming: false,
     // Analytics
     analyticsTracker: options => {},
@@ -217,15 +213,10 @@ export default class Perfume {
 
     // Init visibilitychange listener
     this.onVisibilityChange();
-
     // Log Navigation Timing
-    if (this.config.navigationTiming) {
-      this.logData('navigationTiming', this.getNavigationTiming());
-    }
+    this.logData('navigationTiming', this.getNavigationTiming());
     // Log Network Information
-    if (this.config.networkInformation) {
-      this.logData('networkInformation', this.getNetworkInformation());
-    }
+    this.logData('networkInformation', this.getNetworkInformation());
   }
 
   /**
@@ -269,6 +260,7 @@ export default class Perfume {
         data: duration2Decimal,
         duration: duration2Decimal,
         customProperties,
+        navigatorInfo: this.getNavigatorInfo(),
       };
       // Log to console, delete metric and send to analytics tracker
       this.log(options);
@@ -433,6 +425,16 @@ export default class Perfume {
     return -1;
   }
 
+  private getNavigatorInfo(): object {
+    if (this.wn) {
+      return {
+        deviceMemory: (this.wn as any).deviceMemory ? (this.wn as any).deviceMemory : 0,
+        hardwareConcurrency: (this.wn as any).hardwareConcurrency ? (this.wn as any).hardwareConcurrency : 0,
+      };
+    }
+    return {};
+  }
+
   /**
    * Navigation Timing API provides performance metrics for HTML documents.
    * w3c.github.io/navigation-timing/
@@ -493,11 +495,12 @@ export default class Perfume {
         data[key] = parseFloat(data[key].toFixed(2));
       }
     });
+    const navigatorInfo = this.getNavigatorInfo();
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ measureName, data });
+      this.log({ measureName, data, navigatorInfo });
       // Sends the metric to an external tracking service
-      this.sendTiming({ measureName, data });
+      this.sendTiming({ measureName, data, navigatorInfo });
     });
   }
 
@@ -518,11 +521,12 @@ export default class Perfume {
     ) {
       return;
     }
+    const navigatorInfo = this.getNavigatorInfo();
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ measureName, data: `${duration2Decimal} ${suffix}` });
+      this.log({ measureName, data: `${duration2Decimal} ${suffix}`, navigatorInfo });
       // Sends the metric to an external tracking service
-      this.sendTiming({ measureName, duration: duration2Decimal });
+      this.sendTiming({ measureName, duration: duration2Decimal, navigatorInfo });
     });
   }
 
@@ -539,6 +543,7 @@ export default class Perfume {
       `%c ${this.config.logPrefix} ${options.measureName} `,
       style,
       options.data,
+      options.navigatorInfo
     );
   }
 
@@ -665,7 +670,7 @@ export default class Perfume {
     if (this.isHidden) {
       return;
     }
-    const { measureName, data, duration, customProperties } = options;
+    const { measureName, data, duration, customProperties, navigatorInfo } = options;
     const eventProperties = customProperties ? customProperties : {};
     // Send metric to custom Analytics service
     this.config.analyticsTracker({
@@ -673,6 +678,7 @@ export default class Perfume {
       data,
       duration,
       eventProperties,
+      navigatorInformation: navigatorInfo,
     });
   }
 }

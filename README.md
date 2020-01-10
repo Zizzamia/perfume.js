@@ -70,6 +70,8 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 Navigation Timing collects performance metrics for the life and timings of a network request.
 Perfume helps expose some of the key metrics you might need.
 
+Navigation Timing is run by default.
+
 <ul>
   <li><b>DNS lookup</b>: When a user requests a URL, the Domain Name System (DNS) is queried to translate a domain to an IP address.</li>
   <li><b>Header size</b>: HTTP header size</li>
@@ -83,7 +85,6 @@ Perfume helps expose some of the key metrics you might need.
 
 ```javascript
 const perfume = new Perfume({
-  navigationTiming: true,
   analyticsTracker: ({ metricName, data }) => {
     myAnalyticsTool.track(metricName, data);
   })
@@ -279,7 +280,6 @@ export const PerfumeConfig = {
   firstContentfulPaint: true,
   firstInputDelay: true,
   dataConsumption: true,
-  navigationTiming: true,
   resourceTiming: true,
   analyticsTracker,
 };
@@ -326,7 +326,6 @@ const perfume = new Perfume({
   firstContentfulPaint: true,
   firstInputDelay: true,
   dataConsumption: true,
-  navigationTiming: true,
   resourceTiming: true,
   analyticsTracker,
 });
@@ -385,7 +384,6 @@ const options = {
   firstInputDelay: false,
   dataConsumption: false,
   largestContentfulPaint: false,
-  navigationTiming: false,
   resourceTiming: false,
   // Analytics
   analyticsTracker: options => {},

@@ -45,6 +45,25 @@ export default {
     reject: (x: any) => x,
     resolve: (x: any) => x,
   },
+  navigator: () => {
+    delete (window as any).navigator;
+    const navigator = {
+      connection: {
+        effectiveType: '4g',
+        rtt: 50,
+        downlink: 2.3,
+        saveData: false
+      },
+      deviceMemory: 8,
+      hardwareConcurrency: 12,
+    };
+    Object.defineProperty(window, 'navigator', {
+      configurable: true,
+      enumerable: true,
+      value: navigator,
+      writable: true,
+    });
+  },
   performance: () => {
     delete (window as any).performance;
     const performance = {
