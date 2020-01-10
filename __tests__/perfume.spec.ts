@@ -27,9 +27,6 @@ describe('Perfume', () => {
     const instance = new Perfume();
 
     it('should be defined', () => {
-      expect(instance.config.firstContentfulPaint).toEqual(false);
-      expect(instance.config.firstPaint).toEqual(false);
-      expect(instance.config.firstInputDelay).toEqual(false);
       expect(instance.config.dataConsumption).toEqual(false);
       expect(instance.config.resourceTiming).toEqual(false);
       expect(instance.config.analyticsTracker).toBeDefined();
@@ -42,18 +39,12 @@ describe('Perfume', () => {
   describe('constructor', () => {
     it('should run with config version A', () => {
       new Perfume({
-        firstContentfulPaint: true,
-        firstPaint: true,
-        firstInputDelay: true,
         dataConsumption: true,
       });
     });
 
     it('should run with config version B', () => {
       new Perfume({
-        firstContentfulPaint: true,
-        firstPaint: true,
-        firstInputDelay: true,
         dataConsumption: true,
         resourceTiming: true,
       });
@@ -61,20 +52,8 @@ describe('Perfume', () => {
 
     it('should run with config version C', () => {
       new Perfume({
-        firstContentfulPaint: true,
-        firstPaint: true,
-        firstInputDelay: true,
         dataConsumption: true,
         logging: false,
-      });
-    });
-
-    it('should run with config version D', () => {
-      new Perfume({
-        firstContentfulPaint: true,
-        firstPaint: true,
-        firstInputDelay: true,
-        dataConsumption: true,
       });
     });
   });
@@ -257,8 +236,6 @@ describe('Perfume', () => {
 
   describe('.performanceObserverCb()', () => {
     beforeEach(() => {
-      perfume.config.firstPaint = true;
-      perfume.config.firstContentfulPaint = true;
       (perfume as any).perfObservers.fcp = {
         disconnect: () => {},
       };
@@ -286,25 +263,6 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalledWith(1, 'firstContentfulPaint');
     });
 
-    it('should not call logMetric() when firstPaint and firstContentfulPaint is false', () => {
-      perfume.config.firstPaint = false;
-      perfume.config.firstContentfulPaint = false;
-      spy = jest.spyOn(perfume as any, 'logMetric');
-      (perfume as any).performanceObserverCb({
-        performanceEntries: mock.entries,
-        entryName: 'first-paint',
-        measureName: 'firstPaint',
-        valueLog: 'startTime',
-      });
-      (perfume as any).performanceObserverCb({
-        performanceEntries: mock.entries,
-        entryName: 'first-contentful-paint',
-        measureName: 'firstContentfulPaint',
-        valueLog: 'startTime',
-      });
-      expect(spy).not.toHaveBeenCalled();
-    });
-
     it('should call disconnect() for firstInputDelay when measureName is firstInputDelay', () => {
       spy = jest.spyOn((perfume as any).perfObservers.fid, 'disconnect');
       (perfume as any).performanceObserverCb({
@@ -327,11 +285,6 @@ describe('Perfume', () => {
   });
 
   describe('.initFirstPaint()', () => {
-    beforeEach(() => {
-      perfume.config.firstPaint = true;
-      perfume.config.firstContentfulPaint = true;
-    });
-
     it('should call performanceObserver()', () => {
       spy = jest.spyOn(perfume as any, 'performanceObserver');
       (window as any).chrome = true;
@@ -361,14 +314,9 @@ describe('Perfume', () => {
   });
 
   describe('.initFirstInputDelay()', () => {
-    beforeEach(() => {
-      perfume.config.firstInputDelay = true;
-    });
-
     it('should call performanceObserver()', () => {
+      (perfume as any).performanceObserver = jest.fn();
       spy = jest.spyOn(perfume as any, 'performanceObserver');
-      (window as any).chrome = true;
-      (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstInputDelay']();
       expect(spy.mock.calls.length).toEqual(1);
     });
@@ -387,6 +335,58 @@ describe('Perfume', () => {
         'dataConsumption',
         (perfume as any).perfResourceTiming,
       );
+    });
+  });
+
+  describe('.initLargestContentfulPaint()', () => {
+    it('should call performanceObserver', () => {
+      spy = jest.spyOn(perfume as any, 'performanceObserver');
+      (perfume as any).initLargestContentfulPaint();
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('.initPerformanceObserver()', () => {
+    beforeEach(() => {
+      (perfume as any).initFirstPaint = jest.fn();
+      (perfume as any).initFirstInputDelay = jest.fn();
+      (perfume as any).initLargestContentfulPaint = jest.fn();
+      (perfume as any).initResourceTiming = jest.fn();
+    });
+
+    it('should call initFirstPaint with the correct arguments', () => {
+      spy = jest.spyOn(perfume as any, 'initFirstPaint');
+      (perfume as any).initPerformanceObserver();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith();
+    });
+
+    it('should call initFirstInputDelay with the correct arguments', () => {
+      spy = jest.spyOn(perfume as any, 'initFirstInputDelay');
+      (perfume as any).initPerformanceObserver();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith();
+    });
+
+    it('should call initLargestContentfulPaint with the correct arguments', () => {
+      spy = jest.spyOn(perfume as any, 'initLargestContentfulPaint');
+      (perfume as any).initPerformanceObserver();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith();
+    });
+
+    it('should not call initResourceTiming', () => {
+      spy = jest.spyOn(perfume as any, 'initResourceTiming');
+      (perfume as any).initPerformanceObserver();
+      expect(spy.mock.calls.length).toEqual(0);
+    });
+
+    it('should call initResourceTiming when resourceTiming or is true', () => {
+      (perfume as any).config.resourceTiming = true;
+      spy = jest.spyOn(perfume as any, 'initResourceTiming');
+      (perfume as any).initPerformanceObserver();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith();
     });
   });
 

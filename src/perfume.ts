@@ -14,9 +14,6 @@ export interface IAnalyticsTrackerOptions {
 
 export interface IPerfumeConfig {
   // Metrics
-  firstContentfulPaint: boolean;
-  firstInputDelay: boolean;
-  firstPaint: boolean;
   dataConsumption: boolean;
   largestContentfulPaint: boolean;
   resourceTiming: boolean;
@@ -30,9 +27,6 @@ export interface IPerfumeConfig {
 
 export interface IPerfumeOptions {
   // Metrics
-  firstContentfulPaint?: boolean;
-  firstInputDelay?: boolean;
-  firstPaint?: boolean;
   dataConsumption?: boolean;
   largestContentfulPaint?: boolean;
   resourceTiming?: boolean;
@@ -155,9 +149,6 @@ export interface IPerfumeDataConsumption {
 export default class Perfume {
   config: IPerfumeConfig = {
     // Metrics
-    firstContentfulPaint: false,
-    firstPaint: false,
-    firstInputDelay: false,
     dataConsumption: false,
     largestContentfulPaint: false,
     resourceTiming: false,
@@ -361,9 +352,7 @@ export default class Perfume {
   }
 
   private initPerformanceObserver(): void {
-    if (this.config.firstPaint || this.config.firstContentfulPaint) {
-      this.initFirstPaint();
-    }
+    this.initFirstPaint();
     // FID needs to be initialized as soon as Perfume is available
     // DataConsumption resolves after FID is triggered
     this.initFirstInputDelay();
@@ -608,9 +597,8 @@ export default class Perfume {
     options.performanceEntries.forEach(
       (performanceEntry: IPerformanceEntry) => {
         if (
-          this.config[options.measureName] &&
-          (!options.entryName ||
-            (options.entryName && performanceEntry.name === options.entryName))
+          !options.entryName ||
+            (options.entryName && performanceEntry.name === options.entryName)
         ) {
           this.logMetric(
             performanceEntry[options.valueLog],
