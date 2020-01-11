@@ -417,8 +417,12 @@ export default class Perfume {
   private getNavigatorInfo(): object {
     if (this.wn) {
       return {
-        deviceMemory: (this.wn as any).deviceMemory ? (this.wn as any).deviceMemory : 0,
-        hardwareConcurrency: (this.wn as any).hardwareConcurrency ? (this.wn as any).hardwareConcurrency : 0,
+        deviceMemory: (this.wn as any).deviceMemory
+          ? (this.wn as any).deviceMemory
+          : 0,
+        hardwareConcurrency: (this.wn as any).hardwareConcurrency
+          ? (this.wn as any).hardwareConcurrency
+          : 0,
       };
     }
     return {};
@@ -513,9 +517,17 @@ export default class Perfume {
     const navigatorInfo = this.getNavigatorInfo();
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ measureName, data: `${duration2Decimal} ${suffix}`, navigatorInfo });
+      this.log({
+        measureName,
+        data: `${duration2Decimal} ${suffix}`,
+        navigatorInfo,
+      });
       // Sends the metric to an external tracking service
-      this.sendTiming({ measureName, duration: duration2Decimal, navigatorInfo });
+      this.sendTiming({
+        measureName,
+        duration: duration2Decimal,
+        navigatorInfo,
+      });
     });
   }
 
@@ -532,7 +544,7 @@ export default class Perfume {
       `%c ${this.config.logPrefix} ${options.measureName} `,
       style,
       options.data,
-      options.navigatorInfo
+      options.navigatorInfo,
     );
   }
 
@@ -598,7 +610,7 @@ export default class Perfume {
       (performanceEntry: IPerformanceEntry) => {
         if (
           !options.entryName ||
-            (options.entryName && performanceEntry.name === options.entryName)
+          (options.entryName && performanceEntry.name === options.entryName)
         ) {
           this.logMetric(
             performanceEntry[options.valueLog],
@@ -658,7 +670,13 @@ export default class Perfume {
     if (this.isHidden) {
       return;
     }
-    const { measureName, data, duration, customProperties, navigatorInfo } = options;
+    const {
+      measureName,
+      data,
+      duration,
+      customProperties,
+      navigatorInfo,
+    } = options;
     const eventProperties = customProperties ? customProperties : {};
     // Send metric to custom Analytics service
     this.config.analyticsTracker({

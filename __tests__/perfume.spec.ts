@@ -184,7 +184,11 @@ describe('Perfume', () => {
     it('should call window.console.log() if logging is enabled', () => {
       perfume.config.logging = true;
       spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ measureName: 'metricName', data: '1235.00 ms', navigatorInfo: {} });
+      (perfume as any).log({
+        measureName: 'metricName',
+        data: '1235.00 ms',
+        navigatorInfo: {},
+      });
       const text = '%c Perfume.js: metricName ';
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
@@ -194,7 +198,11 @@ describe('Perfume', () => {
     it('should call window.console.log() if params are correct', () => {
       perfume.config.logging = true;
       spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ measureName: 'metricName', data: '1245.00 ms', navigatorInfo: {} });
+      (perfume as any).log({
+        measureName: 'metricName',
+        data: '1245.00 ms',
+        navigatorInfo: {},
+      });
       const text = '%c Perfume.js: metricName ';
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
@@ -205,7 +213,11 @@ describe('Perfume', () => {
       const data = {};
       perfume.config.logging = true;
       spy = jest.spyOn(window.console, 'log');
-      (perfume as any).log({ measureName: 'metricName', data, navigatorInfo: {} });
+      (perfume as any).log({
+        measureName: 'metricName',
+        data,
+        navigatorInfo: {},
+      });
       const text = '%c Perfume.js: metricName ';
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
@@ -573,7 +585,7 @@ describe('Perfume', () => {
         effectiveType: '4g',
         rtt: 50,
         downlink: 2.3,
-        saveData: false
+        saveData: false,
       });
     });
   });
