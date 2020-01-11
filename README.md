@@ -111,9 +111,10 @@ const perfume = new Perfume({
 
 **FP** is the exact time the browser renders anything as visually different from what was on the screen before navigation, e.g. a background change after a long blank white screen time.
 
+First Paint is run by default.
+
 ```javascript
 const perfume = new Perfume({
-  firstPaint: true,
   analyticsTracker: ({ metricName, duration }) => {
     myAnalyticsTool.track(metricName, duration);
   })
@@ -125,9 +126,10 @@ const perfume = new Perfume({
 
 **FCP** is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.
 
+First Contentful Paint is run by default.
+
 ```javascript
 const perfume = new Perfume({
-  firstContentfulPaint: true,
   analyticsTracker: ({ metricName, duration }) => {
     myAnalyticsTool.track(metricName, duration);
   })
@@ -153,11 +155,12 @@ const perfume = new Perfume({
 
 ### First Input Delay (FID)
 
-**FID** measures the time from when a user first interacts with your site (i.e. when they click a link, tap on a button) to the time when the browser is actually able to respond to that interaction..
+**FID** measures the time from when a user first interacts with your site (i.e. when they click a link, tap on a button) to the time when the browser is actually able to respond to that interaction.
+
+First Input Delay is run by default.
 
 ```javascript
 const perfume = new Perfume({
-  firstInputDelay: true,
   analyticsTracker: ({ metricName, duration }) => {
     myAnalyticsTool.track(metricName, duration);
   })
