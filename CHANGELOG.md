@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.7.0 (2020-1-11)
+
+* **feat:** added hardwareConcurrency and deviceMemory support
+
+### Breaking Changes
+
+* **refactor:** made FP, FCP and FID as default metrics.
+
 ## 4.6.0 (2019-12-3)
 
 * **fix:** restore UMD module breaking [#95](https://github.com/Zizzamia/perfume.js/issues/95)
