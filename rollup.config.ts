@@ -64,7 +64,8 @@ const createConfig = ({ output, min = false }) => {
             'Perfume',
             'deviceMemory',
             'userAgent',
-            'hardwareConcurrency'
+            'hardwareConcurrency',
+            'navigatorInformation'
           ]
         }
       },

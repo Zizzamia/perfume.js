@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.7.1 (2020-1-15)
+
+* **fix:** added navigatorInformation to reserved properties 
+
 ## 4.7.0 (2020-1-11)
 
 * **feat:** added hardwareConcurrency and deviceMemory support
