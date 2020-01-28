@@ -156,7 +156,7 @@ export default class Perfume {
     logging: true,
     maxMeasureTime: 15000,
   };
-  copyright = "© 2020 Leonardo Zizzamia";
+  copyright = '© 2020 Leonardo Zizzamia';
   version = '4.7.1';
   private c = window.console;
   private d = document;
