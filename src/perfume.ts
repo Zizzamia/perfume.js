@@ -1,6 +1,6 @@
 /*!
  * Perfume.js v4.7.1 (http://zizzamia.github.io/perfume)
- * Copyright 2018 The Perfume Authors (https://github.com/Zizzamia/perfume.js/graphs/contributors)
+ * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
@@ -15,7 +15,6 @@ export interface IAnalyticsTrackerOptions {
 export interface IPerfumeConfig {
   // Metrics
   dataConsumption: boolean;
-  largestContentfulPaint: boolean;
   resourceTiming: boolean;
   // Analytics
   analyticsTracker: (options: IAnalyticsTrackerOptions) => void;
@@ -28,7 +27,6 @@ export interface IPerfumeConfig {
 export interface IPerfumeOptions {
   // Metrics
   dataConsumption?: boolean;
-  largestContentfulPaint?: boolean;
   resourceTiming?: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
@@ -150,7 +148,6 @@ export default class Perfume {
   config: IPerfumeConfig = {
     // Metrics
     dataConsumption: false,
-    largestContentfulPaint: false,
     resourceTiming: false,
     // Analytics
     analyticsTracker: options => {},
@@ -159,6 +156,8 @@ export default class Perfume {
     logging: true,
     maxMeasureTime: 15000,
   };
+  copyright = "© 2020 Leonardo Zizzamia";
+  version = '4.7.1';
   private c = window.console;
   private d = document;
   private dataConsumptionTimeout: any;

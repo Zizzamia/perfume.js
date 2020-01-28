@@ -27,6 +27,7 @@ English | [简体中文](./README-zh_CN.md)
 **Perfume** leverage the latest W3C Performance Drafts (e.g. [PerformanceObserver](https://w3c.github.io/performance-timeline/)), for measuring performance that matters! Also known as **field data**, they allow to understand what real-world users are actually experiencing.
 
 * Navigation Timing
+* Navigator Interface
 * Resource Timing
 * First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
@@ -64,7 +65,47 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 ```
 <br />
 
-## Start measuring
+## Quick start
+Metrics like Navigation Timing, Network Information, FP, FCP, FID, and LCP are default reported with Perfume; All results will be reported to the analyticsTracker callback, and the code below is just one way on how you can organize your tracking, feel free to tweak it as you prefer.
+
+```javascript
+const perfume = new Perfume({
+  analyticsTracker: (options) => {
+    const { metricName, data, duration } = options;
+    switch (metricName) {
+      case 'navigationTiming':
+        if (data && data.timeToFirstByte) {
+          myAnalyticsTool.track('navigationTiming', data);
+        }
+        break;
+      case 'networkInformation':
+        if (data && data.effectiveType) {
+          myAnalyticsTool.track('networkInformation', data);
+        }
+        break;
+      case 'firstPaint':
+        myAnalyticsTool.track('firstPaint', { duration });
+        break;
+      case 'firstContentfulPaint':
+        myAnalyticsTool.track('firstContentfulPaint', { duration });
+        break;
+      case 'firstInputDelay':
+        myAnalyticsTool.track('firstInputDelay', { duration });
+        break;
+      case 'largestContentfulPaint':
+        myAnalyticsTool.track('largestContentfulPaint', { duration });
+        break;
+      default:
+        break;
+    }
+  },
+  logging: false,
+  maxMeasureTime: 10000,
+});
+```
+
+## APIs
+Coo coo coo [cool](https://www.youtube.com/watch?v=zDcbpFimUc8), let's learn something new.
 
 ### Navigation Timing
 Navigation Timing collects performance metrics for the life and timings of a network request.
@@ -145,7 +186,6 @@ content has likely loaded—a fast LCP helps reassure the user that the page is 
 
 ```javascript
 const perfume = new Perfume({
-  largestContentfulPaint: true,
   analyticsTracker: ({ metricName, duration }) => {
     myAnalyticsTool.track(metricName, duration);
   })
@@ -280,8 +320,6 @@ const analyticsTracker = function ({ metricName, data, duration }) {
   }
 })
 export const PerfumeConfig = {
-  firstContentfulPaint: true,
-  firstInputDelay: true,
   dataConsumption: true,
   resourceTiming: true,
   analyticsTracker,
@@ -326,8 +364,6 @@ const analyticsTracker = function ({ metricName, data, duration }) {
 })
 
 const perfume = new Perfume({
-  firstContentfulPaint: true,
-  firstInputDelay: true,
   dataConsumption: true,
   resourceTiming: true,
   analyticsTracker,
@@ -382,11 +418,7 @@ Default options provided to Perfume.js constructor.
 ```javascript
 const options = {
   // Metrics
-  firstContentfulPaint: false,
-  firstPaint: false,
-  firstInputDelay: false,
   dataConsumption: false,
-  largestContentfulPaint: false,
   resourceTiming: false,
   // Analytics
   analyticsTracker: options => {},
@@ -394,7 +426,6 @@ const options = {
   logPrefix: "Perfume.js:"
   logging: true,
   maxMeasureTime: 15000,
-  warning: false,
 };
 ```
 <br />
@@ -418,10 +449,12 @@ const options = {
 <br />
 
 ## Perfume is used by
-* [Coinbase](https://www.coinbase.com)
-* [Plan](https://getplan.co)
 * [Conio](https://business.conio.com/)
+* [Coinbase](https://www.coinbase.com)
+* [Coinbase Pro](https://pro.coinbase.com)
+* [Financial-Times](https://github.com/Financial-Times/n-tracking)
 * [Hearst](https://www.cosmopolitan.com/)
+* [Plan](https://getplan.co)
 * Add your company name :)
 <br />
 
@@ -451,7 +484,7 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 
 ## Copyright and license
 
-Code and documentation copyright 2019 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
+Code and documentation copyright 2020 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
 
 ## Team
 
