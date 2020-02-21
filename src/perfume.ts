@@ -10,6 +10,7 @@ export interface IAnalyticsTrackerOptions {
   duration?: number;
   eventProperties?: object;
   navigatorInformation?: object;
+  isLowEnd: boolean;
 }
 
 export interface IPerfumeConfig {
@@ -41,10 +42,16 @@ export interface ILogOptions {
   data?: any;
   customProperties?: object;
   navigatorInfo?: object;
+  isLowEnd: boolean;
 }
 
 export interface IMetricMap {
   [measureName: string]: boolean;
+}
+
+export interface INavigatorInfo {
+  deviceMemory?: number;
+  hardwareConcurrency?: number;
 }
 
 export interface IPerfObservers {
@@ -57,6 +64,7 @@ export interface ISendTimingOptions {
   duration?: number;
   customProperties?: object;
   navigatorInfo?: object;
+  isLowEnd: boolean;
 }
 
 export type IPerfumeMetrics =
@@ -180,6 +188,7 @@ export default class Perfume {
   private w = window;
   private wp = window.performance;
   private wn = window.navigator;
+  private et = '4g';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
@@ -251,6 +260,7 @@ export default class Perfume {
         duration: duration2Decimal,
         customProperties,
         navigatorInfo: this.getNavigatorInfo(),
+        isLowEnd: this.isLowEnd()
       };
       // Log to console, delete metric and send to analytics tracker
       this.log(options);
@@ -376,6 +386,26 @@ export default class Perfume {
     }, 15000);
   }
 
+  private isLowEnd(): boolean {
+    // If number of logical processors available to run threads <= 4
+    if (
+      (this.wn as any).hardwareConcurrency &&
+      (this.wn as any).hardwareConcurrency <= 4
+    ) {
+      return true;
+    }
+    // If the approximate amount of RAM client device has <= 4
+    if ((this.wn as any).deviceMemory && (this.wn as any).deviceMemory <= 4) {
+      return true;
+    }
+    // If the effective type of the connection meaning
+    // one of 'slow-2g', '2g', '3g', or '4g' is !== 4g
+    if (['slow-2g', '2g', '3g'].includes(this.et)) {
+      return true;
+    }
+    return false;
+  }
+
   /**
    * True if the browser supports the Navigation Timing API,
    * User Timing API and the PerformanceObserver Interface.
@@ -413,7 +443,7 @@ export default class Perfume {
     return -1;
   }
 
-  private getNavigatorInfo(): object {
+  private getNavigatorInfo(): INavigatorInfo {
     if (this.wn) {
       return {
         deviceMemory: (this.wn as any).deviceMemory
@@ -471,6 +501,7 @@ export default class Perfume {
       if (typeof dataConnection !== 'object') {
         return {};
       }
+      this.et = dataConnection.effectiveType;
       return {
         downlink: dataConnection.downlink,
         effectiveType: dataConnection.effectiveType,
@@ -488,11 +519,12 @@ export default class Perfume {
       }
     });
     const navigatorInfo = this.getNavigatorInfo();
+    const isLowEnd = this.isLowEnd();
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ measureName, data, navigatorInfo });
+      this.log({ measureName, data, navigatorInfo, isLowEnd });
       // Sends the metric to an external tracking service
-      this.sendTiming({ measureName, data, navigatorInfo });
+      this.sendTiming({ measureName, data, navigatorInfo, isLowEnd });
     });
   }
 
@@ -520,12 +552,14 @@ export default class Perfume {
         measureName,
         data: `${duration2Decimal} ${suffix}`,
         navigatorInfo,
+        isLowEnd: this.isLowEnd()
       });
       // Sends the metric to an external tracking service
       this.sendTiming({
         measureName,
         duration: duration2Decimal,
         navigatorInfo,
+        isLowEnd: this.isLowEnd()
       });
     });
   }
@@ -684,6 +718,7 @@ export default class Perfume {
       duration,
       eventProperties,
       navigatorInformation: navigatorInfo,
+      isLowEnd: this.isLowEnd()
     });
   }
 }
