@@ -260,7 +260,7 @@ export default class Perfume {
         duration: duration2Decimal,
         customProperties,
         navigatorInfo: this.getNavigatorInfo(),
-        isLowEnd: this.isLowEnd()
+        isLowEnd: this.isLowEnd(),
       };
       // Log to console, delete metric and send to analytics tracker
       this.log(options);
@@ -552,14 +552,14 @@ export default class Perfume {
         measureName,
         data: `${duration2Decimal} ${suffix}`,
         navigatorInfo,
-        isLowEnd: this.isLowEnd()
+        isLowEnd: this.isLowEnd(),
       });
       // Sends the metric to an external tracking service
       this.sendTiming({
         measureName,
         duration: duration2Decimal,
         navigatorInfo,
-        isLowEnd: this.isLowEnd()
+        isLowEnd: this.isLowEnd(),
       });
     });
   }
@@ -718,7 +718,7 @@ export default class Perfume {
       duration,
       eventProperties,
       navigatorInformation: navigatorInfo,
-      isLowEnd: this.isLowEnd()
+      isLowEnd: this.isLowEnd(),
     });
   }
 }
