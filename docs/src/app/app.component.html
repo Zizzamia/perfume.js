@@ -25,11 +25,15 @@
       <h3 class="box-title" id="/real-user-measurements/">
         <a href="{{ path }}#/real-user-measurements/">The latest in metrics & Real User Measurement</a>
       </h3>
-      <p><b>Perfume</b> leverage the latest W3C Performance Drafts (e.g. 
+      <p>
+        <b>Perfume</b> leverage the latest W3C Performance Drafts (e.g. 
         <a href="https://w3c.github.io/performance-timeline/" target="_blank">PerformanceObserver</a>),
-      for measuring performance that matters!</p>
+        for measuring performance that matters! Also known as field data, they allow to understand 
+        what real-world users are actually experiencing.
+      </p>
       <ul>
         <li>Navigation Timing</li>
+        <li>Navigator Interface</li>
         <li>Resource Timing</li>
         <li>First Paint (FP)</li>
         <li>First Contentful Paint (FCP)</li>
@@ -37,18 +41,12 @@
         <li>First Input Delay (FID)</li>
         <li>Framework components lifecycle monitoring</li>
       </ul>
-      <picture class="box-img">
-        <source srcset="{{ path }}assets/first-paint-and-first-input-delay-700.webp" type="image/webp" />
-        <source srcset="{{ path }}assets/first-paint-and-first-input-delay.png" type="image/png" />
-        <img src="{{ path }}assets/first-paint-and-first-input-delay.png" 
-        alt="First Paint and First Input Delay" loading="lazy" />
-      </picture>
       <br />
       <p>
         With Perfume.js, you can collect those metrics and have a deep understanding everywhere 
-        in the world how your customers perceive web performance for your application.
-        Use your favorite analytics tool to visualize the data between countries,
-        here below how it might look a sample data for <b>FCP</b> between the United States,
+        in the world how your customers perceive web performance for your application. 
+        Use your favorite analytics tool to visualize the data between countries. 
+        Here below how it might look a sample data for <b>FCP</b> between the United States, 
         Italy, Indonesia, and Nigeria.
       </p>
       <br />
@@ -86,7 +84,62 @@ npm install perfume.js --save
     </div>
 
     <div class="box">
-      <h2 class="box-title">Start measuring</h2>
+      <h3 class="box-title" id="/quick-start/">
+        <a href="{{ path }}#/quick-start/">
+          Quick Start
+        </a>
+      </h3>
+      <p>Metrics like Navigation Timing, Network Information, FP, FCP, FID, and LCP are default reported with Perfume; 
+        All results will be reported to the analyticsTracker callback, and the code below is just 
+        one way on how you can organize your tracking, feel free to tweak it as you prefer.
+      </p>
+      <div class="box-code js">
+        <table>
+          <tbody>
+            <tr>
+              <td class="code">
+                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
+  <span class="violet">analyticsTracker</span><span class="red">:</span> (options) <span class="red">=></span> {{'{'}}
+    <span class="red">const</span> {{'{'}} metricName, data, duration {{'}'}} <span class="red">=</span> options;
+    <span class="red">switch</span> (metricName) {{'{'}}
+      <span class="red">case</span> 'navigationTiming'<span class="red">:</span>
+        if (data && data.timeToFirstByte) {{'{'}}
+          myAnalyticsTool.track('navigationTiming', data);
+          {{'}'}}
+        <span class="red">break</span>;
+      <span class="red">case</span> 'networkInformation'<span class="red">:</span>
+        if (data && data.effectiveType) {{'{'}}
+          myAnalyticsTool.track('networkInformation', data);
+          {{'}'}}
+        <span class="red">break</span>;
+      <span class="red">case</span> 'firstPaint'<span class="red">:</span>
+        myAnalyticsTool.track('firstPaint', {{'{'}} duration {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">case</span> 'firstContentfulPaint'<span class="red">:</span>
+        myAnalyticsTool.track('firstContentfulPaint', {{'{'}} duration {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">case</span> 'firstInputDelay'<span class="red">:</span>
+        myAnalyticsTool.track('firstInputDelay', {{'{'}} duration {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">case</span> 'largestContentfulPaint'<span class="red">:</span>
+        myAnalyticsTool.track('largestContentfulPaint', {{'{'}} duration {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">default</span>:
+        <span class="red">break</span>;
+      {{'}'}}
+    {{'}'}},
+  logging: false
+{{'}'}});</pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box">
+      <h2 class="box-title">APIs</h2>
+      <p>Coo coo coo <a href="https://www.youtube.com/watch?v=zDcbpFimUc8" target="_blank">cool</a>, let's learn something new.</p>
     </div>
 
     <div class="box">
@@ -116,38 +169,6 @@ npm install perfume.js --save
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  navigationTiming<span class="red">:</span> <span class="blue">true</span>,
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data {{'}'}}) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, data);
-  {{'}'}})
-{{'}'}});</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="box">
-      <h3 class="box-title" id="/network-information/">
-        <a href="{{ path }}#/network-information/">
-          Network Information
-        </a>
-      </h3>
-      <p>
-        The Network Information API enables web applications to access 
-        information about the network connection in use by the device.
-      </p>
-      <p class="box-demo">
-        Perfume.js: NetworkInformation {{ networkInformation | json }}
-      </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  networkInformation<span class="red">:</span> <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data {{'}'}}) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, data);
   {{'}'}})
@@ -206,7 +227,6 @@ npm install perfume.js --save
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  firstPaint<span class="red">:</span> <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
   {{'}'}})
@@ -234,7 +254,6 @@ npm install perfume.js --save
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  firstContentfulPaint<span class="red">:</span> <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
   {{'}'}})
@@ -265,7 +284,6 @@ npm install perfume.js --save
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  largestContentfulPaint<span class="red">:</span> <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
   {{'}'}})
@@ -295,7 +313,6 @@ npm install perfume.js --save
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  firstInputDelay<span class="red">:</span> <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
   {{'}'}})
@@ -459,8 +476,6 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
   {{'}'}}
 {{'}'}})
 <span class="red">export</span> <span class="blue">const</span> PerfumeConfig <span class="red">=</span> {{'{'}}
-  firstContentfulPaint: <span class="blue">true</span>,
-  firstInputDelay: <span class="blue">true</span>,
   dataConsumption: <span class="blue">true</span>,
   resourceTiming: <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span>,
@@ -525,8 +540,6 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
 {{'}'}})
 
 <span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  firstContentfulPaint: <span class="blue">true</span>,
-  firstInputDelay: <span class="blue">true</span>,
   dataConsumption: <span class="blue">true</span>,
   resourceTiming: <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span>,
@@ -575,8 +588,14 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data, duration {{'}'}}) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, data, duration);
+  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}}options{{'}'}}) => {{'{'}}
+    const {{'{'}}
+      data,
+      duration,
+      metricName,
+      navigatorInformation,
+    {{'}'}} = options;
+    myAnalyticsTool.<span class="violet">track</span>(data, duration, isLowEnd, metricName, navigatorInformation);
   {{'}'}})
 {{'}'}});</pre>
               </td>
@@ -602,11 +621,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">options</span> <span class="red">=</span> {{'{'}}
   <span class="gray">// Metrics</span>
-  firstContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
-  firstPaint<span class="red">:</span> <span class="blue">false</span>,
-  firstInputDelay<span class="red">:</span> <span class="blue">false</span>,
   dataConsumption<span class="red">:</span> <span class="blue">false</span>,
-  largestContentfulPaint<span class="red">:</span> <span class="blue">false</span>,
   resourceTiming<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Analytics</span>
   analyticsTracker<span class="red">:</span> options => {{'{}'}},
@@ -646,7 +661,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
       <h3 class="box-title" id="/copyright-and-license/">
         <a href="{{ path }}#/copyright-and-license/">Copyright and licenses</a>
       </h3>
-      <p>Code and documentation copyright 2019
+      <p>Code and documentation copyright 2020
         <a href="https://twitter.com/Zizzamia" target="_blank">Leonardo Zizzamia</a>. Code released under the
         <a href="https://github.com/Zizzamia/perfume.js/blob/master/LICENSE" target="_blank">MIT license</a>. Docs released under Creative Commons.</p>
     </div>
@@ -661,7 +676,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
         <div>
           <h3>Leonardo Zizzamia</h3>
           <h4>
-            🌕 Web Tech Lead at <a href="https://www.coinbase.com" target="_blank">Coinbase</a> ☁️✨<br />
+            🌕 <a href="https://www.coinbase.com" target="_blank">Coinbase</a> Growth eng lead  ☁️✨<br />
             Continuous learning about DApps and web performance ✨🔭<br />
             Curator of <a href="https://www.twitter.com/NGRomeConf" target="_blank">@NGRomeConf</a> & 
             <a href="https://www.twitter.com/AngularSF" target="_blank">@AngularSF</a>

@@ -35,10 +35,8 @@ English | [简体中文](./README-zh_CN.md)
 * First Input Delay (FID)
 * Framework components lifecycle monitoring
 
-![First Paint and First Input Delay](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-paint-and-first-input-delay.png)
-
 <br />
-With Perfume.js, you can collect those metrics and have a deep understanding everywhere in the world how your customers perceive web performance for your application. Use your favorite analytics tool to visualize the data between countries,here below how it might look a sample data for <b>FCP</b> between the United States, Italy, Indonesia, and Nigeria.
+With Perfume.js, you can collect those metrics and have a deep understanding everywhere in the world how your customers perceive web performance for your application. Use your favorite analytics tool to visualize the data between countries. Here below how it might look a sample data for <b>FCP</b> between the United States, Italy, Indonesia, and Nigeria.
 <br />
 
 ![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
@@ -99,8 +97,7 @@ const perfume = new Perfume({
         break;
     }
   },
-  logging: false,
-  maxMeasureTime: 10000,
+  logging: false
 });
 ```
 
@@ -402,8 +399,14 @@ Configurable analytics callback to use Perfume.js with any platform.
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: ({ metricName, data, duration }) => {
-    myAnalyticsTool.track(metricName, data, duration);
+  analyticsTracker: (options) => {
+    const {
+      data,
+      duration,
+      metricName,
+      navigatorInformation,
+    } = options;
+    myAnalyticsTool.track(data, duration, isLowEnd, metricName, navigatorInformation);
   })
 });
 ```
