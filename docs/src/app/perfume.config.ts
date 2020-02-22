@@ -16,12 +16,10 @@ export const isLowEnd$ = new BehaviorSubject(false);
 
 // Supports AOT and DI
 export function analyticsTracker(options) {
-  const { metricName, data, duration, isLowEnd, navigatorInformation } = options;
-  if (isLowEnd) {
-    isLowEnd$.next(isLowEnd);
-  }
-  if (navigatorInformation?.deviceMemory) {
+  const { metricName, data, duration, navigatorInformation } = options;
+  if (navigatorInformation && navigatorInformation.deviceMemory) {
     navigatorInformation$.next(navigatorInformation);
+    isLowEnd$.next(navigatorInformation.isLowEnd);
   }
   switch(metricName) {
     case 'navigationTiming':

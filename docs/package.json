@@ -24,7 +24,7 @@
     "@angular/router": "9.0.2",
     "core-js": "3.1.4",
     "ng-packagr": "^9.0.0",
-    "perfume.js": "4.7.2",
+    "perfume.js": "4.7.3",
     "rxjs": "6.5.4",
     "tslib": "^1.10.0",
     "typescript": "3.7.5",

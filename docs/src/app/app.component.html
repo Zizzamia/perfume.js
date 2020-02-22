@@ -107,7 +107,7 @@ npm install perfume.js --save
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   <span class="violet">analyticsTracker</span><span class="red">:</span> (options) <span class="red">=></span> {{'{'}}
-    <span class="red">const</span> {{'{'}} metricName, data, duration, isLowEnd {{'}'}} <span class="red">=</span> options;
+    <span class="red">const</span> {{'{'}} metricName, data, duration, navigatorInformation {{'}'}} <span class="red">=</span> options;
     <span class="red">switch</span> (metricName) {{'{'}}
       <span class="red">case</span> 'navigationTiming'<span class="red">:</span>
         if (data && data.timeToFirstByte) {{'{'}}
@@ -595,7 +595,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
       metricName,
       navigatorInformation,
     {{'}'}} = options;
-    myAnalyticsTool.<span class="violet">track</span>(data, duration, isLowEnd, metricName, navigatorInformation);
+    myAnalyticsTool.<span class="violet">track</span>(data, duration, metricName, navigatorInformation);
   {{'}'}})
 {{'}'}});</pre>
               </td>
