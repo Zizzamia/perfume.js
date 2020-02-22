@@ -34,7 +34,9 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('p', { static: true })
   // Component
   navigationTiming = {};
-  networkInformation = {};
+  networkInformation: {
+    effectiveType: string;
+  };
   dataConsumption = {};
   logCustom: string;
   logFibonacci: string;
@@ -44,7 +46,10 @@ export class AppComponent implements AfterViewInit {
   lcp: number;
   path: string;
   isLowEnd: boolean;
-  navigatorInformation: {};
+  navigatorInformation: {
+    deviceMemory: string | number;
+    hardwareConcurrency: string | number;
+  };
 
   constructor(private ref: ChangeDetectorRef, public perfume: NgPerfume) {
     this.path = window.location.href.split('#')[0];

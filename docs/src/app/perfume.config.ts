@@ -1,8 +1,13 @@
 import { BehaviorSubject } from 'rxjs';
 
 export const navigationTiming = new BehaviorSubject({});
-export const networkInformation = new BehaviorSubject({});
-export const navigatorInformation$ = new BehaviorSubject({});
+export const networkInformation = new BehaviorSubject({
+  effectiveType: '--',
+});
+export const navigatorInformation$ = new BehaviorSubject({
+  deviceMemory: '--',
+  hardwareConcurrency: '--',
+});
 export const resourceTiming = new BehaviorSubject({});
 export const dataConsumption = new BehaviorSubject({});
 export const fp = new BehaviorSubject(0);
@@ -21,7 +26,7 @@ export function analyticsTracker(options) {
     navigatorInformation$.next(navigatorInformation);
     isLowEnd$.next(navigatorInformation.isLowEnd);
   }
-  switch(metricName) {
+  switch (metricName) {
     case 'navigationTiming':
       navigationTiming.next(data);
       break;
