@@ -51,7 +51,7 @@ export class NgPerfume {
   exports: [],
 })
 export class PerfumeModule {
-  public static forRoot(config: any): ModuleWithProviders {
+  public static forRoot(config: any): ModuleWithProviders<PerfumeRootModule> {
     return {
       ngModule: PerfumeRootModule,
       providers: [
