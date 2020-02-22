@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.7.2 (2020-2-21)
+
+* **feat:** added isLowEnd property based on Adaptive Data Loading perfomance pattern
+
 ## 4.7.1 (2020-1-15)
 
 * **fix:** added navigatorInformation to reserved properties 
