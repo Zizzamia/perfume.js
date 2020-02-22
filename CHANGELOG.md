@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.7.3 (2020-2-21)
+
+* **fix:** moved isLowEnd inside navigatorInformation object
+
 ## 4.7.2 (2020-2-21)
 
 * **feat:** added isLowEnd property based on Adaptive Data Loading perfomance pattern
