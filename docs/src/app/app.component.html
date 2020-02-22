@@ -93,6 +93,9 @@ npm install perfume.js --save
         All results will be reported to the analyticsTracker callback, and the code below is just 
         one way on how you can organize your tracking, feel free to tweak it as you prefer.
       </p>
+      <p class="box-demo">
+        Oh btw, your app is <b *ngIf="true">Low-End</b><b *ngIf="!false">High-End</b>
+      </p>
       <div class="box-code js">
         <table>
           <tbody>
@@ -100,7 +103,7 @@ npm install perfume.js --save
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   <span class="violet">analyticsTracker</span><span class="red">:</span> (options) <span class="red">=></span> {{'{'}}
-    <span class="red">const</span> {{'{'}} metricName, data, duration {{'}'}} <span class="red">=</span> options;
+    <span class="red">const</span> {{'{'}} metricName, data, duration, isLowEnd {{'}'}} <span class="red">=</span> options;
     <span class="red">switch</span> (metricName) {{'{'}}
       <span class="red">case</span> 'navigationTiming'<span class="red">:</span>
         if (data && data.timeToFirstByte) {{'{'}}

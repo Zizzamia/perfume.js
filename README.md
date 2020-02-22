@@ -69,7 +69,7 @@ Metrics like Navigation Timing, Network Information, FP, FCP, FID, and LCP are d
 ```javascript
 const perfume = new Perfume({
   analyticsTracker: (options) => {
-    const { metricName, data, duration } = options;
+    const { metricName, data, duration, isLowEnd } = options;
     switch (metricName) {
       case 'navigationTiming':
         if (data && data.timeToFirstByte) {

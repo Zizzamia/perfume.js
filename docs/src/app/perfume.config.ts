@@ -11,9 +11,13 @@ export const fid = new BehaviorSubject(0);
 export const fibonacci = new BehaviorSubject(0);
 export const custom_fibonacci = new BehaviorSubject(0);
 export const openDialog$ = new BehaviorSubject(0);
+export const isLowEnd = new BehaviorSubject(false);
 
 // Supports AOT and DI
-export function analyticsTracker({ metricName, data, duration }) {
+export function analyticsTracker({ metricName, data, duration, isLowEnd }) {
+  if (isLowEnd) {
+    this.isLowEnd$.next(isLowEnd);
+  }
   switch(metricName) {
     case 'navigationTiming':
       navigationTiming.next(data);
