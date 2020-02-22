@@ -65,7 +65,8 @@ const createConfig = ({ output, min = false }) => {
             'deviceMemory',
             'userAgent',
             'hardwareConcurrency',
-            'navigatorInformation'
+            'navigatorInformation',
+            'isLowEnd'
           ]
         }
       },

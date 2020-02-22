@@ -21,7 +21,8 @@ import {
   fibonacci,
   custom_fibonacci,
   networkInformation,
-  isLowEnd,
+  isLowEnd$,
+  navigatorInformation$,
 } from './perfume.config';
 
 @Component({
@@ -43,6 +44,7 @@ export class AppComponent implements AfterViewInit {
   lcp: number;
   path: string;
   isLowEnd: boolean;
+  navigatorInformation: {};
 
   constructor(private ref: ChangeDetectorRef, public perfume: NgPerfume) {
     this.path = window.location.href.split('#')[0];
@@ -55,6 +57,10 @@ export class AppComponent implements AfterViewInit {
     });
     networkInformation.subscribe(result => {
       this.networkInformation = result;
+      this.ref.detectChanges();
+    });
+    navigatorInformation$.subscribe(result => {
+      this.navigatorInformation = result;
       this.ref.detectChanges();
     });
     dataConsumption.subscribe(result => {
@@ -85,7 +91,7 @@ export class AppComponent implements AfterViewInit {
       this.logCustom = `🍹 HayesValley.js: Custom logging ${result} ms`;
       this.ref.detectChanges();
     });
-    isLowEnd.subscribe(result => {
+    isLowEnd$.subscribe(result => {
       this.isLowEnd = result;
       this.ref.detectChanges();
     });

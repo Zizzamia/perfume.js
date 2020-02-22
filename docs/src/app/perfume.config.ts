@@ -2,6 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 
 export const navigationTiming = new BehaviorSubject({});
 export const networkInformation = new BehaviorSubject({});
+export const navigatorInformation$ = new BehaviorSubject({});
 export const resourceTiming = new BehaviorSubject({});
 export const dataConsumption = new BehaviorSubject({});
 export const fp = new BehaviorSubject(0);
@@ -11,12 +12,16 @@ export const fid = new BehaviorSubject(0);
 export const fibonacci = new BehaviorSubject(0);
 export const custom_fibonacci = new BehaviorSubject(0);
 export const openDialog$ = new BehaviorSubject(0);
-export const isLowEnd = new BehaviorSubject(false);
+export const isLowEnd$ = new BehaviorSubject(false);
 
 // Supports AOT and DI
-export function analyticsTracker({ metricName, data, duration, isLowEnd }) {
+export function analyticsTracker(options) {
+  const { metricName, data, duration, isLowEnd, navigatorInformation } = options;
   if (isLowEnd) {
-    this.isLowEnd$.next(isLowEnd);
+    isLowEnd$.next(isLowEnd);
+  }
+  if (navigatorInformation?.deviceMemory) {
+    navigatorInformation$.next(navigatorInformation);
   }
   switch(metricName) {
     case 'navigationTiming':

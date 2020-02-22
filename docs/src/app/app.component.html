@@ -95,7 +95,10 @@ npm install perfume.js --save
       </p>
       <p class="box-demo">
         Oh btw, your app is <span *ngIf="isLowEnd">a <b>Low-End</b></span><span *ngIf="!isLowEnd">an <b>High-End</b></span> 
-        device based on your hardare and network conditions.
+        device based on your hardare and network conditions.<br />
+        Network information: {{ networkInformation?.effectiveType || '4g' }}<br />
+        Device Memory: {{ navigatorInformation?.deviceMemory || '--' }}<br />
+        Hardware Concurrency: {{ navigatorInformation?.hardwareConcurrency || '--' }}
       </p>
       <div class="box-code js">
         <table>

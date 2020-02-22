@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.7.2 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.7.3 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -10,7 +10,6 @@ export interface IAnalyticsTrackerOptions {
   duration?: number;
   eventProperties?: object;
   navigatorInformation?: object;
-  isLowEnd: boolean;
 }
 
 export interface IPerfumeConfig {
@@ -42,7 +41,6 @@ export interface ILogOptions {
   data?: any;
   customProperties?: object;
   navigatorInfo?: object;
-  isLowEnd: boolean;
 }
 
 export interface IMetricMap {
@@ -52,6 +50,7 @@ export interface IMetricMap {
 export interface INavigatorInfo {
   deviceMemory?: number;
   hardwareConcurrency?: number;
+  isLowEnd?: boolean;
 }
 
 export interface IPerfObservers {
@@ -63,8 +62,7 @@ export interface ISendTimingOptions {
   data?: any;
   duration?: number;
   customProperties?: object;
-  navigatorInfo?: object;
-  isLowEnd: boolean;
+  navigatorInfo: INavigatorInfo;
 }
 
 export type IPerfumeMetrics =
@@ -165,7 +163,7 @@ export default class Perfume {
     maxMeasureTime: 15000,
   };
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '4.7.2';
+  version = '4.7.3';
   private c = window.console;
   private d = document;
   private dataConsumptionTimeout: any;
@@ -254,13 +252,14 @@ export default class Perfume {
     const duration2Decimal = parseFloat(durationByMetric.toFixed(2));
     delete this.metrics[markName];
     this.pushTask(() => {
+      const navigatorInfo = this.getNavigatorInfo();
+      navigatorInfo.isLowEnd = this.isAdaptiveLoading();
       const options = {
         measureName: markName,
         data: duration2Decimal,
         duration: duration2Decimal,
         customProperties,
-        navigatorInfo: this.getNavigatorInfo(),
-        isLowEnd: this.isLowEnd(),
+        navigatorInfo,
       };
       // Log to console, delete metric and send to analytics tracker
       this.log(options);
@@ -386,7 +385,7 @@ export default class Perfume {
     }, 15000);
   }
 
-  private isLowEnd(): boolean {
+  private isAdaptiveLoading(): boolean {
     // If number of logical processors available to run threads <= 4
     if (
       (this.wn as any).hardwareConcurrency &&
@@ -519,12 +518,12 @@ export default class Perfume {
       }
     });
     const navigatorInfo = this.getNavigatorInfo();
-    const isLowEnd = this.isLowEnd();
+    navigatorInfo.isLowEnd = this.isAdaptiveLoading();
     this.pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({ measureName, data, navigatorInfo, isLowEnd });
+      this.log({ measureName, data, navigatorInfo });
       // Sends the metric to an external tracking service
-      this.sendTiming({ measureName, data, navigatorInfo, isLowEnd });
+      this.sendTiming({ measureName, data, navigatorInfo });
     });
   }
 
@@ -546,20 +545,19 @@ export default class Perfume {
       return;
     }
     const navigatorInfo = this.getNavigatorInfo();
+    navigatorInfo.isLowEnd = this.isAdaptiveLoading();
     this.pushTask(() => {
       // Logs the metric in the internal console.log
       this.log({
         measureName,
         data: `${duration2Decimal} ${suffix}`,
         navigatorInfo,
-        isLowEnd: this.isLowEnd(),
       });
       // Sends the metric to an external tracking service
       this.sendTiming({
         measureName,
         duration: duration2Decimal,
         navigatorInfo,
-        isLowEnd: this.isLowEnd(),
       });
     });
   }
@@ -718,7 +716,6 @@ export default class Perfume {
       duration,
       eventProperties,
       navigatorInformation: navigatorInfo,
-      isLowEnd: this.isLowEnd(),
     });
   }
 }

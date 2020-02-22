@@ -101,8 +101,8 @@ describe('Perfume', () => {
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
+          isLowEnd: false,
         },
-        isLowEnd: false,
       });
     });
 
@@ -129,8 +129,8 @@ describe('Perfume', () => {
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
+          isLowEnd: false,
         },
-        isLowEnd: false,
       });
     });
 
@@ -429,22 +429,22 @@ describe('Perfume', () => {
     });
   });
 
-  describe('isLowEnd', () => {
+  describe('isAdaptiveLoading', () => {
     it('should return false as default option', () => {
-      const isLowEnd = (perfume as any).isLowEnd();
+      const isLowEnd = (perfume as any).isAdaptiveLoading();
       expect(isLowEnd).toEqual(false);
     });
 
     it('should return true when hardwareConcurrency is 4', () => {
       (perfume as any).wn.hardwareConcurrency = 4;
-      const isLowEnd = (perfume as any).isLowEnd();
+      const isLowEnd = (perfume as any).isAdaptiveLoading();
       expect(isLowEnd).toEqual(true);
     });
 
     it('should return true when deviceMemory is 4', () => {
       (perfume as any).wn.hardwareConcurrency = 8;
       (perfume as any).wn.deviceMemory = 4;
-      const isLowEnd = (perfume as any).isLowEnd();
+      const isLowEnd = (perfume as any).isAdaptiveLoading();
       expect(isLowEnd).toEqual(true);
     });
 
@@ -452,19 +452,19 @@ describe('Perfume', () => {
       (perfume as any).wn.hardwareConcurrency = 8;
       (perfume as any).wn.deviceMemory = 8;
       (perfume as any).et = '3g';
-      const isLowEnd = (perfume as any).isLowEnd();
+      const isLowEnd = (perfume as any).isAdaptiveLoading();
       expect(isLowEnd).toEqual(true);
     });
 
     it('should return true when et is 2g', () => {
       (perfume as any).et = '2g';
-      const isLowEnd = (perfume as any).isLowEnd();
+      const isLowEnd = (perfume as any).isAdaptiveLoading();
       expect(isLowEnd).toEqual(true);
     });
 
     it('should return true when et is slow-2g', () => {
       (perfume as any).et = 'slow-2g';
-      const isLowEnd = (perfume as any).isLowEnd();
+      const isLowEnd = (perfume as any).isAdaptiveLoading();
       expect(isLowEnd).toEqual(true);
     });
   });
@@ -500,8 +500,8 @@ describe('Perfume', () => {
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
+          isLowEnd: false,
         },
-        isLowEnd: false,
       });
     });
 
@@ -515,8 +515,8 @@ describe('Perfume', () => {
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
+          isLowEnd: false,
         },
-        isLowEnd: false,
       });
     });
 
@@ -794,7 +794,6 @@ describe('Perfume', () => {
         data: undefined,
         duration: 123,
         eventProperties: {},
-        isLowEnd: false,
       });
     });
   });
