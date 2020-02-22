@@ -18,13 +18,13 @@ import {
       <a href="{{ path }}#/installing-and-imports/"
       [class.active]="navSelected === navOptions.installing"
       (click)="activeNav(navOptions.installing)">Installing and Imports</a>
+      <a href="{{ path }}#/quick-start/"
+      [class.active]="navSelected === navOptions.quickStart"
+      (click)="activeNav(navOptions.quickStart)">Quick start</a>
       <br />
       <a href="{{ path }}#/navigation-timing/" class="part-two"
       [class.active]="navSelected === navOptions.navTime"
       (click)="activeNav(navOptions.navTime)">Navigation Timing</a>
-      <a href="{{ path }}#/network-information/" class="part-two"
-      [class.active]="navSelected === navOptions.netInfo"
-      (click)="activeNav(navOptions.netInfo)">Network Information</a>
       <a href="{{ path }}#/resource-timing/" class="part-two"
       [class.active]="navSelected === navOptions.resTime"
       (click)="activeNav(navOptions.resTime)">Resource Timing</a>
@@ -135,8 +135,8 @@ export class NavigationComponent implements AfterViewInit {
     this.navOptions = {
       rum: 'real-user-measurement',
       installing: 'installing-and-imports',
+      quickStart: 'quick-start',
       navTime: 'navigation-timing',
-      netInfo: 'network-information',
       resTime: 'resource-timing',
       fp: 'first-paint',
       fcp: 'first-contentful-paint',

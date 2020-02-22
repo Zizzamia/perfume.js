@@ -94,7 +94,8 @@ npm install perfume.js --save
         one way on how you can organize your tracking, feel free to tweak it as you prefer.
       </p>
       <p class="box-demo">
-        Oh btw, your app is <b *ngIf="true">Low-End</b><b *ngIf="!false">High-End</b>
+        Oh btw, your app is <span *ngIf="isLowEnd">a <b>Low-End</b></span><span *ngIf="!isLowEnd">an <b>High-End</b></span> 
+        device based on your hardare and network conditions.
       </p>
       <div class="box-code js">
         <table>
@@ -107,25 +108,25 @@ npm install perfume.js --save
     <span class="red">switch</span> (metricName) {{'{'}}
       <span class="red">case</span> 'navigationTiming'<span class="red">:</span>
         if (data && data.timeToFirstByte) {{'{'}}
-          myAnalyticsTool.track('navigationTiming', data);
-          {{'}'}}
+          myAnalyticsTool.<span class="violet">track</span>('navigationTiming', data);
+        {{'}'}}
         <span class="red">break</span>;
       <span class="red">case</span> 'networkInformation'<span class="red">:</span>
         if (data && data.effectiveType) {{'{'}}
-          myAnalyticsTool.track('networkInformation', data);
-          {{'}'}}
+          myAnalyticsTool.<span class="violet">track</span>('networkInformation', data);
+        {{'}'}}
         <span class="red">break</span>;
       <span class="red">case</span> 'firstPaint'<span class="red">:</span>
-        myAnalyticsTool.track('firstPaint', {{'{'}} duration {{'}'}});
+        myAnalyticsTool.<span class="violet">track</span>('firstPaint', {{'{'}} duration {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'firstContentfulPaint'<span class="red">:</span>
-        myAnalyticsTool.track('firstContentfulPaint', {{'{'}} duration {{'}'}});
+        myAnalyticsTool.<span class="violet">track</span>('firstContentfulPaint', {{'{'}} duration {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'firstInputDelay'<span class="red">:</span>
-        myAnalyticsTool.track('firstInputDelay', {{'{'}} duration {{'}'}});
+        myAnalyticsTool.<span class="violet">track</span>('firstInputDelay', {{'{'}} duration {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'largestContentfulPaint'<span class="red">:</span>
-        myAnalyticsTool.track('largestContentfulPaint', {{'{'}} duration {{'}'}});
+        myAnalyticsTool.<span class="violet">track</span>('largestContentfulPaint', {{'{'}} duration {{'}'}});
         <span class="red">break</span>;
       <span class="red">default</span>:
         <span class="red">break</span>;
@@ -415,11 +416,6 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
         at first inside the <b>NgModule</b> to let the PerformanceObserver work correctly.
       </p>
       <p>
-        In a large application use the  <b>@PerfumeAfterViewInit()</b> decorator to monitor the rendering 
-        performance of the most complex components. Avoid using it inside a NgFor, 
-        instead focus on components that include a collection of smaller components.
-      </p>
-      <p>
         The <b>NgPerfume</b> service exposes all the methods and property of the <b>perfume</b> instance,
         use it to annotate a distinct coding flow manually and for unit test mocking.
       </p>
@@ -430,8 +426,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
               <td class="code">
                 <pre><span class="red">import</span> {{'{'}}
   {{ 'NgPerfume, 
-  PerfumeModule' }},
-  PerfumeAfterViewInit
+  PerfumeModule' }}
 {{'}'}} <span class="red">from</span> 'perfume.js/angular';
 <span class="red">import</span> {{'{'}} AppComponent {{'}'}} <span class="red">from</span> './app.component';
 
@@ -440,7 +435,6 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],
 {{'}'}})
-@<span class="green">PerfumeAfterViewInit</span>('AppComponent')
 <span class="red">export</span> <span class="blue">class</span> <span class="green">AppComponent</span> <span class="red">implements</span> <span class="green">AfterViewInit</span> {{'{'}}
   data: AwesomeType;
 

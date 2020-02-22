@@ -5,7 +5,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { NgPerfume, PerfumeAfterViewInit } from 'perfume.js/angular';
+import { NgPerfume } from 'perfume.js/angular';
 // import {
 //   NgPerfume,
 //   PerfumeAfterViewInit,
@@ -29,7 +29,6 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],
 })
-@PerfumeAfterViewInit('AppComponent')
 export class AppComponent implements AfterViewInit {
   @ViewChild('p', { static: true })
   // Component
