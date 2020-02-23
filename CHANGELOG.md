@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.7.5 (2020-2-22)
+
+* **fix:** missed new property as reserved words
+
 ## 4.7.4 (2020-2-22)
 
 * **fix:** replaced isLowEnd with isLowEndDevice and isLowEndExperience

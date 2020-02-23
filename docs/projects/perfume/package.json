@@ -1,9 +1,9 @@
 {
   "name": "perfume.js/angular",
-  "version": "4.7.4",
+  "version": "4.7.5",
   "peerDependencies": {
     "@angular/common": "^6.0.0",
     "@angular/core": "^6.0.0",
-    "perfume.js": "4.7.3"
+    "perfume.js": "4.7.4"
   }
 }
