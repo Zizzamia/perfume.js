@@ -50,7 +50,7 @@
         Italy, Indonesia, and Nigeria.
       </p>
       <br />
-      <picture class="box-img">
+      <picture class="box-img" *ngIf="!isLowEndExperience">
         <source srcset="{{ path }}assets/first-contentful-paint-desktop.webp" type="image/webp" />
         <source srcset="{{ path }}assets/first-contentful-paint-desktop.png" type="image/png" />
         <img src="{{ path }}assets/first-contentful-paint-desktop.png"
@@ -94,11 +94,13 @@ npm install perfume.js --save
         one way on how you can organize your tracking, feel free to tweak it as you prefer.
       </p>
       <p class="box-demo">
-        Oh btw, your app is <span *ngIf="isLowEnd">a <b>Low-End</b></span><span *ngIf="!isLowEnd">an <b>High-End</b></span> 
-        device based on your hardare and network conditions.<br />
-        Network information: {{ networkInformation?.effectiveType || '--' }}<br />
-        Device Memory: {{ navigatorInformation?.deviceMemory || '--' }}<br />
-        Hardware Concurrency: {{ navigatorInformation?.hardwareConcurrency || '--' }}
+        Oh btw, you're being served a 
+        <b *ngIf="isLowEndExperience">lighter experience</b><b *ngIf="!isLowEndExperience">full experience</b>  
+        based on your hardare, network conditions and data saver preference.<br />
+        Network information: <b>{{ networkInformation?.effectiveType || '--' }}</b><br />
+        Device Memory: <b>{{ navigatorInformation?.deviceMemory || '--' }}</b><br />
+        Hardware Concurrency: <b>{{ navigatorInformation?.hardwareConcurrency || '--' }}</b><br />
+        Data Saver preference: <b>{{ networkInformation?.saveData }}</b><br />
       </p>
       <div class="box-code js">
         <table>
@@ -362,7 +364,7 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
           </tbody>
         </table>
       </div>
-      <picture class="box-img">
+      <picture class="box-img" *ngIf="!isLowEndExperience">
         <source srcset="{{ path }}assets/performance-mark.webp" type="image/webp" />
         <source srcset="{{ path }}assets/performance-mark.png" type="image/png" />
         <img src="{{ path }}assets/performance-mark.png"
@@ -372,7 +374,7 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
 
     <app-cfp class="box" id="/component-first-paint/"></app-cfp>
 
-    <div class="box">
+    <div class="box" *ngIf="!isLowEndExperience">
       <h3 class="box-title" id="/custom-logging/">
         <a href="{{ path }}#/custom-logging/">Custom Logging</a>
       </h3>
@@ -409,7 +411,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
       <h2 class="box-title">Frameworks</h2>
     </div>
 
-    <div class="box">
+    <div class="box" *ngIf="!isLowEndExperience">
       <h3 class="box-title" id="/angular/">
         <a href="{{ path }}#/angular/">Angular</a>
       </h3>
@@ -492,7 +494,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
           </tbody>
         </table>
       </div>
-      <picture class="box-img">
+      <picture class="box-img" *ngIf="!isLowEndExperience">
         <source srcset="{{ path }}assets/angular-performance-decorator.webp" type="image/webp" />
         <source srcset="{{ path }}assets/angular-performance-decorator.png" type="image/png" />
         <img src="{{ path }}assets/angular-performance-decorator.png"
@@ -500,7 +502,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
       </picture>
     </div>
 
-    <div class="box">
+    <div class="box" *ngIf="!isLowEndExperience">
         <h3 class="box-title" id="/react/">
           <a href="{{ path }}#/react/">React</a>
         </h3>
@@ -637,7 +639,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
       </div>
     </div>
 
-    <div class="box">
+    <div class="box" *ngIf="!isLowEndExperience">
       <h3 class="box-title" id="/articles/">
         <a href="{{ path }}#/articles/">Articles</a>
       </h3>

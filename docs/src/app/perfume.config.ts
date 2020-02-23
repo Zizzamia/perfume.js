@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 export const navigationTiming = new BehaviorSubject({});
 export const networkInformation = new BehaviorSubject({
   effectiveType: '--',
+  saveData: '--',
 });
 export const navigatorInformation$ = new BehaviorSubject({
   deviceMemory: '--',
@@ -17,14 +18,16 @@ export const fid = new BehaviorSubject(0);
 export const fibonacci = new BehaviorSubject(0);
 export const custom_fibonacci = new BehaviorSubject(0);
 export const openDialog$ = new BehaviorSubject(0);
-export const isLowEnd$ = new BehaviorSubject(false);
+export const isLowEndDevice$ = new BehaviorSubject(false);
+export const isLowEndExperience$ = new BehaviorSubject(false);
 
 // Supports AOT and DI
 export function analyticsTracker(options) {
   const { metricName, data, duration, navigatorInformation } = options;
   if (navigatorInformation && navigatorInformation.deviceMemory) {
     navigatorInformation$.next(navigatorInformation);
-    isLowEnd$.next(navigatorInformation.isLowEnd);
+    isLowEndDevice$.next(navigatorInformation.isLowEndDevice);
+    isLowEndExperience$.next(navigatorInformation.isLowEndExperience);
   }
   switch (metricName) {
     case 'navigationTiming':

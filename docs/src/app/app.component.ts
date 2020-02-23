@@ -21,7 +21,8 @@ import {
   fibonacci,
   custom_fibonacci,
   networkInformation,
-  isLowEnd$,
+  isLowEndDevice$,
+  isLowEndExperience$,
   navigatorInformation$,
 } from './perfume.config';
 
@@ -34,8 +35,9 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('p', { static: true })
   // Component
   navigationTiming = {};
-  networkInformation: {
-    effectiveType: string;
+  networkInformation = {
+    effectiveType: '--',
+    saveData: '--',
   };
   dataConsumption = {};
   logCustom: string;
@@ -45,7 +47,8 @@ export class AppComponent implements AfterViewInit {
   fid: number;
   lcp: number;
   path: string;
-  isLowEnd: boolean;
+  isLowEndDevice: boolean;
+  isLowEndExperience: boolean;
   navigatorInformation: {
     deviceMemory: string | number;
     hardwareConcurrency: string | number;
@@ -61,7 +64,12 @@ export class AppComponent implements AfterViewInit {
       this.ref.detectChanges();
     });
     networkInformation.subscribe(result => {
-      this.networkInformation = result;
+      if (result?.effectiveType) {
+        this.networkInformation.effectiveType = result.effectiveType;
+      }
+      if ('saveData' in result) {
+        this.networkInformation.saveData = result.saveData;
+      }
       this.ref.detectChanges();
     });
     navigatorInformation$.subscribe(result => {
@@ -96,8 +104,12 @@ export class AppComponent implements AfterViewInit {
       this.logCustom = `🍹 HayesValley.js: Custom logging ${result} ms`;
       this.ref.detectChanges();
     });
-    isLowEnd$.subscribe(result => {
-      this.isLowEnd = result;
+    isLowEndDevice$.subscribe(result => {
+      this.isLowEndDevice = result;
+      this.ref.detectChanges();
+    });
+    isLowEndExperience$.subscribe(result => {
+      this.isLowEndExperience = result;
       this.ref.detectChanges();
     });
   }
