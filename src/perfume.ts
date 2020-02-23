@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.7.3 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.7.4 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -9,7 +9,7 @@ export interface IAnalyticsTrackerOptions {
   data?: any;
   duration?: number;
   eventProperties?: object;
-  navigatorInformation?: object;
+  navigatorInformation?: INavigatorInfo;
 }
 
 export interface IPerfumeConfig {
@@ -40,7 +40,7 @@ export interface ILogOptions {
   measureName: string;
   data?: any;
   customProperties?: object;
-  navigatorInfo?: object;
+  navigatorInfo?: INavigatorInfo;
 }
 
 export interface IMetricMap {
@@ -50,7 +50,8 @@ export interface IMetricMap {
 export interface INavigatorInfo {
   deviceMemory?: number;
   hardwareConcurrency?: number;
-  isLowEnd?: boolean;
+  isLowEndDevice?: boolean;
+  isLowEndExperience?: boolean;
 }
 
 export interface IPerfObservers {
@@ -163,7 +164,7 @@ export default class Perfume {
     maxMeasureTime: 15000,
   };
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '4.7.3';
+  version = '4.7.4';
   private c = window.console;
   private d = document;
   private dataConsumptionTimeout: any;
@@ -187,6 +188,38 @@ export default class Perfume {
   private wp = window.performance;
   private wn = window.navigator;
   private et = '4g';
+  private sd = false;
+
+  get isLowEndDevice(): boolean {
+    // If number of logical processors available to run threads <= 4
+    if (
+      (this.wn as any).hardwareConcurrency &&
+      (this.wn as any).hardwareConcurrency <= 4
+    ) {
+      return true;
+    }
+    // If the approximate amount of RAM client device has <= 4
+    if ((this.wn as any).deviceMemory && (this.wn as any).deviceMemory <= 4) {
+      return true;
+    }
+    return false;
+  }
+
+  get isLowEndExperience(): boolean {
+    if (this.isLowEndDevice) {
+      return true;
+    }
+    // If the effective type of the connection meaning
+    // one of 'slow-2g', '2g', '3g', or '4g' is !== 4g
+    if (['slow-2g', '2g', '3g'].includes(this.et)) {
+      return true;
+    }
+    // Data Saver preference
+    if (this.sd) {
+      return true;
+    }
+    return false;
+  }
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
@@ -253,7 +286,8 @@ export default class Perfume {
     delete this.metrics[markName];
     this.pushTask(() => {
       const navigatorInfo = this.getNavigatorInfo();
-      navigatorInfo.isLowEnd = this.isAdaptiveLoading();
+      navigatorInfo.isLowEndDevice = this.isLowEndDevice;
+      navigatorInfo.isLowEndExperience = this.isLowEndExperience;
       const options = {
         measureName: markName,
         data: duration2Decimal,
@@ -385,26 +419,6 @@ export default class Perfume {
     }, 15000);
   }
 
-  private isAdaptiveLoading(): boolean {
-    // If number of logical processors available to run threads <= 4
-    if (
-      (this.wn as any).hardwareConcurrency &&
-      (this.wn as any).hardwareConcurrency <= 4
-    ) {
-      return true;
-    }
-    // If the approximate amount of RAM client device has <= 4
-    if ((this.wn as any).deviceMemory && (this.wn as any).deviceMemory <= 4) {
-      return true;
-    }
-    // If the effective type of the connection meaning
-    // one of 'slow-2g', '2g', '3g', or '4g' is !== 4g
-    if (['slow-2g', '2g', '3g'].includes(this.et)) {
-      return true;
-    }
-    return false;
-  }
-
   /**
    * True if the browser supports the Navigation Timing API,
    * User Timing API and the PerformanceObserver Interface.
@@ -501,6 +515,7 @@ export default class Perfume {
         return {};
       }
       this.et = dataConnection.effectiveType;
+      this.sd = !!dataConnection.saveData;
       return {
         downlink: dataConnection.downlink,
         effectiveType: dataConnection.effectiveType,
@@ -518,7 +533,8 @@ export default class Perfume {
       }
     });
     const navigatorInfo = this.getNavigatorInfo();
-    navigatorInfo.isLowEnd = this.isAdaptiveLoading();
+    navigatorInfo.isLowEndDevice = this.isLowEndDevice;
+    navigatorInfo.isLowEndExperience = this.isLowEndExperience;
     this.pushTask(() => {
       // Logs the metric in the internal console.log
       this.log({ measureName, data, navigatorInfo });
@@ -545,7 +561,8 @@ export default class Perfume {
       return;
     }
     const navigatorInfo = this.getNavigatorInfo();
-    navigatorInfo.isLowEnd = this.isAdaptiveLoading();
+    navigatorInfo.isLowEndDevice = this.isLowEndDevice;
+    navigatorInfo.isLowEndExperience = this.isLowEndExperience;
     this.pushTask(() => {
       // Logs the metric in the internal console.log
       this.log({

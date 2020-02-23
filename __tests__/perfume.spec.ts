@@ -101,7 +101,8 @@ describe('Perfume', () => {
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
-          isLowEnd: false,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
         },
       });
     });
@@ -129,7 +130,8 @@ describe('Perfume', () => {
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
-          isLowEnd: false,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
         },
       });
     });
@@ -429,43 +431,54 @@ describe('Perfume', () => {
     });
   });
 
-  describe('isAdaptiveLoading', () => {
+  describe('isLowEndDevice', () => {
     it('should return false as default option', () => {
-      const isLowEnd = (perfume as any).isAdaptiveLoading();
-      expect(isLowEnd).toEqual(false);
+      expect((perfume as any).isLowEndDevice).toEqual(false);
     });
 
     it('should return true when hardwareConcurrency is 4', () => {
       (perfume as any).wn.hardwareConcurrency = 4;
-      const isLowEnd = (perfume as any).isAdaptiveLoading();
-      expect(isLowEnd).toEqual(true);
+      expect((perfume as any).isLowEndDevice).toEqual(true);
     });
 
     it('should return true when deviceMemory is 4', () => {
       (perfume as any).wn.hardwareConcurrency = 8;
       (perfume as any).wn.deviceMemory = 4;
-      const isLowEnd = (perfume as any).isAdaptiveLoading();
-      expect(isLowEnd).toEqual(true);
+      expect((perfume as any).isLowEndDevice).toEqual(true);
+    });
+  });
+
+  describe('isLowEndExperience', () => {
+    it('should return false as default option', () => {
+      expect((perfume as any).isLowEndExperience).toEqual(false);
+    });
+
+    it('should return true when isLowEndDevice is true', () => {
+      (perfume as any).wn.hardwareConcurrency = 4;
+      (perfume as any).wn.deviceMemory = 4;
+      expect((perfume as any).isLowEndExperience).toEqual(true);
     });
 
     it('should return true when et is 3g', () => {
       (perfume as any).wn.hardwareConcurrency = 8;
       (perfume as any).wn.deviceMemory = 8;
       (perfume as any).et = '3g';
-      const isLowEnd = (perfume as any).isAdaptiveLoading();
-      expect(isLowEnd).toEqual(true);
+      expect((perfume as any).isLowEndExperience).toEqual(true);
     });
 
     it('should return true when et is 2g', () => {
       (perfume as any).et = '2g';
-      const isLowEnd = (perfume as any).isAdaptiveLoading();
-      expect(isLowEnd).toEqual(true);
+      expect((perfume as any).isLowEndExperience).toEqual(true);
     });
 
     it('should return true when et is slow-2g', () => {
       (perfume as any).et = 'slow-2g';
-      const isLowEnd = (perfume as any).isAdaptiveLoading();
-      expect(isLowEnd).toEqual(true);
+      expect((perfume as any).isLowEndExperience).toEqual(true);
+    });
+
+    it('should return true when saveData is true', () => {
+      (perfume as any).sd = true;
+      expect((perfume as any).isLowEndExperience).toEqual(true);
     });
   });
 
@@ -500,7 +513,8 @@ describe('Perfume', () => {
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
-          isLowEnd: false,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
         },
       });
     });
@@ -515,7 +529,8 @@ describe('Perfume', () => {
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
-          isLowEnd: false,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
         },
       });
     });
