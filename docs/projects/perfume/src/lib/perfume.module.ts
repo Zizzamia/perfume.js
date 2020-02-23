@@ -6,11 +6,11 @@ import {
   ModuleWithProviders,
   NgModule,
 } from '@angular/core';
-import Perfume, { IPerfumeConfig } from 'perfume.js';
-// type ILogOptions = any;
-// type IPerfumeConfig = any;
-// type ISendTimingOptions = any;
-// import Perfume from '../../../../../dist/perfume.min'
+// import Perfume, { IPerfumeConfig } from 'perfume.js';
+type ILogOptions = any;
+type IPerfumeConfig = any;
+type ISendTimingOptions = any;
+import Perfume from '../../../../../dist/perfume.min'
 
 export let perfume;
 

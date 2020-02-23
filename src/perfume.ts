@@ -14,6 +14,7 @@ export interface IAnalyticsTrackerOptions {
 
 export interface IPerfumeConfig {
   // Metrics
+  cumulativeLayoutShift: boolean;
   dataConsumption: boolean;
   resourceTiming: boolean;
   // Analytics
@@ -74,6 +75,7 @@ export type IPerfumeMetrics =
 export type IPerformanceObserverType =
   | 'first-input'
   | 'largest-contentful-paint'
+  | 'layout-shift'
   | 'longtask'
   | 'measure'
   | 'navigation'
@@ -98,6 +100,8 @@ export declare interface IPerformanceEntry {
   name: string;
   renderTime: number;
   startTime: number;
+  hadRecentInput?: boolean;
+  value?: number;
 }
 
 export interface IPerformancePaintTiming {
@@ -154,6 +158,7 @@ export interface IPerfumeDataConsumption {
 export default class Perfume {
   config: IPerfumeConfig = {
     // Metrics
+    cumulativeLayoutShift: false,
     dataConsumption: false,
     resourceTiming: false,
     // Analytics
@@ -166,6 +171,7 @@ export default class Perfume {
   copyright = '© 2020 Leonardo Zizzamia';
   version = '4.7.5';
   private c = window.console;
+  private cumulativeLayoutShiftScore = 0;
   private d = document;
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
@@ -330,7 +336,7 @@ export default class Perfume {
       measureName: 'firstInputDelay',
       valueLog: 'duration',
     });
-    this.disconnectlargestContentfulPaint();
+    this.disconnectPerfObservers();
     this.disconnectDataConsumption();
   }
 
@@ -343,10 +349,19 @@ export default class Perfume {
     this.logData('dataConsumption', this.perfResourceTiming);
   }
 
-  private disconnectlargestContentfulPaint(): void {
+  private disconnectPerfObservers(): void {
     if (this.perfObservers.lcp && this.lcpDuration) {
       this.logMetric(this.lcpDuration, 'largestContentfulPaint');
       this.perfObservers.lcp.disconnect();
+    }
+    if (this.perfObservers.cls && this.cumulativeLayoutShiftScore > 0) {
+      this.perfObservers.cls.takeRecords();
+      this.logMetric(
+        this.cumulativeLayoutShiftScore,
+        'cumulativeLayoutShiftScore',
+        '',
+      );
+      this.perfObservers.cls.disconnect();
     }
   }
 
@@ -393,6 +408,23 @@ export default class Perfume {
     );
   }
 
+  /**
+   * Detects new layout shift occurrences and updates the
+   * `cumulativeLayoutShiftScore` variable.
+   */
+  private initLayoutShift(): void {
+    this.perfObservers.cls = this.performanceObserver(
+      'layout-shift',
+      (performanceEntries: IPerformanceEntry[]) => {
+        const lastEntry = performanceEntries.pop();
+        // Only count layout shifts without recent user input.
+        if (lastEntry && !lastEntry.hadRecentInput && lastEntry.value) {
+          this.cumulativeLayoutShiftScore += lastEntry.value;
+        }
+      },
+    );
+  }
+
   private initPerformanceObserver(): void {
     this.initFirstPaint();
     // FID needs to be initialized as soon as Perfume is available
@@ -403,6 +435,7 @@ export default class Perfume {
     if (this.config.resourceTiming || this.config.dataConsumption) {
       this.initResourceTiming();
     }
+    this.initLayoutShift();
   }
 
   private initResourceTiming(): void {

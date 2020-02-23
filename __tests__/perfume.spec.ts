@@ -354,10 +354,54 @@ describe('Perfume', () => {
     });
   });
 
+  describe('.disconnectPerfObservers()', () => {
+    it('should not call logMetric() as default', () => {
+      spy = jest.spyOn(perfume as any, 'logMetric');
+      (perfume as any).disconnectPerfObservers();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should call logMetric() when observer and lcpDuration are defined', () => {
+      spy = jest.spyOn(perfume as any, 'logMetric');
+      (perfume as any).lcpDuration = 10;
+      (perfume as any).perfObservers.lcp = { disconnect: jest.fn() };
+      (perfume as any).disconnectPerfObservers();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(
+        (perfume as any).lcpDuration,
+        'largestContentfulPaint',
+      );
+    });
+
+    it('should call logMetric() when observer and cumulativeLayoutShiftScore are defined', () => {
+      spy = jest.spyOn(perfume as any, 'logMetric');
+      (perfume as any).cumulativeLayoutShiftScore = 20;
+      (perfume as any).perfObservers.cls = {
+        disconnect: jest.fn(),
+        takeRecords: jest.fn(),
+      };
+      (perfume as any).disconnectPerfObservers();
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith(
+        (perfume as any).cumulativeLayoutShiftScore,
+        'cumulativeLayoutShiftScore',
+        '',
+      );
+    });
+  });
+
   describe('.initLargestContentfulPaint()', () => {
     it('should call performanceObserver', () => {
       spy = jest.spyOn(perfume as any, 'performanceObserver');
       (perfume as any).initLargestContentfulPaint();
+      expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('.initLayoutShift()', () => {
+    it('should call performanceObserver', () => {
+      spy = jest.spyOn(perfume as any, 'performanceObserver');
+      (perfume as any).initLayoutShift();
       expect(spy.mock.calls.length).toEqual(1);
     });
   });

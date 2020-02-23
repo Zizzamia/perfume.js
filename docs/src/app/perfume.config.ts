@@ -15,6 +15,7 @@ export const fp = new BehaviorSubject(0);
 export const fcp = new BehaviorSubject(0);
 export const lcp = new BehaviorSubject(0);
 export const fid = new BehaviorSubject(0);
+export const cls = new BehaviorSubject(0);
 export const fibonacci = new BehaviorSubject(0);
 export const custom_fibonacci = new BehaviorSubject(0);
 export const openDialog$ = new BehaviorSubject(0);
@@ -54,6 +55,9 @@ export function analyticsTracker(options) {
     case 'firstInputDelay':
       fid.next(duration);
       break;
+    case 'cumulativeLayoutShift':
+      cls.next(data);
+      break;
     case 'fibonacci':
       fibonacci.next(duration);
       break;
@@ -67,11 +71,8 @@ export function analyticsTracker(options) {
 }
 
 export const PerfumeConfig = {
-  firstPaint: true,
-  firstContentfulPaint: true,
-  firstInputDelay: true,
+  cumulativeLayoutShift: true,
   dataConsumption: true,
-  largestContentfulPaint: true,
   resourceTiming: true,
   analyticsTracker,
 };

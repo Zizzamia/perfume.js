@@ -5,11 +5,8 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { NgPerfume } from 'perfume.js/angular';
-// import {
-//   NgPerfume,
-//   PerfumeAfterViewInit,
-// } from '../../projects/perfume/src/lib/perfume.module';
+// import { NgPerfume } from 'perfume.js/angular';
+import { NgPerfume } from '../../projects/perfume/src/lib/perfume.module';
 
 import {
   navigationTiming,

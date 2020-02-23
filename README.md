@@ -205,6 +205,19 @@ const perfume = new Perfume({
 // Perfume.js: First Input Delay 3.20 ms
 ```
 
+### Cumulative Layout Shift (CLS)
+**CLS** is an important, user-centric metric for measuring visual stability because it helps quantify how often users experience unexpected layout shifts—a low CLS helps ensure that the page is delightful.
+
+```javascript
+const perfume = new Perfume({
+  cumulativeLayoutShift: true,
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
+  })
+});
+// Perfume.js: Cumulative Layout Shift 3.20 ms
+```
+
 ### Annotate metrics in the DevTools
 
 **Performance.mark** ([User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API)) is used to create an application-defined peformance entry in the browser's performance entry buffer.
