@@ -7,8 +7,8 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 
-// import { NgPerfume } from 'perfume.js/angular';
-import { NgPerfume } from '../../../projects/perfume/src/lib/perfume.module';
+import { NgPerfume } from 'perfume.js/angular';
+// import { NgPerfume } from '../../../projects/perfume/src/lib/perfume.module';
 
 import { openDialog$ } from '../perfume.config';
 

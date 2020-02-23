@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.8.0 (2020-2-23)
+
+* **feat:** added support for Cumulative Layout Shift score #80
+
 ## 4.7.5 (2020-2-22)
 
 * **fix:** missed new property as reserved words

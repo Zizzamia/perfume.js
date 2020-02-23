@@ -68,7 +68,7 @@ const createConfig = ({ output, min = false }) => {
             'navigatorInformation',
             'isLowEndDevice',
             'isLowEndExperience',
-            'cumulativeLayoutShiftScore',
+            'cumulativeLayoutShift',
           ]
         }
       },

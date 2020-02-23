@@ -10,8 +10,8 @@ import { IntroComponent } from './intro/intro.component';
 import { CfpComponent } from './cfp/cfp.component';
 import { PerfumeConfig } from './perfume.config';
 
-// import { PerfumeModule } from 'perfume.js/angular';
-import { PerfumeModule } from '../../projects/perfume/src/lib/perfume.module';
+import { PerfumeModule } from 'perfume.js/angular';
+// import { PerfumeModule } from '../../projects/perfume/src/lib/perfume.module';
 
 @NgModule({
   declarations: [
