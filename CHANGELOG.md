@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.7.4 (2020-2-22)
+
+* **fix:** replaced isLowEnd with isLowEndDevice and isLowEndExperience
+
 ## 4.7.3 (2020-2-21)
 
 * **fix:** moved isLowEnd inside navigatorInformation object
