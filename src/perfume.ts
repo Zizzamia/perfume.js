@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.8.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v4.8.1 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -170,7 +170,7 @@ export default class Perfume {
     maxMeasureTime: 15000,
   };
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '4.8.0';
+  version = '4.8.1';
   private c = window.console;
   private cumulativeLayoutShiftScore = 0;
   private d = document;
