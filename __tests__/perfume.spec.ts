@@ -103,6 +103,7 @@ describe('Perfume', () => {
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported'
         },
       });
     });
@@ -132,6 +133,7 @@ describe('Perfume', () => {
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported'
         },
       });
     });
@@ -559,6 +561,7 @@ describe('Perfume', () => {
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported'
         },
       });
     });
@@ -575,6 +578,7 @@ describe('Perfume', () => {
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported'
         },
       });
     });
@@ -631,6 +635,7 @@ describe('Perfume', () => {
       expect((perfume as any).getNavigatorInfo()).toEqual({
         deviceMemory: 8,
         hardwareConcurrency: 12,
+        serviceWorkerStatus: 'unsupported'
       });
     });
   });

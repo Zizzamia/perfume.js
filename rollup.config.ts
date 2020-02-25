@@ -69,6 +69,7 @@ const createConfig = ({ output, min = false }) => {
             'isLowEndDevice',
             'isLowEndExperience',
             'cumulativeLayoutShift',
+            'serviceWorkerStatus'
           ]
         }
       },

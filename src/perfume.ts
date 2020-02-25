@@ -53,6 +53,7 @@ export interface INavigatorInfo {
   hardwareConcurrency?: number;
   isLowEndDevice?: boolean;
   isLowEndExperience?: boolean;
+  serviceWorkerStatus?: 'controlled' | 'supported' | 'unsupported';
 }
 
 export interface IPerfObservers {
@@ -489,6 +490,15 @@ export default class Perfume {
     return -1;
   }
 
+  /**
+   * Information coming from window.navigator:
+   * 1. Device Memory
+   * 2. Hardware Concurency
+   * 3. Status of the service worker:
+   *     - controlled: a service worker is controlling the page
+   *     - supported: the browser supports service worker
+   *     - unsupported: the user's browser does not support service worker
+   */
   private getNavigatorInfo(): INavigatorInfo {
     if (this.wn) {
       return {
@@ -498,6 +508,12 @@ export default class Perfume {
         hardwareConcurrency: (this.wn as any).hardwareConcurrency
           ? (this.wn as any).hardwareConcurrency
           : 0,
+        serviceWorkerStatus:
+          'serviceWorker' in this.wn
+            ? this.wn.serviceWorker.controller
+              ? 'controlled'
+              : 'supported'
+            : 'unsupported',
       };
     }
     return {};
