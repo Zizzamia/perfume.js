@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.8.1 (2020-2-24)
+
+* **feat:** added serviceWorkerStatus in navigatorInfo
+
 ## 4.8.0 (2020-2-23)
 
 * **feat:** added support for Cumulative Layout Shift score #80
