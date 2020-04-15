@@ -6,7 +6,7 @@ import {
   AfterViewInit,
 } from '@angular/core';
 
-import { isLowEndExperience$ } from '../perfume.config';
+import { isLowEndExperience$ } from '../perfume';
 
 @Component({
   selector: 'app-navigation',
@@ -100,23 +100,6 @@ import { isLowEndExperience$ } from '../perfume.config';
         (click)="activeNav(navOptions.log)"
         *ngIf="!isLowEndExperience"
         >Custom Logging</a
-      >
-      <br />
-      <a
-        href="{{ path }}#/angular/"
-        class="part-angular"
-        [class.active]="navSelected === navOptions.angular"
-        (click)="activeNav(navOptions.angular)"
-        *ngIf="!isLowEndExperience"
-        >Angular</a
-      >
-      <a
-        href="{{ path }}#/react/"
-        class="part-react"
-        [class.active]="navSelected === navOptions.react"
-        (click)="activeNav(navOptions.react)"
-        *ngIf="!isLowEndExperience"
-        >React</a
       >
       <br />
       <a
@@ -225,8 +208,6 @@ export class NavigationComponent implements AfterViewInit {
       cfp: 'component-first-paint',
       annotate: 'annotate-metrics',
       log: 'custom-logging',
-      angular: 'angular',
-      react: 'react',
       as: 'analytics',
       options: 'default-options',
       copyright: 'copyright-and-license',

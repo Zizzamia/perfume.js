@@ -7,10 +7,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 
-import { NgPerfume } from 'perfume.js/angular';
-// import { NgPerfume } from '../../../projects/perfume/src/lib/perfume.module';
-
-import { openDialog$ } from '../perfume.config';
+import { openDialog$, perfume } from '../perfume';
 
 @Component({
   selector: 'app-cfp',
@@ -26,7 +23,6 @@ export class CfpComponent implements AfterViewInit {
   constructor(
     private ref: ChangeDetectorRef,
     public dialog: MatDialog,
-    public perfume: NgPerfume,
   ) {
     this.path = window.location.href.split('#')[0];
   }
@@ -39,13 +35,13 @@ export class CfpComponent implements AfterViewInit {
   }
 
   openDialog() {
-    this.perfume.start('openDialog');
+    perfume.start('openDialog');
     this.dialog.open(DialogComponent, {
       data: { gifIndex: this.gifIndex },
       width: '50%',
     });
     // Increment or reset index
     this.gifIndex = this.gifIndex === 4 ? 0 : this.gifIndex + 1;
-    this.perfume.endPaint('openDialog');
+    perfume.endPaint('openDialog');
   }
 }

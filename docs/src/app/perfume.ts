@@ -1,4 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
+import Perfume from 'perfume.js';
+// import Perfume from '../../../';
 
 export const navigationTiming = new BehaviorSubject({});
 export const networkInformation = new BehaviorSubject({
@@ -76,3 +78,5 @@ export const PerfumeConfig = {
   resourceTiming: true,
   analyticsTracker,
 };
+
+export const perfume = new Perfume(PerfumeConfig);

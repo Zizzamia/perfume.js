@@ -5,9 +5,6 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { NgPerfume } from 'perfume.js/angular';
-// import { NgPerfume } from '../../projects/perfume/src/lib/perfume.module';
-
 import {
   navigationTiming,
   dataConsumption,
@@ -21,7 +18,8 @@ import {
   isLowEndDevice$,
   isLowEndExperience$,
   navigatorInformation$,
-} from './perfume.config';
+  perfume,
+} from './perfume';
 
 @Component({
   selector: 'app-root',
@@ -51,7 +49,7 @@ export class AppComponent implements AfterViewInit {
     hardwareConcurrency: string | number;
   };
 
-  constructor(private ref: ChangeDetectorRef, public perfume: NgPerfume) {
+  constructor(private ref: ChangeDetectorRef) {
     this.path = window.location.href.split('#')[0];
   }
 
@@ -112,15 +110,15 @@ export class AppComponent implements AfterViewInit {
   }
 
   measureFibonacci() {
-    this.perfume.start('fibonacci');
+    perfume.start('fibonacci');
     this.fibonacci(800);
-    this.perfume.end('fibonacci');
+    perfume.end('fibonacci');
   }
 
   customLogging() {
-    this.perfume.start('custom_fibonacci');
+    perfume.start('custom_fibonacci');
     this.fibonacci(800);
-    this.perfume.end('custom_fibonacci');
+    perfume.end('custom_fibonacci');
   }
 
   /**
