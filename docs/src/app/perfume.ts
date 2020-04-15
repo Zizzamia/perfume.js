@@ -26,7 +26,7 @@ export const isLowEndExperience$ = new BehaviorSubject(false);
 
 // Supports AOT and DI
 export function analyticsTracker(options) {
-  const { metricName, data, duration, navigatorInformation } = options;
+  const { metricName, data, navigatorInformation } = options;
   if (navigatorInformation && navigatorInformation.deviceMemory) {
     navigatorInformation$.next(navigatorInformation);
     isLowEndDevice$.next(navigatorInformation.isLowEndDevice);
@@ -46,28 +46,28 @@ export function analyticsTracker(options) {
       dataConsumption.next(data);
       break;
     case 'firstPaint':
-      fp.next(duration);
+      fp.next(data);
       break;
     case 'firstContentfulPaint':
-      fcp.next(duration);
+      fcp.next(data);
       break;
     case 'largestContentfulPaint':
-      lcp.next(duration);
+      lcp.next(data);
       break;
     case 'firstInputDelay':
-      fid.next(duration);
+      fid.next(data);
       break;
     case 'cumulativeLayoutShift':
       cls.next(data);
       break;
     case 'fibonacci':
-      fibonacci.next(duration);
+      fibonacci.next(data);
       break;
     case 'custom_fibonacci':
-      custom_fibonacci.next(duration);
+      custom_fibonacci.next(data);
       break;
     case 'openDialog':
-      openDialog$.next(duration);
+      openDialog$.next(data);
       break;
   }
 }

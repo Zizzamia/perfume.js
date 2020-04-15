@@ -2,7 +2,7 @@
   <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v4-5-0.png" align="left" width="200" />
 </a>
 
-# [Perfume.js v4.8.1](http://perfumejs.com)
+# [Perfume.js v5.0.0-rc.1](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
@@ -69,7 +69,7 @@ Metrics like Navigation Timing, Network Information, FP, FCP, FID, and LCP are d
 ```javascript
 const perfume = new Perfume({
   analyticsTracker: (options) => {
-    const { metricName, data, duration, navigatorInformation } = options;
+    const { metricName, data, navigatorInformation } = options;
     switch (metricName) {
       case 'navigationTiming':
         if (data && data.timeToFirstByte) {
@@ -82,16 +82,16 @@ const perfume = new Perfume({
         }
         break;
       case 'firstPaint':
-        myAnalyticsTool.track('firstPaint', { duration });
+        myAnalyticsTool.track('firstPaint', { duration: data });
         break;
       case 'firstContentfulPaint':
-        myAnalyticsTool.track('firstContentfulPaint', { duration });
+        myAnalyticsTool.track('firstContentfulPaint', { duration: data });
         break;
       case 'firstInputDelay':
-        myAnalyticsTool.track('firstInputDelay', { duration });
+        myAnalyticsTool.track('firstInputDelay', { duration: data });
         break;
       case 'largestContentfulPaint':
-        myAnalyticsTool.track('largestContentfulPaint', { duration });
+        myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
       default:
         break;
@@ -153,8 +153,8 @@ First Paint is run by default.
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: ({ metricName, duration }) => {
-    myAnalyticsTool.track(metricName, duration);
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
   })
 });
 // Perfume.js: First Paint 1482.00 ms
@@ -168,8 +168,8 @@ First Contentful Paint is run by default.
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: ({ metricName, duration }) => {
-    myAnalyticsTool.track(metricName, duration);
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
   })
 });
 // Perfume.js: First Contentful Paint 2029.00 ms
@@ -183,8 +183,8 @@ content has likely loaded—a fast LCP helps reassure the user that the page is 
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: ({ metricName, duration }) => {
-    myAnalyticsTool.track(metricName, duration);
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
   })
 });
 // Perfume.js: Largest Contentful Paint 2429.00 ms
@@ -198,8 +198,8 @@ First Input Delay is run by default.
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: ({ metricName, duration }) => {
-    myAnalyticsTool.track(metricName, duration);
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
   })
 });
 // Perfume.js: First Input Delay 3.20 ms
@@ -224,8 +224,8 @@ const perfume = new Perfume({
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: ({ metricName, duration }) => {
-    myAnalyticsTool.track(metricName, duration);
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
   })
 });
 perfume.start('fibonacci');
@@ -242,8 +242,8 @@ This metric mark the point, immediately after creating a **new component**, when
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: ({ metricName, duration }) => {
-    myAnalyticsTool.track(metricName, duration);
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
   })
 });
 perfume.start('togglePopover');
@@ -256,18 +256,18 @@ perfume.endPaint('togglePopover');
 
 ### Custom Logging
 
-Save the duration and print it out exactly the way you want it.
+Save the data and print it out exactly the way you want it.
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: ({ metricName, duration }) => {
-    myAnalyticsTool.track(metricName, duration);
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
   }),
   logPrefix: '🍹 HayesValley.js:'
 });
 perfume.start('fibonacci');
 fibonacci(400);
-const duration = perfume.end('fibonacci');
+perfume.end('fibonacci');
 // 🍹 HayesValley.js: Custom logging 0.14 ms
 ```
 <br />
@@ -281,11 +281,10 @@ const perfume = new Perfume({
   analyticsTracker: (options) => {
     const {
       data,
-      duration,
       metricName,
       navigatorInformation,
     } = options;
-    myAnalyticsTool.track(data, duration, metricName, navigatorInformation);
+    myAnalyticsTool.track(data, metricName, navigatorInformation);
   })
 });
 ```
@@ -300,6 +299,7 @@ Default options provided to Perfume.js constructor.
 ```javascript
 const options = {
   // Metrics
+  cumulativeLayoutShift: false,
   dataConsumption: false,
   resourceTiming: false,
   // Analytics

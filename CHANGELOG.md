@@ -2,12 +2,15 @@
 
 ## 5.0.0-rc.1 (2020-3-14)
 
-* **feat:** enabled PerformanceObserver for all browser
+* **feat:** enabled `PerformanceObserver` for all browser
+* **feat:** simplified the `analyticsTracker` by having all duration value inside the `data` property
 
 ### Breaking Changes
 
 Until now, we allowed only Chrome to run the PerformanceObserver interface because of possible cross-browser issues. One in particular related to Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
 Starting from Perfume.js v4.9.0, we are going to remove this limitation, and we are going to monitor any new open issues and address them immediately.
+
+Having both `duration` and 	`data` inside the `analyticsTracker`, it started causing some confusion. Starting from v5, we will keep only `data` and have any information from `duration` contained inside `data`. Please make sure to change the code inside your `analyticsTracker`.
 
 ## 4.8.1 (2020-2-24)
 
@@ -15,7 +18,7 @@ Starting from Perfume.js v4.9.0, we are going to remove this limitation, and we 
 
 ## 4.8.0 (2020-2-23)
 
-* **feat:** added support for Cumulative Layout Shift score #80
+* **feat:** added support for Cumulative Layout Shift score [#80](https://github.com/Zizzamia/perfume.js/issues/80)
 
 ## 4.7.5 (2020-2-22)
 

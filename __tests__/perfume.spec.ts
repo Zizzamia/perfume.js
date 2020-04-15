@@ -96,7 +96,6 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalledWith({
         measureName: 'metricName',
         data: 12346,
-        duration: 12346,
         customProperties: {},
         navigatorInfo: {
           deviceMemory: 8,
@@ -126,7 +125,6 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalledWith({
         measureName: 'metricName',
         data: 12346,
-        duration: 12346,
         customProperties: {},
         navigatorInfo: {
           deviceMemory: 8,
@@ -571,7 +569,7 @@ describe('Perfume', () => {
       (perfume as any).logMetric(1, 'firstContentfulPaint');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
-        duration: 1,
+        data: 1,
         measureName: 'firstContentfulPaint',
         navigatorInfo: {
           deviceMemory: 8,
@@ -844,19 +842,18 @@ describe('Perfume', () => {
       perfume.config.analyticsTracker = () => {};
       spy = jest.spyOn(perfume.config, 'analyticsTracker');
       perfume['isHidden'] = true;
-      (perfume as any).sendTiming({ measureName: 'metricName', duration: 123 });
+      (perfume as any).sendTiming({ measureName: 'metricName', data: 123 });
       expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call analyticsTracker() if analyticsTracker is defined', () => {
       perfume.config.analyticsTracker = () => {};
       spy = jest.spyOn(perfume.config, 'analyticsTracker');
-      (perfume as any).sendTiming({ measureName: 'metricName', duration: 123 });
+      (perfume as any).sendTiming({ measureName: 'metricName', data: 123 });
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         metricName: 'metricName',
-        data: undefined,
-        duration: 123,
+        data: 123,
         eventProperties: {},
       });
     });

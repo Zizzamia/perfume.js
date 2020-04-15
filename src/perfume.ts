@@ -63,7 +63,6 @@ export interface IPerfObservers {
 export interface ISendTimingOptions {
   measureName: string;
   data?: any;
-  duration?: number;
   customProperties?: object;
   navigatorInfo: INavigatorInfo;
 }
@@ -298,7 +297,6 @@ export default class Perfume {
       const options = {
         measureName: markName,
         data: duration2Decimal,
-        duration: duration2Decimal,
         customProperties,
         navigatorInfo,
       };
@@ -620,7 +618,7 @@ export default class Perfume {
       // Sends the metric to an external tracking service
       this.sendTiming({
         measureName,
-        duration: duration2Decimal,
+        data: duration2Decimal,
         navigatorInfo,
       });
     });
@@ -768,7 +766,6 @@ export default class Perfume {
     const {
       measureName,
       data,
-      duration,
       customProperties,
       navigatorInfo,
     } = options;
@@ -777,7 +774,6 @@ export default class Perfume {
     this.config.analyticsTracker({
       metricName: measureName,
       data,
-      duration,
       eventProperties,
       navigatorInformation: navigatorInfo,
     });
