@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.0.0-rc.1 (2020-3-14)
+
+* **feat:** enabled PerformanceObserver for all browser
+
+### Breaking Changes
+
+Until now, we allowed only Chrome to run the PerformanceObserver interface because of possible cross-browser issues. One in particular related to Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
+Starting from Perfume.js v4.9.0, we are going to remove this limitation, and we are going to monitor any new open issues and address them immediately.
+
 ## 4.8.1 (2020-2-24)
 
 * **feat:** added serviceWorkerStatus in navigatorInfo

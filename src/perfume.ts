@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v4.8.1 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.1 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -469,12 +469,10 @@ export default class Perfume {
   }
 
   /**
-   * For now only Chrome fully support the PerformanceObserver interface
-   * and the entryType "paint".
-   * Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
+   * Check PerformanceObserver interface is supported
    */
   private isPerformanceObserverSupported(): boolean {
-    return (this.w as any).chrome && 'PerformanceObserver' in this.w;
+    return 'PerformanceObserver' in this.w;
   }
 
   /**
