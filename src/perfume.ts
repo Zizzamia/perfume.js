@@ -763,12 +763,7 @@ export default class Perfume {
     if (this.isHidden) {
       return;
     }
-    const {
-      measureName,
-      data,
-      customProperties,
-      navigatorInfo,
-    } = options;
+    const { measureName, data, customProperties, navigatorInfo } = options;
     const eventProperties = customProperties ? customProperties : {};
     // Send metric to custom Analytics service
     this.config.analyticsTracker({
