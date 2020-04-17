@@ -252,7 +252,7 @@ export default class Perfume {
         }
       }
     }
-    
+
     // Init visibilitychange listener
     this.onVisibilityChange();
     // Log Navigation Timing
@@ -335,11 +335,11 @@ export default class Perfume {
     this.wp.clearMarks(`mark_${markName}_end`);
   }
 
-  private convertToKB = (bytes: number): number => {
+  private convertToKB(bytes: number): number {
     return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
   }
 
-  private didVisibilityChange = () => {
+  private didVisibilityChange() {
     if (this.d.hidden) {
       this.isHidden = this.d.hidden;
     }
