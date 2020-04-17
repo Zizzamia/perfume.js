@@ -33,7 +33,8 @@ English | [简体中文](./README-zh_CN.md)
 * First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 * Largest Contentful Paint (LCP)
 * First Input Delay (FID)
-* Framework components lifecycle monitoring
+* Service Worker Status
+* StorageManager interface
 
 <br />
 With Perfume.js, you can collect those metrics and have a deep understanding everywhere in the world how your customers perceive web performance for your application. Use your favorite analytics tool to visualize the data between countries. Here below how it might look a sample data for <b>FCP</b> between the United States, Italy, Indonesia, and Nigeria.
@@ -94,6 +95,7 @@ const perfume = new Perfume({
         myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
       default:
+        myAnalyticsTool.track(metricName, { duration: data });
         break;
     }
   },
