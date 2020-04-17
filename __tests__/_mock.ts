@@ -56,6 +56,12 @@ export default {
       },
       deviceMemory: 8,
       hardwareConcurrency: 12,
+      storage: {
+        estimate: () => Promise.resolve({
+          quota: 10000000,
+          usage: 9000000
+        })
+      }
     };
     Object.defineProperty(window, 'navigator', {
       configurable: true,

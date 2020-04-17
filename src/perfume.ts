@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.0-rc.1 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.2 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -54,6 +54,8 @@ export interface INavigatorInfo {
   isLowEndDevice?: boolean;
   isLowEndExperience?: boolean;
   serviceWorkerStatus?: 'controlled' | 'supported' | 'unsupported';
+  storageEstimateQuota?: number | null;
+  storageEstimateUsage?: number | null;
 }
 
 export interface IPerfObservers {
@@ -169,7 +171,7 @@ export default class Perfume {
     maxMeasureTime: 15000,
   };
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '4.8.1';
+  version = '5.0.0-rc.2';
   private c = window.console;
   private cumulativeLayoutShiftScore = 0;
   private d = document;
@@ -190,6 +192,8 @@ export default class Perfume {
     total: 0,
     xmlhttprequest: 0,
   };
+  private storageEstimateQuota: number | null = null;
+  private storageEstimateUsage: number | null = null;
   private w = window;
   private wp = window.performance;
   private wn = window.navigator;
@@ -235,6 +239,8 @@ export default class Perfume {
     if (!this.isPerformanceSupported()) {
       return;
     }
+    // Let's estimate our storage capacity
+    this.setStorageEstimate();
 
     // Checks if use Performance or the EmulatedPerformance instance
     if (this.isPerformanceObserverSupported()) {
@@ -246,7 +252,7 @@ export default class Perfume {
         }
       }
     }
-
+    
     // Init visibilitychange listener
     this.onVisibilityChange();
     // Log Navigation Timing
@@ -315,17 +321,29 @@ export default class Perfume {
     });
   }
 
+  /**
+   * Removes the named mark from the browser's performance entry buffer.
+   */
   clear(markName: string): void {
+    delete this.metrics[markName];
+    // Mobile Safari v13 and UC Browser v11
+    // don't support clearMarks yet
+    if (!this.wp.clearMarks) {
+      return;
+    }
     this.wp.clearMarks(`mark_${markName}_start`);
     this.wp.clearMarks(`mark_${markName}_end`);
-    delete this.metrics[markName];
+  }
+
+  private convertToKB = (bytes: number): number => {
+    return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
   }
 
   private didVisibilityChange = () => {
     if (this.d.hidden) {
       this.isHidden = this.d.hidden;
     }
-  };
+  }
 
   private digestFirstInputDelayEntries(
     performanceEntries: IPerformanceEntry[],
@@ -494,6 +512,8 @@ export default class Perfume {
    *     - controlled: a service worker is controlling the page
    *     - supported: the browser supports service worker
    *     - unsupported: the user's browser does not support service worker
+   * 4. Storage quota
+   * 5. Storage usage
    */
   private getNavigatorInfo(): INavigatorInfo {
     if (this.wn) {
@@ -510,6 +530,8 @@ export default class Perfume {
               ? 'controlled'
               : 'supported'
             : 'unsupported',
+        storageEstimateQuota: this.storageEstimateQuota,
+        storageEstimateUsage: this.storageEstimateUsage,
       };
     }
     return {};
@@ -771,6 +793,27 @@ export default class Perfume {
       data,
       eventProperties,
       navigatorInformation: navigatorInfo,
+    });
+  }
+
+  /**
+   * The estimate() method of the StorageManager interface asks the Storage Manager
+   * for how much storage the app takes up (usage),
+   * and how much space is available (quota).
+   */
+  private setStorageEstimate() {
+    if (!this.wn || !this.wn.storage) {
+      return;
+    }
+    navigator.storage.estimate().then(storageInfo => {
+      this.storageEstimateQuota =
+        typeof storageInfo.quota === 'number'
+          ? this.convertToKB(storageInfo.quota)
+          : null;
+      this.storageEstimateUsage =
+        typeof storageInfo.usage === 'number'
+          ? this.convertToKB(storageInfo.usage)
+          : null;
     });
   }
 }

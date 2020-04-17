@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0-rc.2 (2020-3-16)
+
+* **feat:** added `storageEstimateQuota` and `storageEstimateUsage` to the **navigatorInfo** results
+* **fix:** added feature detection for `clearMarks`
+
 ## 5.0.0-rc.1 (2020-3-14)
 
 * **feat:** enabled `PerformanceObserver` for all browser

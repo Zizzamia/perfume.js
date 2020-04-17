@@ -102,7 +102,9 @@ describe('Perfume', () => {
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported'
+          serviceWorkerStatus: 'unsupported',
+          storageEstimateQuota: 9.54,
+          storageEstimateUsage: 8.58,
         },
       });
     });
@@ -131,7 +133,9 @@ describe('Perfume', () => {
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported'
+          serviceWorkerStatus: 'unsupported',
+          storageEstimateQuota: 9.54,
+          storageEstimateUsage: 8.58,
         },
       });
     });
@@ -166,6 +170,13 @@ describe('Perfume', () => {
   describe('.clear()', () => {
     beforeEach(() => {
       jest.useFakeTimers();
+    });
+
+    it('should not call clearMarks() when not supported', () => {
+      spy = jest.spyOn((perfume as any).wp, 'clearMarks');
+      delete (perfume as any).wp.clearMarks;
+      perfume.clear('measure_moon');
+      expect(spy.mock.calls.length).toEqual(0);
     });
 
     it('should call clearMarks() twice and with the correct arguments', () => {
@@ -226,6 +237,12 @@ describe('Perfume', () => {
       const style = 'color:#ff6d00;font-size:11px;';
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(text, style, data, {});
+    });
+  });
+
+  describe('.convertToKB()', () => {
+    it('should convert number to Kilo Bytes', () => {
+      expect((perfume as any).convertToKB(100000000)).toEqual(95.37);
     });
   });
 
@@ -559,7 +576,9 @@ describe('Perfume', () => {
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported'
+          serviceWorkerStatus: 'unsupported',
+          storageEstimateQuota: 9.54,
+          storageEstimateUsage: 8.58,
         },
       });
     });
@@ -576,7 +595,9 @@ describe('Perfume', () => {
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported'
+          serviceWorkerStatus: 'unsupported',
+          storageEstimateQuota: 9.54,
+          storageEstimateUsage: 8.58,
         },
       });
     });
@@ -633,7 +654,9 @@ describe('Perfume', () => {
       expect((perfume as any).getNavigatorInfo()).toEqual({
         deviceMemory: 8,
         hardwareConcurrency: 12,
-        serviceWorkerStatus: 'unsupported'
+        serviceWorkerStatus: 'unsupported',
+        storageEstimateQuota: 9.54,
+        storageEstimateUsage: 8.58,
       });
     });
   });
@@ -856,6 +879,24 @@ describe('Perfume', () => {
         data: 123,
         eventProperties: {},
       });
+    });
+  });
+
+  describe('.setStorageEstimate()', () => {
+    it('when navigator is not supported should not set storageEstimate values', () => {
+      delete (perfume as any).wn;
+      (perfume as any).storageEstimateQuota = null;
+      (perfume as any).storageEstimateUsage = null;
+      (perfume as any).setStorageEstimate();
+      expect((perfume as any).storageEstimateQuota).toEqual(null);
+      expect((perfume as any).storageEstimateUsage).toEqual(null);
+    });
+
+    it('when navigator is supported should set storageEstimate values', () => {
+      mock.navigator();
+      (perfume as any).setStorageEstimate();
+      expect((perfume as any).storageEstimateQuota).toEqual(9.54);
+      expect((perfume as any).storageEstimateUsage).toEqual(8.58);
     });
   });
 });
