@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0-rc.3 (2020-3-18)
+
+* **feat:** added Total Blocking Time [#112](https://github.com/Zizzamia/perfume.js/issues/112)
+
 ## 5.0.0-rc.2 (2020-3-16)
 
 * **feat:** added `storageEstimateQuota` and `storageEstimateUsage` to the **navigatorInfo** results
