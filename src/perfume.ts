@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.0-rc.3 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.4 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -53,8 +53,6 @@ export interface INavigatorInfo {
   isLowEndDevice?: boolean;
   isLowEndExperience?: boolean;
   serviceWorkerStatus?: 'controlled' | 'supported' | 'unsupported';
-  storageEstimateQuota?: number | null;
-  storageEstimateUsage?: number | null;
 }
 
 export interface IPerfObservers {
@@ -169,11 +167,12 @@ export default class Perfume {
     maxMeasureTime: 15000,
   };
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.3';
+  version = '5.0.0-rc.4';
   private c = window.console;
   private cumulativeLayoutShiftScore = 0;
   private d = document;
   private dataConsumptionTimeout: any;
+  private hasSetStorageEstimate = false;
   private isHidden: boolean = false;
   private lcpDuration: number = 0;
   private logPrefixRecording = 'Recording already';
@@ -190,8 +189,6 @@ export default class Perfume {
     total: 0,
     xmlhttprequest: 0,
   };
-  private storageEstimateQuota: number | null = null;
-  private storageEstimateUsage: number | null = null;
   private totalBlockingTimeScore = 0;
   private w = window;
   private wp = window.performance;
@@ -238,9 +235,6 @@ export default class Perfume {
     if (!this.isPerformanceSupported()) {
       return;
     }
-    // Let's estimate our storage capacity
-    this.setStorageEstimate();
-
     // Checks if use Performance or the EmulatedPerformance instance
     if (this.isPerformanceObserverSupported()) {
       try {
@@ -258,6 +252,8 @@ export default class Perfume {
     this.logData('navigationTiming', this.getNavigationTiming());
     // Log Network Information
     this.logData('networkInformation', this.getNetworkInformation());
+    // Let's estimate our storage capacity
+    this.initStorageEstimate();
   }
 
   /**
@@ -334,7 +330,10 @@ export default class Perfume {
     this.wp.clearMarks(`mark_${markName}_end`);
   }
 
-  private convertToKB(bytes: number): number {
+  private convertToKB(bytes: number): number | null {
+    if (typeof bytes !== 'number') {
+      return null;
+    }
     return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
   }
 
@@ -387,13 +386,13 @@ export default class Perfume {
   }
 
   private disconnecTotalBlockingTime(): void {
-    // TBT with 5 second delay after LCP
+    // TBT with 5 second delay after FID
     setTimeout(() => {
       if (this.perfObservers.tbt && this.totalBlockingTimeScore) {
         this.logMetric(this.totalBlockingTimeScore, 'totalBlockingTime5S');
       }
     }, 5000);
-    // TBT with 10 second delay after LCP
+    // TBT with 10 second delay after FID
     setTimeout(() => {
       if (this.perfObservers.tbt) {
         if (this.totalBlockingTimeScore) {
@@ -500,9 +499,6 @@ export default class Perfume {
         });
       },
     );
-    setTimeout(() => {
-      this.disconnecTotalBlockingTime();
-    }, 15000);
   }
 
   /**
@@ -548,8 +544,6 @@ export default class Perfume {
    *     - controlled: a service worker is controlling the page
    *     - supported: the browser supports service worker
    *     - unsupported: the user's browser does not support service worker
-   * 4. Storage quota
-   * 5. Storage usage
    */
   private getNavigatorInfo(): INavigatorInfo {
     if (this.wn) {
@@ -566,8 +560,6 @@ export default class Perfume {
               ? 'controlled'
               : 'supported'
             : 'unsupported',
-        storageEstimateQuota: this.storageEstimateQuota,
-        storageEstimateUsage: this.storageEstimateUsage,
       };
     }
     return {};
@@ -825,9 +817,9 @@ export default class Perfume {
   /**
    * PushTask to requestIdleCallback
    */
-  private pushTask(cb: any): void {
+  private pushTask(cb: any, delay = 3000): void {
     if ('requestIdleCallback' in this.w) {
-      (this.w as any).requestIdleCallback(cb, { timeout: 3000 });
+      (this.w as any).requestIdleCallback(cb, { timeout: delay });
     } else {
       cb();
     }
@@ -857,19 +849,26 @@ export default class Perfume {
    * for how much storage the app takes up (usage),
    * and how much space is available (quota).
    */
-  private setStorageEstimate() {
+  private initStorageEstimate() {
     if (!this.wn || !this.wn.storage) {
       return;
     }
-    navigator.storage.estimate().then(storageInfo => {
-      this.storageEstimateQuota =
-        typeof storageInfo.quota === 'number'
-          ? this.convertToKB(storageInfo.quota)
-          : null;
-      this.storageEstimateUsage =
-        typeof storageInfo.usage === 'number'
-          ? this.convertToKB(storageInfo.usage)
-          : null;
+    this.wn.storage.estimate().then(storageInfo => {
+      let estimateUsageDetails: any = {};
+      if ('usageDetails' in storageInfo) {
+        estimateUsageDetails = (storageInfo as any).usageDetails;
+      }
+      this.logData('storageEstimate', {
+        storageEstimateQuota: this.convertToKB((storageInfo as any).quota),
+        storageEstimateUsage: this.convertToKB((storageInfo as any).usage),
+        storageEstimateCaches: this.convertToKB(estimateUsageDetails.caches),
+        storageEstimateIndexedDB: this.convertToKB(
+          estimateUsageDetails.indexedDB,
+        ),
+        storageEstimatSW: this.convertToKB(
+          estimateUsageDetails.serviceWorkerRegistrations,
+        ),
+      });
     });
   }
 }

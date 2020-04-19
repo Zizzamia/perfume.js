@@ -103,8 +103,6 @@ describe('Perfume', () => {
           isLowEndDevice: false,
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
-          storageEstimateQuota: 9.54,
-          storageEstimateUsage: 8.58,
         },
       });
     });
@@ -134,8 +132,6 @@ describe('Perfume', () => {
           isLowEndDevice: false,
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
-          storageEstimateQuota: 9.54,
-          storageEstimateUsage: 8.58,
         },
       });
     });
@@ -573,8 +569,6 @@ describe('Perfume', () => {
           isLowEndDevice: false,
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
-          storageEstimateQuota: 9.54,
-          storageEstimateUsage: 8.58,
         },
       });
     });
@@ -592,8 +586,6 @@ describe('Perfume', () => {
           isLowEndDevice: false,
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
-          storageEstimateQuota: 9.54,
-          storageEstimateUsage: 8.58,
         },
       });
     });
@@ -651,8 +643,6 @@ describe('Perfume', () => {
         deviceMemory: 8,
         hardwareConcurrency: 12,
         serviceWorkerStatus: 'unsupported',
-        storageEstimateQuota: 9.54,
-        storageEstimateUsage: 8.58,
       });
     });
   });
@@ -878,21 +868,12 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.setStorageEstimate()', () => {
-    it('when navigator is not supported should not set storageEstimate values', () => {
+  describe('.initStorageEstimate()', () => {
+    it('when navigator is not supported should not call logData', () => {
+      spy = jest.spyOn(perfume as any, 'logData');
       delete (perfume as any).wn;
-      (perfume as any).storageEstimateQuota = null;
-      (perfume as any).storageEstimateUsage = null;
-      (perfume as any).setStorageEstimate();
-      expect((perfume as any).storageEstimateQuota).toEqual(null);
-      expect((perfume as any).storageEstimateUsage).toEqual(null);
-    });
-
-    it('when navigator is supported should set storageEstimate values', () => {
-      mock.navigator();
-      (perfume as any).setStorageEstimate();
-      expect((perfume as any).storageEstimateQuota).toEqual(9.54);
-      expect((perfume as any).storageEstimateUsage).toEqual(8.58);
+      (perfume as any).initStorageEstimate();
+      expect(spy.mock.calls.length).toEqual(0);
     });
   });
 });

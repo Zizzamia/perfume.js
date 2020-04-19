@@ -69,6 +69,7 @@ export default {
       value: navigator,
       writable: true,
     });
+    return navigator;
   },
   performance: () => {
     delete (window as any).performance;

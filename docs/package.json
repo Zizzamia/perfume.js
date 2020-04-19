@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "5.0.0-rc.3",
+  "version": "5.0.0-rc.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -24,7 +24,7 @@
     "@angular/router": "9.0.2",
     "core-js": "3.1.4",
     "ng-packagr": "^9.0.0",
-    "perfume.js": "5.0.0-rc.3",
+    "perfume.js": "5.0.0-rc.4",
     "rxjs": "6.5.4",
     "tslib": "^1.10.0",
     "typescript": "3.7.5",

@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0-rc.4 (2020-3-19)
+
+* **fix:** solved issue with `storageEstimate` and created his own event
+* **fix:** removed extra calls for `totalBlockingTime`
+
 ## 5.0.0-rc.3 (2020-3-18)
 
 * **feat:** added Total Blocking Time [#112](https://github.com/Zizzamia/perfume.js/issues/112)

@@ -72,7 +72,18 @@ const createConfig = ({ output, min = false }) => {
             'serviceWorkerStatus',
             'storageEstimateQuota',
             'storageEstimateUsage',
-            'totalBlockingTime'
+            'storageEstimateCaches',
+            'storageEstimateIndexedDB',
+            'storageEstimatSW',
+            'totalBlockingTime',
+            'estimate',
+            'storage',
+            'quota',
+            'usage',
+            'usageDetails',
+            'caches',
+            'indexedDB',
+            'serviceWorkerRegistrations'
           ]
         }
       },
