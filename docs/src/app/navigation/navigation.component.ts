@@ -45,13 +45,6 @@ import { isLowEndExperience$ } from '../perfume';
         >Navigation Timing</a
       >
       <a
-        href="{{ path }}#/resource-timing/"
-        class="part-two"
-        [class.active]="navSelected === navOptions.resTime"
-        (click)="activeNav(navOptions.resTime)"
-        >Resource Timing</a
-      >
-      <a
         href="{{ path }}#/first-paint/"
         class="part-two"
         [class.active]="navSelected === navOptions.fp"
@@ -80,6 +73,20 @@ import { isLowEndExperience$ } from '../perfume';
         >First Input Delay</a
       >
       <a
+        href="{{ path }}#/cumulative-layout-shift/"
+        class="part-two"
+        [class.active]="navSelected === navOptions.cls"
+        (click)="activeNav(navOptions.cls)"
+        >Cumulative Layout Shift</a
+      >
+      <a
+        href="{{ path }}#/resource-timing/"
+        class="part-two"
+        [class.active]="navSelected === navOptions.resTime"
+        (click)="activeNav(navOptions.resTime)"
+        >Resource Timing</a
+      >
+      <a
         href="{{ path }}#/annotate-metrics/"
         class="part-two"
         [class.active]="navSelected === navOptions.annotate"
@@ -93,22 +100,6 @@ import { isLowEndExperience$ } from '../perfume';
         (click)="activeNav(navOptions.cfp)"
         >Component First Paint</a
       >
-      <a
-        href="{{ path }}#/custom-logging/"
-        class="part-two"
-        [class.active]="navSelected === navOptions.log"
-        (click)="activeNav(navOptions.log)"
-        *ngIf="!isLowEndExperience"
-        >Custom Logging</a
-      >
-      <br />
-      <a
-        href="{{ path }}#/analytics/"
-        class="part-three"
-        [class.active]="navSelected === navOptions.as"
-        (click)="activeNav(navOptions.as)"
-        >Analytics</a
-      >
       <br />
       <a
         href="{{ path }}#/default-options/"
@@ -118,19 +109,19 @@ import { isLowEndExperience$ } from '../perfume';
         >Default Options</a
       >
       <a
-        href="{{ path }}#/copyright-and-license/"
-        class="part-four"
-        [class.active]="navSelected === navOptions.copyright"
-        (click)="activeNav(navOptions.copyright)"
-        >Copyright and licenses</a
-      >
-      <a
         href="{{ path }}#/articles/"
         class="part-four"
         [class.active]="navSelected === navOptions.articles"
         (click)="activeNav(navOptions.articles)"
         *ngIf="!isLowEndExperience"
         >Articles</a
+      >
+      <a
+        href="{{ path }}#/copyright-and-license/"
+        class="part-four"
+        [class.active]="navSelected === navOptions.copyright"
+        (click)="activeNav(navOptions.copyright)"
+        >Copyright and licenses</a
       >
     </div>
   `,
@@ -205,10 +196,10 @@ export class NavigationComponent implements AfterViewInit {
       fcp: 'first-contentful-paint',
       lcp: 'largest-contentful-paint',
       fid: 'first-input-delay',
+      cls: 'cumulative-layout-shift',
       cfp: 'component-first-paint',
       annotate: 'annotate-metrics',
       log: 'custom-logging',
-      as: 'analytics',
       options: 'default-options',
       copyright: 'copyright-and-license',
       articles: 'articles',

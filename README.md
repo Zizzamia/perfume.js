@@ -6,7 +6,7 @@
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
-> Perfume is a tiny, web performance monitoring library which reports field data like Navigation Timing, Resource Timing, First Contentful Paint (FP/FCP), Largest Contentful Paint (LCP), First Input Delay (FID) back to your favorite analytics tool.
+> Speed is a feature, and to deliver it we need to understand the many factors and fundamental limitations that are at play. In a few words, if we can measure it, we can improve it.
 
 <br />
 <br />
@@ -14,7 +14,9 @@
 English | [简体中文](./README-zh_CN.md)
 ## Why Perfume.js?
 
-- ⏰ Supported latest Performance APIs for precise metrics
+Perfume is a tiny, web performance monitoring library which reports field data back to your favorite analytics tool.
+
+- ⏰ Supports latest Performance APIs for precise metrics
 - 🔨 Cross browser tested
 - 🚿 Filters out false positive/negative results
 - 🤙 Only 2Kb gzip
@@ -24,20 +26,24 @@ English | [简体中文](./README-zh_CN.md)
 
 ##  The latest in metrics & Real User Measurement
 
-**Perfume** leverage the latest W3C Performance Drafts (e.g. [PerformanceObserver](https://w3c.github.io/performance-timeline/)), for measuring performance that matters! Also known as **field data**, they allow to understand what real-world users are actually experiencing.
+**Perfume** leverage the latest Performance APIs for measuring performance that matters! Also known as **field data**, they allow to understand what real-world users are actually experiencing.
 
 * Navigation Timing
 * Navigator Interface
 * Resource Timing
-* First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-* First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-* Largest Contentful Paint (LCP)
-* First Input Delay (FID)
 * Service Worker Status
 * StorageManager interface
+* First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+* First Contentful Paint ([FCP](https://web.dev/first-contentful-paint/))
+* Largest Contentful Paint ([LCP](https://web.dev/lcp/))
+* First Input Delay ([FID](https://web.dev/fid/))
+* Cumulative Layout Shift ([CLS](https://web.dev/cls/))
+* Total Blocking Time ([TBT](https://web.dev/tbt/))
 
 <br />
-With Perfume.js, you can collect those metrics and have a deep understanding everywhere in the world how your customers perceive web performance for your application. Use your favorite analytics tool to visualize the data between countries. Here below how it might look a sample data for <b>FCP</b> between the United States, Italy, Indonesia, and Nigeria.
+With Perfume.js, you can collect those metrics and have a deep understanding everywhere in the world how your customers perceive web performance for your application. Use your favorite analytics tool to visualize the data between countries.
+<br />
+Here below how it might look a sample data for <b>FCP</b> between the United States, Italy, Indonesia, and Nigeria.
 <br />
 
 ![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
@@ -65,7 +71,7 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 <br />
 
 ## Quick start
-Metrics like Navigation Timing, Network Information, FP, FCP, FID, and LCP are default reported with Perfume; All results will be reported to the analyticsTracker callback, and the code below is just one way on how you can organize your tracking, feel free to tweak it as you prefer.
+Metrics like Navigation Timing, Network Information, FP, FCP, FID, LCP, CLS and TBT are default reported with Perfume; All results will be reported to the analyticsTracker callback, and the code below is just one way on how you can organize your tracking, feel free to tweak it as you prefer.
 
 ```javascript
 const perfume = new Perfume({
@@ -94,6 +100,18 @@ const perfume = new Perfume({
       case 'largestContentfulPaint':
         myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
+      case 'cumulativeLayoutShift':
+        myAnalyticsTool.track('cumulativeLayoutShift', { duration: data });
+        break;
+      case 'totalBlockingTime':
+        myAnalyticsTool.track('totalBlockingTime', { duration: data });
+        break;
+      case 'totalBlockingTime5S':
+        myAnalyticsTool.track('totalBlockingTime5S', { duration: data });
+        break;
+      case 'totalBlockingTime10S':
+        myAnalyticsTool.track('totalBlockingTime10S', { duration: data });
+        break;
       default:
         myAnalyticsTool.track(metricName, { duration: data });
         break;
@@ -103,7 +121,7 @@ const perfume = new Perfume({
 });
 ```
 
-## APIs
+## Performance audits
 Coo coo coo [cool](https://www.youtube.com/watch?v=zDcbpFimUc8), let's learn something new.
 
 ### Navigation Timing
@@ -124,12 +142,54 @@ Navigation Timing is run by default.
 </ul>
 
 ```javascript
-const perfume = new Perfume({
-  analyticsTracker: ({ metricName, data }) => {
-    myAnalyticsTool.track(metricName, data);
-  })
-});
 // Perfume.js: NavigationTiming {{'{'}} ... timeToFirstByte: 192.65 {{'}'}}
+```
+
+### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+
+**FP** is the exact time the browser renders anything as visually different from what was on the screen before navigation, e.g. a background change after a long blank white screen time.
+
+First Paint is run by default.
+
+```javascript
+// Perfume.js: First Paint 1482.00 ms
+```
+
+### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+
+**FCP** is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.
+
+First Contentful Paint is run by default.
+
+```javascript
+// Perfume.js: First Contentful Paint 2029.00 ms
+```
+
+### Largest Contentful Paint (LCP)
+
+Largest Contentful Paint (LCP) is an important, user-centric metric for measuring 
+perceived load speed because it marks the point in the page load timeline when the page's main 
+content has likely loaded—a fast LCP helps reassure the user that the page is useful.
+
+```javascript
+// Perfume.js: Largest Contentful Paint 2429.00 ms
+```
+
+### First Input Delay (FID)
+
+**FID** measures the time from when a user first interacts with your site (i.e. when they click a link, tap on a button) to the time when the browser is actually able to respond to that interaction.
+
+First Input Delay is run by default.
+
+```javascript
+// Perfume.js: First Input Delay 3.20 ms
+```
+
+### Cumulative Layout Shift (CLS)
+**CLS** is an important, user-centric metric for measuring visual stability because it helps quantify how often users experience unexpected layout shifts—a low CLS helps ensure that the page is delightful.
+
+```javascript
+// Perfume.js: Cumulative Layout Shift score 0.13
 ```
 
 ### Resource Timing
@@ -145,79 +205,6 @@ const perfume = new Perfume({
   })
 });
 // Perfume.js: dataConsumption { "css": 185.95, "fetch": 0, "img": 377.93, ... , "script": 8344.95 }
-```
-
-### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-
-**FP** is the exact time the browser renders anything as visually different from what was on the screen before navigation, e.g. a background change after a long blank white screen time.
-
-First Paint is run by default.
-
-```javascript
-const perfume = new Perfume({
-  analyticsTracker: ({ metricName, data }) => {
-    myAnalyticsTool.track(metricName, data);
-  })
-});
-// Perfume.js: First Paint 1482.00 ms
-```
-
-### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-
-**FCP** is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.
-
-First Contentful Paint is run by default.
-
-```javascript
-const perfume = new Perfume({
-  analyticsTracker: ({ metricName, data }) => {
-    myAnalyticsTool.track(metricName, data);
-  })
-});
-// Perfume.js: First Contentful Paint 2029.00 ms
-```
-
-### Largest Contentful Paint (LCP)
-
-Largest Contentful Paint (LCP) is an important, user-centric metric for measuring 
-perceived load speed because it marks the point in the page load timeline when the page's main 
-content has likely loaded—a fast LCP helps reassure the user that the page is useful.
-
-```javascript
-const perfume = new Perfume({
-  analyticsTracker: ({ metricName, data }) => {
-    myAnalyticsTool.track(metricName, data);
-  })
-});
-// Perfume.js: Largest Contentful Paint 2429.00 ms
-```
-
-### First Input Delay (FID)
-
-**FID** measures the time from when a user first interacts with your site (i.e. when they click a link, tap on a button) to the time when the browser is actually able to respond to that interaction.
-
-First Input Delay is run by default.
-
-```javascript
-const perfume = new Perfume({
-  analyticsTracker: ({ metricName, data }) => {
-    myAnalyticsTool.track(metricName, data);
-  })
-});
-// Perfume.js: First Input Delay 3.20 ms
-```
-
-### Cumulative Layout Shift (CLS)
-**CLS** is an important, user-centric metric for measuring visual stability because it helps quantify how often users experience unexpected layout shifts—a low CLS helps ensure that the page is delightful.
-
-```javascript
-const perfume = new Perfume({
-  cumulativeLayoutShift: true,
-  analyticsTracker: ({ metricName, data }) => {
-    myAnalyticsTool.track(metricName, data);
-  })
-});
-// Perfume.js: Cumulative Layout Shift 3.20 ms
 ```
 
 ### Annotate metrics in the DevTools
@@ -256,42 +243,6 @@ perfume.endPaint('togglePopover');
 
 ![Performance](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
 
-### Custom Logging
-
-Save the data and print it out exactly the way you want it.
-
-```javascript
-const perfume = new Perfume({
-  analyticsTracker: ({ metricName, data }) => {
-    myAnalyticsTool.track(metricName, data);
-  }),
-  logPrefix: '🍹 HayesValley.js:'
-});
-perfume.start('fibonacci');
-fibonacci(400);
-perfume.end('fibonacci');
-// 🍹 HayesValley.js: Custom logging 0.14 ms
-```
-<br />
-
-## Analytics
-
-Configurable analytics callback to use Perfume.js with any platform.
-
-```javascript
-const perfume = new Perfume({
-  analyticsTracker: (options) => {
-    const {
-      data,
-      metricName,
-      navigatorInformation,
-    } = options;
-    myAnalyticsTool.track(data, metricName, navigatorInformation);
-  })
-});
-```
-<br />
-
 ## Customize & Utilities
 
 ### Default Options
@@ -301,7 +252,6 @@ Default options provided to Perfume.js constructor.
 ```javascript
 const options = {
   // Metrics
-  cumulativeLayoutShift: false,
   dataConsumption: false,
   resourceTiming: false,
   // Analytics

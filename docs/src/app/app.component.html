@@ -6,8 +6,9 @@
       <h3 class="box-title" id="/why-perfume/">
         <a href="{{ path }}#/why-perfume/">Why Perfume.js?</a>
       </h3>
+      <p>Perfume is a tiny, web performance monitoring library which reports field data back to your favorite analytics tool.</p>
       <ul>
-        <li>⏰ Latest Performance APIs for precise metrics</li>
+        <li>⏰ Supports latest Performance APIs for precise metrics</li>
         <li>🔨 Cross browser tested</li>
         <li>🚿 Filters out false positive/negative results</li>
         <li>🤙 Only 2Kb gzip</li>
@@ -26,26 +27,30 @@
         <a href="{{ path }}#/real-user-measurements/">The latest in metrics & Real User Measurement</a>
       </h3>
       <p>
-        <b>Perfume</b> leverage the latest W3C Performance Drafts (e.g. 
-        <a href="https://w3c.github.io/performance-timeline/" target="_blank">PerformanceObserver</a>),
-        for measuring performance that matters! Also known as field data, they allow to understand 
+        <b>Perfume</b> leverage the latest Performance APIs for measuring performance
+        that matters! Also known as field data, they allow to understand 
         what real-world users are actually experiencing.
       </p>
       <ul>
         <li>Navigation Timing</li>
         <li>Navigator Interface</li>
         <li>Resource Timing</li>
-        <li>First Paint (FP)</li>
-        <li>First Contentful Paint (FCP)</li>
-        <li>Largest Contentful Paint (LCP)</li>
-        <li>First Input Delay (FID)</li>
-        <li>Framework components lifecycle monitoring</li>
+        <li>Service Worker Status</li>
+        <li>StorageManager interface</li>
+        <li>First Paint (<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP</a>)</li>
+        <li>First Contentful Paint (<a href="https://web.dev/first-contentful-paint/" target="_blank">FCP</a>)</li>
+        <li>Largest Contentful Paint (<a href="https://web.dev/lcp/" target="_blank">LCP</a>)</li>
+        <li>First Input Delay (<a href="https://web.dev/fid/" target="_blank">FID</a>)</li>
+        <li>Cumulative Layout Shift (<a href="https://web.dev/cls/" target="_blank">CLS</a>)</li>
+        <li>Total Blocking Time (<a href="https://web.dev/tbt/" target="_blank">TBT</a>)</li>
       </ul>
       <br />
       <p>
         With Perfume.js, you can collect those metrics and have a deep understanding everywhere 
         in the world how your customers perceive web performance for your application. 
-        Use your favorite analytics tool to visualize the data between countries. 
+        Use your favorite analytics tool to visualize the data between countries.
+      </p>
+      <p>
         Here below how it might look a sample data for <b>FCP</b> between the United States, 
         Italy, Indonesia, and Nigeria.
       </p>
@@ -89,7 +94,7 @@ npm install perfume.js --save
           Quick Start
         </a>
       </h3>
-      <p>Metrics like Navigation Timing, Network Information, FP, FCP, FID, and LCP are default reported with Perfume; 
+      <p>Metrics like Navigation Timing, Network Information, FP, FCP, FID, LCP, CLS and TBT are default reported with Perfume; 
         All results will be reported to the analyticsTracker callback, and the code below is just 
         one way on how you can organize your tracking, feel free to tweak it as you prefer.
       </p>
@@ -109,7 +114,7 @@ npm install perfume.js --save
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   <span class="violet">analyticsTracker</span><span class="red">:</span> (options) <span class="red">=></span> {{'{'}}
-    <span class="red">const</span> {{'{'}} metricName, data, duration, navigatorInformation {{'}'}} <span class="red">=</span> options;
+    <span class="red">const</span> {{'{'}} metricName, data, navigatorInformation {{'}'}} <span class="red">=</span> options;
     <span class="red">switch</span> (metricName) {{'{'}}
       <span class="red">case</span> 'navigationTiming'<span class="red">:</span>
         if (data && data.timeToFirstByte) {{'{'}}
@@ -122,17 +127,29 @@ npm install perfume.js --save
         {{'}'}}
         <span class="red">break</span>;
       <span class="red">case</span> 'firstPaint'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('firstPaint', {{'{'}} duration {{'}'}});
+        myAnalyticsTool.<span class="violet">track</span>('firstPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'firstContentfulPaint'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('firstContentfulPaint', {{'{'}} duration {{'}'}});
+        myAnalyticsTool.<span class="violet">track</span>('firstContentfulPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'firstInputDelay'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('firstInputDelay', {{'{'}} duration {{'}'}});
+        myAnalyticsTool.<span class="violet">track</span>('firstInputDelay', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'largestContentfulPaint'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('largestContentfulPaint', {{'{'}} duration {{'}'}});
+        myAnalyticsTool.<span class="violet">track</span>('largestContentfulPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
+      <span class="red">case</span> 'cumulativeLayoutShift'<span class="red">:</span>
+        myAnalyticsTool.<span class="violet">track</span>('cumulativeLayoutShift', {{'{'}} duration: data {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">case</span> 'totalBlockingTime'<span class="red">:</span>
+        myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime', {{'{'}} duration: data {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">case</span> 'totalBlockingTime5S'<span class="red">:</span>
+        myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime5S', {{'{'}} duration: data {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">case</span> 'totalBlockingTime10S'<span class="red">:</span>
+        myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime10S', {{'{'}} duration: data {{'}'}});
+        <span class="red">break</span>;     
       <span class="red">default</span>:
         <span class="red">break</span>;
       {{'}'}}
@@ -147,7 +164,7 @@ npm install perfume.js --save
     </div>
 
     <div class="box">
-      <h2 class="box-title">APIs</h2>
+      <h2 class="box-title">Performance audits</h2>
       <p>Coo coo coo <a href="https://www.youtube.com/watch?v=zDcbpFimUc8" target="_blank">cool</a>, let's learn something new.</p>
     </div>
 
@@ -172,27 +189,80 @@ npm install perfume.js --save
       <p class="box-demo">
         Perfume.js: NavigationTiming {{ navigationTiming | json }}
       </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data {{'}'}}) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, data);
-  {{'}'}})
-{{'}'}});</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/first-paint/">
+        <a href="{{ path }}#/first-paint/">
+          First Paint (FP)
+        </a>
+      </h3>
+      <p>FP is the exact time the browser renders anything as visually different from what was
+      on the screen before navigation, e.g. a background change after a long blank white screen time.</p>
+      <p class="box-demo">
+        Perfume.js: First Paint {{ fp }} ms
+      </p>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/first-contentful-paint/">
+        <a href="{{ path }}#/first-contentful-paint/">
+          First Contentful Paint (FCP)
+        </a>
+      </h3>
+      <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
+      <p class="box-demo">
+        Perfume.js: First Contentful Paint {{ fcp }} ms
+      </p>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/largest-contentful-paint/">
+        <a href="{{ path }}#/largest-contentful-paint/">
+          Largest Contentful Paint (LCP)
+        </a>
+      </h3>
+      <p>LCP is an important, 
+        user-centric metric for measuring perceived load speed because 
+        it marks the point in the page load timeline when the page's main 
+        content has likely loaded—a fast LCP helps reassure the user that the page is useful.</p>
+      <p class="box-demo">
+        Perfume.js: Largest Contentful Paint {{ lcp }} ms
+      </p>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/first-input-delay/">
+        <a href="{{ path }}#/first-input-delay/">First Input Delay (FID)</a>
+      </h3>
+      <p>
+        <b>FID</b> measures the time from when a user first interacts with your site 
+        (i.e. when they click a link, tap on a button) to the time when the browser is actually 
+        able to respond to that interaction.
+      </p>
+      <p class="box-demo">
+        Perfume.js: First Input Delay {{ fid }} ms
+      </p>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/cumulative-layout-shift/">
+        <a href="{{ path }}#/cumulative-layout-shift/">Cumulative Layout Shift (CLS)</a>
+      </h3>
+      <p>
+        <b>CLS</b> is an important, user-centric metric for measuring visual stability
+        because it helps quantify how often users experience unexpected
+        layout shifts—a low CLS helps ensure that the page is delightful.
+      </p>
+      <p class="box-demo">
+        Perfume.js: Cumulative Layout Shift score {{ cls }}
+      </p>
     </div>
 
     <div class="box">
       <h3 class="box-title" id="/resource-timing/">
         <a href="{{ path }}#/resource-timing/">
-          Resource Timing
+          Resource Timing (experimental)
         </a>
       </h3>
       <p>Resource Timing collects performance metrics for document-dependent resources. Stuff like style sheets, scripts, images, et cetera.</p>
@@ -210,120 +280,6 @@ npm install perfume.js --save
   dataConsumption<span class="red">:</span> <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data {{'}'}}) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, data);
-  {{'}'}})
-{{'}'}});</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="box">
-      <h3 class="box-title" id="/first-paint/">
-        <a href="{{ path }}#/first-paint/">
-          First Paint (FP)
-        </a>
-      </h3>
-      <p>FP is the exact time the browser renders anything as visually different from what was
-      on the screen before navigation, e.g. a background change after a long blank white screen time.</p>
-      <p class="box-demo">
-        Perfume.js: First Paint {{ fp }} ms
-      </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
-  {{'}'}})
-{{'}'}});</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="box">
-      <h3 class="box-title" id="/first-contentful-paint/">
-        <a href="{{ path }}#/first-contentful-paint/">
-          First Contentful Paint (FCP)
-        </a>
-      </h3>
-      <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
-      <p class="box-demo">
-        Perfume.js: First Contentful Paint {{ fcp }} ms
-      </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
-  {{'}'}})
-{{'}'}});</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="box">
-      <h3 class="box-title" id="/largest-contentful-paint/">
-        <a href="{{ path }}#/largest-contentful-paint/">
-          Largest Contentful Paint (LCP)
-        </a>
-      </h3>
-      <p>LCP is an important, 
-        user-centric metric for measuring perceived load speed because 
-        it marks the point in the page load timeline when the page's main 
-        content has likely loaded—a fast LCP helps reassure the user that the page is useful.</p>
-      <p class="box-demo">
-        Perfume.js: Largest Contentful Paint {{ lcp }} ms
-      </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
-  {{'}'}})
-{{'}'}});</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="box">
-      <h3 class="box-title" id="/first-input-delay/">
-        <a href="{{ path }}#/first-input-delay/">First Input Delay (FID)</a>
-      </h3>
-      <p>
-        <b>FID</b> measures the time from when a user first interacts with your site 
-        (i.e. when they click a link, tap on a button) to the time when the browser is actually 
-        able to respond to that interaction.
-      </p>
-      <p class="box-demo">
-        Perfume.js: First Input Delay {{ fid }} ms
-      </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
   {{'}'}})
 {{'}'}});</pre>
               </td>
@@ -352,8 +308,8 @@ npm install perfume.js --save
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
+  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data {{'}'}}) => {{'{'}}
+    myAnalyticsTool.<span class="violet">track</span>(metricName, data);
   {{'}'}})
 {{'}'}});
 perfume.<span class="blue">start</span>('fibonacci');
@@ -373,68 +329,6 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
     </div>
 
     <app-cfp class="box" id="/component-first-paint/"></app-cfp>
-
-    <div class="box" *ngIf="!isLowEndExperience">
-      <h3 class="box-title" id="/custom-logging/">
-        <a href="{{ path }}#/custom-logging/">Custom Logging</a>
-      </h3>
-      <p>Save the duration and print it out exactly the way you want it.</p>
-      <p class="box-demo">
-        <button class="box-demo-btn" (click)="customLogging()">Run custom logging</button>
-        <span>{{ logCustom }}</span>
-      </p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, duration {{'}'}}) => {{'{'}}
-    myAnalyticsTool.<span class="violet">track</span>(metricName, duration);
-  {{'}'}}),
-  logPrefix<span class="red">:</span> "🍹 HayesValley.js"
-{{'}'}});
-
-perfume.<span class="blue">start</span>('fibonacci');
-<span class="violet">fibonacci</span>(<span class="blue">400</span>);
-<span class="red">const</span> duration <span class="red">=</span> perfume.<span class="violet">end</span>('fibonacci');
-perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', duration {{'}'}});
-<span class="gray">// 🍹 HayesValley.js: Custom logging 0.14 ms</span></pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="box">
-      <h2 class="box-title" id="/analytics/">Analytics</h2>
-    </div>
-
-    <div class="box">
-      <p>Configurable analytics callback to use Perfume.js with any platform.</p>
-      <div class="box-code js">
-        <table>
-          <tbody>
-            <tr>
-              <td class="code">
-                <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
-  <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}}options{{'}'}}) => {{'{'}}
-    const {{'{'}}
-      data,
-      duration,
-      metricName,
-      navigatorInformation,
-    {{'}'}} = options;
-    myAnalyticsTool.<span class="violet">track</span>(data, duration, metricName, navigatorInformation);
-  {{'}'}})
-{{'}'}});</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
 
     <div class="box">
       <h2 class="box-title">Customize & Utilities</h2>
@@ -508,7 +402,7 @@ perfume.<span class="violet">log</span>({{'{'}} metricName: 'Custom logging', du
           <h3>Leonardo Zizzamia</h3>
           <h4>
             🌕 <a href="https://www.coinbase.com" target="_blank">Coinbase</a> Growth eng lead  ☁️✨<br />
-            Continuous learning about DApps and web performance ✨🔭<br />
+            Leading the web renaissance one byte at the time ✨🔭<br />
             Curator of <a href="https://www.twitter.com/NGRomeConf" target="_blank">@NGRomeConf</a> & 
             <a href="https://www.twitter.com/AngularSF" target="_blank">@AngularSF</a>
           </h4>

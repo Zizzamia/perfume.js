@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.0-rc.2 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.3 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -14,7 +14,6 @@ export interface IAnalyticsTrackerOptions {
 
 export interface IPerfumeConfig {
   // Metrics
-  cumulativeLayoutShift: boolean;
   dataConsumption: boolean;
   resourceTiming: boolean;
   // Analytics
@@ -136,7 +135,7 @@ export interface IPerfumeNavigationTiming {
   dnsLookupTime?: number;
 }
 
-type EffectiveConnectionType = '2g' | '3g' | '4g' | 'slow-2g';
+type EffectiveConnectionType = '2g' | '3g' | '4g' | 'slow-2g' | 'lte';
 
 export interface IPerfumeNetworkInformation {
   downlink?: number;
@@ -160,7 +159,6 @@ export interface IPerfumeDataConsumption {
 export default class Perfume {
   config: IPerfumeConfig = {
     // Metrics
-    cumulativeLayoutShift: false,
     dataConsumption: false,
     resourceTiming: false,
     // Analytics
@@ -171,7 +169,7 @@ export default class Perfume {
     maxMeasureTime: 15000,
   };
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.2';
+  version = '5.0.0-rc.3';
   private c = window.console;
   private cumulativeLayoutShiftScore = 0;
   private d = document;
@@ -194,6 +192,7 @@ export default class Perfume {
   };
   private storageEstimateQuota: number | null = null;
   private storageEstimateUsage: number | null = null;
+  private totalBlockingTimeScore = 0;
   private w = window;
   private wp = window.performance;
   private wn = window.navigator;
@@ -355,6 +354,7 @@ export default class Perfume {
     });
     this.disconnectPerfObservers();
     this.disconnectDataConsumption();
+    this.disconnecTotalBlockingTime();
   }
 
   private disconnectDataConsumption(): void {
@@ -375,11 +375,33 @@ export default class Perfume {
       this.perfObservers.cls.takeRecords();
       this.logMetric(
         this.cumulativeLayoutShiftScore,
-        'cumulativeLayoutShiftScore',
+        'cumulativeLayoutShift',
         '',
       );
       this.perfObservers.cls.disconnect();
     }
+    // TBT by LCP
+    if (this.perfObservers.tbt && this.totalBlockingTimeScore) {
+      this.logMetric(this.totalBlockingTimeScore, 'totalBlockingTime');
+    }
+  }
+
+  private disconnecTotalBlockingTime(): void {
+    // TBT with 5 second delay after LCP
+    setTimeout(() => {
+      if (this.perfObservers.tbt && this.totalBlockingTimeScore) {
+        this.logMetric(this.totalBlockingTimeScore, 'totalBlockingTime5S');
+      }
+    }, 5000);
+    // TBT with 10 second delay after LCP
+    setTimeout(() => {
+      if (this.perfObservers.tbt) {
+        if (this.totalBlockingTimeScore) {
+          this.logMetric(this.totalBlockingTimeScore, 'totalBlockingTime10S');
+        }
+        this.perfObservers.tbt.disconnect();
+      }
+    }, 10000);
   }
 
   private initFirstInputDelay(): void {
@@ -466,6 +488,20 @@ export default class Perfume {
     );
     this.dataConsumptionTimeout = setTimeout(() => {
       this.disconnectDataConsumption();
+    }, 15000);
+  }
+
+  private initTotalBlockingTime(): void {
+    this.perfObservers.tbt = this.performanceObserver(
+      'longtask',
+      (performanceEntries: IPerformanceEntry[]) => {
+        this.performanceObserverTBTCb({
+          performanceEntries,
+        });
+      },
+    );
+    setTimeout(() => {
+      this.disconnecTotalBlockingTime();
     }, 15000);
   }
 
@@ -682,7 +718,7 @@ export default class Perfume {
   private onVisibilityChange() {
     if (typeof this.d.hidden !== 'undefined') {
       // Opera 12.10 and Firefox 18 and later support
-      this.d.addEventListener('visibilitychange', this.didVisibilityChange);
+      this.d.addEventListener('visibilitychange', this.didVisibilityChange.bind(this));
     }
   }
 
@@ -736,6 +772,7 @@ export default class Perfume {
           this.perfObservers.fcp &&
           performanceEntry.name === 'first-contentful-paint'
         ) {
+          this.initTotalBlockingTime();
           this.perfObservers.fcp.disconnect();
         }
       },
@@ -761,6 +798,22 @@ export default class Perfume {
           const bodySize = performanceEntry.decodedBodySize / 1000;
           this.perfResourceTiming[performanceEntry.initiatorType] += bodySize;
           this.perfResourceTiming.total += bodySize;
+        }
+      },
+    );
+  }
+
+  private performanceObserverTBTCb(options: {
+    performanceEntries: IPerformanceEntry[];
+  }): void {
+    options.performanceEntries.forEach(
+      (performanceEntry: IPerformanceEntry) => {
+        if (performanceEntry.name !== 'self') {
+          return;
+        }
+        const blockingTime = performanceEntry.duration - 50;
+        if (blockingTime) {
+          this.totalBlockingTimeScore += blockingTime;
         }
       },
     );

@@ -71,7 +71,8 @@ const createConfig = ({ output, min = false }) => {
             'cumulativeLayoutShift',
             'serviceWorkerStatus',
             'storageEstimateQuota',
-            'storageEstimateUsage'
+            'storageEstimateUsage',
+            'totalBlockingTime'
           ]
         }
       },

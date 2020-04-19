@@ -19,10 +19,9 @@ import {
         </a>
         <h1 class="title">Perfume.js</h1>
         <p>
-          Perfume is a tiny, web performance monitoring library which 
-          reports field data like Navigation Timing, Resource Timing, 
-          First Contentful Paint (FP/FCP), Largest Contentful Paint (LCP), 
-          First Input Delay (FID) back to your favorite analytics tool.
+          Speed is a feature, and to deliver it we need to understand the many factors
+          and fundamental limitations that are at play. 
+          If we can measure it, we can improve it.
         </p>
         <a class="github-button" href="https://github.com/zizzamia/perfume.js"
         data-size="large" data-show-count="true"
@@ -41,8 +40,9 @@ import {
       .layout--intro .box--intro p {
         margin: 10px 0;
         font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
-        font-size: 1.1em;
-        line-height: 34px;
+        font-size: 1.4em;
+        font-style: italic;
+        line-height: 35px;
       }
       .title {
         margin: 0;

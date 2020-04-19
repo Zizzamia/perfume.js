@@ -12,6 +12,7 @@ import {
   fcp,
   lcp,
   fid,
+  cls,
   fibonacci,
   custom_fibonacci,
   networkInformation,
@@ -91,6 +92,10 @@ export class AppComponent implements AfterViewInit {
       this.fid = result;
       this.ref.detectChanges();
     });
+    cls.subscribe(result => {
+      this.cls = result;
+      this.ref.detectChanges();
+    });
     fibonacci.subscribe(result => {
       this.logFibonacci = `Perfume.js: fibonacci ${result} ms`;
       this.ref.detectChanges();
@@ -111,13 +116,13 @@ export class AppComponent implements AfterViewInit {
 
   measureFibonacci() {
     perfume.start('fibonacci');
-    this.fibonacci(800);
+    this.fibonacci(300);
     perfume.end('fibonacci');
   }
 
   customLogging() {
     perfume.start('custom_fibonacci');
-    this.fibonacci(800);
+    this.fibonacci(300);
     perfume.end('custom_fibonacci');
   }
 
@@ -125,7 +130,7 @@ export class AppComponent implements AfterViewInit {
    * The fibonacci methods ensures to reduce the performance of TTI and
    * make it more realistic to a bigger Single Page App
    */
-  private fibonacci(num: number, memo = {}, append: boolean = false): number {
+  private fibonacci(num: number, memo = {}, append = true): number {
     if (memo[num]) {
       return memo[num];
     }
@@ -144,9 +149,9 @@ export class AppComponent implements AfterViewInit {
     const elSequence = document.createElement('span');
     elSequence.classList.add('Fibonacci-sequence');
     elSequence.textContent = num + ' ';
-    elSequence.style.color =
-      '#' + Math.floor(Math.random() * 16777215).toString(16);
     const elFibonacci = document.querySelector('.Fibonacci');
     elFibonacci.appendChild(elSequence);
+    const elFibonacciNew = document.querySelector('.Fibonacci-sequence');
+    if (elFibonacciNew) elFibonacciNew.remove();
   }
 }

@@ -401,7 +401,7 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
         (perfume as any).cumulativeLayoutShiftScore,
-        'cumulativeLayoutShiftScore',
+        'cumulativeLayoutShift',
         '',
       );
     });
@@ -556,10 +556,6 @@ describe('Perfume', () => {
       jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
       (perfume as any).onVisibilityChange();
       expect(spy.mock.calls.length).toEqual(1);
-      expect(document.addEventListener).toHaveBeenLastCalledWith(
-        'visibilitychange',
-        perfume['didVisibilityChange'],
-      );
     });
   });
 
