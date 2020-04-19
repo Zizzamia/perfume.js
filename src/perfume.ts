@@ -718,7 +718,10 @@ export default class Perfume {
   private onVisibilityChange() {
     if (typeof this.d.hidden !== 'undefined') {
       // Opera 12.10 and Firefox 18 and later support
-      this.d.addEventListener('visibilitychange', this.didVisibilityChange.bind(this));
+      this.d.addEventListener(
+        'visibilitychange',
+        this.didVisibilityChange.bind(this),
+      );
     }
   }
 
