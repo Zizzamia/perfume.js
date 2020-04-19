@@ -42,6 +42,7 @@ export class AppComponent implements AfterViewInit {
   fcp: number;
   fid: number;
   lcp: number;
+  cls: number;
   path: string;
   isLowEndDevice: boolean;
   isLowEndExperience: boolean;
