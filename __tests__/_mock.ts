@@ -133,6 +133,7 @@ export default {
       value: performance,
       writable: true,
     });
+    return window.performance;
   },
   PerformanceObserver: MockPerformanceObserver,
   defaultPerfumeConfig: {
