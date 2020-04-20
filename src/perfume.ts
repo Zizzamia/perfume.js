@@ -201,13 +201,13 @@ export default class Perfume {
     this.logData('dataConsumption', this.perfResourceTiming);
   }
 
-  private disconnectPerfObservers(lcp: number, clsScore: number): void {
-    if (this.perfObservers.lcp && lcp) {
-      this.logMetric(lcp, 'largestContentfulPaint');
+  private disconnectPerfObservers(lcpValue: number, clsScoreValue: number): void {
+    if (this.perfObservers.lcp && lcpValue) {
+      this.logMetric(lcpValue, 'largestContentfulPaint');
     }
-    if (this.perfObservers.cls && clsScore > 0) {
+    if (this.perfObservers.cls && clsScoreValue > 0) {
       this.perfObservers.cls.takeRecords();
-      this.logMetric(clsScore, 'cumulativeLayoutShift', '');
+      this.logMetric(clsScoreValue, 'cumulativeLayoutShift', '');
     }
     // TBT by FID
     if (this.perfObservers.tbt && this.totalBlockingTimeScore) {
