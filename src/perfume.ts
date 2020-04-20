@@ -201,7 +201,10 @@ export default class Perfume {
     this.logData('dataConsumption', this.perfResourceTiming);
   }
 
-  private disconnectPerfObservers(lcpValue: number, clsScoreValue: number): void {
+  private disconnectPerfObservers(
+    lcpValue: number,
+    clsScoreValue: number,
+  ): void {
     if (this.perfObservers.lcp && lcpValue) {
       this.logMetric(lcpValue, 'largestContentfulPaint');
     }
