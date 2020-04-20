@@ -645,7 +645,10 @@ export default class Perfume {
   }): void {
     options.performanceEntries.forEach(
       (performanceEntry: IPerformanceEntry) => {
-        if (performanceEntry.name !== 'self' || performanceEntry.startTime < fcp) {
+        if (
+          performanceEntry.name !== 'self' ||
+          performanceEntry.startTime < fcp
+        ) {
           return;
         }
         const blockingTime = performanceEntry.duration - 50;
