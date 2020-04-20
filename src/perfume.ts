@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.0-rc.4 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.5 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -30,6 +30,9 @@ import { getIsLowEndDevice, getIsLowEndExperience } from './isLowEnd';
 // helps reduce the library size
 let et: EffectiveConnectionType = '4g';
 let sd = false;
+let fcp = 0;
+let clsScore = 0;
+let lcp = 0;
 
 export default class Perfume {
   config: IPerfumeConfig = {
@@ -42,11 +45,9 @@ export default class Perfume {
     maxMeasureTime: 15000,
   };
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.4';
-  private cumulativeLayoutShiftScore = 0;
+  version = '5.0.0-rc.5';
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
-  private lcpDuration: number = 0;
   private logPrefixRecording = 'Recording already';
   private metrics: IMetricMap = {};
   private perfObserver: any;
@@ -173,6 +174,7 @@ export default class Perfume {
 
   private didVisibilityChange() {
     if (D.hidden) {
+      this.disconnectPerfObserversHidden();
       this.isHidden = D.hidden;
     }
   }
@@ -185,7 +187,7 @@ export default class Perfume {
       measureName: 'firstInputDelay',
       valueLog: 'duration',
     });
-    this.disconnectPerfObservers();
+    this.disconnectPerfObservers(lcp, clsScore);
     this.disconnectDataConsumption();
     this.disconnecTotalBlockingTime();
   }
@@ -199,23 +201,29 @@ export default class Perfume {
     this.logData('dataConsumption', this.perfResourceTiming);
   }
 
-  private disconnectPerfObservers(): void {
-    if (this.perfObservers.lcp && this.lcpDuration) {
-      this.logMetric(this.lcpDuration, 'largestContentfulPaint');
-      this.perfObservers.lcp.disconnect();
+  private disconnectPerfObservers(lcp: number, clsScore: number): void {
+    if (this.perfObservers.lcp && lcp) {
+      this.logMetric(lcp, 'largestContentfulPaint');
     }
-    if (this.perfObservers.cls && this.cumulativeLayoutShiftScore > 0) {
+    if (this.perfObservers.cls && clsScore > 0) {
       this.perfObservers.cls.takeRecords();
-      this.logMetric(
-        this.cumulativeLayoutShiftScore,
-        'cumulativeLayoutShift',
-        '',
-      );
-      this.perfObservers.cls.disconnect();
+      this.logMetric(clsScore, 'cumulativeLayoutShift', '');
     }
-    // TBT by LCP
+    // TBT by FID
     if (this.perfObservers.tbt && this.totalBlockingTimeScore) {
       this.logMetric(this.totalBlockingTimeScore, 'totalBlockingTime');
+    }
+  }
+
+  private disconnectPerfObserversHidden(): void {
+    if (this.perfObservers.lcp && lcp) {
+      this.logMetric(lcp, 'largestContentfulPaintUntilHidden');
+      this.perfObservers.lcp.disconnect();
+    }
+    if (this.perfObservers.cls && clsScore > 0) {
+      this.perfObservers.cls.takeRecords();
+      this.logMetric(clsScore, 'cumulativeLayoutShiftUntilHidden', '');
+      this.perfObservers.cls.disconnect();
     }
   }
 
@@ -274,7 +282,7 @@ export default class Perfume {
       (performanceEntries: IPerformanceEntry[]) => {
         const lastEntry = performanceEntries.pop();
         if (lastEntry) {
-          this.lcpDuration = lastEntry.renderTime || lastEntry.loadTime;
+          lcp = lastEntry.renderTime || lastEntry.loadTime;
         }
       },
     );
@@ -291,7 +299,7 @@ export default class Perfume {
         const lastEntry = performanceEntries.pop();
         // Only count layout shifts without recent user input.
         if (lastEntry && !lastEntry.hadRecentInput && lastEntry.value) {
-          this.cumulativeLayoutShiftScore += lastEntry.value;
+          clsScore += lastEntry.value;
         }
       },
     );
@@ -509,7 +517,10 @@ export default class Perfume {
    */
   private log(options: ILogOptions): void {
     // Don't log when page is hidden or has disabled logging
-    if (this.isHidden || !this.config.logging) {
+    if (
+      (this.isHidden && options.measureName.indexOf('Hidden') < 0) ||
+      !this.config.logging
+    ) {
       return;
     }
     const style = 'color:#ff6d00;font-size:11px;';
@@ -597,6 +608,7 @@ export default class Perfume {
           this.perfObservers.fcp &&
           performanceEntry.name === 'first-contentful-paint'
         ) {
+          fcp = performanceEntry.startTime;
           this.initTotalBlockingTime();
           this.perfObservers.fcp.disconnect();
         }
@@ -633,7 +645,7 @@ export default class Perfume {
   }): void {
     options.performanceEntries.forEach(
       (performanceEntry: IPerformanceEntry) => {
-        if (performanceEntry.name !== 'self') {
+        if (performanceEntry.name !== 'self' || performanceEntry.startTime < fcp) {
           return;
         }
         const blockingTime = performanceEntry.duration - 50;
@@ -660,7 +672,10 @@ export default class Perfume {
    */
   private sendTiming(options: ISendTimingOptions): void {
     // Doesn't send timing when page is hidden
-    if (this.isHidden || !this.config.analyticsTracker) {
+    if (
+      (this.isHidden && options.measureName.indexOf('Hidden') < 0) ||
+      !this.config.analyticsTracker
+    ) {
       return;
     }
     const { measureName, data, customProperties, navigatorInfo } = options;

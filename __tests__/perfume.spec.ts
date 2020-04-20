@@ -1,4 +1,4 @@
-import { C, W, WN, WP  } from '../src/constants';
+import { C, W, WN, WP } from '../src/constants';
 import Perfume from '../src/perfume';
 import mock from './_mock';
 
@@ -373,32 +373,23 @@ describe('Perfume', () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should call logMetric() when observer and lcpDuration are defined', () => {
+    it('should call logMetric() when observer and lcp are defined', () => {
       spy = jest.spyOn(perfume as any, 'logMetric');
-      (perfume as any).lcpDuration = 10;
       (perfume as any).perfObservers.lcp = { disconnect: jest.fn() };
-      (perfume as any).disconnectPerfObservers();
+      (perfume as any).disconnectPerfObservers(10);
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        (perfume as any).lcpDuration,
-        'largestContentfulPaint',
-      );
+      expect(spy).toHaveBeenCalledWith(10, 'largestContentfulPaint');
     });
 
-    it('should call logMetric() when observer and cumulativeLayoutShiftScore are defined', () => {
+    it('should call logMetric() when observer and clsScore are defined', () => {
       spy = jest.spyOn(perfume as any, 'logMetric');
-      (perfume as any).cumulativeLayoutShiftScore = 20;
       (perfume as any).perfObservers.cls = {
         disconnect: jest.fn(),
         takeRecords: jest.fn(),
       };
-      (perfume as any).disconnectPerfObservers();
+      (perfume as any).disconnectPerfObservers(10, 20);
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        (perfume as any).cumulativeLayoutShiftScore,
-        'cumulativeLayoutShift',
-        '',
-      );
+      expect(spy).toHaveBeenCalledWith(20, 'cumulativeLayoutShift', '');
     });
   });
 
@@ -623,9 +614,7 @@ describe('Perfume', () => {
     });
 
     it('when Navigation Timing is not supported yet should return an empty object', () => {
-      jest
-        .spyOn(WP, 'getEntriesByType')
-        .mockReturnValue([] as any);
+      jest.spyOn(WP, 'getEntriesByType').mockReturnValue([] as any);
       expect((perfume as any).getNavigationTiming()).toEqual({});
     });
   });

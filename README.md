@@ -2,7 +2,7 @@
   <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v4-5-0.png" align="left" width="200" />
 </a>
 
-# [Perfume.js v5.0.0-rc.4](http://perfumejs.com)
+# [Perfume.js v5.0.0-rc.5](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
@@ -88,6 +88,9 @@ const perfume = new Perfume({
           myAnalyticsTool.track('networkInformation', data);
         }
         break;
+      case 'storageEstimate':
+        myAnalyticsTool.track('storageEstimate', data);
+        break;
       case 'firstPaint':
         myAnalyticsTool.track('firstPaint', { duration: data });
         break;
@@ -100,8 +103,14 @@ const perfume = new Perfume({
       case 'largestContentfulPaint':
         myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
+      case 'largestContentfulPaintUntilHidden':
+        myAnalyticsTool.track('largestContentfulPaintUntilHidden', { duration: data });
+        break;
       case 'cumulativeLayoutShift':
         myAnalyticsTool.track('cumulativeLayoutShift', { duration: data });
+        break;
+      case 'cumulativeLayoutShiftUntilHidden':
+        myAnalyticsTool.track('cumulativeLayoutShiftUntilHidden', { duration: data });
         break;
       case 'totalBlockingTime':
         myAnalyticsTool.track('totalBlockingTime', { duration: data });
@@ -142,7 +151,7 @@ Navigation Timing is run by default.
 </ul>
 
 ```javascript
-// Perfume.js: NavigationTiming {{'{'}} ... timeToFirstByte: 192.65 {{'}'}}
+// Perfume.js: navigationTiming { ... timeToFirstByte: 192.65 }
 ```
 
 ### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
@@ -152,7 +161,7 @@ Navigation Timing is run by default.
 First Paint is run by default.
 
 ```javascript
-// Perfume.js: First Paint 1482.00 ms
+// Perfume.js: firstPaint 1482.00 ms
 ```
 
 ### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
@@ -162,7 +171,7 @@ First Paint is run by default.
 First Contentful Paint is run by default.
 
 ```javascript
-// Perfume.js: First Contentful Paint 2029.00 ms
+// Perfume.js: firstContentfulPaint 2029.00 ms
 ```
 
 ### Largest Contentful Paint (LCP)
@@ -171,8 +180,11 @@ Largest Contentful Paint (LCP) is an important, user-centric metric for measurin
 perceived load speed because it marks the point in the page load timeline when the page's main 
 content has likely loaded—a fast LCP helps reassure the user that the page is useful.
 
+We end the LCP measure at two points: when FID happen and when the page's lifecycle state changes to hidden.
+
 ```javascript
-// Perfume.js: Largest Contentful Paint 2429.00 ms
+// Perfume.js: largestContentfulPaint 2429.00 ms
+// Perfume.js: largestContentfulPaintUntilHidden 2429.00 ms
 ```
 
 ### First Input Delay (FID)
@@ -182,14 +194,17 @@ content has likely loaded—a fast LCP helps reassure the user that the page is 
 First Input Delay is run by default.
 
 ```javascript
-// Perfume.js: First Input Delay 3.20 ms
+// Perfume.js: firstInputDelay 3.20 ms
 ```
 
 ### Cumulative Layout Shift (CLS)
 **CLS** is an important, user-centric metric for measuring visual stability because it helps quantify how often users experience unexpected layout shifts—a low CLS helps ensure that the page is delightful.
 
+We end the CLS measure at two points: when FID happen and when the page's lifecycle state changes to hidden.
+
 ```javascript
-// Perfume.js: Cumulative Layout Shift score 0.13
+// Perfume.js: cumulativeLayoutShiftUntil 0.13
+// Perfume.js: cumulativeLayoutShiftUntilHidden 0.13
 ```
 
 ### Total Blocking Time (TBT)
