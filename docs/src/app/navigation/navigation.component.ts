@@ -80,6 +80,13 @@ import { isLowEndExperience$ } from '../perfume';
         >Cumulative Layout Shift</a
       >
       <a
+        href="{{ path }}#/total-blocking-time/"
+        class="part-two"
+        [class.active]="navSelected === navOptions.tbt"
+        (click)="activeNav(navOptions.tbt)"
+        >Total Blocking Time</a
+      >
+      <a
         href="{{ path }}#/resource-timing/"
         class="part-two"
         [class.active]="navSelected === navOptions.resTime"

@@ -13,6 +13,7 @@ import {
   lcp,
   fid,
   cls,
+  tbt,
   fibonacci,
   custom_fibonacci,
   networkInformation,
@@ -43,6 +44,7 @@ export class AppComponent implements AfterViewInit {
   fid: number;
   lcp: number;
   cls: number;
+  tbt: number;
   path: string;
   isLowEndDevice: boolean;
   isLowEndExperience: boolean;
@@ -95,6 +97,10 @@ export class AppComponent implements AfterViewInit {
     });
     cls.subscribe(result => {
       this.cls = result;
+      this.ref.detectChanges();
+    });
+    tbt.subscribe(result => {
+      this.tbt = result;
       this.ref.detectChanges();
     });
     fibonacci.subscribe(result => {

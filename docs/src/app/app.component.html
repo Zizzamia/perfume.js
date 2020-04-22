@@ -151,9 +151,10 @@ npm install perfume.js --save
         myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime10S', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;     
       <span class="red">default</span>:
+        myAnalyticsTool.<span class="violet">track</span>(metricName, {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      {{'}'}}
-    {{'}'}},
+    {{'}'}}
+  {{'}'}},
   logging: false
 {{'}'}});</pre>
               </td>
@@ -256,6 +257,20 @@ npm install perfume.js --save
       </p>
       <p class="box-demo">
         Perfume.js: Cumulative Layout Shift score {{ cls }}
+      </p>
+    </div>
+
+    <div class="box">
+      <h3 class="box-title" id="/total-blocking-time/">
+        <a href="{{ path }}#/total-blocking-time/">Total Blocking Time (TBT)</a>
+      </h3>
+      <p>
+        <b>Total Blocking Time</b> (TBT) is an important, user-centric metric for measuring 
+        load responsiveness because it helps quantify the severity of how non-interactive 
+        a page is prior to it becoming reliably interactive—a low TBT helps ensure that the page is usable.
+      </p>
+      <p class="box-demo">
+        Perfume.js: Total Blocking Time {{ tbt }} ms
       </p>
     </div>
 

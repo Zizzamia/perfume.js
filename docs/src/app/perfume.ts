@@ -18,6 +18,7 @@ export const fcp = new BehaviorSubject(0);
 export const lcp = new BehaviorSubject(0);
 export const fid = new BehaviorSubject(0);
 export const cls = new BehaviorSubject(0);
+export const tbt = new BehaviorSubject(0);
 export const fibonacci = new BehaviorSubject(0);
 export const custom_fibonacci = new BehaviorSubject(0);
 export const openDialog$ = new BehaviorSubject(0);
@@ -59,6 +60,9 @@ export function analyticsTracker(options) {
       break;
     case 'cumulativeLayoutShift':
       cls.next(data);
+      break;
+    case 'totalBlockingTime':
+      tbt.next(data);
       break;
     case 'fibonacci':
       fibonacci.next(data);

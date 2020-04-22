@@ -1,11 +1,10 @@
 /*!
- * Perfume.js v5.0.0-rc.5 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.6 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
 import {
-  EffectiveConnectionType,
   ILogOptions,
   IMetricMap,
   INavigatorInfo,
@@ -17,19 +16,18 @@ import {
   IPerfumeConfig,
   IPerfumeDataConsumption,
   IPerfumeMetrics,
-  IPerfumeNavigationTiming,
-  IPerfumeNetworkInformation,
   IPerfumeOptions,
   ISendTimingOptions,
 } from './types';
 
 import { C, D, W, WN, WP } from './constants';
+import { getNavigationTiming } from './getNavigationTiming';
+import { et, sd, getNetworkInformation } from './getNetworkInformation';
 import { getIsLowEndDevice, getIsLowEndExperience } from './isLowEnd';
+import { isPerformanceSupported, isPerformanceObserverSupported } from './isSupported';
 
 // Have private variable outside the class,
 // helps reduce the library size
-let et: EffectiveConnectionType = '4g';
-let sd = false;
 let fcp = 0;
 let clsScore = 0;
 let lcp = 0;
@@ -45,7 +43,7 @@ export default class Perfume {
     maxMeasureTime: 15000,
   };
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.5';
+  version = '5.0.0-rc.6';
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
   private logPrefixRecording = 'Recording already';
@@ -69,11 +67,11 @@ export default class Perfume {
     this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
-    if (!this.isPerformanceSupported()) {
+    if (!isPerformanceSupported()) {
       return;
     }
     // Checks if use Performance or the EmulatedPerformance instance
-    if (this.isPerformanceObserverSupported()) {
+    if (isPerformanceObserverSupported()) {
       try {
         this.initPerformanceObserver();
       } catch (e) {
@@ -84,9 +82,9 @@ export default class Perfume {
     // Init visibilitychange listener
     this.onVisibilityChange();
     // Log Navigation Timing
-    this.logData('navigationTiming', this.getNavigationTiming());
+    this.logData('navigationTiming', getNavigationTiming());
     // Log Network Information
-    this.logData('networkInformation', this.getNetworkInformation());
+    this.logData('networkInformation', getNetworkInformation());
     // Let's estimate our storage capacity
     this.initStorageEstimate();
   }
@@ -95,7 +93,7 @@ export default class Perfume {
    * Start performance measurement
    */
   start(markName: string): void {
-    if (!this.isPerformanceSupported()) {
+    if (!isPerformanceSupported()) {
       return;
     }
     if (this.metrics[markName]) {
@@ -113,7 +111,7 @@ export default class Perfume {
    * End performance measurement
    */
   end(markName: string, customProperties = {}): void {
-    if (!this.isPerformanceSupported()) {
+    if (!isPerformanceSupported()) {
       return;
     }
     if (!this.metrics[markName]) {
@@ -347,26 +345,6 @@ export default class Perfume {
   }
 
   /**
-   * True if the browser supports the Navigation Timing API,
-   * User Timing API and the PerformanceObserver Interface.
-   * In Safari, the User Timing API (performance.mark()) is not available,
-   * so the DevTools timeline will not be annotated with marks.
-   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
-   * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
-   * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
-   */
-  private isPerformanceSupported(): boolean {
-    return WP && !!WP.getEntriesByType && !!WP.now && !!WP.mark;
-  }
-
-  /**
-   * Check PerformanceObserver interface is supported
-   */
-  private isPerformanceObserverSupported(): boolean {
-    return 'PerformanceObserver' in W;
-  }
-
-  /**
    * Get the duration of the timing metric or -1 if there a measurement has
    * not been made by the User Timing API
    */
@@ -401,62 +379,6 @@ export default class Perfume {
               ? 'controlled'
               : 'supported'
             : 'unsupported',
-      };
-    }
-    return {};
-  }
-
-  /**
-   * Navigation Timing API provides performance metrics for HTML documents.
-   * w3c.github.io/navigation-timing/
-   * developers.google.com/web/fundamentals/performance/navigation-and-resource-timing
-   */
-  private getNavigationTiming(): IPerfumeNavigationTiming {
-    if (!this.isPerformanceSupported()) {
-      return {};
-    }
-    // There is an open issue to type correctly getEntriesByType
-    // github.com/microsoft/TypeScript/issues/33866
-    const n = performance.getEntriesByType('navigation')[0] as any;
-    // In Safari version 11.2 Navigation Timing isn't supported yet
-    if (!n) {
-      return {};
-    }
-    const responseStart = n.responseStart;
-    const responseEnd = n.responseEnd;
-    // We cache the navigation time for future times
-    return {
-      // fetchStart marks when the browser starts to fetch a resource
-      // responseEnd is when the last byte of the response arrives
-      fetchTime: responseEnd - n.fetchStart,
-      // Service worker time plus response time
-      workerTime: n.workerStart > 0 ? responseEnd - n.workerStart : 0,
-      // Request plus response time (network only)
-      totalTime: responseEnd - n.requestStart,
-      // Response time only (download)
-      downloadTime: responseEnd - responseStart,
-      // Time to First Byte (TTFB)
-      timeToFirstByte: responseStart - n.requestStart,
-      // HTTP header size
-      headerSize: n.transferSize - n.encodedBodySize || 0,
-      // Measuring DNS lookup time
-      dnsLookupTime: n.domainLookupEnd - n.domainLookupStart,
-    };
-  }
-
-  private getNetworkInformation(): IPerfumeNetworkInformation {
-    if ('connection' in WN) {
-      const dataConnection = (WN as any).connection;
-      if (typeof dataConnection !== 'object') {
-        return {};
-      }
-      et = dataConnection.effectiveType;
-      sd = !!dataConnection.saveData;
-      return {
-        downlink: dataConnection.downlink,
-        effectiveType: dataConnection.effectiveType,
-        rtt: dataConnection.rtt,
-        saveData: !!dataConnection.saveData,
       };
     }
     return {};

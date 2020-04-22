@@ -553,24 +553,7 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.isPerformanceSupported()', () => {
-    it('should return true if the browser supports the Navigation Timing API', () => {
-      expect((perfume as any).isPerformanceSupported()).toEqual(true);
-    });
-
-    it('should return false if the browser does not supports performance.mark', () => {
-      delete window.performance.mark;
-      expect((perfume as any).isPerformanceSupported()).toEqual(false);
-    });
-
-    it('should return false if the browser does not supports performance.now', () => {
-      window.performance.mark = () => 1;
-      delete window.performance.now;
-      expect((perfume as any).isPerformanceSupported()).toEqual(false);
-    });
-  });
-
-  describe('.getNavigationTiming()', () => {
+  describe('.getNavigatorInfo()', () => {
     it('when navigator is not supported should return an empty object', () => {
       (WN as any) = undefined;
       expect((perfume as any).getNavigatorInfo()).toEqual({});
@@ -582,62 +565,6 @@ describe('Perfume', () => {
         deviceMemory: 8,
         hardwareConcurrency: 12,
         serviceWorkerStatus: 'unsupported',
-      });
-    });
-  });
-
-  describe('.getNavigationTiming()', () => {
-    it('when performance is not supported should return an empty object', () => {
-      (WP as any).mark = undefined;
-      expect((perfume as any).getNavigationTiming()).toEqual({});
-    });
-
-    it('when performance is supported should return the correct value', () => {
-      expect((perfume as any).getNavigationTiming()).toEqual({
-        dnsLookupTime: 0,
-        downloadTime: 0.6899998988956213,
-        fetchTime: 4.435000009834766,
-        headerSize: 0,
-        timeToFirstByte: 3.745000110939145,
-        totalTime: 4.435000009834766,
-        workerTime: 4.435000009834766,
-      });
-    });
-
-    it('when workerStart is 0 should return 0', () => {
-      jest.spyOn(WP, 'getEntriesByType').mockReturnValue([
-        {
-          workerTime: 0,
-        },
-      ] as any);
-      expect((perfume as any).getNavigationTiming().workerTime).toEqual(0);
-    });
-
-    it('when Navigation Timing is not supported yet should return an empty object', () => {
-      jest.spyOn(WP, 'getEntriesByType').mockReturnValue([] as any);
-      expect((perfume as any).getNavigationTiming()).toEqual({});
-    });
-  });
-
-  describe('.getNetworkInformation()', () => {
-    it('when connection is not supported should return an empty object', () => {
-      (WN as any).connection = undefined;
-      expect((perfume as any).getNetworkInformation()).toEqual({});
-    });
-
-    it('when connection is not supported should return an empty object', () => {
-      (WN as any) = mock.navigator();
-      (WN as any).connection = undefined;
-      expect((perfume as any).getNetworkInformation()).toEqual({});
-    });
-
-    it('when connection is supported should return the correct value', () => {
-      (WN as any) = mock.navigator();
-      expect((perfume as any).getNetworkInformation()).toEqual({
-        effectiveType: '4g',
-        rtt: 50,
-        downlink: 2.3,
-        saveData: false,
       });
     });
   });

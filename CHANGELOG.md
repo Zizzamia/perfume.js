@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0-rc.6 (2020-3-21)
+
+* **refactor:** reduced library kb
+
 ## 5.0.0-rc.5 (2020-3-19)
 
 * **feat:** added secondary log for LCP/CLS when the page's lifecycle state changes to hidden
