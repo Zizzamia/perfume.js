@@ -1,8 +1,5 @@
 import { WN } from './constants';
-import {
-  EffectiveConnectionType,
-  IPerfumeNetworkInformation,
-} from './types';
+import { EffectiveConnectionType, IPerfumeNetworkInformation } from './types';
 
 export let et: EffectiveConnectionType = '4g';
 export let sd = false;
@@ -23,4 +20,4 @@ export const getNetworkInformation = (): IPerfumeNetworkInformation => {
     };
   }
   return {};
-}
+};

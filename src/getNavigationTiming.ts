@@ -38,4 +38,4 @@ export const getNavigationTiming = (): IPerfumeNavigationTiming => {
     // Measuring DNS lookup time
     dnsLookupTime: n.domainLookupEnd - n.domainLookupStart,
   };
-}
+};

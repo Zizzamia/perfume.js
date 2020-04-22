@@ -24,7 +24,10 @@ import { C, D, W, WN, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { et, sd, getNetworkInformation } from './getNetworkInformation';
 import { getIsLowEndDevice, getIsLowEndExperience } from './isLowEnd';
-import { isPerformanceSupported, isPerformanceObserverSupported } from './isSupported';
+import {
+  isPerformanceSupported,
+  isPerformanceObserverSupported,
+} from './isSupported';
 
 // Have private variable outside the class,
 // helps reduce the library size

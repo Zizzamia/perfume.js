@@ -18,4 +18,4 @@ export const isPerformanceSupported = (): boolean => {
  */
 export const isPerformanceObserverSupported = (): boolean => {
   return 'PerformanceObserver' in W;
-}
+};
