@@ -1,6 +1,6 @@
 {
   "name": "perfume.js",
-  "version": "5.0.0-rc.6",
+  "version": "5.0.0-rc.7",
   "description": "Tiny web performance monitoring library which reports field data back to your favorite analytics tool.",
   "keywords": [
     "performance",
@@ -90,7 +90,7 @@
       "global": {
         "branches": 82,
         "functions": 100,
-        "lines": 94,
+        "lines": 93,
         "statements": 94
       }
     },

@@ -8,7 +8,6 @@ export interface IAnalyticsTrackerOptions {
 
 export interface IPerfumeConfig {
   // Metrics
-  dataConsumption: boolean;
   resourceTiming: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
@@ -20,7 +19,6 @@ export interface IPerfumeConfig {
 
 export interface IPerfumeOptions {
   // Metrics
-  dataConsumption?: boolean;
   resourceTiming?: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;

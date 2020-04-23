@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.0-rc.6 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.7 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -13,14 +13,14 @@ import {
   IPerformanceObserver,
   IPerformanceObserverEntryList,
   IPerformanceObserverType,
-  IPerfumeConfig,
   IPerfumeDataConsumption,
   IPerfumeMetrics,
   IPerfumeOptions,
   ISendTimingOptions,
 } from './types';
 
-import { C, D, W, WN, WP } from './constants';
+import { config } from './config';
+import { C, D, WN, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { et, getNetworkInformation, sd } from './getNetworkInformation';
 import { getIsLowEndDevice, getIsLowEndExperience } from './isLowEnd';
@@ -28,6 +28,8 @@ import {
   isPerformanceObserverSupported,
   isPerformanceSupported,
 } from './isSupported';
+import { logWarn } from './log';
+import { pushTask } from './utils';
 
 // Have private variable outside the class,
 // helps reduce the library size
@@ -36,17 +38,8 @@ let clsScore = 0;
 let lcp = 0;
 
 export default class Perfume {
-  config: IPerfumeConfig = {
-    // Metrics
-    dataConsumption: false,
-    resourceTiming: false,
-    // Logging
-    logPrefix: 'Perfume.js:',
-    logging: true,
-    maxMeasureTime: 15000,
-  };
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.6';
+  version = '5.0.0-rc.7';
   private dataConsumptionTimeout: any;
   private isHidden: boolean = false;
   private logPrefixRecording = 'Recording already';
@@ -67,7 +60,10 @@ export default class Perfume {
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
-    this.config = Object.assign({}, this.config, options) as IPerfumeConfig;
+    config.resourceTiming = !!options.resourceTiming;
+    config.logPrefix = options.logPrefix || config.logPrefix;
+    config.logging = !!options.logging;
+    config.maxMeasureTime = options.maxMeasureTime || config.maxMeasureTime;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!isPerformanceSupported()) {
@@ -78,7 +74,7 @@ export default class Perfume {
       try {
         this.initPerformanceObserver();
       } catch (e) {
-        this.logWarn(e);
+        logWarn(e);
       }
     }
 
@@ -100,7 +96,7 @@ export default class Perfume {
       return;
     }
     if (this.metrics[markName]) {
-      this.logWarn(`${this.logPrefixRecording} started.`);
+      logWarn(`${this.logPrefixRecording} started.`);
       return;
     }
     this.metrics[markName] = true;
@@ -118,7 +114,7 @@ export default class Perfume {
       return;
     }
     if (!this.metrics[markName]) {
-      this.logWarn(`${this.logPrefixRecording} stopped.`);
+      logWarn(`${this.logPrefixRecording} stopped.`);
       return;
     }
     // End Performance Mark
@@ -127,7 +123,7 @@ export default class Perfume {
     const durationByMetric = this.performanceMeasure(markName);
     const duration2Decimal = parseFloat(durationByMetric.toFixed(2));
     delete this.metrics[markName];
-    this.pushTask(() => {
+    pushTask(() => {
       const navigatorInfo = this.getNavigatorInfo();
       navigatorInfo.isLowEndDevice = getIsLowEndDevice();
       navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
@@ -316,7 +312,7 @@ export default class Perfume {
     this.initFirstInputDelay();
     this.initLargestContentfulPaint();
     // Collects KB information related to resources on the page
-    if (this.config.resourceTiming || this.config.dataConsumption) {
+    if (config.resourceTiming) {
       this.initResourceTiming();
     }
     this.initLayoutShift();
@@ -396,7 +392,7 @@ export default class Perfume {
     const navigatorInfo = this.getNavigatorInfo();
     navigatorInfo.isLowEndDevice = getIsLowEndDevice();
     navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
-    this.pushTask(() => {
+    pushTask(() => {
       // Logs the metric in the internal console.log
       this.log({ measureName, data, navigatorInfo });
       // Sends the metric to an external tracking service
@@ -415,16 +411,13 @@ export default class Perfume {
   ): void {
     const duration2Decimal = parseFloat(duration.toFixed(2));
     // Stop Analytics and Logging for false negative metrics
-    if (
-      duration2Decimal > this.config.maxMeasureTime ||
-      duration2Decimal <= 0
-    ) {
+    if (duration2Decimal > config.maxMeasureTime || duration2Decimal <= 0) {
       return;
     }
     const navigatorInfo = this.getNavigatorInfo();
     navigatorInfo.isLowEndDevice = getIsLowEndDevice();
     navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
-    this.pushTask(() => {
+    pushTask(() => {
       // Logs the metric in the internal console.log
       this.log({
         measureName,
@@ -447,28 +440,17 @@ export default class Perfume {
     // Don't log when page is hidden or has disabled logging
     if (
       (this.isHidden && options.measureName.indexOf('Hidden') < 0) ||
-      !this.config.logging
+      !config.logging
     ) {
       return;
     }
     const style = 'color:#ff6d00;font-size:11px;';
     C.log(
-      `%c ${this.config.logPrefix} ${options.measureName} `,
+      `%c ${config.logPrefix} ${options.measureName} `,
       style,
       options.data,
       options.navigatorInfo,
     );
-  }
-
-  /**
-   * Ensures console.warn exist and logging is enable for
-   * warning messages
-   */
-  private logWarn(message: string): void {
-    if (!this.config.logging) {
-      return;
-    }
-    C.warn(this.config.logPrefix, message);
   }
 
   /**
@@ -552,11 +534,10 @@ export default class Perfume {
   }): void {
     options.performanceEntries.forEach(
       (performanceEntry: IPerformanceEntry) => {
-        if (this.config.resourceTiming) {
+        if (config.resourceTiming) {
           this.logData('resourceTiming', performanceEntry);
         }
         if (
-          this.config.dataConsumption &&
           performanceEntry.decodedBodySize &&
           performanceEntry.initiatorType
         ) {
@@ -588,31 +569,20 @@ export default class Perfume {
   }
 
   /**
-   * PushTask to requestIdleCallback
-   */
-  private pushTask(cb: any): void {
-    if ('requestIdleCallback' in W) {
-      (W as any).requestIdleCallback(cb, { timeout: 3000 });
-    } else {
-      cb();
-    }
-  }
-
-  /**
    * Sends the User timing measure to analyticsTracker
    */
   private sendTiming(options: ISendTimingOptions): void {
     // Doesn't send timing when page is hidden
     if (
       (this.isHidden && options.measureName.indexOf('Hidden') < 0) ||
-      !this.config.analyticsTracker
+      !config.analyticsTracker
     ) {
       return;
     }
     const { measureName, data, customProperties, navigatorInfo } = options;
     const eventProperties = customProperties ? customProperties : {};
     // Send metric to custom Analytics service
-    this.config.analyticsTracker({
+    config.analyticsTracker({
       metricName: measureName,
       data,
       eventProperties,

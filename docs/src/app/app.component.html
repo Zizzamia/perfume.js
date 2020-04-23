@@ -277,7 +277,7 @@ npm install perfume.js --save
     <div class="box">
       <h3 class="box-title" id="/resource-timing/">
         <a href="{{ path }}#/resource-timing/">
-          Resource Timing (experimental)
+          Resource Timing
         </a>
       </h3>
       <p>Resource Timing collects performance metrics for document-dependent resources. Stuff like style sheets, scripts, images, et cetera.</p>
@@ -292,7 +292,6 @@ npm install perfume.js --save
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">perfume</span> <span class="red">= new</span> <span class="violet">Perfume</span>({{'{'}}
   resourceTiming<span class="red">:</span> <span class="blue">true</span>,
-  dataConsumption<span class="red">:</span> <span class="blue">true</span>,
   <span class="violet">analyticsTracker</span><span class="red">:</span> ({{'{'}} metricName, data {{'}'}}) => {{'{'}}
     myAnalyticsTool.<span class="violet">track</span>(metricName, data);
   {{'}'}})
@@ -361,7 +360,6 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">options</span> <span class="red">=</span> {{'{'}}
   <span class="gray">// Metrics</span>
-  dataConsumption<span class="red">:</span> <span class="blue">false</span>,
   resourceTiming<span class="red">:</span> <span class="blue">false</span>,
   <span class="gray">// Analytics</span>
   analyticsTracker<span class="red">:</span> options => {{'{}'}},

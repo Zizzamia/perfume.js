@@ -77,9 +77,7 @@ export function analyticsTracker(options) {
 }
 
 export const PerfumeConfig = {
-  cumulativeLayoutShift: true,
   dataConsumption: true,
-  resourceTiming: true,
   analyticsTracker,
 };
 
