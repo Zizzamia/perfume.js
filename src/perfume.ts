@@ -24,8 +24,8 @@ import {
   isPerformanceSupported,
 } from './isSupported';
 import { log, logData, logMetric, logWarn } from './log';
-import { onVisibilityChange, visibility } from './onVisibilityChange';
 import { po } from './observe';
+import { onVisibilityChange, visibility } from './onVisibilityChange';
 import { reportPerf } from './reportPerf';
 import { initStorageEstimate } from './storageEstimate';
 import { pushTask } from './utils';
