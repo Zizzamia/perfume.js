@@ -348,27 +348,22 @@ export default class Perfume {
     measureName: IPerfumeMetrics;
     valueLog: 'duration' | 'startTime';
   }): void {
-    options.performanceEntries.forEach(
-      (performanceEntry) => {
-        if (
-          !options.entryName ||
-          (options.entryName && performanceEntry.name === options.entryName)
-        ) {
-          logMetric(
-            performanceEntry[options.valueLog],
-            options.measureName,
-          );
-        }
-        if (
-          this.perfObservers.fcp &&
-          performanceEntry.name === 'first-contentful-paint'
-        ) {
-          fcp = performanceEntry.startTime;
-          this.initTotalBlockingTime();
-          this.perfObservers.fcp.disconnect();
-        }
-      },
-    );
+    options.performanceEntries.forEach(performanceEntry => {
+      if (
+        !options.entryName ||
+        (options.entryName && performanceEntry.name === options.entryName)
+      ) {
+        logMetric(performanceEntry[options.valueLog], options.measureName);
+      }
+      if (
+        this.perfObservers.fcp &&
+        performanceEntry.name === 'first-contentful-paint'
+      ) {
+        fcp = performanceEntry.startTime;
+        this.initTotalBlockingTime();
+        this.perfObservers.fcp.disconnect();
+      }
+    });
     if (this.perfObservers.fid && options.measureName === 'firstInputDelay') {
       this.perfObservers.fid.disconnect();
     }
