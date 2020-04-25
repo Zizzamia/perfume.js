@@ -1,13 +1,17 @@
-import { C } from '../src/constants';
+import { C, WN, WP } from '../src/constants';
 import { config } from '../src/config';
-import { log, logData, logWarn } from '../src/log';
+import * as log from '../src/log';
 import { visibility } from '../src/onVisibilityChange';
+import * as reportPerf from '../src/reportPerf';
 import * as utils from '../src/utils';
+import mock from './_mock';
 
 describe('log', () => {
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
+    (WN as any) = mock.navigator();
+    (WP as any) = mock.performance();
     (C as any).log = (n: any) => n;
     visibility.isHidden = false;
   });
@@ -28,7 +32,7 @@ describe('log', () => {
     it('should not call window.console.log() if logging is disabled', () => {
       config.logging = false;
       spy = jest.spyOn(C, 'log');
-      log({
+      log.log({
         measureName: 'metricNameHidden',
         data: '1245.00 ms',
         navigatorInfo: {},
@@ -40,7 +44,7 @@ describe('log', () => {
       config.logging = true;
       visibility.isHidden = true;
       spy = jest.spyOn(C, 'log');
-      log({
+      log.log({
         measureName: 'metricName',
         data: '1245.00 ms',
         navigatorInfo: {},
@@ -51,7 +55,7 @@ describe('log', () => {
     it('should call window.console.log() if logging is enabled', () => {
       config.logging = true;
       spy = jest.spyOn(C, 'log');
-      log({
+      log.log({
         measureName: 'metricName',
         data: '1235.00 ms',
         navigatorInfo: {},
@@ -65,7 +69,7 @@ describe('log', () => {
     it('should call window.console.log() if params are correct', () => {
       config.logging = true;
       spy = jest.spyOn(C, 'log');
-      log({
+      log.log({
         measureName: 'metricName',
         data: '1245.00 ms',
         navigatorInfo: {},
@@ -80,7 +84,7 @@ describe('log', () => {
       const data = {};
       config.logging = true;
       spy = jest.spyOn(C, 'log');
-      log({
+      log.log({
         measureName: 'metricName',
         data,
         navigatorInfo: {},
@@ -95,15 +99,57 @@ describe('log', () => {
   describe('.logData()', () => {
     it('should call pushTask', () => {
       spy = jest.spyOn(utils, 'pushTask');
-      logData('measureName', {});
+      log.logData('measureName', {});
       expect(spy.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('.logMetric()', () => {
+    it('should call log() with the correct arguments', () => {
+      spy = jest.spyOn(log, 'log');
+      log.logMetric(1, 'firstContentfulPaint');
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith({
+        data: '1 ms',
+        measureName: 'firstContentfulPaint',
+        navigatorInfo: {
+          deviceMemory: 8,
+          hardwareConcurrency: 12,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported',
+        },
+      });
+    });
+
+    it('should call reportPerf() with the correct arguments', () => {
+      spy = jest.spyOn(reportPerf, 'reportPerf');
+      log.logMetric(1, 'firstContentfulPaint');
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith({
+        data: 1,
+        measureName: 'firstContentfulPaint',
+        navigatorInfo: {
+          deviceMemory: 8,
+          hardwareConcurrency: 12,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported',
+        },
+      });
+    });
+
+    it('should not call reportPerf() when duration is higher of config.maxMeasureTime', () => {
+      spy = jest.spyOn(reportPerf, 'reportPerf');
+      log.logMetric(20000, 'firstContentfulPaint');
+      expect(spy.mock.calls.length).toEqual(0);
     });
   });
 
   describe('.logWarn()', () => {
     it('should throw a console.warn if config.warning is true', () => {
       spy = jest.spyOn(window.console, 'warn');
-      logWarn('message');
+      log.logWarn('message');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(config.logPrefix, 'message');
     });

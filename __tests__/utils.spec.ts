@@ -1,8 +1,19 @@
 import { W } from '../src/constants';
-import { pushTask } from '../src/utils';
+import { convertToKB, pushTask } from '../src/utils';
 
 describe('utils', () => {
   let spy: jest.SpyInstance;
+
+  describe('.convertToKB()', () => {
+    it('should convert number to Kilo Bytes', () => {
+      expect(convertToKB(100000000)).toEqual(95.37);
+    });
+
+    it('should return null when input is not a number', () => {
+      // @ts-ignore
+      expect(convertToKB('100000000')).toEqual(null);
+    });
+  });
 
   describe('.pushTask()', () => {
     it('should call cb() if requestIdleCallback is undefined', () => {

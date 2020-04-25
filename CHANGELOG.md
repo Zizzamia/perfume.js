@@ -1,16 +1,20 @@
 # Changelog
 
+## 5.0.0-rc.9 (2020-3-25)
+
+* **refactor:** reduced library kb part IV
+
 ## 5.0.0-rc.8 (2020-3-24)
 
-* **refactor:** reduced library kb
+* **refactor:** reduced library kb part III
 
 ## 5.0.0-rc.7 (2020-3-24)
 
-* **refactor:** reduced library kb
+* **refactor:** reduced library kb part II
 
 ## 5.0.0-rc.6 (2020-3-21)
 
-* **refactor:** reduced library kb
+* **refactor:** reduced library kb part I
 
 ## 5.0.0-rc.5 (2020-3-19)
 

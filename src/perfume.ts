@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.0-rc.8 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.9 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -8,16 +8,13 @@ import {
   IMetricMap,
   IPerfObservers,
   IPerformanceEntry,
-  IPerformanceObserver,
-  IPerformanceObserverEntryList,
-  IPerformanceObserverType,
   IPerfumeDataConsumption,
   IPerfumeMetrics,
   IPerfumeOptions,
 } from './types';
 
 import { config } from './config';
-import { WN, WP } from './constants';
+import { WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { getNavigatorInfo } from './getNavigatorInfo';
 import { et, getNetworkInformation, sd } from './getNetworkInformation';
@@ -26,9 +23,11 @@ import {
   isPerformanceObserverSupported,
   isPerformanceSupported,
 } from './isSupported';
-import { log, logData, logWarn } from './log';
+import { log, logData, logMetric, logWarn } from './log';
 import { onVisibilityChange, visibility } from './onVisibilityChange';
+import { po } from './observe';
 import { reportPerf } from './reportPerf';
+import { initStorageEstimate } from './storageEstimate';
 import { pushTask } from './utils';
 
 // Have private variable outside the class,
@@ -39,11 +38,10 @@ let lcp = 0;
 
 export default class Perfume {
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.8';
+  version = '5.0.0-rc.9';
   private dataConsumptionTimeout: any;
   private logPrefixRecording = 'Recording already';
   private metrics: IMetricMap = {};
-  private perfObserver: any;
   private perfObservers: IPerfObservers = {};
   private perfResourceTiming: IPerfumeDataConsumption = {
     beacon: 0,
@@ -70,11 +68,7 @@ export default class Perfume {
     }
     // Checks if use Performance or the EmulatedPerformance instance
     if (isPerformanceObserverSupported()) {
-      try {
-        this.initPerformanceObserver();
-      } catch (e) {
-        logWarn(e);
-      }
+      this.initPerformanceObserver();
     }
 
     // Init visibilitychange listener
@@ -84,7 +78,7 @@ export default class Perfume {
     // Log Network Information
     logData('networkInformation', getNetworkInformation());
     // Let's estimate our storage capacity
-    this.initStorageEstimate();
+    initStorageEstimate();
   }
 
   /**
@@ -161,13 +155,6 @@ export default class Perfume {
     WP.clearMarks(`mark_${markName}_end`);
   }
 
-  private convertToKB(bytes: number): number | null {
-    if (typeof bytes !== 'number') {
-      return null;
-    }
-    return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
-  }
-
   private digestFirstInputDelayEntries(
     performanceEntries: IPerformanceEntry[],
   ): void {
@@ -195,26 +182,26 @@ export default class Perfume {
     clsScoreValue: number,
   ): void {
     if (this.perfObservers.lcp && lcpValue) {
-      this.logMetric(lcpValue, 'largestContentfulPaint');
+      logMetric(lcpValue, 'largestContentfulPaint');
     }
     if (this.perfObservers.cls && clsScoreValue > 0) {
       this.perfObservers.cls.takeRecords();
-      this.logMetric(clsScoreValue, 'cumulativeLayoutShift', '');
+      logMetric(clsScoreValue, 'cumulativeLayoutShift', '');
     }
     // TBT by FID
     if (this.perfObservers.tbt && this.totalBlockingTimeScore) {
-      this.logMetric(this.totalBlockingTimeScore, 'totalBlockingTime');
+      logMetric(this.totalBlockingTimeScore, 'totalBlockingTime');
     }
   }
 
   private disconnectPerfObserversHidden(): void {
     if (this.perfObservers.lcp && lcp) {
-      this.logMetric(lcp, 'largestContentfulPaintUntilHidden');
+      logMetric(lcp, 'largestContentfulPaintUntilHidden');
       this.perfObservers.lcp.disconnect();
     }
     if (this.perfObservers.cls && clsScore > 0) {
       this.perfObservers.cls.takeRecords();
-      this.logMetric(clsScore, 'cumulativeLayoutShiftUntilHidden', '');
+      logMetric(clsScore, 'cumulativeLayoutShiftUntilHidden', '');
       this.perfObservers.cls.disconnect();
     }
   }
@@ -223,14 +210,14 @@ export default class Perfume {
     // TBT with 5 second delay after FID
     setTimeout(() => {
       if (this.perfObservers.tbt && this.totalBlockingTimeScore) {
-        this.logMetric(this.totalBlockingTimeScore, 'totalBlockingTime5S');
+        logMetric(this.totalBlockingTimeScore, 'totalBlockingTime5S');
       }
     }, 5000);
     // TBT with 10 second delay after FID
     setTimeout(() => {
       if (this.perfObservers.tbt) {
         if (this.totalBlockingTimeScore) {
-          this.logMetric(this.totalBlockingTimeScore, 'totalBlockingTime10S');
+          logMetric(this.totalBlockingTimeScore, 'totalBlockingTime10S');
         }
         this.perfObservers.tbt.disconnect();
       }
@@ -238,7 +225,7 @@ export default class Perfume {
   }
 
   private initFirstInputDelay(): void {
-    this.perfObservers.fid = this.performanceObserver(
+    this.perfObservers.fid = po(
       'first-input',
       this.digestFirstInputDelayEntries.bind(this),
     );
@@ -249,7 +236,7 @@ export default class Perfume {
    * the biggest above-the-fold layout change has happened.
    */
   private initFirstPaint(): void {
-    this.perfObservers.fcp = this.performanceObserver(
+    this.perfObservers.fcp = po(
       'paint',
       (performanceEntries: IPerformanceEntry[]) => {
         this.performanceObserverCb({
@@ -269,7 +256,7 @@ export default class Perfume {
   }
 
   private initLargestContentfulPaint(): void {
-    this.perfObservers.lcp = this.performanceObserver(
+    this.perfObservers.lcp = po(
       'largest-contentful-paint',
       (performanceEntries: IPerformanceEntry[]) => {
         const lastEntry = performanceEntries.pop();
@@ -285,7 +272,7 @@ export default class Perfume {
    * `cumulativeLayoutShiftScore` variable.
    */
   private initLayoutShift(): void {
-    this.perfObservers.cls = this.performanceObserver(
+    this.perfObservers.cls = po(
       'layout-shift',
       (performanceEntries: IPerformanceEntry[]) => {
         const lastEntry = performanceEntries.pop();
@@ -311,21 +298,18 @@ export default class Perfume {
   }
 
   private initResourceTiming(): void {
-    this.performanceObserver(
-      'resource',
-      (performanceEntries: IPerformanceEntry[]) => {
-        this.performanceObserverResourceCb({
-          performanceEntries,
-        });
-      },
-    );
+    po('resource', (performanceEntries: IPerformanceEntry[]) => {
+      this.performanceObserverResourceCb({
+        performanceEntries,
+      });
+    });
     this.dataConsumptionTimeout = setTimeout(() => {
       this.disconnectDataConsumption();
     }, 15000);
   }
 
   private initTotalBlockingTime(): void {
-    this.perfObservers.tbt = this.performanceObserver(
+    this.perfObservers.tbt = po(
       'longtask',
       (performanceEntries: IPerformanceEntry[]) => {
         this.performanceObserverTBTCb({
@@ -348,63 +332,11 @@ export default class Perfume {
     return -1;
   }
 
-  /**
-   * Dispatches the metric duration into internal logs
-   * and the external time tracking service.
-   */
-  private logMetric(
-    duration: number,
-    measureName: string,
-    suffix: string = 'ms',
-  ): void {
-    const duration2Decimal = parseFloat(duration.toFixed(2));
-    // Stop Analytics and Logging for false negative metrics
-    if (duration2Decimal > config.maxMeasureTime || duration2Decimal <= 0) {
-      return;
-    }
-    const navigatorInfo = getNavigatorInfo();
-    navigatorInfo.isLowEndDevice = getIsLowEndDevice();
-    navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
-    pushTask(() => {
-      // Logs the metric in the internal console.log
-      log({
-        measureName,
-        data: `${duration2Decimal} ${suffix}`,
-        navigatorInfo,
-      });
-      // Sends the metric to an external tracking service
-      reportPerf({
-        measureName,
-        data: duration2Decimal,
-        navigatorInfo,
-      });
-    });
-  }
-
   private performanceMeasure(measureName: string): number {
     const startMark = `mark_${measureName}_start`;
     const endMark = `mark_${measureName}_end`;
     WP.measure(measureName, startMark, endMark);
     return this.getDurationByMetric(measureName);
-  }
-
-  /**
-   * PerformanceObserver subscribes to performance events as they happen
-   * and respond to them asynchronously.
-   */
-  private performanceObserver(
-    eventType: IPerformanceObserverType,
-    cb: (performanceEntries: any[]) => void,
-  ): IPerformanceObserver {
-    this.perfObserver = new PerformanceObserver(
-      (entryList: IPerformanceObserverEntryList) => {
-        const performanceEntries = entryList.getEntries();
-        cb(performanceEntries);
-      },
-    );
-    // Retrieve buffered events and subscribe to newer events for Paint Timing
-    this.perfObserver.observe({ type: eventType, buffered: true });
-    return this.perfObserver;
   }
 
   /**
@@ -417,12 +349,12 @@ export default class Perfume {
     valueLog: 'duration' | 'startTime';
   }): void {
     options.performanceEntries.forEach(
-      (performanceEntry: IPerformanceEntry) => {
+      (performanceEntry) => {
         if (
           !options.entryName ||
           (options.entryName && performanceEntry.name === options.entryName)
         ) {
-          this.logMetric(
+          logMetric(
             performanceEntry[options.valueLog],
             options.measureName,
           );
@@ -479,33 +411,5 @@ export default class Perfume {
         }
       },
     );
-  }
-
-  /**
-   * The estimate() method of the StorageManager interface asks the Storage Manager
-   * for how much storage the app takes up (usage),
-   * and how much space is available (quota).
-   */
-  private initStorageEstimate() {
-    if (!WN || !WN.storage) {
-      return;
-    }
-    WN.storage.estimate().then(storageInfo => {
-      let estimateUsageDetails: any = {};
-      if ('usageDetails' in storageInfo) {
-        estimateUsageDetails = (storageInfo as any).usageDetails;
-      }
-      logData('storageEstimate', {
-        storageEstimateQuota: this.convertToKB((storageInfo as any).quota),
-        storageEstimateUsage: this.convertToKB((storageInfo as any).usage),
-        storageEstimateCaches: this.convertToKB(estimateUsageDetails.caches),
-        storageEstimateIndexedDB: this.convertToKB(
-          estimateUsageDetails.indexedDB,
-        ),
-        storageEstimatSW: this.convertToKB(
-          estimateUsageDetails.serviceWorkerRegistrations,
-        ),
-      });
-    });
   }
 }

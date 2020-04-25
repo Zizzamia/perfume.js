@@ -1,9 +1,10 @@
 import { config } from '../src/config';
-import { C, W, WN, WP } from '../src/constants';
+import { C, WN, WP } from '../src/constants';
 import * as log from '../src/log';
 import { visibility } from '../src/onVisibilityChange';
 import Perfume from '../src/perfume';
 import * as reportPerf from '../src/reportPerf';
+import * as observe from '../src/observe';
 import mock from './_mock';
 
 describe('Perfume', () => {
@@ -169,14 +170,9 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.convertToKB()', () => {
-    it('should convert number to Kilo Bytes', () => {
-      expect((perfume as any).convertToKB(100000000)).toEqual(95.37);
-    });
-  });
-
   describe('.performanceObserverCb()', () => {
     beforeEach(() => {
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
       (perfume as any).perfObservers.fcp = {
         disconnect: () => {},
       };
@@ -186,7 +182,7 @@ describe('Perfume', () => {
     });
 
     it('should call logMetric() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'logMetric');
+      spy = jest.spyOn(log, 'logMetric');
       (perfume as any).performanceObserverCb({
         performanceEntries: mock.entries,
         entryName: 'first-paint',
@@ -226,8 +222,8 @@ describe('Perfume', () => {
   });
 
   describe('.initFirstPaint()', () => {
-    it('should call performanceObserver()', () => {
-      spy = jest.spyOn(perfume as any, 'performanceObserver');
+    it('should call po()', () => {
+      spy = jest.spyOn(observe, 'po');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initFirstPaint']();
@@ -236,7 +232,7 @@ describe('Perfume', () => {
   });
 
   describe('.digestFirstInputDelayEntries()', () => {
-    it('should call performanceObserver()', () => {
+    it('should call po()', () => {
       spy = jest.spyOn(perfume as any, 'performanceObserverCb');
       perfume['digestFirstInputDelayEntries']([]);
       expect(spy.mock.calls.length).toEqual(1);
@@ -255,9 +251,8 @@ describe('Perfume', () => {
   });
 
   describe('.initFirstInputDelay()', () => {
-    it('should call performanceObserver()', () => {
-      (perfume as any).performanceObserver = jest.fn();
-      spy = jest.spyOn(perfume as any, 'performanceObserver');
+    it('should call po()', () => {
+      spy = jest.spyOn(observe, 'po');
       perfume['initFirstInputDelay']();
       expect(spy.mock.calls.length).toEqual(1);
     });
@@ -281,13 +276,13 @@ describe('Perfume', () => {
 
   describe('.disconnectPerfObservers()', () => {
     it('should not call logMetric() as default', () => {
-      spy = jest.spyOn(perfume as any, 'logMetric');
+      spy = jest.spyOn(log, 'logMetric');
       (perfume as any).disconnectPerfObservers();
       expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call logMetric() when observer and lcp are defined', () => {
-      spy = jest.spyOn(perfume as any, 'logMetric');
+      spy = jest.spyOn(log, 'logMetric');
       (perfume as any).perfObservers.lcp = { disconnect: jest.fn() };
       (perfume as any).disconnectPerfObservers(10);
       expect(spy.mock.calls.length).toEqual(1);
@@ -295,7 +290,7 @@ describe('Perfume', () => {
     });
 
     it('should call logMetric() when observer and clsScore are defined', () => {
-      spy = jest.spyOn(perfume as any, 'logMetric');
+      spy = jest.spyOn(log, 'logMetric');
       (perfume as any).perfObservers.cls = {
         disconnect: jest.fn(),
         takeRecords: jest.fn(),
@@ -307,8 +302,8 @@ describe('Perfume', () => {
   });
 
   describe('.initLargestContentfulPaint()', () => {
-    it('should call performanceObserver', () => {
-      spy = jest.spyOn(perfume as any, 'performanceObserver');
+    it('should call po', () => {
+      spy = jest.spyOn(observe, 'po');
       (perfume as any).initLargestContentfulPaint();
       expect(spy.mock.calls.length).toEqual(1);
     });
@@ -316,7 +311,7 @@ describe('Perfume', () => {
 
   describe('.initLayoutShift()', () => {
     it('should call performanceObserver', () => {
-      spy = jest.spyOn(perfume as any, 'performanceObserver');
+      spy = jest.spyOn(observe, 'po');
       (perfume as any).initLayoutShift();
       expect(spy.mock.calls.length).toEqual(1);
     });
@@ -372,8 +367,8 @@ describe('Perfume', () => {
       (perfume as any).perfObservers.dataConsumption = { disconnect: () => {} };
     });
 
-    it('should call performanceObserver()', () => {
-      spy = jest.spyOn(perfume as any, 'performanceObserver');
+    it('should call po()', () => {
+      spy = jest.spyOn(observe, 'po');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initResourceTiming']();
@@ -381,55 +376,13 @@ describe('Perfume', () => {
     });
 
     it('should call disconnectDataConsumption() after the setTimeout', () => {
-      jest.spyOn(perfume as any, 'performanceObserver');
+      jest.spyOn(observe, 'po');
       spy = jest.spyOn(perfume as any, 'disconnectDataConsumption');
       (window as any).chrome = true;
       (window as any).PerformanceObserver = mock.PerformanceObserver;
       perfume['initResourceTiming']();
       jest.runAllTimers();
       expect(spy.mock.calls.length).toEqual(1);
-    });
-  });
-
-  describe('.logMetric()', () => {
-    it('should call log() with the correct arguments', () => {
-      spy = jest.spyOn(log, 'log');
-      (perfume as any).logMetric(1, 'firstContentfulPaint');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({
-        data: '1 ms',
-        measureName: 'firstContentfulPaint',
-        navigatorInfo: {
-          deviceMemory: 8,
-          hardwareConcurrency: 12,
-          isLowEndDevice: false,
-          isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported',
-        },
-      });
-    });
-
-    it('should call reportPerf() with the correct arguments', () => {
-      spy = jest.spyOn(reportPerf, 'reportPerf');
-      (perfume as any).logMetric(1, 'firstContentfulPaint');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({
-        data: 1,
-        measureName: 'firstContentfulPaint',
-        navigatorInfo: {
-          deviceMemory: 8,
-          hardwareConcurrency: 12,
-          isLowEndDevice: false,
-          isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported',
-        },
-      });
-    });
-
-    it('should not call reportPerf() when duration is higher of config.maxMeasureTime', () => {
-      spy = jest.spyOn(reportPerf, 'reportPerf');
-      (perfume as any).logMetric(20000, 'firstContentfulPaint');
-      expect(spy.mock.calls.length).toEqual(0);
     });
   });
 
@@ -450,15 +403,6 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalled();
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith('fibonacci');
-    });
-  });
-
-  describe('.performanceObserver()', () => {
-    it('should call PerformanceObserver', () => {
-      spy = jest.spyOn(W, 'PerformanceObserver' as any);
-      (perfume as any).performanceObserver('paint', () => 0);
-      expect(spy).toHaveBeenCalled();
-      expect(spy.mock.calls.length).toEqual(1);
     });
   });
 
@@ -555,15 +499,6 @@ describe('Perfume', () => {
         ],
       });
       expect(spy.mock.calls.length).toEqual(2);
-    });
-  });
-
-  describe('.initStorageEstimate()', () => {
-    it('when navigator is not supported should not call logData', () => {
-      spy = jest.spyOn(log, 'logData');
-      (WN as any) = undefined;
-      (perfume as any).initStorageEstimate();
-      expect(spy.mock.calls.length).toEqual(0);
     });
   });
 });

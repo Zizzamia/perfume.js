@@ -102,17 +102,6 @@ export interface IPerformancePaintTiming {
   duration: number;
 }
 
-export declare interface IPerformanceObserverEntryList {
-  getEntries: any;
-  getEntriesByName: any;
-  getEntriesByType: any;
-}
-
-export interface IPerformanceObserver {
-  observer: () => void;
-  disconnect: () => void;
-}
-
 export interface IPerfumeNavigationTiming {
   fetchTime?: number;
   workerTime?: number;

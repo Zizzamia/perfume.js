@@ -45,6 +45,39 @@ export const logData = (measureName: string, data: any): void => {
 };
 
 /**
+ * Dispatches the metric duration into internal logs
+ * and the external time tracking service.
+ */
+export const logMetric = (
+  duration: number,
+  measureName: string,
+  suffix: string = 'ms',
+) => {
+  const duration2Decimal = parseFloat(duration.toFixed(2));
+  // Stop Analytics and Logging for false negative metrics
+  if (duration2Decimal > config.maxMeasureTime || duration2Decimal <= 0) {
+    return;
+  }
+  const navigatorInfo = getNavigatorInfo();
+  navigatorInfo.isLowEndDevice = getIsLowEndDevice();
+  navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
+  pushTask(() => {
+    // Logs the metric in the internal console.log
+    log({
+      measureName,
+      data: `${duration2Decimal} ${suffix}`,
+      navigatorInfo,
+    });
+    // Sends the metric to an external tracking service
+    reportPerf({
+      measureName,
+      data: duration2Decimal,
+      navigatorInfo,
+    });
+  });
+}
+
+/**
  * Ensures console.warn exist and logging is enable for
  * warning messages
  */
