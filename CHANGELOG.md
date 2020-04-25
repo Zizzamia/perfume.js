@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0-rc.8 (2020-3-24)
+
+* **refactor:** reduced library kb
+
+## 5.0.0-rc.7 (2020-3-24)
+
+* **refactor:** reduced library kb
+
 ## 5.0.0-rc.6 (2020-3-21)
 
 * **refactor:** reduced library kb

@@ -1,8 +1,8 @@
-import { W  } from '../src/constants';
+import { W } from '../src/constants';
 import { pushTask } from '../src/utils';
 
 describe('utils', () => {
-  let spy;
+  let spy: jest.SpyInstance;
 
   describe('.pushTask()', () => {
     it('should call cb() if requestIdleCallback is undefined', () => {

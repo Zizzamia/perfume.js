@@ -1,7 +1,9 @@
 import { config } from '../src/config';
 import { C, W, WN, WP } from '../src/constants';
 import * as log from '../src/log';
+import { visibility } from '../src/onVisibilityChange';
 import Perfume from '../src/perfume';
+import * as reportPerf from '../src/reportPerf';
 import mock from './_mock';
 
 describe('Perfume', () => {
@@ -16,6 +18,7 @@ describe('Perfume', () => {
     (C as any).log = (n: any) => n;
     (window as any).console.warn = (n: any) => n;
     perfume['perfObservers'] = {};
+    visibility.isHidden = false;
   });
 
   afterEach(() => {
@@ -70,7 +73,7 @@ describe('Perfume', () => {
     });
 
     it('should call log() with correct params', () => {
-      spy = jest.spyOn(perfume as any, 'log');
+      spy = jest.spyOn(log, 'log');
       config.logging = true;
       perfume.start('metricName');
       perfume.end('metricName');
@@ -98,8 +101,8 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalledWith('mark_metric_moon_end');
     });
 
-    it('should call sendTiming() with correct params', () => {
-      spy = jest.spyOn(perfume as any, 'sendTiming');
+    it('should call reportPerf() with correct params', () => {
+      spy = jest.spyOn(reportPerf, 'reportPerf');
       config.logging = true;
       perfume.start('metricName');
       perfume.end('metricName');
@@ -166,82 +169,9 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.log()', () => {
-    it('should not call window.console.log() if logging is disabled', () => {
-      config.logging = false;
-      spy = jest.spyOn(C, 'log');
-      (perfume as any).log({ metricName: '', data: '0 ms' });
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should call window.console.log() if logging is enabled', () => {
-      config.logging = true;
-      spy = jest.spyOn(C, 'log');
-      (perfume as any).log({
-        measureName: 'metricName',
-        data: '1235.00 ms',
-        navigatorInfo: {},
-      });
-      const text = '%c Perfume.js: metricName ';
-      const style = 'color:#ff6d00;font-size:11px;';
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text, style, '1235.00 ms', {});
-    });
-
-    it('should call window.console.log() if params are correct', () => {
-      config.logging = true;
-      spy = jest.spyOn(C, 'log');
-      (perfume as any).log({
-        measureName: 'metricName',
-        data: '1245.00 ms',
-        navigatorInfo: {},
-      });
-      const text = '%c Perfume.js: metricName ';
-      const style = 'color:#ff6d00;font-size:11px;';
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text, style, '1245.00 ms', {});
-    });
-
-    it('should call window.console.log() with data', () => {
-      const data = {};
-      config.logging = true;
-      spy = jest.spyOn(C, 'log');
-      (perfume as any).log({
-        measureName: 'metricName',
-        data,
-        navigatorInfo: {},
-      });
-      const text = '%c Perfume.js: metricName ';
-      const style = 'color:#ff6d00;font-size:11px;';
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(text, style, data, {});
-    });
-  });
-
   describe('.convertToKB()', () => {
     it('should convert number to Kilo Bytes', () => {
       expect((perfume as any).convertToKB(100000000)).toEqual(95.37);
-    });
-  });
-
-  describe('.didVisibilityChange()', () => {
-    it('should keep "hidden" default value when is false', () => {
-      perfume['didVisibilityChange']();
-      expect(perfume['isHidden']).toEqual(false);
-    });
-
-    it('should set "hidden" value when is true', () => {
-      perfume['isHidden'] = false;
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
-      perfume['didVisibilityChange']();
-      expect(perfume['isHidden']).toEqual(true);
-    });
-
-    it('should keep "hidden" value when changes to false', () => {
-      perfume['isHidden'] = true;
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(false);
-      perfume['didVisibilityChange']();
-      expect(perfume['isHidden']).toEqual(true);
     });
   });
 
@@ -339,7 +269,7 @@ describe('Perfume', () => {
     });
 
     it('should call logData() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'logData');
+      spy = jest.spyOn(log, 'logData');
       (perfume as any).disconnectDataConsumption();
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
@@ -461,25 +391,9 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.onVisibilityChange()', () => {
-    it('should not call document.addEventListener() when document.hidden is undefined', () => {
-      spy = jest.spyOn(document, 'addEventListener');
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(undefined as any);
-      (perfume as any).onVisibilityChange();
-      expect(spy.mock.calls.length).toEqual(0);
-    });
-
-    it('should call document.addEventListener() with the correct argument', () => {
-      spy = jest.spyOn(document, 'addEventListener');
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
-      (perfume as any).onVisibilityChange();
-      expect(spy.mock.calls.length).toEqual(1);
-    });
-  });
-
   describe('.logMetric()', () => {
     it('should call log() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'log');
+      spy = jest.spyOn(log, 'log');
       (perfume as any).logMetric(1, 'firstContentfulPaint');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
@@ -495,8 +409,8 @@ describe('Perfume', () => {
       });
     });
 
-    it('should call sendTiming() with the correct arguments', () => {
-      spy = jest.spyOn(perfume as any, 'sendTiming');
+    it('should call reportPerf() with the correct arguments', () => {
+      spy = jest.spyOn(reportPerf, 'reportPerf');
       (perfume as any).logMetric(1, 'firstContentfulPaint');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
@@ -512,26 +426,10 @@ describe('Perfume', () => {
       });
     });
 
-    it('should not call sendTiming() when duration is higher of config.maxMeasureTime', () => {
-      spy = jest.spyOn(perfume as any, 'sendTiming');
+    it('should not call reportPerf() when duration is higher of config.maxMeasureTime', () => {
+      spy = jest.spyOn(reportPerf, 'reportPerf');
       (perfume as any).logMetric(20000, 'firstContentfulPaint');
       expect(spy.mock.calls.length).toEqual(0);
-    });
-  });
-
-  describe('.getNavigatorInfo()', () => {
-    it('when navigator is not supported should return an empty object', () => {
-      (WN as any) = undefined;
-      expect((perfume as any).getNavigatorInfo()).toEqual({});
-    });
-
-    it('when navigator is supported should return the correct value', () => {
-      (WN as any) = mock.navigator();
-      expect((perfume as any).getNavigatorInfo()).toEqual({
-        deviceMemory: 8,
-        hardwareConcurrency: 12,
-        serviceWorkerStatus: 'unsupported',
-      });
     });
   });
 
@@ -643,7 +541,7 @@ describe('Perfume', () => {
     });
 
     it('should call logData for each performanceEntry', () => {
-      spy = jest.spyOn(perfume as any, 'logData');
+      spy = jest.spyOn(log, 'logData');
       (perfume as any).performanceObserverResourceCb({
         performanceEntries: [
           {
@@ -660,31 +558,9 @@ describe('Perfume', () => {
     });
   });
 
-  describe('.sendTiming()', () => {
-    it('should not call analyticsTracker() if isHidden is true', () => {
-      config.analyticsTracker = () => {};
-      spy = jest.spyOn(config, 'analyticsTracker');
-      perfume['isHidden'] = true;
-      (perfume as any).sendTiming({ measureName: 'metricName', data: 123 });
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should call analyticsTracker() if analyticsTracker is defined', () => {
-      config.analyticsTracker = () => {};
-      spy = jest.spyOn(config, 'analyticsTracker');
-      (perfume as any).sendTiming({ measureName: 'metricName', data: 123 });
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({
-        metricName: 'metricName',
-        data: 123,
-        eventProperties: {},
-      });
-    });
-  });
-
   describe('.initStorageEstimate()', () => {
     it('when navigator is not supported should not call logData', () => {
-      spy = jest.spyOn(perfume as any, 'logData');
+      spy = jest.spyOn(log, 'logData');
       (WN as any) = undefined;
       (perfume as any).initStorageEstimate();
       expect(spy.mock.calls.length).toEqual(0);

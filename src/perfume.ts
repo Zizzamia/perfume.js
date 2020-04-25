@@ -1,13 +1,11 @@
 /*!
- * Perfume.js v5.0.0-rc.7 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.8 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
 import {
-  ILogOptions,
   IMetricMap,
-  INavigatorInfo,
   IPerfObservers,
   IPerformanceEntry,
   IPerformanceObserver,
@@ -16,19 +14,21 @@ import {
   IPerfumeDataConsumption,
   IPerfumeMetrics,
   IPerfumeOptions,
-  ISendTimingOptions,
 } from './types';
 
 import { config } from './config';
-import { C, D, WN, WP } from './constants';
+import { WN, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
+import { getNavigatorInfo } from './getNavigatorInfo';
 import { et, getNetworkInformation, sd } from './getNetworkInformation';
 import { getIsLowEndDevice, getIsLowEndExperience } from './isLowEnd';
 import {
   isPerformanceObserverSupported,
   isPerformanceSupported,
 } from './isSupported';
-import { logWarn } from './log';
+import { log, logData, logWarn } from './log';
+import { reportPerf } from './reportPerf';
+import { visibility, onVisibilityChange } from './onVisibilityChange';
 import { pushTask } from './utils';
 
 // Have private variable outside the class,
@@ -41,7 +41,6 @@ export default class Perfume {
   copyright = '© 2020 Leonardo Zizzamia';
   version = '5.0.0-rc.7';
   private dataConsumptionTimeout: any;
-  private isHidden: boolean = false;
   private logPrefixRecording = 'Recording already';
   private metrics: IMetricMap = {};
   private perfObserver: any;
@@ -79,11 +78,11 @@ export default class Perfume {
     }
 
     // Init visibilitychange listener
-    this.onVisibilityChange();
+    onVisibilityChange(this.disconnectPerfObserversHidden);
     // Log Navigation Timing
-    this.logData('navigationTiming', getNavigationTiming());
+    logData('navigationTiming', getNavigationTiming());
     // Log Network Information
-    this.logData('networkInformation', getNetworkInformation());
+    logData('networkInformation', getNetworkInformation());
     // Let's estimate our storage capacity
     this.initStorageEstimate();
   }
@@ -103,7 +102,7 @@ export default class Perfume {
     // Creates a timestamp in the browser's performance entry buffer
     WP.mark(`mark_${markName}_start`);
     // Reset hidden value
-    this.isHidden = false;
+    visibility.isHidden = false;
   }
 
   /**
@@ -124,7 +123,7 @@ export default class Perfume {
     const duration2Decimal = parseFloat(durationByMetric.toFixed(2));
     delete this.metrics[markName];
     pushTask(() => {
-      const navigatorInfo = this.getNavigatorInfo();
+      const navigatorInfo = getNavigatorInfo();
       navigatorInfo.isLowEndDevice = getIsLowEndDevice();
       navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
       const options = {
@@ -134,8 +133,8 @@ export default class Perfume {
         navigatorInfo,
       };
       // Log to console, delete metric and send to analytics tracker
-      this.log(options);
-      this.sendTiming(options);
+      log(options);
+      reportPerf(options);
     });
   }
 
@@ -169,13 +168,6 @@ export default class Perfume {
     return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
   }
 
-  private didVisibilityChange() {
-    if (D.hidden) {
-      this.disconnectPerfObserversHidden();
-      this.isHidden = D.hidden;
-    }
-  }
-
   private digestFirstInputDelayEntries(
     performanceEntries: IPerformanceEntry[],
   ): void {
@@ -195,7 +187,7 @@ export default class Perfume {
     }
     clearTimeout(this.dataConsumptionTimeout);
     this.dataConsumptionTimeout = undefined;
-    this.logData('dataConsumption', this.perfResourceTiming);
+    logData('dataConsumption', this.perfResourceTiming);
   }
 
   private disconnectPerfObservers(
@@ -357,50 +349,6 @@ export default class Perfume {
   }
 
   /**
-   * Information coming from window.navigator:
-   * 1. Device Memory
-   * 2. Hardware Concurency
-   * 3. Status of the service worker:
-   *     - controlled: a service worker is controlling the page
-   *     - supported: the browser supports service worker
-   *     - unsupported: the user's browser does not support service worker
-   */
-  private getNavigatorInfo(): INavigatorInfo {
-    if (WN) {
-      return {
-        deviceMemory: (WN as any).deviceMemory ? (WN as any).deviceMemory : 0,
-        hardwareConcurrency: (WN as any).hardwareConcurrency
-          ? (WN as any).hardwareConcurrency
-          : 0,
-        serviceWorkerStatus:
-          'serviceWorker' in WN
-            ? WN.serviceWorker.controller
-              ? 'controlled'
-              : 'supported'
-            : 'unsupported',
-      };
-    }
-    return {};
-  }
-
-  private logData(measureName: string, data: any): void {
-    Object.keys(data).forEach(key => {
-      if (typeof data[key] === 'number') {
-        data[key] = parseFloat(data[key].toFixed(2));
-      }
-    });
-    const navigatorInfo = this.getNavigatorInfo();
-    navigatorInfo.isLowEndDevice = getIsLowEndDevice();
-    navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
-    pushTask(() => {
-      // Logs the metric in the internal console.log
-      this.log({ measureName, data, navigatorInfo });
-      // Sends the metric to an external tracking service
-      this.sendTiming({ measureName, data, navigatorInfo });
-    });
-  }
-
-  /**
    * Dispatches the metric duration into internal logs
    * and the external time tracking service.
    */
@@ -414,58 +362,23 @@ export default class Perfume {
     if (duration2Decimal > config.maxMeasureTime || duration2Decimal <= 0) {
       return;
     }
-    const navigatorInfo = this.getNavigatorInfo();
+    const navigatorInfo = getNavigatorInfo();
     navigatorInfo.isLowEndDevice = getIsLowEndDevice();
     navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
     pushTask(() => {
       // Logs the metric in the internal console.log
-      this.log({
+      log({
         measureName,
         data: `${duration2Decimal} ${suffix}`,
         navigatorInfo,
       });
       // Sends the metric to an external tracking service
-      this.sendTiming({
+      reportPerf({
         measureName,
         data: duration2Decimal,
         navigatorInfo,
       });
     });
-  }
-
-  /**
-   * Coloring Text in Browser Console
-   */
-  private log(options: ILogOptions): void {
-    // Don't log when page is hidden or has disabled logging
-    if (
-      (this.isHidden && options.measureName.indexOf('Hidden') < 0) ||
-      !config.logging
-    ) {
-      return;
-    }
-    const style = 'color:#ff6d00;font-size:11px;';
-    C.log(
-      `%c ${config.logPrefix} ${options.measureName} `,
-      style,
-      options.data,
-      options.navigatorInfo,
-    );
-  }
-
-  /**
-   * From visibilitychange listener it saves only when
-   * the page gets hidden, because it's important to not
-   * use the wrong "hidden" value when send timing or logging.
-   */
-  private onVisibilityChange() {
-    if (typeof D.hidden !== 'undefined') {
-      // Opera 12.10 and Firefox 18 and later support
-      D.addEventListener(
-        'visibilitychange',
-        this.didVisibilityChange.bind(this),
-      );
-    }
   }
 
   private performanceMeasure(measureName: string): number {
@@ -535,7 +448,7 @@ export default class Perfume {
     options.performanceEntries.forEach(
       (performanceEntry: IPerformanceEntry) => {
         if (config.resourceTiming) {
-          this.logData('resourceTiming', performanceEntry);
+          logData('resourceTiming', performanceEntry);
         }
         if (
           performanceEntry.decodedBodySize &&
@@ -569,28 +482,6 @@ export default class Perfume {
   }
 
   /**
-   * Sends the User timing measure to analyticsTracker
-   */
-  private sendTiming(options: ISendTimingOptions): void {
-    // Doesn't send timing when page is hidden
-    if (
-      (this.isHidden && options.measureName.indexOf('Hidden') < 0) ||
-      !config.analyticsTracker
-    ) {
-      return;
-    }
-    const { measureName, data, customProperties, navigatorInfo } = options;
-    const eventProperties = customProperties ? customProperties : {};
-    // Send metric to custom Analytics service
-    config.analyticsTracker({
-      metricName: measureName,
-      data,
-      eventProperties,
-      navigatorInformation: navigatorInfo,
-    });
-  }
-
-  /**
    * The estimate() method of the StorageManager interface asks the Storage Manager
    * for how much storage the app takes up (usage),
    * and how much space is available (quota).
@@ -604,7 +495,7 @@ export default class Perfume {
       if ('usageDetails' in storageInfo) {
         estimateUsageDetails = (storageInfo as any).usageDetails;
       }
-      this.logData('storageEstimate', {
+      logData('storageEstimate', {
         storageEstimateQuota: this.convertToKB((storageInfo as any).quota),
         storageEstimateUsage: this.convertToKB((storageInfo as any).usage),
         storageEstimateCaches: this.convertToKB(estimateUsageDetails.caches),
