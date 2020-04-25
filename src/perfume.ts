@@ -27,8 +27,8 @@ import {
   isPerformanceSupported,
 } from './isSupported';
 import { log, logData, logWarn } from './log';
-import { reportPerf } from './reportPerf';
 import { onVisibilityChange, visibility } from './onVisibilityChange';
+import { reportPerf } from './reportPerf';
 import { pushTask } from './utils';
 
 // Have private variable outside the class,
