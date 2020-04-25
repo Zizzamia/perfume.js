@@ -39,7 +39,7 @@ let lcp = 0;
 
 export default class Perfume {
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.7';
+  version = '5.0.0-rc.8';
   private dataConsumptionTimeout: any;
   private logPrefixRecording = 'Recording already';
   private metrics: IMetricMap = {};
