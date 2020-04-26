@@ -13,17 +13,17 @@ export const initStorageEstimate = () => {
   }
 };
 
-export const reportStorageEstimate = (storageInfo: StorageEstimate) => { 
+export const reportStorageEstimate = (storageInfo: StorageEstimate) => {
   let estimateUsageDetails: any = {};
   if ('usageDetails' in storageInfo) {
     estimateUsageDetails = (storageInfo as any).usageDetails;
   }
   logData('storageEstimate', {
-    storageEstimateQuota: convertToKB((storageInfo as any).quota),
-    storageEstimateUsage: convertToKB((storageInfo as any).usage),
-    storageEstimateCaches: convertToKB(estimateUsageDetails.caches),
-    storageEstimateIndexedDB: convertToKB(estimateUsageDetails.indexedDB),
-    storageEstimatSW: convertToKB(
+    quota: convertToKB((storageInfo as any).quota),
+    usage: convertToKB((storageInfo as any).usage),
+    caches: convertToKB(estimateUsageDetails.caches),
+    indexedDB: convertToKB(estimateUsageDetails.indexedDB),
+    serviceWorker: convertToKB(
       estimateUsageDetails.serviceWorkerRegistrations,
     ),
   });

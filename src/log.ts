@@ -75,7 +75,7 @@ export const logMetric = (
       navigatorInfo,
     });
   });
-}
+};
 
 /**
  * Ensures console.warn exist and logging is enable for

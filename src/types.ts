@@ -58,11 +58,6 @@ export interface ISendTimingOptions {
   navigatorInfo: INavigatorInfo;
 }
 
-export type IPerfumeMetrics =
-  | 'firstContentfulPaint'
-  | 'firstPaint'
-  | 'firstInputDelay';
-
 export type IPerformanceObserverType =
   | 'first-input'
   | 'largest-contentful-paint'

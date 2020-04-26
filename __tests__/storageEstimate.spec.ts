@@ -44,11 +44,11 @@ describe('storageEstimate', () => {
       } as any);
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith('storageEstimate', {
-        storageEstimatSW: 8.58,
-        storageEstimateCaches: 8.58,
-        storageEstimateIndexedDB: 8.58,
-        storageEstimateQuota: 9.54,
-        storageEstimateUsage: 8.58,
+        serviceWorker: 8.58,
+        caches: 8.58,
+        indexedDB: 8.58,
+        quota: 9.54,
+        usage: 8.58,
       });
     });
 
@@ -60,11 +60,11 @@ describe('storageEstimate', () => {
       } as any);
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith('storageEstimate', {
-        storageEstimatSW: null,
-        storageEstimateCaches: null,
-        storageEstimateIndexedDB: null,
-        storageEstimateQuota: 9.54,
-        storageEstimateUsage: 8.58,
+        serviceWorker: null,
+        caches: null,
+        indexedDB: null,
+        quota: 9.54,
+        usage: 8.58,
       });
     });
   });

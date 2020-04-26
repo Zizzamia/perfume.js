@@ -1,5 +1,5 @@
 import { W, WP } from '../src/constants';
-import { po } from '../src/observe';
+import { po } from '../src/performanceObserver';
 import mock from './_mock';
 
 describe('observe', () => {
