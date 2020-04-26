@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0-rc.10 (2020-3-26)
+
+* **refactor:** reduced library kb part V & simplified estimateStorage metric result
+
+### Breaking Changes
+
+Simplified EstimateStorage values, to help reduce library size.
+
 ## 5.0.0-rc.9 (2020-3-25)
 
 * **refactor:** reduced library kb part IV
