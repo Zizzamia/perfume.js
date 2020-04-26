@@ -2,9 +2,9 @@ import { IPerfumeConfig } from './types';
 
 export const config: IPerfumeConfig = {
   // Metrics
-  resourceTiming: false,
+  isResourceTiming: false,
   // Logging
-  logPrefix: 'Perfume.js:',
-  logging: true,
-  maxMeasureTime: 15000,
+  loggingPrefix: 'Perfume.js:',
+  isLogging: true,
+  maxTime: 15000,
 };

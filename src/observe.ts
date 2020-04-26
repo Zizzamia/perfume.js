@@ -18,7 +18,7 @@ export const initPerformanceObserver = () => {
     initLargestContentfulPaint,
   );
   // Collects KB information related to resources on the page
-  if (config.resourceTiming) {
+  if (config.isResourceTiming) {
     po('resource', initResourceTiming);
   }
   perfObservers.cls = po('layout-shift', initLayoutShift);

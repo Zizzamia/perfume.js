@@ -13,7 +13,7 @@ describe('resourceTiming', () => {
         fetch: 0,
         total: 0,
       };
-      config.resourceTiming = true;
+      config.isResourceTiming = true;
     });
 
     it('should dataConsumption be 0 when entries are empty', () => {

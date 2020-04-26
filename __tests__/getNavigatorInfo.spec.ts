@@ -14,6 +14,8 @@ describe('getNavigatorInfo', () => {
       expect(getNavigatorInfo()).toEqual({
         deviceMemory: 8,
         hardwareConcurrency: 12,
+        isLowEndDevice: false,
+        isLowEndExperience: false,
         serviceWorkerStatus: 'unsupported',
       });
     });
@@ -24,6 +26,8 @@ describe('getNavigatorInfo', () => {
       expect(getNavigatorInfo()).toEqual({
         deviceMemory: 0,
         hardwareConcurrency: 12,
+        isLowEndDevice: false,
+        isLowEndExperience: false,
         serviceWorkerStatus: 'unsupported',
       });
     });
@@ -34,6 +38,8 @@ describe('getNavigatorInfo', () => {
       expect(getNavigatorInfo()).toEqual({
         deviceMemory: 8,
         hardwareConcurrency: 0,
+        isLowEndDevice: false,
+        isLowEndExperience: false,
         serviceWorkerStatus: 'unsupported',
       });
     });
@@ -44,6 +50,8 @@ describe('getNavigatorInfo', () => {
       expect(getNavigatorInfo()).toEqual({
         deviceMemory: 8,
         hardwareConcurrency: 12,
+        isLowEndDevice: false,
+        isLowEndExperience: false,
         serviceWorkerStatus: 'controlled',
       });
     });
@@ -54,6 +62,8 @@ describe('getNavigatorInfo', () => {
       expect(getNavigatorInfo()).toEqual({
         deviceMemory: 8,
         hardwareConcurrency: 12,
+        isLowEndDevice: false,
+        isLowEndExperience: false,
         serviceWorkerStatus: 'supported',
       });
     });

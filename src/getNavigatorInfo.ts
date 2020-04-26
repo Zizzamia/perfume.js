@@ -1,4 +1,6 @@
-import { WN } from './constants';
+import { getDM, getHC, WN } from './constants';
+import { et, sd } from './getNetworkInformation';
+import { getIsLowEndDevice, getIsLowEndExperience } from './isLowEnd';
 import { INavigatorInfo } from './types';
 
 /**
@@ -13,16 +15,16 @@ import { INavigatorInfo } from './types';
 export const getNavigatorInfo = function(): INavigatorInfo {
   if (WN) {
     return {
-      deviceMemory: (WN as any).deviceMemory ? (WN as any).deviceMemory : 0,
-      hardwareConcurrency: (WN as any).hardwareConcurrency
-        ? (WN as any).hardwareConcurrency
-        : 0,
+      deviceMemory: getDM() || 0,
+      hardwareConcurrency: getHC() || 0,
       serviceWorkerStatus:
         'serviceWorker' in WN
           ? WN.serviceWorker.controller
             ? 'controlled'
             : 'supported'
           : 'unsupported',
+      isLowEndDevice: getIsLowEndDevice(),
+      isLowEndExperience: getIsLowEndExperience(et, sd)
     };
   }
   return {};

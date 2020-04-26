@@ -75,7 +75,7 @@ describe('Perfume', () => {
 
     it('should call log() with correct params', () => {
       spy = jest.spyOn(log, 'log');
-      config.logging = true;
+      config.isLogging = true;
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
@@ -104,7 +104,7 @@ describe('Perfume', () => {
 
     it('should call reportPerf() with correct params', () => {
       spy = jest.spyOn(reportPerf, 'reportPerf');
-      config.logging = true;
+      config.isLogging = true;
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);

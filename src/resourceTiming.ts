@@ -5,7 +5,7 @@ import { IPerformanceEntry } from './types';
 
 export const initResourceTiming = (performanceEntries: IPerformanceEntry[]) => {
   performanceEntries.forEach(performanceEntry => {
-    if (config.resourceTiming) {
+    if (config.isResourceTiming) {
       logData('resourceTiming', performanceEntry);
     }
     if (performanceEntry.decodedBodySize && performanceEntry.initiatorType) {

@@ -8,13 +8,13 @@ export interface IAnalyticsTrackerOptions {
 
 export interface IPerfumeConfig {
   // Metrics
-  resourceTiming: boolean;
+  isResourceTiming: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   // Logging
-  logPrefix: string;
-  logging: boolean;
-  maxMeasureTime: number;
+  loggingPrefix: string;
+  isLogging: boolean;
+  maxTime: number;
 }
 
 export interface IPerfumeOptions {

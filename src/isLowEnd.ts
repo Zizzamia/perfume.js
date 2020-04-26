@@ -1,13 +1,13 @@
-import { WN } from './constants';
+import { getDM, getHC } from './constants';
 import { EffectiveConnectionType } from './types';
 
 export const getIsLowEndDevice = (): boolean => {
   // If number of logical processors available to run threads <= 4
-  if ((WN as any).hardwareConcurrency && (WN as any).hardwareConcurrency <= 4) {
+  if (getHC() && getHC() <= 4) {
     return true;
   }
   // If the approximate amount of RAM client device has <= 4
-  if ((WN as any).deviceMemory && (WN as any).deviceMemory <= 4) {
+  if (getDM() && getDM() <= 4) {
     return true;
   }
   return false;

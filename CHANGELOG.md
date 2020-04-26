@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0-rc.11 (2020-3-26)
+
+* **refactor:** reduced library kb part VI
+
 ## 5.0.0-rc.10 (2020-3-26)
 
 * **refactor:** reduced library kb part V & simplified estimateStorage metric result

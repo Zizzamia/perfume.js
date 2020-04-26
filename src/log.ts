@@ -1,8 +1,6 @@
 import { config } from './config';
 import { C } from './constants';
 import { getNavigatorInfo } from './getNavigatorInfo';
-import { et, sd } from './getNetworkInformation';
-import { getIsLowEndDevice, getIsLowEndExperience } from './isLowEnd';
 import { visibility } from './onVisibilityChange';
 import { reportPerf } from './reportPerf';
 import { ILogOptions } from './types';
@@ -15,12 +13,12 @@ export const log = (options: ILogOptions): void => {
   // Don't log when page is hidden or has disabled logging
   if (
     (visibility.isHidden && options.measureName.indexOf('Hidden') < 0) ||
-    !config.logging
+    !config.isLogging
   ) {
     return;
   }
   C.log(
-    `%c ${config.logPrefix} ${options.measureName} `,
+    `%c ${config.loggingPrefix} ${options.measureName} `,
     'color:#ff6d00;font-size:11px;',
     options.data,
     options.navigatorInfo,
@@ -34,8 +32,6 @@ export const logData = (measureName: string, data: any): void => {
     }
   });
   const navigatorInfo = getNavigatorInfo();
-  navigatorInfo.isLowEndDevice = getIsLowEndDevice();
-  navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
   pushTask(() => {
     // Logs the metric in the internal console.log
     log({ measureName, data, navigatorInfo });
@@ -55,12 +51,10 @@ export const logMetric = (
 ) => {
   const duration2Decimal = parseFloat(duration.toFixed(2));
   // Stop Analytics and Logging for false negative metrics
-  if (duration2Decimal > config.maxMeasureTime || duration2Decimal <= 0) {
+  if (duration2Decimal > config.maxTime || duration2Decimal <= 0) {
     return;
   }
   const navigatorInfo = getNavigatorInfo();
-  navigatorInfo.isLowEndDevice = getIsLowEndDevice();
-  navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
   pushTask(() => {
     // Logs the metric in the internal console.log
     log({
@@ -82,8 +76,8 @@ export const logMetric = (
  * warning messages
  */
 export const logWarn = (message: string): void => {
-  if (!config.logging) {
+  if (!config.isLogging) {
     return;
   }
-  C.warn(config.logPrefix, message);
+  C.warn(config.loggingPrefix, message);
 };

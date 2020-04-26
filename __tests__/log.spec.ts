@@ -30,7 +30,7 @@ describe('log', () => {
 
     
     it('should not call window.console.log() if logging is disabled', () => {
-      config.logging = false;
+      config.isLogging = false;
       spy = jest.spyOn(C, 'log');
       log.log({
         measureName: 'metricNameHidden',
@@ -41,7 +41,7 @@ describe('log', () => {
     });
     
     it('should not call window.console.log() if visibility is hidden', () => {
-      config.logging = true;
+      config.isLogging = true;
       visibility.isHidden = true;
       spy = jest.spyOn(C, 'log');
       log.log({
@@ -53,7 +53,7 @@ describe('log', () => {
     });
 
     it('should call window.console.log() if logging is enabled', () => {
-      config.logging = true;
+      config.isLogging = true;
       spy = jest.spyOn(C, 'log');
       log.log({
         measureName: 'metricName',
@@ -67,7 +67,7 @@ describe('log', () => {
     });
 
     it('should call window.console.log() if params are correct', () => {
-      config.logging = true;
+      config.isLogging = true;
       spy = jest.spyOn(C, 'log');
       log.log({
         measureName: 'metricName',
@@ -82,7 +82,7 @@ describe('log', () => {
 
     it('should call window.console.log() with data', () => {
       const data = {};
-      config.logging = true;
+      config.isLogging = true;
       spy = jest.spyOn(C, 'log');
       log.log({
         measureName: 'metricName',
@@ -139,7 +139,7 @@ describe('log', () => {
       });
     });
 
-    it('should not call reportPerf() when duration is higher of config.maxMeasureTime', () => {
+    it('should not call reportPerf() when duration is higher of config.maxTime', () => {
       spy = jest.spyOn(reportPerf, 'reportPerf');
       log.logMetric(20000, 'firstContentfulPaint');
       expect(spy.mock.calls.length).toEqual(0);
@@ -151,17 +151,7 @@ describe('log', () => {
       spy = jest.spyOn(window.console, 'warn');
       log.logWarn('message');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(config.logPrefix, 'message');
+      expect(spy).toHaveBeenCalledWith(config.loggingPrefix, 'message');
     });
-
-    /**
-    it('should not throw a console.warn if config.logging is false', () => {
-      spy = jest.spyOn(window.console, 'warn');
-      config.logging = false;
-      logWarn('message');
-      expect(spy.mock.calls.length).toEqual(0);
-      expect(spy).not.toHaveBeenCalled();
-    });
-    */
   });
 });

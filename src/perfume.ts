@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.0-rc.10 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.11 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -10,8 +10,7 @@ import { config } from './config';
 import { WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { getNavigatorInfo } from './getNavigatorInfo';
-import { et, getNetworkInformation, sd } from './getNetworkInformation';
-import { getIsLowEndDevice, getIsLowEndExperience } from './isLowEnd';
+import { getNetworkInformation } from './getNetworkInformation';
 import {
   isPerformanceObserverSupported,
   isPerformanceSupported,
@@ -31,15 +30,15 @@ const logPrefixRecording = 'Recording already';
 
 export default class Perfume {
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.10';
+  version = '5.0.0-rc.11';
   private metrics: IMetricMap = {};
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
-    config.resourceTiming = !!options.resourceTiming;
-    config.logPrefix = options.logPrefix || config.logPrefix;
-    config.logging = !!options.logging;
-    config.maxMeasureTime = options.maxMeasureTime || config.maxMeasureTime;
+    config.isResourceTiming = !!options.resourceTiming;
+    config.loggingPrefix = options.logPrefix || config.loggingPrefix;
+    config.isLogging = !!options.logging;
+    config.maxTime = options.maxMeasureTime || config.maxTime;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!isPerformanceSupported()) {
@@ -96,14 +95,11 @@ export default class Perfume {
     const duration2Decimal = parseFloat(durationByMetric.toFixed(2));
     delete this.metrics[markName];
     pushTask(() => {
-      const navigatorInfo = getNavigatorInfo();
-      navigatorInfo.isLowEndDevice = getIsLowEndDevice();
-      navigatorInfo.isLowEndExperience = getIsLowEndExperience(et, sd);
       const options = {
         measureName: markName,
         data: duration2Decimal,
         customProperties,
-        navigatorInfo,
+        navigatorInfo: getNavigatorInfo(),
       };
       // Log to console, delete metric and send to analytics tracker
       log(options);
