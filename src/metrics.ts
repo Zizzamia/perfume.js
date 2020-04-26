@@ -1,5 +1,6 @@
-import { IPerfumeDataConsumption } from './types';
+import { IMetricMap, IPerfumeDataConsumption } from './types';
 
+export const metrics: IMetricMap = {};
 export const cls = {
   value: 0,
 };

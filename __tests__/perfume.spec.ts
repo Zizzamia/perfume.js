@@ -1,6 +1,7 @@
 import { config } from '../src/config';
 import { C, WN, WP } from '../src/constants';
 import * as log from '../src/log';
+import { metrics } from '../src/metrics';
 import { visibility } from '../src/onVisibilityChange';
 import Perfume from '../src/perfume';
 import * as reportPerf from '../src/reportPerf';
@@ -47,6 +48,7 @@ describe('Perfume', () => {
   describe('.start()', () => {
     beforeEach(() => {
       perfume = new Perfume({ ...mock.defaultPerfumeConfig });
+      delete metrics.metric_moon;
     });
 
     it('should call window.performance.mark with the correct argument', () => {
@@ -55,42 +57,11 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith('mark_metric_moon_start');
     });
-
-    it('should throw a logWarn if recording already started', () => {
-      spy = jest.spyOn(log, 'logWarn');
-      perfume.start('metricName');
-      perfume.start('metricName');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('Recording already started.');
-    });
   });
 
   describe('.end()', () => {
-    it('should throw a logWarn if param is correct and recording already stopped', () => {
-      spy = jest.spyOn(log, 'logWarn');
-      perfume.end('metricName');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('Recording already stopped.');
-    });
-
-    it('should call log() with correct params', () => {
-      spy = jest.spyOn(log, 'log');
-      config.isLogging = true;
-      perfume.start('metricName');
-      perfume.end('metricName');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({
-        measureName: 'metricName',
-        data: 12346,
-        customProperties: {},
-        navigatorInfo: {
-          deviceMemory: 8,
-          hardwareConcurrency: 12,
-          isLowEndDevice: false,
-          isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported',
-        },
-      });
+    beforeEach(() => {
+      delete metrics.metric_moon;
     });
 
     it('should call window.performance.mark with the correct argument', () => {
@@ -102,37 +73,29 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalledWith('mark_metric_moon_end');
     });
 
-    it('should call reportPerf() with correct params', () => {
-      spy = jest.spyOn(reportPerf, 'reportPerf');
+    it('should call logData() with correct params', () => {
+      spy = jest.spyOn(log, 'logData');
       config.isLogging = true;
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({
-        measureName: 'metricName',
+      expect(spy).toHaveBeenCalledWith('metricName', {
         data: 12346,
         customProperties: {},
-        navigatorInfo: {
-          deviceMemory: 8,
-          hardwareConcurrency: 12,
-          isLowEndDevice: false,
-          isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported',
-        },
       });
     });
 
     it('should add metrics properly', () => {
       perfume = new Perfume();
       perfume.start('metricName');
-      expect(perfume['metrics']['metricName']).toBeDefined();
+      expect(metrics['metricName']).toBeDefined();
     });
 
     it('should delete metrics properly', () => {
       perfume = new Perfume();
       perfume.start('metricName');
       perfume.end('metricName');
-      expect(perfume['metrics']['metricName']).not.toBeDefined();
+      expect(metrics['metricName']).not.toBeDefined();
     });
   });
 

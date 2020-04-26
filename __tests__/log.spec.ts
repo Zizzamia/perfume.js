@@ -145,13 +145,4 @@ describe('log', () => {
       expect(spy.mock.calls.length).toEqual(0);
     });
   });
-
-  describe('.logWarn()', () => {
-    it('should throw a console.warn if config.warning is true', () => {
-      spy = jest.spyOn(window.console, 'warn');
-      log.logWarn('message');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(config.loggingPrefix, 'message');
-    });
-  });
 });

@@ -1,5 +1,5 @@
 import { WP  } from '../src/constants';
-import { isPerformanceSupported, isPerformanceObserverSupported } from '../src/isSupported';
+import { isPerformanceSupported } from '../src/isSupported';
 import mock from './_mock';
 
 describe('isSupported', () => {
@@ -23,12 +23,6 @@ describe('isSupported', () => {
       window.performance.mark = () => 1;
       delete window.performance.now;
       expect(isPerformanceSupported()).toEqual(false);
-    });
-  });
-
-  describe('.isPerformanceObserverSupported()', () => {
-    it('should return true if the browser supports PerformanceObserver', () => {
-      expect(isPerformanceObserverSupported()).toEqual(true);
     });
   });
 });

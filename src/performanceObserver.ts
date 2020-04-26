@@ -1,4 +1,5 @@
-import { logWarn } from './log';
+import { C } from './constants';
+import { config } from './config';
 import { IPerformanceObserverType } from './types';
 
 /**
@@ -18,7 +19,7 @@ export const po = (
     perfObserver.observe({ type: eventType, buffered: true });
     return perfObserver;
   } catch (e) {
-    logWarn(e);
+    C.warn(config.loggingPrefix, e);
   }
   return null;
 };

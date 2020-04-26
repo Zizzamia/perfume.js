@@ -70,14 +70,3 @@ export const logMetric = (
     });
   });
 };
-
-/**
- * Ensures console.warn exist and logging is enable for
- * warning messages
- */
-export const logWarn = (message: string): void => {
-  if (!config.isLogging) {
-    return;
-  }
-  C.warn(config.loggingPrefix, message);
-};

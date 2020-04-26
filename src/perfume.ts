@@ -1,38 +1,31 @@
 /*!
- * Perfume.js v5.0.0-rc.12 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.13 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
-import { IMetricMap, IPerfumeOptions } from './types';
+import { IPerfumeOptions } from './types';
 
 import { config } from './config';
-import { WP } from './constants';
+import { W, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
-import { getNavigatorInfo } from './getNavigatorInfo';
 import { getNetworkInformation } from './getNetworkInformation';
-import {
-  isPerformanceObserverSupported,
-  isPerformanceSupported,
-} from './isSupported';
-import { log, logData, logWarn } from './log';
+import { isPerformanceSupported } from './isSupported';
+import { logData } from './log';
 import { performanceMeasure } from './measure';
+import { metrics } from './metrics';
 import {
   disconnectPerfObserversHidden,
   initPerformanceObserver,
 } from './observe';
 import { onVisibilityChange, visibility } from './onVisibilityChange';
-import { reportPerf } from './reportPerf';
 import { initStorageEstimate } from './storageEstimate';
-import { pushTask, roundByTwo } from './utils';
+import { roundByTwo } from './utils';
 
-const logPrefixRecording = 'Recording already';
+const AUTHOR = 'Leonardo Zizzamia';
+const VERSION = '5.0.0-rc.13';
 
 export default class Perfume {
-  copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.12';
-  private metrics: IMetricMap = {};
-
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     config.isResourceTiming = !!options.resourceTiming;
@@ -45,7 +38,7 @@ export default class Perfume {
       return;
     }
     // Checks if use Performance or the EmulatedPerformance instance
-    if (isPerformanceObserverSupported()) {
+    if ('PerformanceObserver' in W) {
       initPerformanceObserver();
     }
 
@@ -63,14 +56,10 @@ export default class Perfume {
    * Start performance measurement
    */
   start(markName: string): void {
-    if (!isPerformanceSupported()) {
+    if (!isPerformanceSupported() || metrics[markName]) {
       return;
     }
-    if (this.metrics[markName]) {
-      logWarn(`${logPrefixRecording} started.`);
-      return;
-    }
-    this.metrics[markName] = true;
+    metrics[markName] = true;
     // Creates a timestamp in the browser's performance entry buffer
     WP.mark(`mark_${markName}_start`);
     // Reset hidden value
@@ -81,11 +70,7 @@ export default class Perfume {
    * End performance measurement
    */
   end(markName: string, customProperties = {}): void {
-    if (!isPerformanceSupported()) {
-      return;
-    }
-    if (!this.metrics[markName]) {
-      logWarn(`${logPrefixRecording} stopped.`);
+    if (!isPerformanceSupported() || !metrics[markName]) {
       return;
     }
     // End Performance Mark
@@ -93,17 +78,10 @@ export default class Perfume {
     // Get duration and change it to a two decimal value
     const durationByMetric = performanceMeasure(markName);
     const duration2Decimal = roundByTwo(durationByMetric);
-    delete this.metrics[markName];
-    pushTask(() => {
-      const options = {
-        measureName: markName,
-        data: duration2Decimal,
-        customProperties,
-        navigatorInfo: getNavigatorInfo(),
-      };
-      // Log to console, delete metric and send to analytics tracker
-      log(options);
-      reportPerf(options);
+    delete metrics[markName];
+    logData(markName, {
+      data: duration2Decimal,
+      customProperties,
     });
   }
 
@@ -120,7 +98,7 @@ export default class Perfume {
    * Removes the named mark from the browser's performance entry buffer.
    */
   clear(markName: string): void {
-    delete this.metrics[markName];
+    delete metrics[markName];
     // Mobile Safari v13 and UC Browser v11
     // don't support clearMarks yet
     if (!WP.clearMarks) {

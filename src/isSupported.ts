@@ -12,10 +12,3 @@ import { W, WP } from './constants';
 export const isPerformanceSupported = (): boolean => {
   return WP && !!WP.getEntriesByType && !!WP.now && !!WP.mark;
 };
-
-/**
- * Check PerformanceObserver interface is supported
- */
-export const isPerformanceObserverSupported = (): boolean => {
-  return 'PerformanceObserver' in W;
-};

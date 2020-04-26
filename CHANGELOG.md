@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0-rc.13 (2020-3-26)
+
+* **refactor:** reduced library kb part VIII
+
+### Breaking Changes
+
+Removed warning logs for start() and end() methods, because the code already handles those edge cases.
+
 ## 5.0.0-rc.12 (2020-3-26)
 
 * **refactor:** reduced library kb part VII
