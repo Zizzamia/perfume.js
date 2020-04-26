@@ -46,22 +46,28 @@ export function analyticsTracker(options) {
     case 'dataConsumption':
       dataConsumption.next(data);
       break;
-    case 'firstPaint':
+    case 'fp':
       fp.next(data);
       break;
-    case 'firstContentfulPaint':
+    case 'fcp':
       fcp.next(data);
       break;
-    case 'largestContentfulPaint':
+    case 'lcp':
       lcp.next(data);
       break;
-    case 'firstInputDelay':
+    case 'lcpFinal':
+      lcp.next(data);
+      break;
+    case 'fid':
       fid.next(data);
       break;
-    case 'cumulativeLayoutShift':
+    case 'cls':
       cls.next(data);
       break;
-    case 'totalBlockingTime':
+    case 'clsFinal':
+      cls.next(data);
+      break;
+    case 'tbt':
       tbt.next(data);
       break;
     case 'fibonacci':

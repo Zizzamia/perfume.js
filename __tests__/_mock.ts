@@ -145,13 +145,9 @@ export default {
   },
   PerformanceObserver: MockPerformanceObserver,
   defaultPerfumeConfig: {
-    firstContentfulPaint: false,
-    firstPaint: false,
-    firstInputDelay: false,
     analyticsTracker: jest.fn(),
     logPrefix: 'Perfume.js:',
     logging: true,
-    warning: false,
   },
   entries,
 };

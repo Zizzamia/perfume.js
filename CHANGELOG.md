@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.0.0-rc.12 (2020-3-26)
+
+* **refactor:** reduced library kb part VII
+
+### Breaking Changes
+
+Renamed most of metric names, please read README Quickstart to see the latest name version we have.
+We made most of metric with short names, to allow the library to be even smaller.
+
 ## 5.0.0-rc.11 (2020-3-26)
 
 * **refactor:** reduced library kb part VI

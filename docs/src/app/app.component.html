@@ -126,28 +126,34 @@ npm install perfume.js --save
           myAnalyticsTool.<span class="violet">track</span>('networkInformation', data);
         {{'}'}}
         <span class="red">break</span>;
-      <span class="red">case</span> 'firstPaint'<span class="red">:</span>
+      <span class="red">case</span> 'fp'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('firstPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'firstContentfulPaint'<span class="red">:</span>
+      <span class="red">case</span> 'fcp'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('firstContentfulPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'firstInputDelay'<span class="red">:</span>
+      <span class="red">case</span> 'fid'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('firstInputDelay', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'largestContentfulPaint'<span class="red">:</span>
+      <span class="red">case</span> 'lcp'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('largestContentfulPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'cumulativeLayoutShift'<span class="red">:</span>
+      <span class="red">case</span> 'lcpFinal'<span class="red">:</span>
+        myAnalyticsTool.<span class="violet">track</span>('largestContentfulPaintFinal', {{'{'}} duration: data {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">case</span> 'cls'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('cumulativeLayoutShift', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'totalBlockingTime'<span class="red">:</span>
+      <span class="red">case</span> 'clsFinal'<span class="red">:</span>
+        myAnalyticsTool.<span class="violet">track</span>('cumulativeLayoutShiftUntilHidden', {{'{'}} duration: data {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">case</span> 'tbt'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'totalBlockingTime5S'<span class="red">:</span>
+      <span class="red">case</span> 'tbt5S'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime5S', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'totalBlockingTime10S'<span class="red">:</span>
+      <span class="red">case</span> 'tbt10S'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime10S', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;     
       <span class="red">default</span>:

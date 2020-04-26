@@ -91,34 +91,34 @@ const perfume = new Perfume({
       case 'storageEstimate':
         myAnalyticsTool.track('storageEstimate', data);
         break;
-      case 'firstPaint':
-        myAnalyticsTool.track('firstPaint', { duration: data });
+      case 'fp':
+        myAnalyticsTool.track('fp', { duration: data });
         break;
-      case 'firstContentfulPaint':
-        myAnalyticsTool.track('firstContentfulPaint', { duration: data });
+      case 'fcp':
+        myAnalyticsTool.track('fcp', { duration: data });
         break;
-      case 'firstInputDelay':
+      case 'fid':
         myAnalyticsTool.track('firstInputDelay', { duration: data });
         break;
-      case 'largestContentfulPaint':
+      case 'lcp':
         myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
-      case 'largestContentfulPaintUntilHidden':
-        myAnalyticsTool.track('largestContentfulPaintUntilHidden', { duration: data });
+      case 'lcpFinal':
+        myAnalyticsTool.track('lcpFinal', { duration: data });
         break;
-      case 'cumulativeLayoutShift':
+      case 'cls':
         myAnalyticsTool.track('cumulativeLayoutShift', { duration: data });
         break;
-      case 'cumulativeLayoutShiftUntilHidden':
-        myAnalyticsTool.track('cumulativeLayoutShiftUntilHidden', { duration: data });
+      case 'clsFinal':
+        myAnalyticsTool.track('cumulativeLayoutShiftFinal', { duration: data });
         break;
-      case 'totalBlockingTime':
+      case 'tbt':
         myAnalyticsTool.track('totalBlockingTime', { duration: data });
         break;
-      case 'totalBlockingTime5S':
+      case 'tbt5S':
         myAnalyticsTool.track('totalBlockingTime5S', { duration: data });
         break;
-      case 'totalBlockingTime10S':
+      case 'tbt10S':
         myAnalyticsTool.track('totalBlockingTime10S', { duration: data });
         break;
       default:
@@ -171,7 +171,7 @@ First Paint is run by default.
 First Contentful Paint is run by default.
 
 ```javascript
-// Perfume.js: firstContentfulPaint 2029.00 ms
+// Perfume.js: fcp 2029.00 ms
 ```
 
 ### Largest Contentful Paint (LCP)
@@ -194,7 +194,7 @@ We end the LCP measure at two points: when FID happen and when the page's lifecy
 First Input Delay is run by default.
 
 ```javascript
-// Perfume.js: firstInputDelay 3.20 ms
+// Perfume.js: fid 3.20 ms
 ```
 
 ### Cumulative Layout Shift (CLS)
@@ -203,17 +203,17 @@ First Input Delay is run by default.
 We end the CLS measure at two points: when FID happen and when the page's lifecycle state changes to hidden.
 
 ```javascript
-// Perfume.js: cumulativeLayoutShiftUntil 0.13
-// Perfume.js: cumulativeLayoutShiftUntilHidden 0.13
+// Perfume.js: cls 0.13
+// Perfume.js: clsFinal 0.13
 ```
 
 ### Total Blocking Time (TBT)
 **Total Blocking Time** (TBT) is an important, user-centric metric for measuring load responsiveness because it helps quantify the severity of how non-interactive a page is prior to it becoming reliably interactive—a low TBT helps ensure that the page is usable.
 
 ```javascript
-// Perfume.js: totalBlockingTime 347.07 ms 
-// Perfume.js: totalBlockingTime5S 427.14 ms 
-// Perfume.js: totalBlockingTime10S 427.14 ms 
+// Perfume.js: tbt 347.07 ms 
+// Perfume.js: tbt5S 427.14 ms 
+// Perfume.js: tbt10S 427.14 ms 
 ```
 
 ### Resource Timing

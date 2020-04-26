@@ -16,7 +16,7 @@ export const initFirstInputDelay = (
 ) => {
   const lastEntry = performanceEntries.pop();
   if (lastEntry) {
-    logMetric(lastEntry.duration, 'firstInputDelay');
+    logMetric(lastEntry.duration, 'fid');
   }
   perfObservers.fid.disconnect();
   if (perfObservers.lcp) {

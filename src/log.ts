@@ -4,7 +4,7 @@ import { getNavigatorInfo } from './getNavigatorInfo';
 import { visibility } from './onVisibilityChange';
 import { reportPerf } from './reportPerf';
 import { ILogOptions } from './types';
-import { pushTask } from './utils';
+import { pushTask, roundByTwo } from './utils';
 
 /**
  * Coloring Text in Browser Console
@@ -28,7 +28,7 @@ export const log = (options: ILogOptions): void => {
 export const logData = (measureName: string, data: any): void => {
   Object.keys(data).forEach(key => {
     if (typeof data[key] === 'number') {
-      data[key] = parseFloat(data[key].toFixed(2));
+      data[key] = roundByTwo(data[key]);
     }
   });
   const navigatorInfo = getNavigatorInfo();
@@ -49,7 +49,7 @@ export const logMetric = (
   measureName: string,
   suffix: string = 'ms',
 ) => {
-  const duration2Decimal = parseFloat(duration.toFixed(2));
+  const duration2Decimal = roundByTwo(duration);
   // Stop Analytics and Logging for false negative metrics
   if (duration2Decimal > config.maxTime || duration2Decimal <= 0) {
     return;

@@ -107,11 +107,11 @@ describe('log', () => {
   describe('.logMetric()', () => {
     it('should call log() with the correct arguments', () => {
       spy = jest.spyOn(log, 'log');
-      log.logMetric(1, 'firstContentfulPaint');
+      log.logMetric(1, 'fcp');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         data: '1 ms',
-        measureName: 'firstContentfulPaint',
+        measureName: 'fcp',
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
@@ -124,11 +124,11 @@ describe('log', () => {
 
     it('should call reportPerf() with the correct arguments', () => {
       spy = jest.spyOn(reportPerf, 'reportPerf');
-      log.logMetric(1, 'firstContentfulPaint');
+      log.logMetric(1, 'fcp');
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         data: 1,
-        measureName: 'firstContentfulPaint',
+        measureName: 'fcp',
         navigatorInfo: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
@@ -141,7 +141,7 @@ describe('log', () => {
 
     it('should not call reportPerf() when duration is higher of config.maxTime', () => {
       spy = jest.spyOn(reportPerf, 'reportPerf');
-      log.logMetric(20000, 'firstContentfulPaint');
+      log.logMetric(20000, 'fcp');
       expect(spy.mock.calls.length).toEqual(0);
     });
   });

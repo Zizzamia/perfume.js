@@ -1,10 +1,14 @@
 import { W } from './constants';
 
+export const roundByTwo = (num: number) => {
+  return parseFloat(num.toFixed(2));
+}
+
 export const convertToKB = (bytes: number): number | null => {
   if (typeof bytes !== 'number') {
     return null;
   }
-  return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
+  return roundByTwo(bytes / Math.pow(1024, 2));
 };
 
 /**

@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.0-rc.11 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.12 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -24,13 +24,13 @@ import {
 import { onVisibilityChange, visibility } from './onVisibilityChange';
 import { reportPerf } from './reportPerf';
 import { initStorageEstimate } from './storageEstimate';
-import { pushTask } from './utils';
+import { pushTask, roundByTwo } from './utils';
 
 const logPrefixRecording = 'Recording already';
 
 export default class Perfume {
   copyright = '© 2020 Leonardo Zizzamia';
-  version = '5.0.0-rc.11';
+  version = '5.0.0-rc.12';
   private metrics: IMetricMap = {};
 
   constructor(options: IPerfumeOptions = {}) {
@@ -92,7 +92,7 @@ export default class Perfume {
     WP.mark(`mark_${markName}_end`);
     // Get duration and change it to a two decimal value
     const durationByMetric = performanceMeasure(markName);
-    const duration2Decimal = parseFloat(durationByMetric.toFixed(2));
+    const duration2Decimal = roundByTwo(durationByMetric);
     delete this.metrics[markName];
     pushTask(() => {
       const options = {

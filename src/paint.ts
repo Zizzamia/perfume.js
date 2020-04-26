@@ -12,9 +12,9 @@ import { IPerformanceEntry } from './types';
 export const initFirstPaint = (performanceEntries: IPerformanceEntry[]) => {
   performanceEntries.forEach(performanceEntry => {
     if (performanceEntry.name === 'first-paint') {
-      logMetric(performanceEntry.startTime, 'firstPaint');
+      logMetric(performanceEntry.startTime, 'fp');
     } else if (performanceEntry.name === fcpEntryName) {
-      logMetric(performanceEntry.startTime, 'firstContentfulPaint');
+      logMetric(performanceEntry.startTime, 'fcp');
     }
     if (performanceEntry.name === fcpEntryName) {
       fcp.value = performanceEntry.startTime;
