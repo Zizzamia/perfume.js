@@ -32,15 +32,12 @@ describe('Perfume', () => {
 
   describe('constructor', () => {
     it('should run with config version A', () => {
-      new Perfume({
-        resourceTiming: true,
-      });
+      new Perfume({});
     });
 
     it('should run with config version B', () => {
       new Perfume({
         resourceTiming: true,
-        logging: false,
       });
     });
   });
@@ -75,7 +72,6 @@ describe('Perfume', () => {
 
     it('should call logData() with correct params', () => {
       spy = jest.spyOn(log, 'logData');
-      config.isLogging = true;
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);

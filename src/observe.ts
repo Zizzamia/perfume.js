@@ -26,12 +26,12 @@ export const initPerformanceObserver = () => {
 
 export const disconnectPerfObserversHidden = () => {
   if (perfObservers.lcp) {
-    logMetric(lcp.value, `${lcpMetricName}UntilHidden`);
+    logMetric(lcp.value, `${lcpMetricName}Final`);
     perfObservers.lcp.disconnect();
   }
   if (perfObservers.cls) {
     perfObservers.cls.takeRecords();
-    logMetric(cls.value, `${clsMetricName}UntilHidden`, '');
+    logMetric(cls.value, `${clsMetricName}Final`);
     perfObservers.cls.disconnect();
   }
 };

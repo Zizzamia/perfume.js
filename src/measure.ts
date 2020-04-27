@@ -14,8 +14,10 @@ export const getDurationByMetric = (measureName: string): number => {
 };
 
 export const performanceMeasure = (measureName: string): number => {
-  const startMark = `mark_${measureName}_start`;
-  const endMark = `mark_${measureName}_end`;
-  WP.measure(measureName, startMark, endMark);
+  WP.measure(
+    measureName,
+    `mark_${measureName}_start`,
+    `mark_${measureName}_end`,
+  );
   return getDurationByMetric(measureName);
 };

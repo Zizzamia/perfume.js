@@ -145,7 +145,7 @@ npm install perfume.js --save
         myAnalyticsTool.<span class="violet">track</span>('cumulativeLayoutShift', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'clsFinal'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('cumulativeLayoutShiftUntilHidden', {{'{'}} duration: data {{'}'}});
+        myAnalyticsTool.<span class="violet">track</span>('cumulativeLayoutShiftFinal', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'tbt'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime', {{'{'}} duration: data {{'}'}});
@@ -161,7 +161,6 @@ npm install perfume.js --save
         <span class="red">break</span>;
     {{'}'}}
   {{'}'}},
-  logging: false
 {{'}'}});</pre>
               </td>
             </tr>
@@ -365,13 +364,8 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
             <tr>
               <td class="code">
                 <pre><span class="red">const</span> <span class="blue">options</span> <span class="red">=</span> {{'{'}}
-  <span class="gray">// Metrics</span>
   resourceTiming<span class="red">:</span> <span class="blue">false</span>,
-  <span class="gray">// Analytics</span>
   analyticsTracker<span class="red">:</span> options => {{'{}'}},
-  <span class="gray">// Logging</span>
-  logPrefix<span class="red">:</span> "Perfume.js:"
-  logging<span class="red">:</span> <span class="blue">true</span>,
   maxMeasureTime<span class="red">:</span> 15000,
 {{'}'}};</pre>
               </td>

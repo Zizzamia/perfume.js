@@ -1,5 +1,4 @@
 import { C } from './constants';
-import { config } from './config';
 import { IPerformanceObserverType } from './types';
 
 /**
@@ -12,14 +11,13 @@ export const po = (
 ): PerformanceObserver | null => {
   try {
     const perfObserver = new PerformanceObserver(entryList => {
-      const performanceEntries = entryList.getEntries();
-      cb(performanceEntries);
+      cb(entryList.getEntries());
     });
     // Retrieve buffered events and subscribe to newer events for Paint Timing
     perfObserver.observe({ type: eventType, buffered: true });
     return perfObserver;
   } catch (e) {
-    C.warn(config.loggingPrefix, e);
+    C.warn('Perfume.js:', e);
   }
   return null;
 };

@@ -8,7 +8,7 @@ import { ISendTimingOptions } from './types';
 export const reportPerf = function(options: ISendTimingOptions): void {
   // Doesn't send timing when page is hidden
   if (
-    (visibility.isHidden && options.measureName.indexOf('Hidden') < 0) ||
+    (visibility.isHidden && options.measureName.indexOf('Final') < 0) ||
     !config.analyticsTracker
   ) {
     return;

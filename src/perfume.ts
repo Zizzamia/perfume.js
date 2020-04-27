@@ -1,11 +1,9 @@
 /*!
- * Perfume.js v5.0.0-rc.13 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.14 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
-import { IPerfumeOptions } from './types';
-
 import { config } from './config';
 import { W, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
@@ -20,17 +18,16 @@ import {
 } from './observe';
 import { onVisibilityChange, visibility } from './onVisibilityChange';
 import { initStorageEstimate } from './storageEstimate';
+import { IPerfumeOptions } from './types';
 import { roundByTwo } from './utils';
 
 const AUTHOR = 'Leonardo Zizzamia';
-const VERSION = '5.0.0-rc.13';
+const VERSION = '5.0.0-rc.14';
 
 export default class Perfume {
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     config.isResourceTiming = !!options.resourceTiming;
-    config.loggingPrefix = options.logPrefix || config.loggingPrefix;
-    config.isLogging = !!options.logging;
     config.maxTime = options.maxMeasureTime || config.maxTime;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
@@ -75,12 +72,9 @@ export default class Perfume {
     }
     // End Performance Mark
     WP.mark(`mark_${markName}_end`);
-    // Get duration and change it to a two decimal value
-    const durationByMetric = performanceMeasure(markName);
-    const duration2Decimal = roundByTwo(durationByMetric);
     delete metrics[markName];
     logData(markName, {
-      data: duration2Decimal,
+      data: roundByTwo(performanceMeasure(markName)),
       customProperties,
     });
   }

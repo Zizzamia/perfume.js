@@ -12,8 +12,6 @@ export interface IPerfumeConfig {
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   // Logging
-  loggingPrefix: string;
-  isLogging: boolean;
   maxTime: number;
 }
 
@@ -23,16 +21,7 @@ export interface IPerfumeOptions {
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   // Logging
-  logPrefix?: string;
-  logging?: boolean;
   maxMeasureTime?: number;
-}
-
-export interface ILogOptions {
-  measureName: string;
-  data?: any;
-  customProperties?: object;
-  navigatorInfo?: INavigatorInfo;
 }
 
 export interface IMetricMap {

@@ -24,7 +24,7 @@ export const initFirstInputDelay = (
   }
   if (perfObservers.cls) {
     perfObservers.cls.takeRecords();
-    logMetric(cls.value, clsMetricName, '');
+    logMetric(cls.value, clsMetricName);
   }
   // TBT by FID
   if (perfObservers.tbt) {

@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0-rc.14 (2020-3-26)
+
+* **refactor:** reduced library kb part IX
+
+### Breaking Changes
+
+Removed the development logging options, in favor of focusing more on the `analyticsTracker` method.
+
 ## 5.0.0-rc.13 (2020-3-26)
 
 * **refactor:** reduced library kb part VIII

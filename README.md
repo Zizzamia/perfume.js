@@ -2,7 +2,7 @@
   <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v4-5-0.png" align="left" width="200" />
 </a>
 
-# [Perfume.js v5.0.0-rc.13](http://perfumejs.com)
+# [Perfume.js v5.0.0-rc.14](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
@@ -125,8 +125,7 @@ const perfume = new Perfume({
         myAnalyticsTool.track(metricName, { duration: data });
         break;
     }
-  },
-  logging: false
+  }
 });
 ```
 
@@ -183,8 +182,8 @@ content has likely loaded—a fast LCP helps reassure the user that the page is 
 We end the LCP measure at two points: when FID happen and when the page's lifecycle state changes to hidden.
 
 ```javascript
-// Perfume.js: largestContentfulPaint 2429.00 ms
-// Perfume.js: largestContentfulPaintUntilHidden 2429.00 ms
+// Perfume.js: lcp 2429.00 ms
+// Perfume.js: lcpFinal 2429.00 ms
 ```
 
 ### First Input Delay (FID)
@@ -274,12 +273,8 @@ Default options provided to Perfume.js constructor.
 
 ```javascript
 const options = {
-  resourceTiming: false,
-  // Analytics
+  resourceTiming: false
   analyticsTracker: options => {},
-  // Logging
-  logPrefix: "Perfume.js:"
-  logging: true,
   maxMeasureTime: 15000,
 };
 ```
