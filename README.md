@@ -73,6 +73,8 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 ## Quick start
 Metrics like Navigation Timing, Network Information, FP, FCP, FID, LCP, CLS and TBT are default reported with Perfume; All results will be reported to the analyticsTracker callback, and the code below is just one way on how you can organize your tracking, feel free to tweak it as you prefer.
 
+🚀 Visit [perfumejs.com](http://perfumejs.com/) for a live demo on how the metrics work. 🌕
+
 ```javascript
 const perfume = new Perfume({
   analyticsTracker: (options) => {
