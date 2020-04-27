@@ -40,13 +40,6 @@ export interface IPerfObservers {
   [measureName: string]: any;
 }
 
-export interface ISendTimingOptions {
-  measureName: string;
-  data?: any;
-  customProperties?: object;
-  navigatorInfo: INavigatorInfo;
-}
-
 export type IPerformanceObserverType =
   | 'first-input'
   | 'largest-contentful-paint'

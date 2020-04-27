@@ -205,6 +205,7 @@ export class NavigationComponent implements AfterViewInit {
       fid: 'first-input-delay',
       cls: 'cumulative-layout-shift',
       cfp: 'component-first-paint',
+      tbt: 'total-blocking-time',
       annotate: 'annotate-metrics',
       log: 'custom-logging',
       options: 'default-options',

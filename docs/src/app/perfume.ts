@@ -33,6 +33,11 @@ export function analyticsTracker(options) {
     isLowEndDevice$.next(navigatorInformation.isLowEndDevice);
     isLowEndExperience$.next(navigatorInformation.isLowEndExperience);
   }
+  console.log(
+    `%c Perfume.js: ${metricName}`,
+    'color:#ff6d00;font-size:11px;',
+    data,
+  );
   switch (metricName) {
     case 'navigationTiming':
       navigationTiming.next(data);
@@ -83,7 +88,7 @@ export function analyticsTracker(options) {
 }
 
 export const PerfumeConfig = {
-  dataConsumption: true,
+  resourceTiming: true,
   analyticsTracker,
 };
 

@@ -10,7 +10,7 @@ describe('reportPerf', () => {
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
       visibility.isHidden = true;
-      reportPerf({ measureName: 'metricName', data: 123, navigatorInfo: {} });
+      reportPerf('metricName', 123);
       expect(spy).not.toHaveBeenCalled();
     });
 
@@ -18,13 +18,19 @@ describe('reportPerf', () => {
       visibility.isHidden = false;
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
-      reportPerf({ measureName: 'metricName', data: 123, navigatorInfo: {} });
+      reportPerf('metricName', 123);
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         metricName: 'metricName',
         data: 123,
         eventProperties: {},
-        navigatorInformation: {},
+        navigatorInformation: {
+          deviceMemory: 0,
+          hardwareConcurrency: 12,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported',
+        },
       });
     });
 
@@ -32,18 +38,19 @@ describe('reportPerf', () => {
       visibility.isHidden = false;
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
-      reportPerf({
-        measureName: 'metricName',
-        data: 123,
-        navigatorInfo: {},
-        customProperties: { mare: 'sea' },
-      });
+      reportPerf('metricName', 123, { mare: 'sea' });
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         metricName: 'metricName',
         data: 123,
         eventProperties: { mare: 'sea' },
-        navigatorInformation: {},
+        navigatorInformation: {
+          deviceMemory: 0,
+          hardwareConcurrency: 12,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported',
+        },
       });
     });
   });

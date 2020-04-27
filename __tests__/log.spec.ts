@@ -35,17 +35,7 @@ describe('log', () => {
       spy = jest.spyOn(reportPerf, 'reportPerf');
       log.logMetric(1, 'fcp');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith({
-        data: 1,
-        measureName: 'fcp',
-        navigatorInfo: {
-          deviceMemory: 8,
-          hardwareConcurrency: 12,
-          isLowEndDevice: false,
-          isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported',
-        },
-      });
+      expect(spy).toHaveBeenCalledWith('fcp', 1);
     });
 
     it('should not call reportPerf() when duration is higher of config.maxTime', () => {

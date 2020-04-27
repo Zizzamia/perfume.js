@@ -1,23 +1,27 @@
 import { config } from './config';
+import { getNavigatorInfo } from './getNavigatorInfo';
 import { visibility } from './onVisibilityChange';
-import { ISendTimingOptions } from './types';
 
 /**
  * Sends the User timing measure to analyticsTracker
  */
-export const reportPerf = function(options: ISendTimingOptions): void {
+export const reportPerf = function(
+  measureName: string,
+  data: any,
+  customProperties?: object,
+): void {
   // Doesn't send timing when page is hidden
   if (
-    (visibility.isHidden && options.measureName.indexOf('Final') < 0) ||
+    (visibility.isHidden && measureName.indexOf('Final') < 0) ||
     !config.analyticsTracker
   ) {
     return;
   }
   // Send metric to custom Analytics service
   config.analyticsTracker({
-    metricName: options.measureName,
-    data: options.data,
-    eventProperties: options.customProperties ? options.customProperties : {},
-    navigatorInformation: options.navigatorInfo,
+    metricName: measureName,
+    data,
+    eventProperties: customProperties || {},
+    navigatorInformation: getNavigatorInfo(),
   });
 };

@@ -75,10 +75,13 @@ describe('Perfume', () => {
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('metricName', {
-        data: 12346,
-        customProperties: {},
-      });
+      expect(spy).toHaveBeenCalledWith(
+        'metricName',
+        {
+          data: 12346,
+        },
+        {},
+      );
     });
 
     it('should add metrics properly', () => {

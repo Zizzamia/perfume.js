@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0-rc.15 (2020-3-26)
+
+* **fix:** added back analyticsTracker into the configs
+
 ## 5.0.0-rc.14 (2020-3-26)
 
 * **refactor:** reduced library kb part IX

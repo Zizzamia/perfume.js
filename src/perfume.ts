@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.0-rc.14 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.15 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -22,11 +22,12 @@ import { IPerfumeOptions } from './types';
 import { roundByTwo } from './utils';
 
 const AUTHOR = 'Leonardo Zizzamia';
-const VERSION = '5.0.0-rc.14';
+const VERSION = '5.0.0-rc.15';
 
 export default class Perfume {
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
+    config.analyticsTracker = options.analyticsTracker;
     config.isResourceTiming = !!options.resourceTiming;
     config.maxTime = options.maxMeasureTime || config.maxTime;
 
@@ -73,10 +74,13 @@ export default class Perfume {
     // End Performance Mark
     WP.mark(`mark_${markName}_end`);
     delete metrics[markName];
-    logData(markName, {
-      data: roundByTwo(performanceMeasure(markName)),
+    logData(
+      markName,
+      {
+        data: roundByTwo(performanceMeasure(markName)),
+      },
       customProperties,
-    });
+    );
   }
 
   /**

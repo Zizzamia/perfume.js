@@ -1,18 +1,21 @@
 import { config } from './config';
-import { getNavigatorInfo } from './getNavigatorInfo';
+
 import { reportPerf } from './reportPerf';
 import { pushTask, roundByTwo } from './utils';
 
-export const logData = (measureName: string, data: any): void => {
-  Object.keys(data).forEach(key => {
-    if (typeof data[key] === 'number') {
-      data[key] = roundByTwo(data[key]);
+export const logData = (
+  measureName: string,
+  metric: any,
+  customProperties?: object,
+): void => {
+  Object.keys(metric).forEach(key => {
+    if (typeof metric[key] === 'number') {
+      metric[key] = roundByTwo(metric[key]);
     }
   });
-  const navigatorInfo = getNavigatorInfo();
   pushTask(() => {
     // Sends the metric to an external tracking service
-    reportPerf({ measureName, data, navigatorInfo });
+    reportPerf(measureName, metric, customProperties);
   });
 };
 
@@ -26,13 +29,8 @@ export const logMetric = (duration: number, measureName: string) => {
   if (duration2Decimal > config.maxTime || duration2Decimal <= 0) {
     return;
   }
-  const navigatorInfo = getNavigatorInfo();
   pushTask(() => {
     // Sends the metric to an external tracking service
-    reportPerf({
-      measureName,
-      data: duration2Decimal,
-      navigatorInfo,
-    });
+    reportPerf(measureName, duration2Decimal);
   });
 };
