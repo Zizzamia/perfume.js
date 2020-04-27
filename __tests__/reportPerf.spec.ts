@@ -1,9 +1,16 @@
 import { config } from '../src/config';
+import { WN, WP } from '../src/constants';
 import { visibility } from '../src/onVisibilityChange';
 import { reportPerf } from '../src/reportPerf';
+import mock from './_mock';
 
 describe('reportPerf', () => {
   let spy: jest.SpyInstance;
+
+  beforeEach(() => {
+    (WN as any) = mock.navigator();
+    (WP as any) = mock.performance();
+  });
 
   describe('.reportPerf()', () => {
     it('should not call analyticsTracker() if isHidden is true', () => {
@@ -25,7 +32,7 @@ describe('reportPerf', () => {
         data: 123,
         eventProperties: {},
         navigatorInformation: {
-          deviceMemory: 0,
+          deviceMemory: 8,
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
@@ -45,7 +52,7 @@ describe('reportPerf', () => {
         data: 123,
         eventProperties: { mare: 'sea' },
         navigatorInformation: {
-          deviceMemory: 0,
+          deviceMemory: 8,
           hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,

@@ -1,10 +1,8 @@
-import { config } from '../src/config';
 import { C, WN, WP } from '../src/constants';
 import * as log from '../src/log';
 import { metrics } from '../src/metrics';
 import { visibility } from '../src/onVisibilityChange';
 import Perfume from '../src/perfume';
-import * as reportPerf from '../src/reportPerf';
 import * as observe from '../src/observe';
 import mock from './_mock';
 
