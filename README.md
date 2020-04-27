@@ -76,7 +76,7 @@ Metrics like Navigation Timing, Network Information, FP, FCP, FID, LCP, CLS and 
 ```javascript
 const perfume = new Perfume({
   analyticsTracker: (options) => {
-    const { metricName, data, navigatorInformation } = options;
+    const { metricName, data, eventProperties, navigatorInformation } = options;
     switch (metricName) {
       case 'navigationTiming':
         if (data && data.timeToFirstByte) {
@@ -92,10 +92,10 @@ const perfume = new Perfume({
         myAnalyticsTool.track('storageEstimate', data);
         break;
       case 'fp':
-        myAnalyticsTool.track('fp', { duration: data });
+        myAnalyticsTool.track('firstPaint', { duration: data });
         break;
       case 'fcp':
-        myAnalyticsTool.track('fcp', { duration: data });
+        myAnalyticsTool.track('firstContentfulPaint', { duration: data });
         break;
       case 'fid':
         myAnalyticsTool.track('firstInputDelay', { duration: data });
@@ -104,7 +104,7 @@ const perfume = new Perfume({
         myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
       case 'lcpFinal':
-        myAnalyticsTool.track('lcpFinal', { duration: data });
+        myAnalyticsTool.track('largestContentfulPaintFinal', { duration: data });
         break;
       case 'cls':
         myAnalyticsTool.track('cumulativeLayoutShift', { duration: data });
@@ -160,7 +160,7 @@ Navigation Timing is run by default.
 First Paint is run by default.
 
 ```javascript
-// Perfume.js: firstPaint 1482.00 ms
+// Perfume.js: fp 1482.00 ms
 ```
 
 ### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))

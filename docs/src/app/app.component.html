@@ -101,11 +101,32 @@ npm install perfume.js --save
       <p class="box-demo">
         Oh btw, you're being served a 
         <b *ngIf="isLowEndExperience">lighter experience</b><b *ngIf="!isLowEndExperience">full experience</b>  
-        based on your hardare, network conditions and data saver preference.<br />
+        based on your hardare, network conditions and data saver preference.<br /><br />
+        
+        <b>// Device Information</b><br />
         Network information: <b>{{ networkInformation?.effectiveType || '--' }}</b><br />
         Device Memory: <b>{{ navigatorInformation?.deviceMemory || '--' }}</b><br />
         Hardware Concurrency: <b>{{ navigatorInformation?.hardwareConcurrency || '--' }}</b><br />
         Data Saver preference: <b>{{ networkInformation?.saveData }}</b><br />
+        <br />
+        <b>// Main Performance Metrics</b><br />
+        Time To First Byte: <b>{{ navigationTiming?.timeToFirstByte || 0 }}ms</b><br />
+        First Paint: <b>{{ fp }} ms</b><br />
+        First Contentful Paint: <b>{{ fcp }} ms</b><br />
+        First Input Delay: <b>{{ fid }} ms</b><br />
+        Largest Contentful Paint: <b>{{ lcp }} ms</b><br />
+        Cumulative Layout Shift: <b>{{ cls }}</b><br />
+        Total Blocking Time: <b>{{ tbt }} ms</b><br /><br />
+
+        <b>// Secondary Performance Metrics</b><br />
+        <b>// Those metrics activate on a set delay or when the tab change visibility</b><br />
+        Largest Contentful Paint Final: <b>{{ lcpFinal }} ms</b><br />
+        Cumulative Layout Shift Final: <b>{{ clsFinal }}</b><br />
+        Total Blocking Time 5S: <b>{{ tbt5s }} ms</b><br />
+        Total Blocking Time 10S: <b>{{ tbt10s }} ms</b><br /><br />
+
+        <b>// Experimental Performance metric</b><br />
+        dataConsumption: <b>{{ dataConsumption | json }}</b>
       </p>
       <div class="box-code js">
         <table>

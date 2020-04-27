@@ -11,9 +11,13 @@ import {
   fp,
   fcp,
   lcp,
+  lcpFinal,
   fid,
   cls,
+  clsFinal,
   tbt,
+  tbt5s,
+  tbt10s,
   fibonacci,
   custom_fibonacci,
   networkInformation,
@@ -31,7 +35,7 @@ import {
 export class AppComponent implements AfterViewInit {
   @ViewChild('p', { static: true })
   // Component
-  navigationTiming = {};
+  navigationTiming: any = {};
   networkInformation = {
     effectiveType: '--',
     saveData: '--',
@@ -43,8 +47,12 @@ export class AppComponent implements AfterViewInit {
   fcp: number;
   fid: number;
   lcp: number;
+  lcpFinal: number;
   cls: number;
+  clsFinal: number;
   tbt: number;
+  tbt5s: number;
+  tbt10s: number;
   path: string;
   isLowEndDevice: boolean;
   isLowEndExperience: boolean;
@@ -91,6 +99,10 @@ export class AppComponent implements AfterViewInit {
       this.lcp = result;
       this.ref.detectChanges();
     });
+    lcpFinal.subscribe(result => {
+      this.lcpFinal = result;
+      this.ref.detectChanges();
+    });
     fid.subscribe(result => {
       this.fid = result;
       this.ref.detectChanges();
@@ -99,8 +111,20 @@ export class AppComponent implements AfterViewInit {
       this.cls = result;
       this.ref.detectChanges();
     });
+    clsFinal.subscribe(result => {
+      this.clsFinal = result;
+      this.ref.detectChanges();
+    });
     tbt.subscribe(result => {
       this.tbt = result;
+      this.ref.detectChanges();
+    });
+    tbt5s.subscribe(result => {
+      this.tbt5s = result;
+      this.ref.detectChanges();
+    });
+    tbt10s.subscribe(result => {
+      this.tbt10s = result;
       this.ref.detectChanges();
     });
     fibonacci.subscribe(result => {

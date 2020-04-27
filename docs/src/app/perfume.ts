@@ -16,9 +16,13 @@ export const dataConsumption = new BehaviorSubject({});
 export const fp = new BehaviorSubject(0);
 export const fcp = new BehaviorSubject(0);
 export const lcp = new BehaviorSubject(0);
+export const lcpFinal = new BehaviorSubject(0);
 export const fid = new BehaviorSubject(0);
 export const cls = new BehaviorSubject(0);
+export const clsFinal = new BehaviorSubject(0);
 export const tbt = new BehaviorSubject(0);
+export const tbt5s = new BehaviorSubject(0);
+export const tbt10s = new BehaviorSubject(0);
 export const fibonacci = new BehaviorSubject(0);
 export const custom_fibonacci = new BehaviorSubject(0);
 export const openDialog$ = new BehaviorSubject(0);
@@ -61,7 +65,7 @@ export function analyticsTracker(options) {
       lcp.next(data);
       break;
     case 'lcpFinal':
-      lcp.next(data);
+      lcpFinal.next(data);
       break;
     case 'fid':
       fid.next(data);
@@ -70,11 +74,17 @@ export function analyticsTracker(options) {
       cls.next(data);
       break;
     case 'clsFinal':
-      cls.next(data);
+      clsFinal.next(data);
       break;
     case 'tbt':
       tbt.next(data);
       break;
+    case 'tbt5S':
+      tbt5s.next(data);
+      break;
+    case 'tbt10S':
+      tbt10s.next(data);
+      break;  
     case 'fibonacci':
       fibonacci.next(data);
       break;
