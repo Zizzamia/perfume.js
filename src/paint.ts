@@ -1,7 +1,7 @@
 import { logMetric } from './log';
 import { fcp, fcpEntryName, lcp } from './metrics';
 import { perfObservers } from './observeInstances';
-import { po } from './performanceObserver';
+import { po, poDisconnect } from './performanceObserver';
 import { initTotalBlockingTime } from './totalBlockingTime';
 import { IPerformanceEntry } from './types';
 
@@ -14,12 +14,10 @@ export const initFirstPaint = (performanceEntries: IPerformanceEntry[]) => {
     if (performanceEntry.name === 'first-paint') {
       logMetric(performanceEntry.startTime, 'fp');
     } else if (performanceEntry.name === fcpEntryName) {
-      logMetric(performanceEntry.startTime, 'fcp');
-    }
-    if (performanceEntry.name === fcpEntryName) {
       fcp.value = performanceEntry.startTime;
-      perfObservers.tbt = po('longtask', initTotalBlockingTime);
-      perfObservers.fcp.disconnect();
+      logMetric(fcp.value, 'fcp');
+      perfObservers[4] = po('longtask', initTotalBlockingTime);
+      poDisconnect(0);
     }
   });
 };

@@ -14,23 +14,21 @@ describe('measure', () => {
       spy.mockReset();
       spy.mockRestore();
     }
-  });
+  })
 
-  describe('.getDurationByMetric()', () => {
+  describe('.performanceMeasure()', () => {
     it('should return entry.duration when entryType is not measure', () => {
       WP.getEntriesByName = () =>
         [{ duration: 12345, entryType: 'notMeasure' } as any] as any[];
-      const value = measure.getDurationByMetric('metricName');
+      const value = measure.performanceMeasure('metricName');
       expect(value).toEqual(-1);
     });
-
+  
     it('should return -1 when entryType is a measure', () => {
-      const value = measure.getDurationByMetric('metricName');
+      const value = measure.performanceMeasure('metricName');
       expect(value).toEqual(12346);
     });
-  });
 
-  describe('.performanceMeasure()', () => {
     it('should call window.performance.measure with the correct arguments', () => {
       spy = jest.spyOn(WP, 'measure');
       measure.performanceMeasure('fibonacci');
@@ -38,13 +36,6 @@ describe('measure', () => {
       const end = 'mark_fibonacci_end';
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith('fibonacci', start, end);
-    });
-
-    it('should call getDurationByMetric with the correct arguments', () => {
-      spy = jest.spyOn(measure, 'getDurationByMetric');
-      measure.performanceMeasure('fibonacci');
-      expect(spy.mock.calls.length).toBe(1);
-      expect(spy).toHaveBeenCalledWith('fibonacci');
     });
   });
 });

@@ -8,6 +8,7 @@ import {
   tbt,
   tbtMetricName,
 } from './metrics';
+import { poDisconnect } from './performanceObserver';
 import { perfObservers } from './observeInstances';
 import { IPerformanceEntry } from './types';
 
@@ -18,29 +19,27 @@ export const initFirstInputDelay = (
   if (lastEntry) {
     logMetric(lastEntry.duration, 'fid');
   }
-  perfObservers.fid.disconnect();
-  if (perfObservers.lcp) {
+  poDisconnect(1);
+  if (perfObservers[2]) {
     logMetric(lcp.value, lcpMetricName);
   }
-  if (perfObservers.cls) {
-    perfObservers.cls.takeRecords();
+  if (perfObservers[3]) {
+    perfObservers[3].takeRecords();
     logMetric(cls.value, clsMetricName);
   }
   // TBT by FID
-  if (perfObservers.tbt) {
+  if (perfObservers[4]) {
     logMetric(tbt.value, tbtMetricName);
-  }
-  // TBT with 5 second delay after FID
-  setTimeout(() => {
-    if (perfObservers.tbt) {
+    // TBT with 5 second delay after FID
+    setTimeout(() => {
       logMetric(tbt.value, `${tbtMetricName}5S`);
-    }
-  }, 5000);
+    }, 5000);
+  }
   // TBT with 10 second delay after FID
   setTimeout(() => {
-    if (perfObservers.tbt) {
+    if (perfObservers[4]) {
       logMetric(tbt.value, `${tbtMetricName}10S`);
-      perfObservers.tbt.disconnect();
+      poDisconnect(4);
     }
     // Report Data Consumption
     logData('dataConsumption', rt.value);

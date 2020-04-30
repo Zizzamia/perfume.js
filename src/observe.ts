@@ -5,15 +5,15 @@ import { logMetric } from './log';
 import { cls, clsMetricName, lcp, lcpMetricName } from './metrics';
 import { perfObservers } from './observeInstances';
 import { initFirstPaint, initLargestContentfulPaint } from './paint';
-import { po } from './performanceObserver';
+import { po, poDisconnect } from './performanceObserver';
 import { initResourceTiming } from './resourceTiming';
 
 export const initPerformanceObserver = () => {
-  perfObservers.fcp = po('paint', initFirstPaint);
+  perfObservers[0] = po('paint', initFirstPaint);
   // FID needs to be initialized as soon as Perfume is available
   // DataConsumption resolves after FID is triggered
-  perfObservers.fid = po('first-input', initFirstInputDelay);
-  perfObservers.lcp = po(
+  perfObservers[1] = po('first-input', initFirstInputDelay);
+  perfObservers[2] = po(
     'largest-contentful-paint',
     initLargestContentfulPaint,
   );
@@ -21,17 +21,17 @@ export const initPerformanceObserver = () => {
   if (config.isResourceTiming) {
     po('resource', initResourceTiming);
   }
-  perfObservers.cls = po('layout-shift', initLayoutShift);
+  perfObservers[3] = po('layout-shift', initLayoutShift);
 };
 
 export const disconnectPerfObserversHidden = () => {
-  if (perfObservers.lcp) {
+  if (perfObservers[2]) {
     logMetric(lcp.value, `${lcpMetricName}Final`);
-    perfObservers.lcp.disconnect();
+    poDisconnect(2);
   }
-  if (perfObservers.cls) {
-    perfObservers.cls.takeRecords();
+  if (perfObservers[3]) {
+    perfObservers[3].takeRecords();
     logMetric(cls.value, `${clsMetricName}Final`);
-    perfObservers.cls.disconnect();
+    poDisconnect(3);
   }
 };

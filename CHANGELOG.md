@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0-rc.16 (2020-3-30)
+
+* **refactor:** reduced library kb part X
+* **fix:** added extra check to remove observer reference
+
 ## 5.0.0-rc.15 (2020-3-26)
 
 * **fix:** added back analyticsTracker into the configs

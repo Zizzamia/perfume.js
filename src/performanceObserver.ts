@@ -1,4 +1,5 @@
 import { C } from './constants';
+import { perfObservers } from './observeInstances';
 import { IPerformanceObserverType } from './types';
 
 /**
@@ -21,3 +22,8 @@ export const po = (
   }
   return null;
 };
+
+export const poDisconnect = (observer: any) => {
+  perfObservers[observer].disconnect();
+  delete perfObservers[observer];
+}

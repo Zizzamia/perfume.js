@@ -1,26 +1,7 @@
-import { WN } from '../src/constants';
 import * as log from '../src/log';
 import * as st from '../src/storageEstimate';
-import mock from './_mock';
 
 describe('storageEstimate', () => {
-  describe('.initStorageEstimate()', () => {
-    it('when navigator is not supported should not call WN.storage.estimate()', () => {
-      (WN as any) = mock.navigator();
-      const spy = jest.spyOn(WN.storage, 'estimate');
-      (WN as any).storage = undefined;
-      st.initStorageEstimate();
-      expect(spy.mock.calls.length).toEqual(0);
-    });
-
-    it('when navigator is supported should call WN.storage.estimate()', () => {
-      (WN as any) = mock.navigator();
-      const spy = jest.spyOn(WN.storage, 'estimate');
-      st.initStorageEstimate();
-      expect(spy.mock.calls.length).toEqual(1);
-    });
-  });
-
   describe('.reportStorageEstimate()', () => {
     let spy: jest.SpyInstance;
 

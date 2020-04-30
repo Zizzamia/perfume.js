@@ -38,6 +38,21 @@ describe('Perfume', () => {
         resourceTiming: true,
       });
     });
+
+    it('when navigator is not supported should not call WN.storage.estimate()', () => {
+      (WN as any) = mock.navigator();
+      const spy = jest.spyOn(WN.storage, 'estimate');
+      (WN as any).storage = undefined;
+      new Perfume();
+      expect(spy.mock.calls.length).toEqual(0);
+    });
+
+    it('when navigator is supported should call WN.storage.estimate()', () => {
+      (WN as any) = mock.navigator();
+      const spy = jest.spyOn(WN.storage, 'estimate');
+      new Perfume();
+      expect(spy.mock.calls.length).toEqual(1);
+    });
   });
 
   describe('.start()', () => {

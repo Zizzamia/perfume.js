@@ -1,7 +1,6 @@
 import { config } from './config';
-
 import { reportPerf } from './reportPerf';
-import { pushTask, roundByTwo } from './utils';
+import { roundByTwo } from './utils';
 
 export const logData = (
   measureName: string,
@@ -13,10 +12,8 @@ export const logData = (
       metric[key] = roundByTwo(metric[key]);
     }
   });
-  pushTask(() => {
-    // Sends the metric to an external tracking service
-    reportPerf(measureName, metric, customProperties);
-  });
+  // Sends the metric to an external tracking service
+  reportPerf(measureName, metric, customProperties);
 };
 
 /**
@@ -25,12 +22,8 @@ export const logData = (
  */
 export const logMetric = (duration: number, measureName: string) => {
   const duration2Decimal = roundByTwo(duration);
-  // Stop Analytics and Logging for false negative metrics
-  if (duration2Decimal > config.maxTime || duration2Decimal <= 0) {
-    return;
-  }
-  pushTask(() => {
+  if (duration2Decimal <= config.maxTime && duration2Decimal > 0) {
     // Sends the metric to an external tracking service
     reportPerf(measureName, duration2Decimal);
-  });
+  }
 };

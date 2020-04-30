@@ -13,7 +13,7 @@ describe('firstInput', () => {
     (WP as any) = mock.performance();
     (window as any).PerformanceObserver = mock.PerformanceObserver;
     (oi as any).perfObservers = {
-      fid: { disconnect: jest.fn() },
+      1: { disconnect: jest.fn() },
     };
   });
 
@@ -39,7 +39,7 @@ describe('firstInput', () => {
     });
 
     it('should call logMetric when perfObservers.lcp is defined', () => {
-      (oi as any).perfObservers.lcp = { disconnect: jest.fn() };
+      (oi as any).perfObservers[2] = { disconnect: jest.fn() };
       (metrics as any).lcp = { value: 1 };
       spy = jest.spyOn(log, 'logMetric');
       initFirstInputDelay([{ duration: 10 } as any]);
@@ -49,7 +49,7 @@ describe('firstInput', () => {
     });
 
     it('should call logMetric when perfObservers.cls is defined', () => {
-      (oi as any).perfObservers.cls = { takeRecords: jest.fn() };
+      (oi as any).perfObservers[3] = { takeRecords: jest.fn() };
       (metrics as any).cls = { value: 2 };
       spy = jest.spyOn(log, 'logMetric');
       initFirstInputDelay([{ duration: 10 } as any]);
@@ -59,7 +59,7 @@ describe('firstInput', () => {
     });
 
     it('should call logMetric when perfObservers.tbt is defined', () => {
-      (oi as any).perfObservers.tbt = { disconnect: jest.fn() };
+      (oi as any).perfObservers[4] = { disconnect: jest.fn() };
       (metrics as any).tbt = { value: 3 };
       spy = jest.spyOn(log, 'logMetric');
       initFirstInputDelay([{ duration: 10 } as any]);

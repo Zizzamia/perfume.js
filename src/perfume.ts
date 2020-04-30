@@ -1,11 +1,11 @@
 /*!
- * Perfume.js v5.0.0-rc.15 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.16 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
 import { config } from './config';
-import { W, WP } from './constants';
+import { W, WN, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { getNetworkInformation } from './getNetworkInformation';
 import { isPerformanceSupported } from './isSupported';
@@ -17,12 +17,12 @@ import {
   initPerformanceObserver,
 } from './observe';
 import { onVisibilityChange, visibility } from './onVisibilityChange';
-import { initStorageEstimate } from './storageEstimate';
+import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByTwo } from './utils';
 
 const AUTHOR = 'Leonardo Zizzamia';
-const VERSION = '5.0.0-rc.15';
+const VERSION = '5.0.0-rc.16';
 
 export default class Perfume {
   constructor(options: IPerfumeOptions = {}) {
@@ -47,7 +47,9 @@ export default class Perfume {
     // Log Network Information
     logData('networkInformation', getNetworkInformation());
     // Let's estimate our storage capacity
-    initStorageEstimate();
+    if (WN && WN.storage) {
+      WN.storage.estimate().then(reportStorageEstimate);
+    }
   }
 
   /**
