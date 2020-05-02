@@ -48,12 +48,13 @@ describe('observe', () => {
   });
 
   describe('.disconnectPerfObserversHidden()', () => {
-    it('should not call logMetric when perfObservers values are undefined', () => {
-      perfObservers[2] = undefined;
-      perfObservers[3] = undefined;
+    it('should call logMetric', () => {
+      perfObservers[2] = { disconnect: jest.fn() };
+      perfObservers[3] = { disconnect: jest.fn(), takeRecords: jest.fn() };
+      perfObservers[4] = { disconnect: jest.fn() };
       spy = jest.spyOn(log, 'logMetric');
       disconnectPerfObserversHidden();
-      expect(spy.mock.calls.length).toEqual(0);
+      expect(spy.mock.calls.length).toEqual(3);
     });
   });
 });

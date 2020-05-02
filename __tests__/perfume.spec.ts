@@ -53,6 +53,20 @@ describe('Perfume', () => {
       new Perfume();
       expect(spy.mock.calls.length).toEqual(1);
     });
+
+    it('should not call document.addEventListener() when document.hidden is undefined', () => {
+      spy = jest.spyOn(document, 'addEventListener');
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(undefined as any);
+      new Perfume();
+      expect(spy.mock.calls.length).toEqual(0);
+    });
+  
+    it('should call document.addEventListener() with the correct argument', () => {
+      spy = jest.spyOn(document, 'addEventListener');
+      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+      new Perfume();
+      expect(spy.mock.calls.length).toEqual(1);
+    });
   });
 
   describe('.start()', () => {

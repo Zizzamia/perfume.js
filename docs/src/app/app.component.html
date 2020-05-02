@@ -115,7 +115,7 @@ npm install perfume.js --save
         First Contentful Paint: <b>{{ fcp }} ms</b><br />
         First Input Delay: <b>{{ fid }} ms</b><br />
         Largest Contentful Paint: <b>{{ lcp }} ms</b><br />
-        Cumulative Layout Shift: <b>{{ cls }}</b><br />
+        Cumulative Layout Shift: <b>{{ cls }} score</b><br />
         Total Blocking Time: <b>{{ tbt }} ms</b><br /><br />
 
         <b>// Secondary Performance Metrics</b><br />
@@ -123,7 +123,8 @@ npm install perfume.js --save
         Largest Contentful Paint Final: <b>{{ lcpFinal }} ms</b><br />
         Cumulative Layout Shift Final: <b>{{ clsFinal }}</b><br />
         Total Blocking Time 5S: <b>{{ tbt5s }} ms</b><br />
-        Total Blocking Time 10S: <b>{{ tbt10s }} ms</b><br /><br />
+        Total Blocking Time 10S: <b>{{ tbt10s }} ms</b><br />
+        Total Blocking Time Final: <b>{{ tbtFinal }} ms</b><br /><br />
 
         <b>// Experimental Performance metric</b><br />
         dataConsumption: <b>{{ dataConsumption | json }}</b>
@@ -176,7 +177,10 @@ npm install perfume.js --save
         <span class="red">break</span>;
       <span class="red">case</span> 'tbt10S'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime10S', {{'{'}} duration: data {{'}'}});
-        <span class="red">break</span>;     
+        <span class="red">break</span>;
+      <span class="red">case</span> 'tbtFinal'<span class="red">:</span>
+        myAnalyticsTool.<span class="violet">track</span>('totalBlockingTimeFinal', {{'{'}} duration: data {{'}'}});
+        <span class="red">break</span>;
       <span class="red">default</span>:
         myAnalyticsTool.<span class="violet">track</span>(metricName, {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;

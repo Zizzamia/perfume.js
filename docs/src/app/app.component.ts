@@ -18,6 +18,7 @@ import {
   tbt,
   tbt5s,
   tbt10s,
+  tbtFinal,
   fibonacci,
   custom_fibonacci,
   networkInformation,
@@ -53,6 +54,7 @@ export class AppComponent implements AfterViewInit {
   tbt: number;
   tbt5s: number;
   tbt10s: number;
+  tbtFinal: number;
   path: string;
   isLowEndDevice: boolean;
   isLowEndExperience: boolean;
@@ -125,6 +127,10 @@ export class AppComponent implements AfterViewInit {
     });
     tbt10s.subscribe(result => {
       this.tbt10s = result;
+      this.ref.detectChanges();
+    });
+    tbtFinal.subscribe(result => {
+      this.tbtFinal = result;
       this.ref.detectChanges();
     });
     fibonacci.subscribe(result => {

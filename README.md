@@ -2,7 +2,7 @@
   <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v4-5-0.png" align="left" width="200" />
 </a>
 
-# [Perfume.js v5.0.0-rc.15](http://perfumejs.com)
+# [Perfume.js v5.0.0-rc.17](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
@@ -123,6 +123,9 @@ const perfume = new Perfume({
       case 'tbt10S':
         myAnalyticsTool.track('totalBlockingTime10S', { duration: data });
         break;
+      case 'tbtFinal':
+        myAnalyticsTool.track('totalBlockingTimeFinal', { duration: data });
+        break;
       default:
         myAnalyticsTool.track(metricName, { duration: data });
         break;
@@ -169,8 +172,6 @@ First Paint is run by default.
 
 **FCP** is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.
 
-First Contentful Paint is run by default.
-
 ```javascript
 // Perfume.js: fcp 2029.00 ms
 ```
@@ -191,8 +192,6 @@ We end the LCP measure at two points: when FID happen and when the page's lifecy
 ### First Input Delay (FID)
 
 **FID** measures the time from when a user first interacts with your site (i.e. when they click a link, tap on a button) to the time when the browser is actually able to respond to that interaction.
-
-First Input Delay is run by default.
 
 ```javascript
 // Perfume.js: fid 3.20 ms

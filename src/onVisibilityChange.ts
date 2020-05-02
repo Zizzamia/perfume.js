@@ -9,13 +9,6 @@ export const visibility = {
  * the page gets hidden, because it's important to not
  * use the wrong "hidden" value when send timing or logging.
  */
-export const onVisibilityChange = function(this: any, cb: Function) {
-  if (typeof D.hidden !== 'undefined') {
-    // Opera 12.10 and Firefox 18 and later support
-    D.addEventListener('visibilitychange', didVisibilityChange.bind(this, cb));
-  }
-};
-
 export const didVisibilityChange = function(cb: Function) {
   if (D.hidden) {
     cb();

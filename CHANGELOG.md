@@ -1,15 +1,20 @@
 # Changelog
 
-## 5.0.0-rc.16 (2020-3-30)
+## 5.0.0-rc.17 (2020-4-30)
+
+* **feat:** added Total Blocking Time Final metrics
+* **refactor:** reduced library kb part XI
+
+## 5.0.0-rc.16 (2020-4-30)
 
 * **refactor:** reduced library kb part X
 * **fix:** added extra check to remove observer reference
 
-## 5.0.0-rc.15 (2020-3-26)
+## 5.0.0-rc.15 (2020-4-26)
 
 * **fix:** added back analyticsTracker into the configs
 
-## 5.0.0-rc.14 (2020-3-26)
+## 5.0.0-rc.14 (2020-4-26)
 
 * **refactor:** reduced library kb part IX
 
@@ -17,7 +22,7 @@
 
 Removed the development logging options, in favor of focusing more on the `analyticsTracker` method.
 
-## 5.0.0-rc.13 (2020-3-26)
+## 5.0.0-rc.13 (2020-4-26)
 
 * **refactor:** reduced library kb part VIII
 
@@ -25,7 +30,7 @@ Removed the development logging options, in favor of focusing more on the `analy
 
 Removed warning logs for start() and end() methods, because the code already handles those edge cases.
 
-## 5.0.0-rc.12 (2020-3-26)
+## 5.0.0-rc.12 (2020-4-26)
 
 * **refactor:** reduced library kb part VII
 
@@ -34,11 +39,11 @@ Removed warning logs for start() and end() methods, because the code already han
 Renamed most of metric names, please read README Quickstart to see the latest name version we have.
 We made most of metric with short names, to allow the library to be even smaller.
 
-## 5.0.0-rc.11 (2020-3-26)
+## 5.0.0-rc.11 (2020-4-26)
 
 * **refactor:** reduced library kb part VI
 
-## 5.0.0-rc.10 (2020-3-26)
+## 5.0.0-rc.10 (2020-4-26)
 
 * **refactor:** reduced library kb part V & simplified estimateStorage metric result
 
@@ -46,41 +51,41 @@ We made most of metric with short names, to allow the library to be even smaller
 
 Simplified EstimateStorage values, to help reduce library size.
 
-## 5.0.0-rc.9 (2020-3-25)
+## 5.0.0-rc.9 (2020-4-25)
 
 * **refactor:** reduced library kb part IV
 
-## 5.0.0-rc.8 (2020-3-24)
+## 5.0.0-rc.8 (2020-4-24)
 
 * **refactor:** reduced library kb part III
 
-## 5.0.0-rc.7 (2020-3-24)
+## 5.0.0-rc.7 (2020-4-24)
 
 * **refactor:** reduced library kb part II
 
-## 5.0.0-rc.6 (2020-3-21)
+## 5.0.0-rc.6 (2020-4-21)
 
 * **refactor:** reduced library kb part I
 
-## 5.0.0-rc.5 (2020-3-19)
+## 5.0.0-rc.5 (2020-4-19)
 
 * **feat:** added secondary log for LCP/CLS when the page's lifecycle state changes to hidden
 
-## 5.0.0-rc.4 (2020-3-19)
+## 5.0.0-rc.4 (2020-4-19)
 
 * **fix:** solved issue with `storageEstimate` and created his own event
 * **fix:** removed extra calls for `totalBlockingTime`
 
-## 5.0.0-rc.3 (2020-3-18)
+## 5.0.0-rc.3 (2020-4-18)
 
 * **feat:** added Total Blocking Time [#112](https://github.com/Zizzamia/perfume.js/issues/112)
 
-## 5.0.0-rc.2 (2020-3-16)
+## 5.0.0-rc.2 (2020-4-16)
 
 * **feat:** added `storageEstimateQuota` and `storageEstimateUsage` to the **navigatorInfo** results
 * **fix:** added feature detection for `clearMarks`
 
-## 5.0.0-rc.1 (2020-3-14)
+## 5.0.0-rc.1 (2020-4-14)
 
 * **feat:** enabled `PerformanceObserver` for all browser
 * **feat:** simplified the `analyticsTracker` by having all duration value inside the `data` property

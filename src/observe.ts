@@ -2,7 +2,7 @@ import { config } from './config';
 import { initLayoutShift } from './cumulativeLayoutShift';
 import { initFirstInputDelay } from './firstInput';
 import { logMetric } from './log';
-import { cls, clsMetricName, lcp, lcpMetricName } from './metrics';
+import { cls, lcp, tbt } from './metrics';
 import { perfObservers } from './observeInstances';
 import { initFirstPaint, initLargestContentfulPaint } from './paint';
 import { po, poDisconnect } from './performanceObserver';
@@ -25,13 +25,11 @@ export const initPerformanceObserver = () => {
 };
 
 export const disconnectPerfObserversHidden = () => {
-  if (perfObservers[2]) {
-    logMetric(lcp.value, `${lcpMetricName}Final`);
-    poDisconnect(2);
-  }
-  if (perfObservers[3]) {
-    perfObservers[3].takeRecords();
-    logMetric(cls.value, `${clsMetricName}Final`);
-    poDisconnect(3);
-  }
+  logMetric(lcp.value, `lcpFinal`);
+  poDisconnect(2);
+  perfObservers[3].takeRecords();
+  logMetric(cls.value, `clsFinal`);
+  poDisconnect(3);
+  logMetric(tbt.value, `tbtFinal`);
+  poDisconnect(4);
 };

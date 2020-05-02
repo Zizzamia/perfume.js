@@ -4,7 +4,6 @@ export const metrics: IMetricMap = {};
 export const cls = {
   value: 0,
 };
-export const clsMetricName = 'cls';
 export const fcp = {
   value: 0,
 };
@@ -12,7 +11,6 @@ export const lcp = {
   value: 0,
 };
 export const fcpEntryName = 'first-contentful-paint';
-export const lcpMetricName = 'lcp';
 export const rt: { value: IPerfumeDataConsumption } = {
   value: {
     beacon: 0,
@@ -28,4 +26,3 @@ export const rt: { value: IPerfumeDataConsumption } = {
 export const tbt = {
   value: 0,
 };
-export const tbtMetricName = 'tbt';

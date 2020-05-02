@@ -1,11 +1,11 @@
 /*!
- * Perfume.js v5.0.0-rc.16 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.0-rc.17 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
  */
 import { config } from './config';
-import { W, WN, WP } from './constants';
+import { D, W, WN, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { getNetworkInformation } from './getNetworkInformation';
 import { isPerformanceSupported } from './isSupported';
@@ -16,15 +16,14 @@ import {
   disconnectPerfObserversHidden,
   initPerformanceObserver,
 } from './observe';
-import { onVisibilityChange, visibility } from './onVisibilityChange';
+import { didVisibilityChange, visibility } from './onVisibilityChange';
 import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByTwo } from './utils';
 
-const AUTHOR = 'Leonardo Zizzamia';
-const VERSION = '5.0.0-rc.16';
-
 export default class Perfume {
+  v = '5.0.0-rc.17';
+
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     config.analyticsTracker = options.analyticsTracker;
@@ -41,7 +40,13 @@ export default class Perfume {
     }
 
     // Init visibilitychange listener
-    onVisibilityChange(disconnectPerfObserversHidden);
+    if (typeof D.hidden !== 'undefined') {
+      // Opera 12.10 and Firefox 18 and later support
+      D.addEventListener(
+        'visibilitychange',
+        didVisibilityChange.bind(this, disconnectPerfObserversHidden),
+      );
+    }
     // Log Navigation Timing
     logData('navigationTiming', getNavigationTiming());
     // Log Network Information
