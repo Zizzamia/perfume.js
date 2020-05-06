@@ -13,7 +13,9 @@ export const initFirstInputDelay = (
   }
   poDisconnect(1);
   logMetric(lcp.value, 'lcp');
-  perfObservers[3].takeRecords();
+  if (perfObservers[3]) {
+    perfObservers[3].takeRecords();
+  }
   logMetric(cls.value, 'cls');
   logMetric(tbt.value, 'tbt');
   // TBT with 5 second delay after FID

@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0-rc.18 (2020-5-6)
+
+* **fix:** added extra check in case `observer` object is not present
+
 ## 5.0.0-rc.17 (2020-4-30)
 
 * **feat:** added Total Blocking Time Final metrics
