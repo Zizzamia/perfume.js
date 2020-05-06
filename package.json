@@ -1,6 +1,6 @@
 {
   "name": "perfume.js",
-  "version": "5.0.0-rc.18",
+  "version": "5.0.0-rc.19",
   "description": "Web performance library for measuring all User-centric performance metrics.",
   "keywords": [
     "performance",
@@ -88,7 +88,7 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 95,
+        "branches": 93,
         "functions": 95,
         "lines": 95,
         "statements": 95

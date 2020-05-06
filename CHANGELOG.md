@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0-rc.19 (2020-5-6)
+
+* **fix:** added extra check to avoid multiple `disconnectPerfObserversHidden` calls
+
 ## 5.0.0-rc.18 (2020-5-6)
 
 * **fix:** added extra check in case `observer` object is not present
