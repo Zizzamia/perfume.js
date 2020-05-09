@@ -1,5 +1,29 @@
 # Changelog
 
+## 5.0.0 (2020-5-9)
+
+* **feat:** simplified the `analyticsTracker` by having all duration value inside the `data` property
+* **feat:** enabled `PerformanceObserver` for all browser, before was only for Chrome
+* **feat:** added Total Blocking Time [#112](https://github.com/Zizzamia/perfume.js/issues/112)
+* **feat:** added Total Blocking Time Final for when the page's lifecycle state changes to hidden
+* **feat:** added secondary log for LCP and CLS called LCP Final & CLS Final for when the page's lifecycle state changes to hidden
+* **feat:** added `storageEstimateQuota` and `storageEstimateUsage` to the **navigatorInfo** results
+* **fix:** added feature detection for `clearMarks`
+* **fix:** solved issue with `storageEstimate` and created his own event
+* **refactor:** reduced library size to 2Kb gzipped
+
+### Breaking Changes
+
+Until now, we allowed only Chrome to run the PerformanceObserver interface because of possible cross-browser issues. One in particular related to Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027. Starting from Perfume.js v5, we are going to remove this limitation.
+
+Having both `duration` and 	`data` inside the `analyticsTracker`, it started causing some confusion. Starting from v5, we will keep only `data` and have any information from `duration` contained inside `data`. Please make sure to change the code inside your `analyticsTracker`.
+
+More changes:
+- Removed the development logging options, in favor of focusing more on the `analyticsTracker` method.
+- Removed warning logs for `start()` and `end()` methods, because the code already handles those edge cases.
+- Renamed most of metric names, please read [README Quickstart](https://github.com/Zizzamia/perfume.js#quick-start) to see the latest name version we have. We made most of metric with short names, to allow the library to be even smaller.
+- Simplified `EstimateStorage` values, to help reduce library size.
+
 ## 5.0.0-rc.19 (2020-5-6)
 
 * **fix:** added extra check to avoid multiple `disconnectPerfObserversHidden` calls
@@ -101,7 +125,7 @@ Simplified EstimateStorage values, to help reduce library size.
 ### Breaking Changes
 
 Until now, we allowed only Chrome to run the PerformanceObserver interface because of possible cross-browser issues. One in particular related to Firefox 58: https://bugzilla.mozilla.org/show_bug.cgi?id=1403027
-Starting from Perfume.js v4.9.0, we are going to remove this limitation, and we are going to monitor any new open issues and address them immediately.
+Starting from Perfume.js v5.0.0-rc.1, we are going to remove this limitation, and we are going to monitor any new open issues and address them immediately.
 
 Having both `duration` and 	`data` inside the `analyticsTracker`, it started causing some confusion. Starting from v5, we will keep only `data` and have any information from `duration` contained inside `data`. Please make sure to change the code inside your `analyticsTracker`.
 

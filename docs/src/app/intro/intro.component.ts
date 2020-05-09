@@ -19,7 +19,7 @@ import {
         </a>
         <h1 class="title">Perfume.js</h1>
         <p>
-          Speed is a feature, and to deliver it we need to understand the many factors
+          <b>Page Speed</b> is a feature, and to deliver it we need to understand the many factors
           and fundamental limitations that are at play. 
           If we can measure it, we can improve it.
         </p>

@@ -2,11 +2,11 @@
   <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v4-5-0.png" align="left" width="200" />
 </a>
 
-# [Perfume.js v5.0.0-rc.19](http://perfumejs.com)
+# [Perfume.js v5.0.0](http://perfumejs.com)
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
-> Speed is a feature, and to deliver it we need to understand the many factors and fundamental limitations that are at play. In a few words, if we can measure it, we can improve it.
+> <b>Page Speed<b> is a feature, and to deliver it we need to understand the many factors and fundamental limitations that are at play. If we can measure it, we can improve it.
 
 <br />
 <br />
@@ -14,9 +14,10 @@
 English | [简体中文](./README-zh_CN.md)
 ## Why Perfume.js?
 
-Perfume is a tiny, web performance monitoring library which reports field data back to your favorite analytics tool.
+Perfume is a tiny, web performance monitoring library that reports field data back to your favorite analytics tool.
 
 - ⏰ Supports latest Performance APIs for precise metrics
+- 🚀 Device data enrichment
 - 🔨 Cross browser tested
 - 🚿 Filters out false positive/negative results
 - 🤙 Only 2Kb gzip
@@ -26,7 +27,7 @@ Perfume is a tiny, web performance monitoring library which reports field data b
 
 ##  The latest in metrics & Real User Measurement
 
-**Perfume** leverage the latest Performance APIs for measuring performance that matters! Also known as **field data**, they allow to understand what real-world users are actually experiencing.
+**Perfume** leverages the latest Performance APIs to collect **field data** that allows us to understand what real-world users are actually experiencing.
 
 * Navigation Timing
 * Navigator Interface
@@ -41,9 +42,9 @@ Perfume is a tiny, web performance monitoring library which reports field data b
 * Total Blocking Time ([TBT](https://web.dev/tbt/))
 
 <br />
-With Perfume.js, you can collect those metrics and have a deep understanding everywhere in the world how your customers perceive web performance for your application. Use your favorite analytics tool to visualize the data between countries.
+With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world perceive web performance for your application. 
 <br />
-Here below how it might look a sample data for <b>FCP</b> between the United States, Italy, Indonesia, and Nigeria.
+Use your favorite analytics tool to visualize the data from country to country. Take a look at this example comparing <b>FCP</b> for [coinbase.com](https://www.coinbase.com/) in the United States, Italy, Indonesia, and Nigeria.
 <br />
 
 ![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
@@ -71,7 +72,7 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 <br />
 
 ## Quick start
-Metrics like Navigation Timing, Network Information, FP, FCP, FID, LCP, CLS and TBT are default reported with Perfume; All results will be reported to the analyticsTracker callback, and the code below is just one way on how you can organize your tracking, feel free to tweak it as you prefer.
+Metrics like Navigation Timing, Network Information, FP, FCP, FID, LCP, CLS and TBT are default reported with Perfume; All results will be reported to the `analyticsTracker` callback, and the code below is just one way for you to organize your tracking, feel free to tweak it suit your needs.
 
 🚀 Visit [perfumejs.com](http://perfumejs.com/) for a live demo on how the metrics work. 🌕
 
@@ -109,10 +110,10 @@ const perfume = new Perfume({
         myAnalyticsTool.track('largestContentfulPaintFinal', { duration: data });
         break;
       case 'cls':
-        myAnalyticsTool.track('cumulativeLayoutShift', { duration: data });
+        myAnalyticsTool.track('cumulativeLayoutShift', { value: data });
         break;
       case 'clsFinal':
-        myAnalyticsTool.track('cumulativeLayoutShiftFinal', { duration: data });
+        myAnalyticsTool.track('cumulativeLayoutShiftFinal', { value: data });
         break;
       case 'tbt':
         myAnalyticsTool.track('totalBlockingTime', { duration: data });
@@ -134,15 +135,22 @@ const perfume = new Perfume({
 });
 ```
 
+In a world with widely varying device capabilities, a one-size-fits-all event doesn’t always work. Perfume adds **data enrichment** to all events so we can better understand the real world experiences:
+- **deviceMemory**: the user's device memory (RAM).
+- **hardwareConcurrency**: the number of logical CPU processor cores on the user's device.
+- **serviceWorkerStatus**: status of the service worker between controlled, supported and unsupported.
+
+Based on the Navigator APIs the library can help us differentiate between a low-end and a high-end device/experience:
+- **isLowEndDevice**: combination of the score of RAM and CPU.
+- **isLowEndExperience**: combination of the score of RAM, CPU, NetworkStatus and SaveData.
+
 ## Performance audits
 Coo coo coo [cool](https://www.youtube.com/watch?v=zDcbpFimUc8), let's learn something new.
 
 ### Navigation Timing
 Navigation Timing collects performance metrics for the life and timings of a network request.
+
 Perfume helps expose some of the key metrics you might need.
-
-Navigation Timing is run by default.
-
 <ul>
   <li><b>DNS lookup</b>: When a user requests a URL, the Domain Name System (DNS) is queried to translate a domain to an IP address.</li>
   <li><b>Header size</b>: HTTP header size</li>
@@ -160,7 +168,7 @@ Navigation Timing is run by default.
 
 ### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 
-**FP** is the exact time the browser renders anything as visually different from what was on the screen before navigation, e.g. a background change after a long blank white screen time.
+**FP** is the exact time taken for the browser to render anything as visually different from what was on the screen before navigation, e.g. a background change after a long blank white screen time.
 
 First Paint is run by default.
 
@@ -170,7 +178,7 @@ First Paint is run by default.
 
 ### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 
-**FCP** is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.
+**FCP** is the exact time taken for the browser to render the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.
 
 ```javascript
 // Perfume.js: fcp 2029.00 ms
@@ -178,15 +186,13 @@ First Paint is run by default.
 
 ### Largest Contentful Paint (LCP)
 
-Largest Contentful Paint (LCP) is an important, user-centric metric for measuring 
-perceived load speed because it marks the point in the page load timeline when the page's main 
-content has likely loaded—a fast LCP helps reassure the user that the page is useful.
+**LCP** is an important, user-centric metric for measuring perceived load speed because it marks the point in the page load timeline when the page's main content has likely loaded—a fast LCP helps reassure the user that the page is useful.
 
-We end the LCP measure at two points: when FID happen and when the page's lifecycle state changes to hidden.
+We end the Largest Contentful Paint measure at two points: when First Input Delay happen and when the page's lifecycle state changes to hidden.
 
 ```javascript
 // Perfume.js: lcp 2429.00 ms
-// Perfume.js: lcpFinal 2429.00 ms
+// Perfume.js: lcpFinal 2642.00 ms
 ```
 
 ### First Input Delay (FID)
@@ -200,7 +206,7 @@ We end the LCP measure at two points: when FID happen and when the page's lifecy
 ### Cumulative Layout Shift (CLS)
 **CLS** is an important, user-centric metric for measuring visual stability because it helps quantify how often users experience unexpected layout shifts—a low CLS helps ensure that the page is delightful.
 
-We end the CLS measure at two points: when FID happen and when the page's lifecycle state changes to hidden.
+We end the Cumulative Layout Shift measure at two points: when First Input Delay happen and when the page's lifecycle state changes to hidden.
 
 ```javascript
 // Perfume.js: cls 0.13
@@ -208,17 +214,20 @@ We end the CLS measure at two points: when FID happen and when the page's lifecy
 ```
 
 ### Total Blocking Time (TBT)
-**Total Blocking Time** (TBT) is an important, user-centric metric for measuring load responsiveness because it helps quantify the severity of how non-interactive a page is prior to it becoming reliably interactive—a low TBT helps ensure that the page is usable.
+**TBT** is an important, user-centric metric for measuring load responsiveness because it helps quantify the severity of how non-interactive a page is prior to it becoming reliably interactive—a low TBT helps ensure that the page is usable.
+
+We end the Total Blocking Time measure at four points: when First Input Delay happen, 5 seconds after FID, 10 seconds after FID and when the page's lifecycle state changes to hidden.
 
 ```javascript
 // Perfume.js: tbt 347.07 ms 
 // Perfume.js: tbt5S 427.14 ms 
 // Perfume.js: tbt10S 427.14 ms 
+// Perfume.js: tbtFinal 526.08 ms 
 ```
 
 ### Resource Timing
 Resource Timing collects performance metrics for document-dependent resources. Stuff like style sheets, scripts, images, et cetera.
-Perfume helps expose all PerformanceResourceTiming entries and group data data consumption by Kb used.
+Perfume helps expose all PerformanceResourceTiming entries and groups data data consumption by Kb used.
 
 ```javascript
 const perfume = new Perfume({
@@ -266,7 +275,7 @@ perfume.endPaint('togglePopover');
 
 ![Performance](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
 
-## Customize & Utilities
+## Customize
 
 ### Default Options
 

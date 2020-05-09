@@ -6,9 +6,10 @@
       <h3 class="box-title" id="/why-perfume/">
         <a href="{{ path }}#/why-perfume/">Why Perfume.js?</a>
       </h3>
-      <p>Perfume is a tiny, web performance monitoring library which reports field data back to your favorite analytics tool.</p>
+      <p>Perfume is a tiny, web performance monitoring library that reports field data back to your favorite analytics tool.</p>
       <ul>
         <li>⏰ Supports latest Performance APIs for precise metrics</li>
+        <li>🚀 Device data enrichment</li>
         <li>🔨 Cross browser tested</li>
         <li>🚿 Filters out false positive/negative results</li>
         <li>🤙 Only 2Kb gzip</li>
@@ -27,9 +28,8 @@
         <a href="{{ path }}#/real-user-measurements/">The latest in metrics & Real User Measurement</a>
       </h3>
       <p>
-        <b>Perfume</b> leverage the latest Performance APIs for measuring performance
-        that matters! Also known as field data, they allow to understand 
-        what real-world users are actually experiencing.
+        <b>Perfume</b> leverages the latest Performance APIs to collect <b>field data</b> 
+        that allows us to understand what real-world users are actually experiencing.
       </p>
       <ul>
         <li>Navigation Timing</li>
@@ -46,12 +46,12 @@
       </ul>
       <br />
       <p>
-        With Perfume.js, you can collect those metrics and have a deep understanding everywhere 
-        in the world how your customers perceive web performance for your application. 
-        Use your favorite analytics tool to visualize the data between countries.
+        With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world 
+        perceive web performance for your application.
       </p>
       <p>
-        Here below how it might look a sample data for <b>FCP</b> between the United States, 
+        Use your favorite analytics tool to visualize the data from country to country.
+        Take a look at this example comparing <b>FCP</b> for <a href="https://www.coinbase.com" target="_blank">coinbase.com</a> in the United States, 
         Italy, Indonesia, and Nigeria.
       </p>
       <br />
@@ -96,7 +96,7 @@ npm install perfume.js --save
       </h3>
       <p>Metrics like Navigation Timing, Network Information, FP, FCP, FID, LCP, CLS and TBT are default reported with Perfume; 
         All results will be reported to the analyticsTracker callback, and the code below is just 
-        one way on how you can organize your tracking, feel free to tweak it as you prefer.
+        one way for you to organize your tracking, feel free to tweak it suit your needs.
       </p>
       <p class="box-demo">
         Oh btw, you're being served a 
@@ -119,7 +119,7 @@ npm install perfume.js --save
         Total Blocking Time: <b>{{ tbt }} ms</b><br /><br />
 
         <b>// Secondary Performance Metrics</b><br />
-        <b>// Those metrics activate on a set delay or when the tab change visibility</b><br />
+        <b>// These metrics activate on a set delay or when the tab changes visibility</b><br />
         Largest Contentful Paint Final: <b>{{ lcpFinal }} ms</b><br />
         Cumulative Layout Shift Final: <b>{{ clsFinal }}</b><br />
         Total Blocking Time 5S: <b>{{ tbt5s }} ms</b><br />
@@ -192,6 +192,20 @@ npm install perfume.js --save
           </tbody>
         </table>
       </div>
+      <br />
+      <p>In a world with widely varying device capabilities, a one-size-fits-all event doesn’t always work. 
+        Perfume adds <b>data enrichment</b> to all events so we can better understand the real world experiences:</p>
+      <ul>
+        <li><b>deviceMemory</b>: the user's device memory (RAM).</li>
+        <li><b>hardwareConcurrency</b>: the number of logical CPU processor cores on the user's device.</li>
+        <li><b>serviceWorkerStatus</b>: status of the service worker between controlled, supported and unsupported.</li>
+      </ul>
+      <p>Based on the Navigator APIs the library can help us differentiate between a low-end and a 
+        high-end device/experience:</p>
+      <ul>
+        <li><b>isLowEndDevice</b>: combination of the score of RAM and CPU.</li>
+        <li><b>isLowEndExperience</b>: combination of the score of RAM, CPU, NetworkStatus and SaveData.</li>
+      </ul>
     </div>
 
     <div class="box">
@@ -228,7 +242,7 @@ npm install perfume.js --save
           First Paint (FP)
         </a>
       </h3>
-      <p>FP is the exact time the browser renders anything as visually different from what was
+      <p><b>FP</b> is the exact time taken for the browser to render anything as visually different from what was
       on the screen before navigation, e.g. a background change after a long blank white screen time.</p>
       <p class="box-demo">
         Perfume.js: First Paint {{ fp }} ms
@@ -241,7 +255,7 @@ npm install perfume.js --save
           First Contentful Paint (FCP)
         </a>
       </h3>
-      <p>FCP is the exact time the browser renders the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
+      <p><b>FCP</b> is the exact time taken for the browser to render the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.</p>
       <p class="box-demo">
         Perfume.js: First Contentful Paint {{ fcp }} ms
       </p>
@@ -253,12 +267,14 @@ npm install perfume.js --save
           Largest Contentful Paint (LCP)
         </a>
       </h3>
-      <p>LCP is an important, 
+      <p><b>LCP</b> is an important, 
         user-centric metric for measuring perceived load speed because 
         it marks the point in the page load timeline when the page's main 
         content has likely loaded—a fast LCP helps reassure the user that the page is useful.</p>
+      <p>We end the Largest Contentful Paint measure at two points: when First Input Delay happen and when the page's lifecycle state changes to hidden.</p>
       <p class="box-demo">
-        Perfume.js: Largest Contentful Paint {{ lcp }} ms
+        Perfume.js: Largest Contentful Paint {{ lcp }} ms<br />
+        Perfume.js: Largest Contentful Paint Final {{ lcpFinal }} ms
       </p>
     </div>
 
@@ -286,7 +302,8 @@ npm install perfume.js --save
         layout shifts—a low CLS helps ensure that the page is delightful.
       </p>
       <p class="box-demo">
-        Perfume.js: Cumulative Layout Shift score {{ cls }}
+        Perfume.js: Cumulative Layout Shift {{ cls }}<br />
+        Perfume.js: Cumulative Layout Shift Final {{ clsFinal }}
       </p>
     </div>
 
@@ -295,12 +312,22 @@ npm install perfume.js --save
         <a href="{{ path }}#/total-blocking-time/">Total Blocking Time (TBT)</a>
       </h3>
       <p>
-        <b>Total Blocking Time</b> (TBT) is an important, user-centric metric for measuring 
-        load responsiveness because it helps quantify the severity of how non-interactive 
-        a page is prior to it becoming reliably interactive—a low TBT helps ensure that the page is usable.
+        <b>TBT</b> is an important, user-centric metric for measuring load 
+        responsiveness because it helps quantify the severity 
+        of how non-interactive a page is prior to it becoming reliably 
+        interactive—a low TBT helps ensure that the page is usable.
+      </p>
+      <p>
+        We end the Total Blocking Time measure at four points: 
+        when First Input Delay happen, 5 seconds after FID, 10 
+        seconds after FID and when the page's lifecycle state 
+        changes to hidden.
       </p>
       <p class="box-demo">
-        Perfume.js: Total Blocking Time {{ tbt }} ms
+        Perfume.js: Total Blocking Time {{ tbt }} ms<br />
+        Perfume.js: Total Blocking Time 5s {{ tbt5s }} ms<br />
+        Perfume.js: Total Blocking Time 10S {{ tbt10s }} ms<br />
+        Perfume.js: Total Blocking Time Final {{ tbtFinal }} ms<br />
       </p>
     </div>
 
@@ -311,7 +338,7 @@ npm install perfume.js --save
         </a>
       </h3>
       <p>Resource Timing collects performance metrics for document-dependent resources. Stuff like style sheets, scripts, images, et cetera.</p>
-      <p>Perfume helps expose all PerformanceResourceTiming entries and group data <b>data consumption</b> by Kb used.</p>
+      <p>Perfume helps expose all PerformanceResourceTiming entries and groups data <b>data consumption</b> by Kb used.</p>
       <p class="box-demo">
         Perfume.js: dataConsumption {{ dataConsumption | json }}
       </p>
@@ -339,8 +366,9 @@ npm install perfume.js --save
       </h3>
       <p>
         <b>Performance.mark</b> (
-        <a href="https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API" target="_blank">User Timing API</a>) is used to create an application-defined peformance entry in the browser's performance entry
-        buffer.
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API" target="_blank">User Timing API</a>) is used to create an 
+        application-defined peformance entry in 
+        the browser's performance entry buffer.
       </p>
       <p class="box-demo">
         <button class="box-demo-btn" (click)="measureFibonacci()">Run Fibonacci</button>
@@ -375,7 +403,7 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
     <app-cfp class="box" id="/component-first-paint/"></app-cfp>
 
     <div class="box">
-      <h2 class="box-title">Customize & Utilities</h2>
+      <h2 class="box-title">Customize</h2>
     </div>
 
     <div class="box">
@@ -440,7 +468,7 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
           <h3>Leonardo Zizzamia</h3>
           <h4>
             🌕 <a href="https://www.coinbase.com" target="_blank">Coinbase</a> Growth eng lead  ☁️✨<br />
-            Leading the web renaissance one byte at the time ✨🔭<br />
+            Leading the web renaissance one byte at a time ✨🔭<br />
             Curator of <a href="https://www.twitter.com/NGRomeConf" target="_blank">@NGRomeConf</a> & 
             <a href="https://www.twitter.com/AngularSF" target="_blank">@AngularSF</a>
           </h4>
