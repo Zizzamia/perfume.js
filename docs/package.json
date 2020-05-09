@@ -25,7 +25,7 @@
     "core-js": "3.1.4",
     "ng-packagr": "^9.0.0",
     "perfume.js": "5.0.0",
-    "rxjs": "6.5.4",
+    "rxjs": "6.5.5",
     "tslib": "^1.10.0",
     "typescript": "3.7.5",
     "zone.js": "~0.10.2"
