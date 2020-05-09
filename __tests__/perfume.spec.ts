@@ -104,9 +104,7 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith(
         'metricName',
-        {
-          data: 12346,
-        },
+        12346,
         {},
       );
     });

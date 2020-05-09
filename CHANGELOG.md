@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1 (2020-5-9)
+
+* **fix:** measuring with `perfume.end()` now returns the **duration** of the annotation instead of an object
+
 ## 5.0.0 (2020-5-9)
 
 * **feat:** simplified the `analyticsTracker` by having all duration value inside the `data` property
