@@ -44,7 +44,8 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 <br />
 With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world perceive web performance for your application. 
 <br />
-Use your favorite analytics tool to visualize the data from country to country. Take a look at this example comparing <b>FCP</b> for [coinbase.com](https://www.coinbase.com/) in the United States, Italy, Indonesia, and Nigeria.
+Use your favorite analytics tool to visualize the data from country to country. 
+Take a look at this example comparing <b>FCP</b> for [coinbase.com](www.coinbase.com) in the United States, Italy, Indonesia, and Nigeria.
 <br />
 
 ![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
@@ -72,7 +73,7 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 <br />
 
 ## Quick start
-Metrics like Navigation Timing, Network Information, FP, FCP, FID, LCP, CLS and TBT are default reported with Perfume; All results will be reported to the `analyticsTracker` callback, and the code below is just one way for you to organize your tracking, feel free to tweak it suit your needs.
+Metrics like **Navigation Timing**, **Network Information**, **FP**, **FCP**, **FID**, **LCP**, **CLS** and **TBT** are default reported with Perfume; All results will be reported to the `analyticsTracker` callback, and the code below is just one way for you to organize your tracking, feel free to tweak it suit your needs.
 
 🚀 Visit [perfumejs.com](http://perfumejs.com/) for a live demo on how the metrics work. 🌕
 
