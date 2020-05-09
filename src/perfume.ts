@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.0.1 (http://zizzamia.github.io/perfume)
+ * Perfume.js v5.0.2 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -22,7 +22,7 @@ import { IPerfumeOptions } from './types';
 import { roundByTwo } from './utils';
 
 export default class Perfume {
-  v = '5.0.1';
+  v = '5.0.2';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options

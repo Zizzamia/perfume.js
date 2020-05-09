@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.1 (2020-5-9)
+## 5.0.2 (2020-5-9)
 
 * **fix:** measuring with `perfume.end()` now returns the **duration** of the annotation instead of an object
 
