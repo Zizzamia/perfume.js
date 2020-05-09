@@ -45,7 +45,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world perceive web performance for your application. 
 <br />
 Use your favorite analytics tool to visualize the data from country to country. 
-Take a look at this example comparing <b>FCP</b> for [coinbase.com](www.coinbase.com) in the United States, Italy, Indonesia, and Nigeria.
+Take a look at this example comparing <b>FCP</b> for www.coinbase.com in the United States, Italy, Indonesia, and Nigeria.
 <br />
 
 ![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
@@ -170,8 +170,6 @@ Perfume helps expose some of the key metrics you might need.
 ### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 
 **FP** is the exact time taken for the browser to render anything as visually different from what was on the screen before navigation, e.g. a background change after a long blank white screen time.
-
-First Paint is run by default.
 
 ```javascript
 // Perfume.js: fp 1482.00 ms
