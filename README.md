@@ -1,5 +1,6 @@
 <a href="http://www.perfumejs.com/">
-  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v4-5-0.png" align="left" width="200" />
+  <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v5-0-0.png"
+  align="left" width="200" alt="Perfume.js logo" />
 </a>
 
 # [Perfume.js v5.0.2](http://perfumejs.com)
