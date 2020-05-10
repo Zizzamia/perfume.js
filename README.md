@@ -12,6 +12,7 @@
 <br />
 <br />
 <br />
+<br />
 
 English | [简体中文](./README-zh_CN.md)
 ## Why Perfume.js?
@@ -47,7 +48,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world perceive web performance for your application. 
 <br />
 Use your favorite analytics tool to visualize the data from country to country. 
-Take a look at this example comparing <b>FCP</b> for [Coinbase](https://www.coinbase.com/) in the United States, Italy, Indonesia, and Nigeria.
+Take a look at this example comparing <b>FCP</b> for [Coinbase](https://coinbase.com/) in the United States, Italy, Indonesia, and Nigeria.
 <br />
 
 ![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
