@@ -116,14 +116,6 @@ import { isLowEndExperience$ } from '../perfume';
         >Default Options</a
       >
       <a
-        href="{{ path }}#/articles/"
-        class="part-four"
-        [class.active]="navSelected === navOptions.articles"
-        (click)="activeNav(navOptions.articles)"
-        *ngIf="!isLowEndExperience"
-        >Articles</a
-      >
-      <a
         href="{{ path }}#/copyright-and-license/"
         class="part-four"
         [class.active]="navSelected === navOptions.copyright"
@@ -210,7 +202,6 @@ export class NavigationComponent implements AfterViewInit {
       log: 'custom-logging',
       options: 'default-options',
       copyright: 'copyright-and-license',
-      articles: 'articles',
     };
   }
 
