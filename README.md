@@ -277,9 +277,7 @@ perfume.endPaint('togglePopover');
 
 ![Performance](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
 
-## Customize
-
-### Default Options
+## Perfume custom options
 
 Default options provided to Perfume.js constructor.
 
@@ -290,8 +288,6 @@ const options = {
   maxMeasureTime: 15000,
 };
 ```
-<br />
-
 
 ## Use Google Analytics
 A quick way to see your page speed results on your web app is by using Google Analytics. Those GA events will show on Behavior > Site Speed > User Timings. For testing you might want to see them coming live on Realtime > Events.
@@ -315,6 +311,7 @@ new Perfume({
     }
   })
 });
+```
 <br />
 
 ## Develop
