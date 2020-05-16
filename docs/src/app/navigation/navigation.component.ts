@@ -124,53 +124,6 @@ import { isLowEndExperience$ } from '../perfume';
       >
     </div>
   `,
-  styles: [
-    `
-      .layout-nav {
-        display: none;
-        padding: 0 0 0 20px;
-        font-size: 1em;
-        color: #222;
-      }
-      .layout-nav a {
-        display: block;
-        padding: 5px 10px;
-        border-left: 2px solid transparent;
-        border-left-color: rgba(249, 200, 40, 0.4);
-        line-height: 20px;
-        text-decoration: none;
-      }
-      .layout-nav a.part-two {
-        border-left-color: rgba(235, 185, 180, 0.4);
-      }
-      .layout-nav a.part-three {
-        border-left-color: rgba(187, 219, 230, 0.4);
-      }
-      .layout-nav a.part-four {
-        border-left-color: rgba(198, 178, 238, 0.4);
-      }
-      .layout-nav a.part-angular {
-        border-left-color: rgba(212, 43, 38, 0.4);
-      }
-      .layout-nav a.part-react {
-        border-left-color: rgba(97, 218, 251, 0.4);
-      }
-      .layout-nav a:hover,
-      .layout-nav a.active {
-        background: rgba(246, 225, 113, 0.3);
-        border-left-color: rgba(227, 187, 180, 0.8);
-      }
-      @media (min-width: 960px) {
-        .layout-nav {
-          flex-shrink: 0;
-          display: block;
-          position: sticky;
-          top: 10px;
-          margin-top: 28px;
-        }
-      }
-    `,
-  ],
   encapsulation: ViewEncapsulation.None,
 })
 export class NavigationComponent implements AfterViewInit {

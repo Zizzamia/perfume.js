@@ -12,7 +12,6 @@ import { openDialog$, perfume } from '../perfume';
 @Component({
   selector: 'app-cfp',
   templateUrl: './cfp.component.html',
-  styles: [``],
   encapsulation: ViewEncapsulation.None,
 })
 export class CfpComponent implements AfterViewInit {

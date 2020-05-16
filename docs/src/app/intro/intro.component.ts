@@ -32,50 +32,6 @@ import {
       </div>
     </div>
   `,
-  styles: [
-    `
-      .layout--intro .box--intro {
-        margin: 0 0 40px !important;
-      }
-      .layout--intro .box--intro p {
-        margin: 10px 0;
-        font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
-        font-size: 1.4em;
-        font-style: italic;
-        line-height: 35px;
-      }
-      .title {
-        margin: 0;
-        padding: 8px 0 0;
-        font-family: 'Dancing Script', cursive;
-        font-size: 3.7em;
-        font-weight: 400;
-        text-align: center;
-        color: #f2db77;
-      }
-      .logo img {
-        display: block;
-        width: 212px;
-        margin: auto;
-      }
-      @media (min-width: 960px) {
-        .layout--intro .layout-content {
-          max-width: 832px;
-        }
-      }
-      @media (min-width: 640px) {
-        .logo {
-          float: left;
-        }
-        .title {
-          text-align: left;
-        }
-        .layout--intro .box--intro p {
-          margin: 10px 20px 10px 0px;
-        }
-      }
-    `,
-  ],
   encapsulation: ViewEncapsulation.None,
 })
 export class IntroComponent implements AfterViewInit {

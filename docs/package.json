@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "9.1.6",
     "@angular/router": "9.1.6",
     "core-js": "3.1.4",
+    "idb": "5.0.3",
     "ng-packagr": "^9.0.0",
     "perfume.js": "5.0.2",
     "rxjs": "6.5.5",
