@@ -292,6 +292,31 @@ const options = {
 ```
 <br />
 
+
+## Use Google Analytics
+A quick way to see your page speed results on your web app is by using Google Analytics. Those GA events will show on Behavior > Site Speed > User Timings. For testing you might want to see them coming live on Realtime > Events.
+
+Have fun ✨
+
+```javascript
+const metricNames = ['fp', 'fcp', 'lcp', 'lcpFinal', 'fid', 'cls', 'clsFinal', 'tbt', 'tbt10S', 'tbtFinal'];
+new Perfume({
+  analyticsTracker: ({ metricName, data, navigatorInformation }) => {
+    if (metricNames.includes(metricName)) {
+      ga('send', 'event', {
+        eventCategory: 'Perfume.js',
+        eventAction: metricName,
+        // Google Analytics metrics must be integers, so the value is rounded
+        eventValue: metricName === 'cls' ? data * 1000 : data,
+        eventLabel: navigatorInformation.isLowEndExperience ? 'lowEndExperience' : 'highEndExperience',
+        // Use a non-interaction event to avoid affecting bounce rate
+        nonInteraction: true,
+      });
+    }
+  })
+});
+<br />
+
 ## Develop
 
 * `npm run test`: Run test suite
