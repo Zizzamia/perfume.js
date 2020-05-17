@@ -56,15 +56,17 @@ export function analyticsTracker(options) {
       'tbtFinal',
     ].includes(metricName)
   ) {
-    (window as any).ga('send', 'event', {
-      eventCategory: 'Perfume.js',
-      eventAction: metricName,
-      // Google Analytics metrics must be integers, so the value is rounded
-      eventValue: metricName === 'cls' ? data * 1000 : data,
-      eventLabel: navigatorInformation.isLowEndExperience ? 'lowEndExperience' : 'highEndExperience',
-      // Use a non-interaction event to avoid affecting bounce rate
-      nonInteraction: true,
-    });
+    if ((window as any).ga) {
+      (window as any).ga('send', 'event', {
+        eventCategory: 'Perfume.js',
+        eventAction: metricName,
+        // Google Analytics metrics must be integers, so the value is rounded
+        eventValue: metricName === 'cls' ? data * 1000 : data,
+        eventLabel: navigatorInformation.isLowEndExperience ? 'lowEndExperience' : 'highEndExperience',
+        // Use a non-interaction event to avoid affecting bounce rate
+        nonInteraction: true,
+      });
+    }
   }
   switch (metricName) {
     case 'navigationTiming':

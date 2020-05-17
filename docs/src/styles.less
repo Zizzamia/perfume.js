@@ -1,5 +1,3 @@
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -354,6 +352,18 @@ h3.box-title {
   font-size: 16px;
   line-height: 24px;
 }
+@media (max-width: 960px) {
+  .box-leo {
+    -webkit-box-align: flex-start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: flex-start;
+    align-items: flex-start;
+  }
+  .box-leo img {
+    width: 50px;
+    height: 50px;
+  }
+}
 
 
 .layout-nav {
@@ -397,5 +407,10 @@ h3.box-title {
     position: sticky;
     top: 10px;
     margin-top: 28px;
+  } 
+}
+@media (max-width: 400) {
+  .no-mobile {
+    display: none !important;
   }
 }

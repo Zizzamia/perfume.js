@@ -68,7 +68,7 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     navigationTiming.subscribe(result => {
-      this.navigationTiming = result;
+      this.navigationTiming = JSON.stringify(result, undefined, 2);
       this.ref.detectChanges();
     });
     networkInformation.subscribe(result => {
@@ -85,7 +85,7 @@ export class AppComponent implements AfterViewInit {
       this.ref.detectChanges();
     });
     dataConsumption.subscribe(result => {
-      this.dataConsumption = result;
+      this.dataConsumption = JSON.stringify(result, undefined, 2);
       this.ref.detectChanges();
     });
     fp.subscribe(result => {

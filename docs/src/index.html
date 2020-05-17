@@ -18,6 +18,255 @@
 </head>
 
 <body>
-  <app-root></app-root>
+  <div class="layout layout--body">
+    <div class="layout-content">
+      <app-intro class="layout layout-performance layout--intro">
+        <div class="layout-content">
+          <div id="/home/" class="box box--intro">
+            <a href="https://github.com/zizzamia/perfume.js" target="_blank" rel="noreferrer">
+              <picture class="logo">
+                <source type="image/webp" srcset="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.webp">
+                <source type="image/png" srcset="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.png">
+                <img alt="Perfume.js logo" src="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.png">
+              </picture>
+            </a>
+            <h1 class="title">Perfume.js</h1>
+            <p>
+              <b>Page Speed</b> is a feature, and to deliver it we need to understand the many factors
+              and fundamental limitations that are at play. 
+              If we can measure it, we can improve it.
+            </p>
+            <a class="github-button" href="https://github.com/zizzamia/perfume.js"
+            data-size="large" data-show-count="true"
+            aria-label="Star zizzamia/perfume.js on GitHub">Star</a>
+            <a href="https://twitter.com/zizzamia?ref_src=twsrc%5Etfw"
+            class="twitter-follow-button" data-size="large" rel="noreferrer"
+            data-show-count="true">Follow @zizzamia</a>
+          </div>
+        </div>
+      </app-intro>
+      <div class="box box--intro">
+        <br />
+        <h3 class="box-title" id="/why-perfume/">
+          <a href="https://zizzamia.github.io/perfume/#/why-perfume/">Why Perfume.js?</a>
+        </h3>
+        <p>
+          Perfume is a tiny, web performance monitoring library that reports field
+          data back to your favorite analytics tool.
+        </p>
+        <ul>
+          <li>⏰ Supports latest Performance APIs for precise metrics</li>
+          <li>🚀 Device data enrichment</li>
+          <li>🔨 Cross browser tested</li>
+          <li>🚿 Filters out false positive/negative results</li>
+          <li>🤙 Only 2Kb Javascript gzip</li>
+          <li>🛰 Flexible analytics tool</li>
+          <li>
+            ⚡️ Waste-zero ms with
+            <a
+              href="https://developers.google.com/web/updates/2015/08/using-requestidlecallback"
+              target="_blank" rel="noreferrer"
+              >requestIdleCallback</a
+            >
+            strategy built-in
+          </li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3 class="box-title" id="/real-user-measurements/">
+          <a href="https://zizzamia.github.io/perfume/#/real-user-measurements/"
+            >The latest in metrics & Real User Measurement</a
+          >
+        </h3>
+        <p>
+          <b>Perfume</b> leverages the latest Performance APIs to collect
+          <b>field data</b>
+          that allows us to understand what real-world users are actually
+          experiencing.
+        </p>
+        <ul>
+          <li>Navigation Timing</li>
+          <li>Navigator Interface</li>
+          <li>Resource Timing</li>
+          <li>Service Worker Status</li>
+          <li>StorageManager interface</li>
+          <li>
+            First Paint (FP)
+          </li>
+          <li>
+            First Contentful Paint (<a
+              href="https://web.dev/first-contentful-paint/"
+              target="_blank" rel="noreferrer"
+              >FCP</a
+            >)
+          </li>
+          <li>
+            Largest Contentful Paint (<a href="https://web.dev/lcp/" target="_blank" rel="noreferrer"
+              >LCP</a
+            >)
+          </li>
+          <li>
+            First Input Delay (<a href="https://web.dev/fid/" target="_blank" rel="noreferrer">FID</a>)
+          </li>
+          <li>
+            Cumulative Layout Shift (<a href="https://web.dev/cls/" target="_blank" rel="noreferrer"
+              >CLS</a
+            >)
+          </li>
+          <li>
+            Total Blocking Time (<a href="https://web.dev/tbt/" target="_blank" rel="noreferrer">TBT</a
+            >)
+          </li>
+        </ul>
+        <br />
+        <p>
+          With Perfume.js, you can collect these metrics to develop a deeper
+          understanding of how customers around the world perceive web performance for
+          your application.
+        </p>
+        <p class="no-mobile">
+          Use your favorite analytics tool to visualize the data from country to
+          country. Take a look at this example comparing <b>FCP</b> for
+          <a href="https://www.coinbase.com" target="_blank" rel="noreferrer">coinbase.com</a> in the
+          United States, Italy, Indonesia, and Nigeria.
+        </p>
+        <br />
+        <picture class="box-img no-mobile">
+          <source
+            srcset="https://zizzamia.github.io/perfume/assets/first-contentful-paint-desktop.webp"
+            type="image/webp" class="no-mobile"
+          />
+          <source
+            srcset="https://zizzamia.github.io/perfume/assets/first-contentful-paint-desktop.png"
+            type="image/png" class="no-mobile"
+          />
+          <img
+            src="https://zizzamia.github.io/perfume/assets/first-contentful-paint-desktop.png"
+            alt="First Contentful Paint"
+            loading="lazy" class="no-mobile"
+          />
+        </picture>
+      </div>
+      
+      <div class="box">
+        <h3 class="box-title" id="/installing-and-imports/">
+          <a href="https://zizzamia.github.io/perfume/#/installing-and-imports/">Installing and Imports</a>
+        </h3>
+        <div class="box-code js">
+          <table>
+            <tbody>
+              <tr>
+                <td class="code">
+                  <pre><span class="gray">// Install</span>
+npm install perfume.js --save
+
+<span class="gray">// Importing library</span>
+<span class="gray">// Import the generated bundle to use the whole library generated:</span>
+<span class="red">import</span> Perfume <span class="red">from</span> 'perfume.js';
+
+<span class="gray">// Universal Module Definition:</span>
+<span class="red">import</span> Perfume <span class="red">from</span> 'node_modules/perfume.js/perfume.umd.js'; </pre>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <app-root></app-root>
+
+      <div class="box">
+        <h2 class="box-title">Customize</h2>
+      </div>
+      <div class="box">
+        <h3 class="box-title" id="/default-options/">
+          <a href="https://zizzamia.github.io/perfume/#/default-options/">Default Options</a>
+        </h3>
+        <p>Default options provided to Perfume.js constructor.</p>
+        <div class="box-code js">
+          <table>
+            <tbody>
+              <tr>
+                <td class="code">
+                  <pre><span class="red">const</span> <span class="blue">options</span> <span class="red">=</span> {
+  resourceTiming<span class="red">:</span> <span class="blue">false</span>,
+  analyticsTracker<span class="red">:</span> options => {},
+  maxMeasureTime<span class="red">:</span> 15000,
+};</pre>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="box">
+        <h2 class="box-title">Contacts</h2>
+      </div>
+      <div class="box">
+        <h3 class="box-title" id="/copyright-and-license/">
+          <a href="https://zizzamia.github.io/perfume/#/copyright-and-license/">Copyright and licenses</a>
+        </h3>
+        <p>
+          Code and documentation copyright 2020 <a href="https://twitter.com/Zizzamia" 
+          target="_blank" rel="noreferrer">Leonardo Zizzamia</a>. Code released under the
+          <a
+            href="https://github.com/Zizzamia/perfume.js/blob/master/LICENSE"
+            target="_blank" rel="noreferrer"
+            >MIT license</a>. Docs released under Creative Commons.
+        </p>
+      </div>
+      
+      <div class="box">
+        <a href="https://twitter.com/Zizzamia" class="box-leo" target="_blank" rel="noreferrer">
+          <picture class="logo">
+            <source
+              srcset="https://zizzamia.github.io/perfume/assets/leonardo-zizzamia.webp"
+              type="image/webp"
+            />
+            <source
+              srcset="https://zizzamia.github.io/perfume/assets/leonardo-zizzamia.jpg"
+              type="image/jpeg"
+            />
+            <img
+              src="https://zizzamia.github.io/perfume/assets/leonardo-zizzamia.jpg"
+              alt="Leonardo Zizzamia"
+              loading="lazy"
+            />
+          </picture>
+          <div>
+            <h3>Leonardo Zizzamia</h3>
+            <h4>
+              🌕<b>Coinbase</b> Growth eng lead ☁️✨
+              Leading the web renaissance one byte at a time ✨🔭
+              Curator of <b>@NGRomeConf</b> & <b>@AngularSF</b>
+            </h4>
+          </div>
+        </a>
+      </div>
+      
+      <div class="box Fibonacci"></div>
+    </div>
+    <app-navigation class="layout-nav">
+      <div class="layout-nav">
+        <a class="active" href="https://zizzamia.github.io/perfume/#/home/">Home</a>
+        <a href="https://zizzamia.github.io/perfume/#/real-user-measurements/">Real User Measurement</a>
+        <a href="https://zizzamia.github.io/perfume/#/installing-and-imports/">Installing and Imports</a>
+        <a href="https://zizzamia.github.io/perfume/#/quick-start/">Quick start</a><br>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/navigation-timing/">Navigation Timing</a>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/first-paint/">First Paint</a>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/first-contentful-paint/">First Contentful Paint</a>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/largest-contentful-paint/">Largest Contentful Paint</a>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/first-input-delay/">First Input Delay</a>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/cumulative-layout-shift/">Cumulative Layout Shift</a>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/total-blocking-time/">Total Blocking Time</a>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/resource-timing/">Resource Timing</a>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/annotate-metrics/">Annotate metrics</a>
+        <a class="part-two" href="https://zizzamia.github.io/perfume/#/component-first-paint/">Component First Paint</a>
+        <br>
+        <a class="part-four" href="https://zizzamia.github.io/perfume/#/default-options/">Default Options</a><a class="part-four" href="https://zizzamia.github.io/perfume/#/copyright-and-license/">Copyright and licenses</a>
+      </div>
+    </app-navigation>
+  </div>
 </body>
 </html>
