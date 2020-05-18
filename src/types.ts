@@ -1,9 +1,8 @@
 export interface IAnalyticsTrackerOptions {
   metricName: string;
-  data?: any;
-  duration?: number;
-  eventProperties?: object;
-  navigatorInformation?: INavigatorInfo;
+  data: IPerfumeData;
+  eventProperties: object;
+  navigatorInformation: INavigatorInfo;
 }
 
 export interface IPerfumeConfig {
@@ -109,3 +108,5 @@ export interface IPerfumeDataConsumption {
   total: number;
   xmlhttprequest: number;
 }
+
+export type IPerfumeData = number | IPerfumeNavigationTiming | IPerfumeNetworkInformation;
