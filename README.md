@@ -312,6 +312,9 @@ new Perfume({
   })
 });
 ```
+
+To connect with additional analytics providers, checkout the [analytics plugin for Perfume.js](https://getanalytics.io/plugins/perfumejs/).
+
 <br />
 
 ## Develop
@@ -324,6 +327,7 @@ new Perfume({
 ## Plugins
 
 * [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
+* [Perfume.js plugin for Analytics](https://github.com/DavidWells/analytics/tree/master/packages/analytics-plugin-perfumejs)
 <br />
 
 ## Perfume is used by
