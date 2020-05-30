@@ -17,7 +17,7 @@ addons:
   code_climate:
     repo_token: 1bbf623b0428bdadf89c0e0db78d37de3fe9f5c80be4188a85c7098cf32228b5
 script:
-  - npm run test:prod && npm run build
+  - npm run ci
 after_success:
   - yarn global add codeclimate-test-reporter
   - npm run report-coverage

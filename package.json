@@ -56,7 +56,8 @@
     "commit": "git-cz",
     "commitmsg": "validate-commit-msg",
     "precommit": "lint-staged",
-    "prepush": "npm run test:prod"
+    "prepush": "npm run test:prod",
+    "ci": "npm run test:prod && npm run build"
   },
   "lint-staged": {
     "{src,__tests__}/**/*.ts": [
