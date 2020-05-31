@@ -125,19 +125,13 @@ export function analyticsTracker(options) {
       custom_fibonacci.next(data);
       break;
     case 'openDialog':
+      openDialog$.next(data);
+      break;
     case 'elHeroLogo':
       elHeroLogo.next(data);
       break;
     case 'elPageTitle':
       elPageTitle.next(data);
-      break;
-      openDialog$.next(data);
-      break;
-    case 'hero-logo':
-      heroLogoTiming.next(data);
-      break;
-    case 'page-title':
-      pageTitleTiming.next(data);
       break;
   }
 }
