@@ -24,7 +24,8 @@
     "cumulative-layout-shift",
     "cls",
     "total-blocking-time",
-    "tbt"
+    "tbt",
+    "element-timing"
   ],
   "iife": "dist/perfume.iife.min.js",
   "main": "dist/perfume.min.js",
