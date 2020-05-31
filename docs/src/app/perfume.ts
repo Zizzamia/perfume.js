@@ -31,8 +31,6 @@ export const isLowEndDevice$ = new BehaviorSubject(false);
 export const isLowEndExperience$ = new BehaviorSubject(false);
 export const elHeroLogo = new BehaviorSubject(0);
 export const elPageTitle = new BehaviorSubject(0);
-export const heroLogoTiming = new BehaviorSubject(0);
-export const pageTitleTiming = new BehaviorSubject(0);
 
 // Supports AOT and DI
 export function analyticsTracker(options) {
