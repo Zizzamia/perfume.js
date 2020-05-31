@@ -51,8 +51,8 @@
 
     <b>// Experimental Performance metrics</b><br />
     dataConsumption: <b>{{ dataConsumption }}</b><br />
-    Hero logo element timing: <b>{{ heroLogoTiming }} ms</b><br />
-    Page title element timing: <b>{{ pageTitleTiming }} ms</b>
+    Hero logo element timing: <b>{{ elHeroLogo }} ms</b><br />
+    Page title element timing: <b>{{ elPageTitle }} ms</b>
   </p>
   <div class="box-code js">
     <table>
@@ -401,12 +401,16 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
     <img src="{{ path }}assets/performance-cfp.png"
     alt="Annotate Component First Paint (CFP)" loading="lazy" class="no-mobile" />
   </picture>
-  <br />
-  <p>Or try using the <a href="https://wicg.github.io/element-timing/" target="_blank" rel="noreferrer">Element Timing API</a></p>
+</div>
+<div class="box">
+  <h3 class="box-title" id="/element-timing">
+    <a href="{{ path }}#/element-timing">Element Timing</a>
+  </h3>
+  <p>Add the <b>elementtiming</b> attribute to track when image elements and text nodes with are displayed on screen using the <a href="https://wicg.github.io/element-timing/" target="_blank" rel="noreferrer">Element Timing API</a></p>
   <p class="box-demo">
-    <b>Hero logo element timing</b>: {{ heroLogoTiming }} ms
+    <b>Hero logo element timing</b>: {{ elHeroLogo }} ms
     <br />
-    <b>Page title element timing</b>: {{ pageTitleTiming }} ms
+    <b>Page title element timing</b>: {{ elPageTitle }} ms
   </p>
   <div class="box-code html">
     <table>
