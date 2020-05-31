@@ -47,6 +47,7 @@ export type IPerformanceObserverType =
   | 'measure'
   | 'navigation'
   | 'paint'
+  | 'element'
   | 'resource';
 
 export type IPerformanceEntryInitiatorType =
@@ -69,6 +70,7 @@ export declare interface IPerformanceEntry {
   startTime: number;
   hadRecentInput?: boolean;
   value?: number;
+  identifier?: string;
 }
 
 export interface IPerformancePaintTiming {

@@ -35,6 +35,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 * Navigation Timing
 * Navigator Interface
 * Resource Timing
+* Element Timing
 * Service Worker Status
 * StorageManager interface
 * First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
@@ -130,6 +131,9 @@ const perfume = new Perfume({
         break;
       case 'tbtFinal':
         myAnalyticsTool.track('totalBlockingTimeFinal', { duration: data });
+        break;
+      case 'page-title':
+        myAnalyticsTool.track('pageTitle', { duration: data });
         break;
       default:
         myAnalyticsTool.track(metricName, { duration: data });
@@ -276,6 +280,22 @@ perfume.endPaint('togglePopover');
 ```
 
 ![Performance](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
+
+Or you can try the [emerging](https://chromestatus.com/features#elementtiming) [Element Timing API](https://wicg.github.io/element-timing/) specification by simply adding the `elementtiming` attribute to HTML elements you would like to measure:
+
+```diff
+<header>
+-  <h1 class="title">Perfume.js</h1>
+-  <img alt="Perfume.js logo" src="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.png">
++  <h1 elementtiming="page-title" class="title">Perfume.js</h1>
++  <img elementtiming="hero-logo" alt="Perfume.js logo" src="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.png">
+</header>
+```
+
+```javascript
+// Perfume.js: page-title 256.00 ms
+// Perfume.js: hero-logo 1234.00 ms
+```
 
 ## Perfume custom options
 

@@ -30,3 +30,13 @@ export const initLargestContentfulPaint = (
     lcp.value = lastEntry.renderTime || lastEntry.loadTime;
   }
 };
+
+export const initElementTiming = (
+  performanceEntries: IPerformanceEntry[],
+) => {
+  performanceEntries.forEach(performanceEntry => {
+    if (performanceEntry.identifier) {
+      logMetric(performanceEntry.startTime, performanceEntry.identifier);
+    }
+  });
+};
