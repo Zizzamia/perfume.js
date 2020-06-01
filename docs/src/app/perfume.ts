@@ -136,6 +136,7 @@ export function analyticsTracker(options) {
 
 export const PerfumeConfig = {
   resourceTiming: true,
+  elementTiming: true,
   analyticsTracker,
 };
 

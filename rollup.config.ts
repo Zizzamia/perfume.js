@@ -14,6 +14,7 @@ const createConfig = ({ output, min = false }) => {
             'config',
             'navigationTiming',
             'resourceTiming',
+            'elementTiming',
             'start',
             'end',
             'endPaint',

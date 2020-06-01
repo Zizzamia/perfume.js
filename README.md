@@ -285,16 +285,19 @@ perfume.endPaint('togglePopover');
 
 Track when image elements and text nodes are displayed on screen using the [emerging](https://chromestatus.com/features#elementtiming) [Element Timing API](https://wicg.github.io/element-timing/) specification by simply adding the `elementtiming` attribute with a descriptive value of your choice to HTML elements you would like to measure:
 
-```diff
-<header>
--  <h1 class="title">Perfume.js</h1>
--  <img alt="Perfume.js logo" src="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.png">
-+  <h1 elementtiming="elPageTitle" class="title">Perfume.js</h1>
-+  <img elementtiming="elHeroLogo" alt="Perfume.js logo" src="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.png">
-</header>
+```html
+<h1 elementtiming="elPageTitle" class="title">Perfume.js</h1>
+<img elementtiming="elHeroLogo" alt="Perfume.js logo" src="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.png">
 ```
 
 ```javascript
+const perfume = new Perfume({
+  elementTiming: true,
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
+  })
+});
+
 // Perfume.js: elPageTitle 256.00 ms
 // Perfume.js: elHeroLogo 1234.00 ms
 ```
@@ -305,7 +308,8 @@ Default options provided to Perfume.js constructor.
 
 ```javascript
 const options = {
-  resourceTiming: false
+  resourceTiming: false,
+  elementTiming: false,
   analyticsTracker: options => {},
   maxMeasureTime: 15000,
 };
