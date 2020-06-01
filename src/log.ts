@@ -20,7 +20,7 @@ export const logData = (
  * Dispatches the metric duration into internal logs
  * and the external time tracking service.
  */
-export const logMetric = (duration: number, measureName: string) => {
+export const logMetric = (duration: number, measureName: string): void => {
   const duration2Decimal = roundByTwo(duration);
   if (duration2Decimal <= config.maxTime && duration2Decimal > 0) {
     // Sends the metric to an external tracking service

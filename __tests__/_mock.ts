@@ -1,4 +1,16 @@
 /* istanbul ignore file */
+
+import { IPerformanceEntry } from '../src/types';
+
+export const MockPerformanceEntry: IPerformanceEntry = {
+  duration: 123,
+  entryType: "paint",
+  loadTime: 456,
+  name: "entry name",
+  renderTime: 789,
+  startTime: 987,
+};
+
 const entries = [
   { name: 'first-paint', startTime: 1 },
   { name: 'first-contentful-paint', startTime: 1 },
@@ -150,4 +162,5 @@ export default {
     logging: true,
   },
   entries,
+  PerformanceEntry: MockPerformanceEntry,
 };

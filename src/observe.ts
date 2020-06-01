@@ -4,7 +4,7 @@ import { initFirstInputDelay } from './firstInput';
 import { logMetric } from './log';
 import { cls, lcp, tbt } from './metrics';
 import { perfObservers } from './observeInstances';
-import { initFirstPaint, initLargestContentfulPaint } from './paint';
+import { initFirstPaint, initLargestContentfulPaint, initElementTiming } from './paint';
 import { po, poDisconnect } from './performanceObserver';
 import { initResourceTiming } from './resourceTiming';
 
@@ -22,6 +22,7 @@ export const initPerformanceObserver = () => {
     po('resource', initResourceTiming);
   }
   perfObservers[3] = po('layout-shift', initLayoutShift);
+  po('element', initElementTiming);
 };
 
 export const disconnectPerfObserversHidden = () => {

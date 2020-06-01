@@ -25,6 +25,8 @@ import {
   isLowEndDevice$,
   isLowEndExperience$,
   navigatorInformation$,
+  elHeroLogo,
+  elPageTitle,
   perfume,
 } from './perfume';
 
@@ -61,6 +63,8 @@ export class AppComponent implements AfterViewInit {
     deviceMemory: string | number;
     hardwareConcurrency: string | number;
   };
+  elHeroLogo: number;
+  elPageTitle: number;
 
   constructor(private ref: ChangeDetectorRef) {
     this.path = window.location.href.split('#')[0];
@@ -146,6 +150,14 @@ export class AppComponent implements AfterViewInit {
     });
     isLowEndExperience$.subscribe(result => {
       this.isLowEndExperience = result;
+      this.ref.detectChanges();
+    });
+    elHeroLogo.subscribe(result => {
+      this.elHeroLogo = result;
+      this.ref.detectChanges();
+    });
+    elPageTitle.subscribe(result => {
+      this.elPageTitle = result;
       this.ref.detectChanges();
     });
   }

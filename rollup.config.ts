@@ -77,7 +77,8 @@ const createConfig = ({ output, min = false }) => {
             'usageDetails',
             'caches',
             'indexedDB',
-            'serviceWorkerRegistrations'
+            'serviceWorkerRegistrations',
+            'identifier'
           ]
         }
       },

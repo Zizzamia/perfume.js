@@ -29,6 +29,8 @@ export const custom_fibonacci = new BehaviorSubject(0);
 export const openDialog$ = new BehaviorSubject(0);
 export const isLowEndDevice$ = new BehaviorSubject(false);
 export const isLowEndExperience$ = new BehaviorSubject(false);
+export const elHeroLogo = new BehaviorSubject(0);
+export const elPageTitle = new BehaviorSubject(0);
 
 // Supports AOT and DI
 export function analyticsTracker(options) {
@@ -122,6 +124,12 @@ export function analyticsTracker(options) {
       break;
     case 'openDialog':
       openDialog$.next(data);
+      break;
+    case 'elHeroLogo':
+      elHeroLogo.next(data);
+      break;
+    case 'elPageTitle':
+      elPageTitle.next(data);
       break;
   }
 }

@@ -49,8 +49,10 @@
     Total Blocking Time 10S: <b>{{ tbt10s }} ms</b><br />
     Total Blocking Time Final: <b>{{ tbtFinal }} ms</b><br /><br />
 
-    <b>// Experimental Performance metric</b><br />
-    dataConsumption: <b>{{ dataConsumption }}</b>
+    <b>// Experimental Performance metrics</b><br />
+    dataConsumption: <b>{{ dataConsumption }}</b><br />
+    Hero logo element timing: <b>{{ elHeroLogo }} ms</b><br />
+    Page title element timing: <b>{{ elPageTitle }} ms</b>
   </p>
   <div class="box-code js">
     <table>
@@ -368,7 +370,12 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
       loading="lazy" class="no-mobile"
     />
   </picture>
+</div>
 
+<div class="box">
+  <h3 class="box-title" id="/component-first-paint/">
+    <a href="{{ path }}#/component-first-paint/">Component First Paint</a>
+  </h3>
   <p>Use perfume.endPaint() to mark the point, immediately after the browser renders pixels to the screen.</p>
   <div class="box-code js">
     <table>
@@ -394,4 +401,26 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
     <img src="{{ path }}assets/performance-cfp.png"
     alt="Annotate Component First Paint (CFP)" loading="lazy" class="no-mobile" />
   </picture>
+</div>
+<div class="box">
+  <h3 class="box-title" id="/element-timing">
+    <a href="{{ path }}#/element-timing">Element Timing</a>
+  </h3>
+  <p>Add the <b>elementtiming</b> attribute to track when image elements and text nodes with are displayed on screen using the <a href="https://wicg.github.io/element-timing/" target="_blank" rel="noreferrer">Element Timing API</a></p>
+  <p class="box-demo">
+    <b>Hero logo element timing</b>: {{ elHeroLogo }} ms
+    <br />
+    <b>Page title element timing</b>: {{ elPageTitle }} ms
+  </p>
+  <div class="box-code html">
+    <table>
+      <tbody>
+        <tr>
+          <td class="code">
+            <pre><span class="violet">{{'<'}}h1</span> <span class="blue">elementtiming</span><span class="violet">="</span><span class="red">page-title</span><span class="violet">" </span><span class="blue">class</span><span class="violet">="</span><span class="red">title</span><span class="violet">"{{'>'}}</span>Perfume.js<span class="violet">{{'<'}}/h1{{'>'}}</span></pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

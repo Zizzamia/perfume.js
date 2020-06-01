@@ -181,7 +181,7 @@ h3.box-title {
   position: relative;
   margin: 10px 0;
 
-  &.js .code:before {
+  &.js .code:before, &.html .code:before {
     position: absolute;
     top: 0;
     right: 0;
@@ -192,7 +192,12 @@ h3.box-title {
     line-height: 15px;
     height: 15px;
     font-weight: 600;
+  }
+  &.js .code:before {
     content: 'JS';
+  }
+  &.html .code:before {
+    content: 'HTML';
   }
   table,
   tr,
