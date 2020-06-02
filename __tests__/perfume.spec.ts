@@ -39,6 +39,19 @@ describe('Perfume', () => {
       });
     });
 
+    it('should run with config version C', () => {
+      new Perfume({
+        elementTiming: true,
+      });
+    });
+
+    it('should run with config version D', () => {
+      new Perfume({
+        resourceTiming: true,
+        elementTiming: true,
+      });
+    });
+
     it('when navigator is not supported should not call WN.storage.estimate()', () => {
       (WN as any) = mock.navigator();
       const spy = jest.spyOn(WN.storage, 'estimate');
@@ -60,7 +73,7 @@ describe('Perfume', () => {
       new Perfume();
       expect(spy.mock.calls.length).toEqual(0);
     });
-  
+
     it('should call document.addEventListener() with the correct argument', () => {
       spy = jest.spyOn(document, 'addEventListener');
       jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);

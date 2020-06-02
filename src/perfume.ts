@@ -28,6 +28,7 @@ export default class Perfume {
     // Extend default config with external options
     config.analyticsTracker = options.analyticsTracker;
     config.isResourceTiming = !!options.resourceTiming;
+    config.isElementTiming = !!options.elementTiming;
     config.maxTime = options.maxMeasureTime || config.maxTime;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported

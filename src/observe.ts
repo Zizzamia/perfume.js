@@ -8,7 +8,7 @@ import { initFirstPaint, initLargestContentfulPaint, initElementTiming } from '.
 import { po, poDisconnect } from './performanceObserver';
 import { initResourceTiming } from './resourceTiming';
 
-export const initPerformanceObserver = () => {
+export const initPerformanceObserver = (): void => {
   perfObservers[0] = po('paint', initFirstPaint);
   // FID needs to be initialized as soon as Perfume is available
   // DataConsumption resolves after FID is triggered
@@ -22,10 +22,12 @@ export const initPerformanceObserver = () => {
     po('resource', initResourceTiming);
   }
   perfObservers[3] = po('layout-shift', initLayoutShift);
-  po('element', initElementTiming);
+  if (config.isElementTiming) {
+    po('element', initElementTiming);
+  }
 };
 
-export const disconnectPerfObserversHidden = () => {
+export const disconnectPerfObserversHidden = (): void => {
   if (perfObservers[2]) {
     logMetric(lcp.value, `lcpFinal`);
     poDisconnect(2);

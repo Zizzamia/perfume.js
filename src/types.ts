@@ -8,6 +8,7 @@ export interface IAnalyticsTrackerOptions {
 export interface IPerfumeConfig {
   // Metrics
   isResourceTiming: boolean;
+  isElementTiming: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   // Logging
@@ -17,6 +18,7 @@ export interface IPerfumeConfig {
 export interface IPerfumeOptions {
   // Metrics
   resourceTiming?: boolean;
+  elementTiming?: boolean;
   // Analytics
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   // Logging
