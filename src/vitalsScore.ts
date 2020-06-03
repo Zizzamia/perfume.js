@@ -26,8 +26,8 @@ export const getVitalsScore = (
   if (!webVitalsScore[measureName]) {
     return null;
   }
-  if (value < webVitalsScore[measureName][0]) {
+  if (value <= webVitalsScore[measureName][0]) {
     return 'good';
   }
-  return value < webVitalsScore[measureName][1] ? 'needsImprovement' : 'poor';
+  return value <= webVitalsScore[measureName][1] ? 'needsImprovement' : 'poor';
 };

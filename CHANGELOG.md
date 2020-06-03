@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.1.0 (2020-6-2)
+
+* **feat:** added web vitals score to metrics [#126](https://github.com/Zizzamia/perfume.js/issues/126)
+* **feat:** added element timing support [#124](https://github.com/Zizzamia/perfume.js/pull/124)
+
 ## 5.0.2 (2020-5-9)
 
 * **fix:** measuring with `perfume.end()` now returns the **duration** of the annotation instead of an object

@@ -3,7 +3,7 @@
   align="left" width="200" alt="Perfume.js logo" />
 </a>
 
-# [Perfume.js v5.0.2](http://perfumejs.com)
+# [Perfume.js v5.1.0](http://perfumejs.com)
 
 [![Current version](https://img.shields.io/github/tag/zizzamia/perfume.js?color=3498DB&label=version)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-27ae60.svg"> [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js) [![brotli size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=brotli&label=JS+brotli+size)](https://unpkg.com/perfume.js)
 
@@ -24,6 +24,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - 🔨 Cross browser tested
 - 🚿 Filters out false positive/negative results
 - 🤙 Only 2Kb gzip
+- 🏅 Web Vitals Score
 - 🛰 Flexible analytics tool
 - ⚡️ Waste-zero ms with [requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback) strategy built-in
 <br />
@@ -44,6 +45,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 * First Input Delay ([FID](https://web.dev/fid/))
 * Cumulative Layout Shift ([CLS](https://web.dev/cls/))
 * Total Blocking Time ([TBT](https://web.dev/tbt/))
+* [Web Vitals Score](https://web.dev/vitals/)
 
 <br />
 With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world perceive web performance for your application. 
@@ -84,7 +86,7 @@ Metrics like **Navigation Timing**, **Network Information**, **FP**, **FCP**, **
 ```javascript
 const perfume = new Perfume({
   analyticsTracker: (options) => {
-    const { metricName, data, eventProperties, navigatorInformation } = options;
+    const { metricName, data, eventProperties, navigatorInformation, vitalsScore } = options;
     switch (metricName) {
       case 'navigationTiming':
         if (data && data.timeToFirstByte) {
@@ -302,6 +304,23 @@ const perfume = new Perfume({
 // Perfume.js: elHeroLogo 1234.00 ms
 ```
 
+## Web Vitals Score
+Perfume will expose for all major metrics the vitals score, those can be used to improve your [SEO and Google page rank](https://webmasters.googleblog.com/2020/05/evaluating-page-experience.html).
+
+| Web Vitals                                | Good          | Needs Improvement | Poor      |
+| ----------------------------------------- | -------------:| -----------------:| ---------:|
+| Fist Paint (fp)                           | 0-1000        | 1001-2500         | Over 2500 |
+| First Contentful Paint (fcp)              | 0-1000        | 1001-2500         | Over 2500 |
+| Largest Contentful Paint (lcp)            | 0-2500        | 2501-4000         | Over 4000 |
+| Largest Contentful Paint Final (lcpFinal) | 0-2500        | 2501-4000         | Over 4000 |
+| First Input Delay (fid)                   | 0-100         | 101-300           | Over 300  |
+| Cumulative Layout Shift (cls)             | 0-0.1         | 0.11-0.25         | Over 0.25 |
+| Cumulative Layout Shift Final (clsFinal)  | 0-2500        | 2501-4000         | Over 4000 |
+| Total Blocking Time (tbt)                 | 0-300         | 301-600           | Over 600  |
+| Total Blocking Time 5S (tbt5S)            | 0-300         | 301-600           | Over 600  |
+| Total Blocking Time 10S (tbt5S)           | 0-300         | 301-600           | Over 600  |
+| Total Blocking Time Final (tbtFinal)      | 0-300         | 301-600           | Over 600  |
+
 ## Perfume custom options
 
 Default options provided to Perfume.js constructor.
@@ -360,6 +379,7 @@ To connect with additional analytics providers, checkout the [analytics plugin f
 * [Conio](https://business.conio.com/)
 * [Coinbase](https://www.coinbase.com)
 * [Coinbase Pro](https://pro.coinbase.com)
+* [Coinbase Custody](https://custody.coinbase.com)
 * [Financial-Times](https://github.com/Financial-Times/n-tracking)
 * [Hearst](https://www.cosmopolitan.com/)
 * [Plan](https://getplan.co)
@@ -371,7 +391,7 @@ To connect with additional analytics providers, checkout the [analytics plugin f
 Made with ☕️ by [@zizzamia](https://twitter.com/zizzamia) and
 I want to thank some friends and projects for the work they did:
 
-* [Leveraging the Performance Metrics that Most Affect User Experience](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics) for documenting this new User-centric performance metrics;
+* [Leraging the Performance Metrics that Most Affect User Experience](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics) for documenting this new User-centric performance metrics;ev
 * [Performance Timeline Level 2](https://w3c.github.io/performance-timeline/) the definition of _PerformanceObserver_ in that specification;
 * [The Contributors](https://github.com/Zizzamia/perfume.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
 * **you** for the star you'll give this project 😉 and for supporting me by giving my project a try 😄
