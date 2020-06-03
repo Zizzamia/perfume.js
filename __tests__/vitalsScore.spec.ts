@@ -6,6 +6,7 @@ describe('vitalsScore', () => {
   describe('webVitalsScore', () => {
     it('should default to the correct values', () => {
       expect(webVitalsScore).toEqual({
+        fp: [1000, 2500],
         fcp: [1000, 2500],
         lcp: [2500, 4000],
         lcpFinal: [2500, 4000],
