@@ -79,7 +79,19 @@ const createConfig = ({ output, min = false }) => {
             'caches',
             'indexedDB',
             'serviceWorkerRegistrations',
-            'identifier'
+            'identifier',
+            'vitalsScore',
+            'fp',
+            'fcp',
+            'lcp',
+            'lcpFinal',
+            'fid',
+            'cls',
+            'clsFinal',
+            'tbt',
+            'tbt5S',
+            'tbt10S',
+            'tbtFinal',
           ]
         }
       },

@@ -2,6 +2,7 @@ import { config } from './config';
 import { getNavigatorInfo } from './getNavigatorInfo';
 import { visibility } from './onVisibilityChange';
 import { pushTask } from './utils';
+import { getVitalsScore } from './vitalsScore';
 
 /**
  * Sends the User timing measure to analyticsTracker
@@ -25,6 +26,7 @@ export const reportPerf = function(
       data,
       eventProperties: customProperties || {},
       navigatorInformation: getNavigatorInfo(),
+      vitalsScore: getVitalsScore(measureName, data),
     });
   });
 };

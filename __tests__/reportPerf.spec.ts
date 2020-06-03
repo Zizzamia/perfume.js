@@ -25,10 +25,10 @@ describe('reportPerf', () => {
       visibility.isHidden = false;
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
-      reportPerf('metricName', 123);
+      reportPerf('fcp', 123);
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
-        metricName: 'metricName',
+        metricName: 'fcp',
         data: 123,
         eventProperties: {},
         navigatorInformation: {
@@ -38,6 +38,7 @@ describe('reportPerf', () => {
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
         },
+        vitalsScore: 'good',
       });
     });
 
@@ -45,11 +46,11 @@ describe('reportPerf', () => {
       visibility.isHidden = false;
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
-      reportPerf('metricName', 123, { mare: 'sea' });
+      reportPerf('tbt', 423, { mare: 'sea' });
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
-        metricName: 'metricName',
-        data: 123,
+        metricName: 'tbt',
+        data: 423,
         eventProperties: { mare: 'sea' },
         navigatorInformation: {
           deviceMemory: 8,
@@ -58,6 +59,7 @@ describe('reportPerf', () => {
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
         },
+        vitalsScore: 'needsImprovement',
       });
     });
   });

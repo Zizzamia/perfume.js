@@ -3,6 +3,7 @@ export interface IAnalyticsTrackerOptions {
   data: IPerfumeData;
   eventProperties: object;
   navigatorInformation: INavigatorInfo;
+  vitalsScore: IVitalsScore;
 }
 
 export interface IPerfumeConfig {
@@ -114,3 +115,5 @@ export interface IPerfumeDataConsumption {
 }
 
 export type IPerfumeData = number | IPerfumeNavigationTiming | IPerfumeNetworkInformation;
+
+export type IVitalsScore = 'good' | 'needsImprovement' | 'poor' | null;

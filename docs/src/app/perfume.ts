@@ -34,7 +34,7 @@ export const elPageTitle = new BehaviorSubject(0);
 
 // Supports AOT and DI
 export function analyticsTracker(options) {
-  const { metricName, data, navigatorInformation } = options;
+  const { metricName, data, navigatorInformation, vitalsScore } = options;
   if (navigatorInformation && navigatorInformation.deviceMemory) {
     navigatorInformation$.next(navigatorInformation);
     isLowEndDevice$.next(navigatorInformation.isLowEndDevice);
@@ -43,6 +43,7 @@ export function analyticsTracker(options) {
   console.log(`%c Perfume.js: ${metricName}`, 'color:#ff6d00;font-size:11px;', {
     data,
     ...navigatorInformation,
+    vitalsScore
   });
   if (
     [
