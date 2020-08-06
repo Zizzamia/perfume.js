@@ -53,7 +53,7 @@ export default class Perfume {
     // Log Network Information
     logData('networkInformation', getNetworkInformation());
     // Let's estimate our storage capacity
-    if (WN && WN.storage) {
+    if (WN && WN.storage && typeof WN.storage.estimate === 'function') {
       WN.storage.estimate().then(reportStorageEstimate);
     }
   }
