@@ -60,6 +60,14 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(0);
     });
 
+    it('when WN.storage.estimate() is not defined should not call it', () => {
+      (WN as any) = mock.navigator();
+      const spy = jest.spyOn(WN.storage, 'estimate');
+      (WN as any).storage.estimate = undefined;
+      expect(() => new Perfume()).not.toThrow(TypeError);
+      expect(spy.mock.calls.length).toEqual(0);
+    });
+
     it('when navigator is supported should call WN.storage.estimate()', () => {
       (WN as any) = mock.navigator();
       const spy = jest.spyOn(WN.storage, 'estimate');
