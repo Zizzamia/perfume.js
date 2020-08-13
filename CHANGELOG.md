@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.1.1 (2020-8-12)
+
+* **fix:** added storage.estimate feature detection [#136](https://github.com/Zizzamia/perfume.js/issues/136)
+
 ## 5.1.0 (2020-6-2)
 
 * **feat:** added web vitals score to metrics [#126](https://github.com/Zizzamia/perfume.js/issues/126)
