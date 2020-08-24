@@ -1,7 +1,7 @@
 import { logData, logMetric } from './log';
 import { cls, lcp, rt, tbt } from './metrics';
-import { poDisconnect } from './performanceObserver';
 import { perfObservers } from './observeInstances';
+import { poDisconnect } from './performanceObserver';
 import { IPerformanceEntry } from './types';
 
 export const initFirstInputDelay = (
@@ -13,7 +13,7 @@ export const initFirstInputDelay = (
   }
   poDisconnect(1);
   logMetric(lcp.value, 'lcp');
-  if (perfObservers[3]) {
+  if (perfObservers[3] && typeof perfObservers[3].takeRecords === 'function') {
     perfObservers[3].takeRecords();
   }
   logMetric(cls.value, 'cls');

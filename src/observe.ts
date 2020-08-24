@@ -4,7 +4,11 @@ import { initFirstInputDelay } from './firstInput';
 import { logMetric } from './log';
 import { cls, lcp, tbt } from './metrics';
 import { perfObservers } from './observeInstances';
-import { initFirstPaint, initLargestContentfulPaint, initElementTiming } from './paint';
+import {
+  initElementTiming,
+  initFirstPaint,
+  initLargestContentfulPaint,
+} from './paint';
 import { po, poDisconnect } from './performanceObserver';
 import { initResourceTiming } from './resourceTiming';
 
@@ -13,10 +17,7 @@ export const initPerformanceObserver = (): void => {
   // FID needs to be initialized as soon as Perfume is available
   // DataConsumption resolves after FID is triggered
   perfObservers[1] = po('first-input', initFirstInputDelay);
-  perfObservers[2] = po(
-    'largest-contentful-paint',
-    initLargestContentfulPaint,
-  );
+  perfObservers[2] = po('largest-contentful-paint', initLargestContentfulPaint);
   // Collects KB information related to resources on the page
   if (config.isResourceTiming) {
     po('resource', initResourceTiming);
@@ -33,7 +34,9 @@ export const disconnectPerfObserversHidden = (): void => {
     poDisconnect(2);
   }
   if (perfObservers[3]) {
-    perfObservers[3].takeRecords();
+    if (typeof perfObservers[3].takeRecords === 'function') {
+      perfObservers[3].takeRecords();
+    }
     logMetric(cls.value, `clsFinal`);
     poDisconnect(3);
   }
