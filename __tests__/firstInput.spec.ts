@@ -46,5 +46,13 @@ describe('firstInput', () => {
       expect(spy).toHaveBeenCalledWith(2, 'cls');
       expect(spy).toHaveBeenCalledWith(3, 'tbt');
     });
+
+    it('should conditionally call takeRecords', () => {
+      //Delete the takeRecords method which isn't available on Safari and make sure all the metrics are still logged
+      delete oi.perfObservers[3].takeRecords;
+      spy = jest.spyOn(log, 'logMetric');
+      initFirstInputDelay([]);
+      expect(spy.mock.calls.length).toEqual(3);
+    });
   });
 });
