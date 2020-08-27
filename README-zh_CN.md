@@ -6,15 +6,16 @@
 
 [![NPM version](https://badge.fury.io/js/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) [![JS gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js)
 
-> 一个灵活的库，用于测量第一个dom生成的时间(<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>)、用户最早可操作时间（fid）和组件的生命周期性能。向Google Analytics或您理想的跟踪工具报告实际用户测量值。
+> 一个灵活的库，用于测量第一个 dom 生成的时间(<a href="https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f" target="_blank">FP/FCP</a>)、用户最早可操作时间（fid）和组件的生命周期性能。向 Google Analytics 或您理想的跟踪工具报告实际用户测量值。
 
 <br />
 <br />
 
-[English](./README.md) | 简体中文
+[English](./README.md) | 简体中文 | [Italian](./README-it.md)
+
 ## Why Perfume.js?
 
-- ⏰ 用最新的API获取精准的性能信息
+- ⏰ 用最新的 API 获取精准的性能信息
 - 🔨 跨浏览器测试
 - 🚿 过滤虚假的结果
 - 🔭 浏览器跟踪器内置
@@ -26,10 +27,10 @@
 
 **Perfume** 利用最新的 W3C Performance 提案 (比如 [PerformanceObserver](https://w3c.github.io/performance-timeline/)), 来测试重要的性能信息! ⚡️
 
-* 首次绘制 ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-* 首次内容绘制 ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-* 首次输入延迟 (FID)
-* 框架、组件生命周期监控
+- 首次绘制 ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+- 首次内容绘制 ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+- 首次输入延迟 (FID)
+- 框架、组件生命周期监控
 
 ![首次绘制和首次输入延迟](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-paint-and-first-input-delay.png)
 
@@ -47,7 +48,7 @@ npm (https://www.npmjs.com/package/perfume.js):
 import Perfume from 'perfume.js';
 ```
 
-也可以直接使用umd(Universal Module Definition)方式引入。
+也可以直接使用 umd(Universal Module Definition)方式引入。
 
 ```javascript
 import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
@@ -61,7 +62,7 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 
 ```javascript
 const perfume = new Perfume({
-  firstPaint: true
+  firstPaint: true,
 });
 // Perfume.js: First Paint 1482.00 ms
 ```
@@ -72,24 +73,25 @@ const perfume = new Perfume({
 
 ```javascript
 const perfume = new Perfume({
-  firstContentfulPaint: true
+  firstContentfulPaint: true,
 });
 // Perfume.js: First Contentful Paint 2029.00 ms
 ```
 
 ### 首次输入延迟 (FID)
 
-**FID** 测量用户首次与站点交互时（即，当他们单击链接，点击按钮或使用自定义的，由JavaScript驱动的控件）到浏览器实际能够回应这种互动的延时。
+**FID** 测量用户首次与站点交互时（即，当他们单击链接，点击按钮或使用自定义的，由 JavaScript 驱动的控件）到浏览器实际能够回应这种互动的延时。
+
 ```javascript
 const perfume = new Perfume({
-  firstInputDelay: true
+  firstInputDelay: true,
 });
 // Perfume.js: First Input Delay 3.20 ms
 ```
 
 ### 在开发者工具中标记指标
 
-**性能标记** ([自定义时间测量API
+**性能标记** ([自定义时间测量 API
 ](https://developer.mozilla.org/zh-CN/docs/Web/API/User_Timing_API)) 用于在浏览器的性能条目中创建自定义性能标记。
 
 ```javascript
@@ -120,7 +122,7 @@ perfume.endPaint('togglePopover');
 
 ```javascript
 const perfume = new Perfume({
-  logPrefix: '🍹 HayesValley.js:'
+  logPrefix: '🍹 HayesValley.js:',
 });
 perfume.start('fibonacci');
 fibonacci(400);
@@ -144,7 +146,7 @@ const perfume = new Perfume({
 
 ### 默认选项
 
-在构造函数中提供给Perfume.js默认选项。
+在构造函数中提供给 Perfume.js 默认选项。
 
 ```javascript
 const options = {
@@ -190,27 +192,26 @@ perfume.sendTiming(metricName, durationFCP);
 
 ## 开发
 
-* `npm start`: Run `npm run build` in watch mode
-* `npm run test`: Run test suite
-* `npm run test:watch`: Run test suite in [interactive watch mode](http://facebook.github.io/jest/docs/cli.html#watch)
-* `npm run build`: Generate bundles and typings
-* `npm run lint`: Lints code
+- `npm start`: Run `npm run build` in watch mode
+- `npm run test`: Run test suite
+- `npm run test:watch`: Run test suite in [interactive watch mode](http://facebook.github.io/jest/docs/cli.html#watch)
+- `npm run build`: Generate bundles and typings
+- `npm run lint`: Lints code
 
 ## 文章
 
-* [First (Contentful) Paint with a touch of Perfume(.js)](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f)
-* [Time to Interactive with RUM](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c)
+- [First (Contentful) Paint with a touch of Perfume(.js)](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f)
+- [Time to Interactive with RUM](https://medium.com/@zizzamia/time-to-interactive-with-rum-862ba874392c)
 
 ## Credits and Specs
 
 Made with ☕️ by [@zizzamia](https://twitter.com/zizzamia) and
 I want to thank some friends and projects for the work they did:
 
-* [Leveraging the Performance Metrics that Most Affect User Experience](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics) for documenting this new User-centric performance metrics;
-* [Performance Timeline Level 2](https://w3c.github.io/performance-timeline/) the definition of _PerformanceObserver_ in that specification;
-* [The Contributors](https://github.com/Zizzamia/perfume.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
-* **you** for the star you'll give this project 😉 and for supporting me by giving my project a try 😄
-
+- [Leveraging the Performance Metrics that Most Affect User Experience](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics) for documenting this new User-centric performance metrics;
+- [Performance Timeline Level 2](https://w3c.github.io/performance-timeline/) the definition of _PerformanceObserver_ in that specification;
+- [The Contributors](https://github.com/Zizzamia/perfume.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
+- **you** for the star you'll give this project 😉 and for supporting me by giving my project a try 😄
 
 ### Contributors
 
@@ -222,7 +223,6 @@ This project exists thanks to all the people who contribute.
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/perfumejs#backer)]
 
 <a href="https://opencollective.com/perfumejs#backers" target="_blank"><img src="https://opencollective.com/perfumejs/backers.svg?width=890"></a>
-
 
 ## Copyright and license
 

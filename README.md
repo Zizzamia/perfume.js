@@ -14,7 +14,8 @@
 <br />
 <br />
 
-English | [简体中文](./README-zh_CN.md)
+English | [简体中文](./README-zh_CN.md) | [Italian](./README-it.md)
+
 ## Why Perfume.js?
 
 Perfume is a tiny, web performance monitoring library that reports field data back to your favorite analytics tool.
@@ -27,25 +28,25 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - 🏅 Web Vitals Score
 - 🛰 Flexible analytics tool
 - ⚡️ Waste-zero ms with [requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback) strategy built-in
-<br />
+  <br />
 
-##  The latest in metrics & Real User Measurement
+## The latest in metrics & Real User Measurement
 
 **Perfume** leverages the latest Performance APIs to collect **field data** that allows us to understand what real-world users are actually experiencing.
 
-* Navigation Timing
-* Navigator Interface
-* Resource Timing
-* Element Timing
-* Service Worker Status
-* StorageManager interface
-* First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-* First Contentful Paint ([FCP](https://web.dev/first-contentful-paint/))
-* Largest Contentful Paint ([LCP](https://web.dev/lcp/))
-* First Input Delay ([FID](https://web.dev/fid/))
-* Cumulative Layout Shift ([CLS](https://web.dev/cls/))
-* Total Blocking Time ([TBT](https://web.dev/tbt/))
-* [Web Vitals Score](https://web.dev/vitals/)
+- Navigation Timing
+- Navigator Interface
+- Resource Timing
+- Element Timing
+- Service Worker Status
+- StorageManager interface
+- First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+- First Contentful Paint ([FCP](https://web.dev/first-contentful-paint/))
+- Largest Contentful Paint ([LCP](https://web.dev/lcp/))
+- First Input Delay ([FID](https://web.dev/fid/))
+- Cumulative Layout Shift ([CLS](https://web.dev/cls/))
+- Total Blocking Time ([TBT](https://web.dev/tbt/))
+- [Web Vitals Score](https://web.dev/vitals/)
 
 <br />
 With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world perceive web performance for your application. 
@@ -55,7 +56,6 @@ Take a look at this example comparing <b>FCP</b> for www.coinbase.com in the Uni
 <br />
 
 ![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
-
 
 ## Installing
 
@@ -76,17 +76,25 @@ Universal Module Definition:
 ```javascript
 import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 ```
+
 <br />
 
 ## Quick start
+
 Metrics like **Navigation Timing**, **Network Information**, **FP**, **FCP**, **FID**, **LCP**, **CLS** and **TBT** are default reported with Perfume; All results will be reported to the `analyticsTracker` callback, and the code below is just one way for you to organize your tracking, feel free to tweak it suit your needs.
 
 🚀 Visit [perfumejs.com](http://perfumejs.com/) for a live demo on how the metrics work. 🌕
 
 ```javascript
 const perfume = new Perfume({
-  analyticsTracker: (options) => {
-    const { metricName, data, eventProperties, navigatorInformation, vitalsScore } = options;
+  analyticsTracker: options => {
+    const {
+      metricName,
+      data,
+      eventProperties,
+      navigatorInformation,
+      vitalsScore,
+    } = options;
     switch (metricName) {
       case 'navigationTiming':
         if (data && data.timeToFirstByte) {
@@ -114,7 +122,9 @@ const perfume = new Perfume({
         myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
       case 'lcpFinal':
-        myAnalyticsTool.track('largestContentfulPaintFinal', { duration: data });
+        myAnalyticsTool.track('largestContentfulPaintFinal', {
+          duration: data,
+        });
         break;
       case 'cls':
         myAnalyticsTool.track('cumulativeLayoutShift', { value: data });
@@ -135,26 +145,31 @@ const perfume = new Perfume({
         myAnalyticsTool.track(metricName, { duration: data });
         break;
     }
-  }
+  },
 });
 ```
 
 In a world with widely varying device capabilities, a one-size-fits-all event doesn’t always work. Perfume adds **data enrichment** to all events so we can better understand the real world experiences:
+
 - **deviceMemory**: the user's device memory (RAM).
 - **hardwareConcurrency**: the number of logical CPU processor cores on the user's device.
 - **serviceWorkerStatus**: status of the service worker between controlled, supported and unsupported.
 
 Based on the Navigator APIs the library can help us differentiate between a low-end and a high-end device/experience:
+
 - **isLowEndDevice**: combination of the score of RAM and CPU.
 - **isLowEndExperience**: combination of the score of RAM, CPU, NetworkStatus and SaveData.
 
 ## Performance audits
+
 Coo coo coo [cool](https://www.youtube.com/watch?v=zDcbpFimUc8), let's learn something new.
 
 ### Navigation Timing
+
 Navigation Timing collects performance metrics for the life and timings of a network request.
 
 Perfume helps expose some of the key metrics you might need.
+
 <ul>
   <li><b>DNS lookup</b>: When a user requests a URL, the Domain Name System (DNS) is queried to translate a domain to an IP address.</li>
   <li><b>Header size</b>: HTTP header size</li>
@@ -206,6 +221,7 @@ We end the Largest Contentful Paint measure at two points: when First Input Dela
 ```
 
 ### Cumulative Layout Shift (CLS)
+
 **CLS** is an important, user-centric metric for measuring visual stability because it helps quantify how often users experience unexpected layout shifts—a low CLS helps ensure that the page is delightful.
 
 We end the Cumulative Layout Shift measure at two points: when First Input Delay happen and when the page's lifecycle state changes to hidden.
@@ -216,18 +232,20 @@ We end the Cumulative Layout Shift measure at two points: when First Input Delay
 ```
 
 ### Total Blocking Time (TBT)
+
 **TBT** is an important, user-centric metric for measuring load responsiveness because it helps quantify the severity of how non-interactive a page is prior to it becoming reliably interactive—a low TBT helps ensure that the page is usable.
 
 We end the Total Blocking Time measure at four points: when First Input Delay happen, 5 seconds after FID, 10 seconds after FID and when the page's lifecycle state changes to hidden.
 
 ```javascript
-// Perfume.js: tbt 347.07 ms 
-// Perfume.js: tbt5S 427.14 ms 
-// Perfume.js: tbt10S 427.14 ms 
-// Perfume.js: tbtFinal 526.08 ms 
+// Perfume.js: tbt 347.07 ms
+// Perfume.js: tbt5S 427.14 ms
+// Perfume.js: tbt10S 427.14 ms
+// Perfume.js: tbtFinal 526.08 ms
 ```
 
 ### Resource Timing
+
 Resource Timing collects performance metrics for document-dependent resources. Stuff like style sheets, scripts, images, et cetera.
 Perfume helps expose all PerformanceResourceTiming entries and groups data data consumption by Kb used.
 
@@ -283,7 +301,11 @@ Track when image elements and text nodes are displayed on screen using the [emer
 
 ```html
 <h1 elementtiming="elPageTitle" class="title">Perfume.js</h1>
-<img elementtiming="elHeroLogo" alt="Perfume.js logo" src="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.png">
+<img
+  elementtiming="elHeroLogo"
+  alt="Perfume.js logo"
+  src="https://zizzamia.github.io/perfume/assets/perfume-logo-v5-0-0.png"
+/>
 ```
 
 ```javascript
@@ -299,21 +321,22 @@ const perfume = new Perfume({
 ```
 
 ## Web Vitals Score
+
 Perfume will expose for all major metrics the vitals score, those can be used to improve your [SEO and Google page rank](https://webmasters.googleblog.com/2020/05/evaluating-page-experience.html).
 
-| Web Vitals                                | Good          | Needs Improvement | Poor      |
-| ----------------------------------------- | -------------:| -----------------:| ---------:|
-| Fist Paint (fp)                           | 0-1000        | 1001-2500         | Over 2500 |
-| First Contentful Paint (fcp)              | 0-1000        | 1001-2500         | Over 2500 |
-| Largest Contentful Paint (lcp)            | 0-2500        | 2501-4000         | Over 4000 |
-| Largest Contentful Paint Final (lcpFinal) | 0-2500        | 2501-4000         | Over 4000 |
-| First Input Delay (fid)                   | 0-100         | 101-300           | Over 300  |
-| Cumulative Layout Shift (cls)             | 0-0.1         | 0.11-0.25         | Over 0.25 |
-| Cumulative Layout Shift Final (clsFinal)  | 0-2500        | 2501-4000         | Over 4000 |
-| Total Blocking Time (tbt)                 | 0-300         | 301-600           | Over 600  |
-| Total Blocking Time 5S (tbt5S)            | 0-300         | 301-600           | Over 600  |
-| Total Blocking Time 10S (tbt5S)           | 0-300         | 301-600           | Over 600  |
-| Total Blocking Time Final (tbtFinal)      | 0-300         | 301-600           | Over 600  |
+| Web Vitals                                |   Good | Needs Improvement |      Poor |
+| ----------------------------------------- | -----: | ----------------: | --------: |
+| Fist Paint (fp)                           | 0-1000 |         1001-2500 | Over 2500 |
+| First Contentful Paint (fcp)              | 0-1000 |         1001-2500 | Over 2500 |
+| Largest Contentful Paint (lcp)            | 0-2500 |         2501-4000 | Over 4000 |
+| Largest Contentful Paint Final (lcpFinal) | 0-2500 |         2501-4000 | Over 4000 |
+| First Input Delay (fid)                   |  0-100 |           101-300 |  Over 300 |
+| Cumulative Layout Shift (cls)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
+| Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
+| Total Blocking Time (tbt)                 |  0-300 |           301-600 |  Over 600 |
+| Total Blocking Time 5S (tbt5S)            |  0-300 |           301-600 |  Over 600 |
+| Total Blocking Time 10S (tbt5S)           |  0-300 |           301-600 |  Over 600 |
+| Total Blocking Time Final (tbtFinal)      |  0-300 |           301-600 |  Over 600 |
 
 ## Perfume custom options
 
@@ -329,6 +352,7 @@ const options = {
 ```
 
 ## Use Google Analytics
+
 A quick way to see your page speed results on your web app is by using Google Analytics. Those GA events will show on Behavior > Site Speed > User Timings. For testing you might want to see them coming live on Realtime > Events.
 
 Have fun ✨
@@ -358,38 +382,38 @@ To connect with additional analytics providers, checkout the [analytics plugin f
 
 ## Develop
 
-* `npm run test`: Run test suite
-* `npm run build`: Generate bundles and typings
-* `npm run lint`: Lints code
-<br />
+- `npm run test`: Run test suite
+- `npm run build`: Generate bundles and typings
+- `npm run lint`: Lints code
+  <br />
 
 ## Plugins
 
-* [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
-* [Perfume.js plugin for Analytics](https://github.com/DavidWells/analytics/tree/master/packages/analytics-plugin-perfumejs)
-<br />
+- [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
+- [Perfume.js plugin for Analytics](https://github.com/DavidWells/analytics/tree/master/packages/analytics-plugin-perfumejs)
+  <br />
 
 ## Perfume is used by
-* [Conio](https://business.conio.com/)
-* [Coinbase](https://www.coinbase.com)
-* [Coinbase Pro](https://pro.coinbase.com)
-* [Coinbase Custody](https://custody.coinbase.com)
-* [Financial-Times](https://github.com/Financial-Times/n-tracking)
-* [Hearst](https://www.cosmopolitan.com/)
-* [Plan](https://getplan.co)
-* Add your company name :)
-<br />
+
+- [Conio](https://business.conio.com/)
+- [Coinbase](https://www.coinbase.com)
+- [Coinbase Pro](https://pro.coinbase.com)
+- [Coinbase Custody](https://custody.coinbase.com)
+- [Financial-Times](https://github.com/Financial-Times/n-tracking)
+- [Hearst](https://www.cosmopolitan.com/)
+- [Plan](https://getplan.co)
+- Add your company name :)
+  <br />
 
 ## Credits and Specs
 
 Made with ☕️ by [@zizzamia](https://twitter.com/zizzamia) and
 I want to thank some friends and projects for the work they did:
 
-* [Leraging the Performance Metrics that Most Affect User Experience](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics) for documenting this new User-centric performance metrics;ev
-* [Performance Timeline Level 2](https://w3c.github.io/performance-timeline/) the definition of _PerformanceObserver_ in that specification;
-* [The Contributors](https://github.com/Zizzamia/perfume.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
-* **you** for the star you'll give this project 😉 and for supporting me by giving my project a try 😄
-
+- [Leraging the Performance Metrics that Most Affect User Experience](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics) for documenting this new User-centric performance metrics;ev
+- [Performance Timeline Level 2](https://w3c.github.io/performance-timeline/) the definition of _PerformanceObserver_ in that specification;
+- [The Contributors](https://github.com/Zizzamia/perfume.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
+- **you** for the star you'll give this project 😉 and for supporting me by giving my project a try 😄
 
 ### Contributors
 
