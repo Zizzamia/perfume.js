@@ -22,7 +22,7 @@ export const logData = (
  */
 export const logMetric = (duration: number, measureName: string): void => {
   const duration2Decimal = roundByTwo(duration);
-  if (duration2Decimal <= config.maxTime && duration2Decimal > 0) {
+  if (duration2Decimal <= config.maxTime && duration2Decimal >= 0) {
     // Sends the metric to an external tracking service
     reportPerf(measureName, duration2Decimal);
   }

@@ -31,6 +31,13 @@ describe('log', () => {
   });
 
   describe('.logMetric()', () => {
+    it('should call reportPerf() when value is 0', () => {
+      spy = jest.spyOn(reportPerf, 'reportPerf');
+      log.logMetric(0, 'cls');
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith('cls', 0);
+    });
+
     it('should call reportPerf() with the correct arguments', () => {
       spy = jest.spyOn(reportPerf, 'reportPerf');
       log.logMetric(1, 'fcp');
