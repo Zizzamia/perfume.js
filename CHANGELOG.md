@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.2.0 (2020-8-26)
+
+* **fix:** conditionally make calls to PerformanceObserver.takeRecords which does not exist in Safari [#138](https://github.com/Zizzamia/perfume.js/pull/138)
+* **fix:** report CLS when value is 0
+* **feat:** prepare new FID iteration for v6
+* **chore:** Italian README [#137](https://github.com/Zizzamia/perfume.js/pull/137)
+
 ## 5.1.1 (2020-8-12)
 
 * **fix:** added storage.estimate feature detection [#136](https://github.com/Zizzamia/perfume.js/issues/136)
