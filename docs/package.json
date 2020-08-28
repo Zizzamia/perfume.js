@@ -25,7 +25,7 @@
     "core-js": "3.1.4",
     "idb": "5.0.3",
     "ng-packagr": "^9.0.0",
-    "perfume.js": "5.1.0",
+    "perfume.js": "5.2.1",
     "rxjs": "6.5.5",
     "tslib": "^1.10.0",
     "typescript": "3.7.5",
