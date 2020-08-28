@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.2.2 (2020-8-27)
+
+* **fix:** added processingStart in minified file
+
 ## 5.2.1 (2020-8-27)
 
 * **fix:** added fidVitals to vitalsScore

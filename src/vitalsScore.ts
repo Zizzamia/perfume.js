@@ -2,6 +2,7 @@ import { IPerfumeData, IVitalsScore } from './types';
 
 const fcpScore = [1000, 2500];
 const lcpScore = [2500, 4000];
+const fidcore = [100, 300];
 const clsScore = [0.1, 0.25];
 const tbtScore = [300, 600];
 
@@ -10,8 +11,8 @@ export const webVitalsScore: Record<string, number[]> = {
   fcp: fcpScore,
   lcp: lcpScore,
   lcpFinal: lcpScore,
-  fid: [100, 300],
-  fidVitals: [100, 300],
+  fid: fidcore,
+  fidVitals: fidcore,
   cls: clsScore,
   clsFinal: clsScore,
   tbt: tbtScore,

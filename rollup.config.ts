@@ -93,6 +93,7 @@ const createConfig = ({ output, min = false }) => {
             'tbt5S',
             'tbt10S',
             'tbtFinal',
+            'processingStart'
           ]
         }
       },
