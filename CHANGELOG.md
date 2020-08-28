@@ -2,7 +2,7 @@
 
 ## 5.2.1 (2020-8-27)
 
-* **fix:** report CLS when value is 0
+* **fix:** added fidVitals to vitalsScore
 
 ## 5.2.0 (2020-8-26)
 

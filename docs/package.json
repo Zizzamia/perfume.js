@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
