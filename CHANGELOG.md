@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.2.3 (2020-8-28)
+
+* **fix:** miss PerformanceObserver in rollup config
+
 ## 5.2.2 (2020-8-27)
 
 * **fix:** added processingStart in minified file
