@@ -11,6 +11,7 @@ describe('vitalsScore', () => {
         lcp: [2500, 4000],
         lcpFinal: [2500, 4000],
         fid: [100, 300],
+        fidVitals: [100, 300],
         cls: [0.1, 0.25],
         clsFinal: [0.1, 0.25],
         tbt: [300, 600],
@@ -44,6 +45,12 @@ describe('vitalsScore', () => {
       expect(getVitalsScore('fid', 80)).toEqual('good');
       expect(getVitalsScore('fid', 150)).toEqual('needsImprovement');
       expect(getVitalsScore('fid', 400)).toEqual('poor');
+    });
+
+    it('should return the correct values for fidVitals', () => {
+      expect(getVitalsScore('fidVitals', 80)).toEqual('good');
+      expect(getVitalsScore('fidVitals', 150)).toEqual('needsImprovement');
+      expect(getVitalsScore('fidVitals', 400)).toEqual('poor');
     });
 
     it('should return the correct values for cls', () => {

@@ -86,6 +86,7 @@ const createConfig = ({ output, min = false }) => {
             'lcp',
             'lcpFinal',
             'fid',
+            'fidVitals',
             'cls',
             'clsFinal',
             'tbt',

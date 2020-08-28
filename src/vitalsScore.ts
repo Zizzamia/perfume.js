@@ -11,6 +11,7 @@ export const webVitalsScore: Record<string, number[]> = {
   lcp: lcpScore,
   lcpFinal: lcpScore,
   fid: [100, 300],
+  fidVitals: [100, 300],
   cls: clsScore,
   clsFinal: clsScore,
   tbt: tbtScore,

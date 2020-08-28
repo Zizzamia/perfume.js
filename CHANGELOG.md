@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.2.1 (2020-8-27)
+
+* **fix:** report CLS when value is 0
+
 ## 5.2.0 (2020-8-26)
 
 * **fix:** conditionally make calls to PerformanceObserver.takeRecords which does not exist in Safari [#138](https://github.com/Zizzamia/perfume.js/pull/138)
