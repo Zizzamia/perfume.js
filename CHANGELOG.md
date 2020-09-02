@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.3.0 (2020-9-2)
+
+* **feat:** added the raw `performanceEntry` object in the reporting for FID and FID Vitals. This will help developer to do more custom analysis based on the FID target.
+
 ## 5.2.3 (2020-8-28)
 
 * **fix:** miss PerformanceObserver in rollup config

@@ -35,14 +35,15 @@ describe('firstInput', () => {
     });
 
     it('should call logMetric five times', () => {
+      const entry = { duration: 10, processingStart: 20, startTime: 5 };
       (metrics as any).lcp = { value: 1 };
       (metrics as any).cls = { value: 2 };
       (metrics as any).tbt = { value: 3 };
       spy = jest.spyOn(log, 'logMetric');
-      initFirstInputDelay([{ duration: 10, processingStart: 20, startTime: 5 } as any]);
+      initFirstInputDelay([entry as any]);
       expect(spy.mock.calls.length).toEqual(5);
-      expect(spy).toHaveBeenCalledWith(15, 'fidVitals');
-      expect(spy).toHaveBeenCalledWith(10, 'fid');
+      expect(spy).toHaveBeenCalledWith(15, 'fidVitals', { performanceEntry: entry });
+      expect(spy).toHaveBeenCalledWith(10, 'fid', { performanceEntry: entry });
       expect(spy).toHaveBeenCalledWith(1, 'lcp');
       expect(spy).toHaveBeenCalledWith(2, 'cls');
       expect(spy).toHaveBeenCalledWith(3, 'tbt');

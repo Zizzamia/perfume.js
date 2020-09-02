@@ -11,10 +11,14 @@ export const initFirstInputDelay = (
   if (lastEntry) {
     // Core Web Vitals FID logic
     // Measure the delay to begin processing the first input event
-    logMetric(lastEntry.processingStart - lastEntry.startTime, 'fidVitals');
+    logMetric(lastEntry.processingStart - lastEntry.startTime, 'fidVitals', {
+      performanceEntry: lastEntry
+    });
     // Legacy FID logic
     // Measure the duration of processing the first input event
-    logMetric(lastEntry.duration, 'fid');
+    logMetric(lastEntry.duration, 'fid', {
+      performanceEntry: lastEntry
+    });
   }
   // Disconnect this observer since callback is only triggered once
   poDisconnect(1);

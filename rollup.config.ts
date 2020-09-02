@@ -94,7 +94,8 @@ const createConfig = ({ output, min = false }) => {
             'tbt10S',
             'tbtFinal',
             'processingStart',
-            'PerformanceObserver'
+            'PerformanceObserver',
+            'performanceEntry'
           ]
         }
       },

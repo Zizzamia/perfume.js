@@ -4,13 +4,13 @@ import { rt } from './metrics';
 import { IPerformanceEntry } from './types';
 
 export const initResourceTiming = (performanceEntries: IPerformanceEntry[]) => {
-  performanceEntries.forEach(performanceEntry => {
+  performanceEntries.forEach(entry => {
     if (config.isResourceTiming) {
-      logData('resourceTiming', performanceEntry);
+      logData('resourceTiming', entry);
     }
-    if (performanceEntry.decodedBodySize && performanceEntry.initiatorType) {
-      const bodySize = performanceEntry.decodedBodySize / 1000;
-      rt.value[performanceEntry.initiatorType] += bodySize;
+    if (entry.decodedBodySize && entry.initiatorType) {
+      const bodySize = entry.decodedBodySize / 1000;
+      rt.value[entry.initiatorType] += bodySize;
       rt.value.total += bodySize;
     }
   });

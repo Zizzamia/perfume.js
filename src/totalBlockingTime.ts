@@ -4,14 +4,14 @@ import { IPerformanceEntry } from './types';
 export const initTotalBlockingTime = (
   performanceEntries: IPerformanceEntry[],
 ): void => {
-  performanceEntries.forEach(performanceEntry => {
+  performanceEntries.forEach(entry => {
     if (
-      performanceEntry.name !== 'self' ||
-      performanceEntry.startTime < fcp.value
+      entry.name !== 'self' ||
+      entry.startTime < fcp.value
     ) {
       return;
     }
-    const blockingTime = performanceEntry.duration - 50;
+    const blockingTime = entry.duration - 50;
     if (blockingTime > 0) {
       tbt.value += blockingTime;
     }

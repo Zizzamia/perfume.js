@@ -10,11 +10,11 @@ import { IPerformanceEntry } from './types';
  * the biggest above-the-fold layout change has happened.
  */
 export const initFirstPaint = (performanceEntries: IPerformanceEntry[]) => {
-  performanceEntries.forEach(performanceEntry => {
-    if (performanceEntry.name === 'first-paint') {
-      logMetric(performanceEntry.startTime, 'fp');
-    } else if (performanceEntry.name === fcpEntryName) {
-      fcp.value = performanceEntry.startTime;
+  performanceEntries.forEach(entry => {
+    if (entry.name === 'first-paint') {
+      logMetric(entry.startTime, 'fp');
+    } else if (entry.name === fcpEntryName) {
+      fcp.value = entry.startTime;
       logMetric(fcp.value, 'fcp');
       perfObservers[4] = po('longtask', initTotalBlockingTime);
       poDisconnect(0);
@@ -34,9 +34,9 @@ export const initLargestContentfulPaint = (
 export const initElementTiming = (
   performanceEntries: IPerformanceEntry[],
 ) => {
-  performanceEntries.forEach(performanceEntry => {
-    if (performanceEntry.identifier) {
-      logMetric(performanceEntry.startTime, performanceEntry.identifier);
+  performanceEntries.forEach(entry => {
+    if (entry.identifier) {
+      logMetric(entry.startTime, entry.identifier);
     }
   });
 };

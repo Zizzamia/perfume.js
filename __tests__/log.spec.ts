@@ -35,14 +35,14 @@ describe('log', () => {
       spy = jest.spyOn(reportPerf, 'reportPerf');
       log.logMetric(0, 'cls');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('cls', 0);
+      expect(spy).toHaveBeenCalledWith('cls', 0, undefined);
     });
 
     it('should call reportPerf() with the correct arguments', () => {
       spy = jest.spyOn(reportPerf, 'reportPerf');
       log.logMetric(1, 'fcp');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('fcp', 1);
+      expect(spy).toHaveBeenCalledWith('fcp', 1, undefined);
     });
 
     it('should not call reportPerf() when duration is higher of config.maxTime', () => {

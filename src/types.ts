@@ -79,6 +79,7 @@ export declare interface IPerformanceEntry {
 // https://wicg.github.io/event-timing/#sec-performance-event-timing
 export interface PerformanceEventTiming extends PerformanceEntry {
   processingStart: DOMHighResTimeStamp;
+  target?: Node;
 }
 
 export interface IPerformancePaintTiming {
