@@ -5,7 +5,7 @@
  * @license
  */
 import { config } from './config';
-import { D, W, WN, WP, getTrack } from './constants';
+import { D, W, WN, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { getNetworkInformation } from './getNetworkInformation';
 import { isPerformanceSupported } from './isSupported';
