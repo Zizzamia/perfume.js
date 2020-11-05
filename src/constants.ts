@@ -6,5 +6,4 @@ export const D = document;
 export const WN = W.navigator;
 export const WP = W.performance;
 export const getDM = () => (WN as any).deviceMemory;
-export const getTrack = () => (WN as any).doNotTrack;
 export const getHC = () => (WN as any).hardwareConcurrency;
