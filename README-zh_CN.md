@@ -335,7 +335,7 @@ Perfume 会暴露所有主要指标的生命体征得分，这些可以用来提
 | Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
 | Total Blocking Time (tbt)                 |  0-300 |           301-600 |  Over 600 |
 | Total Blocking Time 5S (tbt5S)            |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time 10S (tbt5S)           |  0-300 |           301-600 |  Over 600 |
+| Total Blocking Time 10S (tbt10S)          |  0-300 |           301-600 |  Over 600 |
 | Total Blocking Time Final (tbtFinal)      |  0-300 |           301-600 |  Over 600 |
 
 ## Perfume 自定义选项

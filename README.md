@@ -335,7 +335,7 @@ Perfume will expose for all major metrics the vitals score, those can be used to
 | Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
 | Total Blocking Time (tbt)                 |  0-300 |           301-600 |  Over 600 |
 | Total Blocking Time 5S (tbt5S)            |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time 10S (tbt5S)           |  0-300 |           301-600 |  Over 600 |
+| Total Blocking Time 10S (tbt10S)          |  0-300 |           301-600 |  Over 600 |
 | Total Blocking Time Final (tbtFinal)      |  0-300 |           301-600 |  Over 600 |
 
 ## Perfume custom options
