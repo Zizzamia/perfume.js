@@ -5,7 +5,7 @@
  * @license
  */
 import { config } from './config';
-import { D, W, WN, WP } from './constants';
+import { D, W, WN, WP, getTrack } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { getNetworkInformation } from './getNetworkInformation';
 import { isPerformanceSupported } from './isSupported';
@@ -27,12 +27,17 @@ export default class Perfume {
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     config.analyticsTracker = options.analyticsTracker;
+    config.doNoTrack = (options.respectDoNotTrack && geetTrack());
     config.isResourceTiming = !!options.resourceTiming;
     config.isElementTiming = !!options.elementTiming;
     config.maxTime = options.maxMeasureTime || config.maxTime;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!isPerformanceSupported()) {
+      return;
+    }
+    // Exit from Perfume if DoNotTrack is set, and respecConfig is true
+    if (config.doNoTrack) {
       return;
     }
     // Checks if use Performance or the EmulatedPerformance instance
