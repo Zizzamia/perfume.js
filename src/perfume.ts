@@ -27,7 +27,7 @@ export default class Perfume {
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     config.analyticsTracker = options.analyticsTracker;
-    config.doNoTrack = (options.respectDoNotTrack && geetTrack());
+    config.doNoTrack = (options.respectDoNotTrack && getTrack());
     config.isResourceTiming = !!options.resourceTiming;
     config.isElementTiming = !!options.elementTiming;
     config.maxTime = options.maxMeasureTime || config.maxTime;
