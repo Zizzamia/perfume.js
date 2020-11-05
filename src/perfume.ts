@@ -19,7 +19,7 @@ import {
 import { didVisibilityChange, visibility } from './onVisibilityChange';
 import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
-import { roundByTwo } from './utils';
+import { roundByTwo, getDoNotTrack } from './utils';
 
 export default class Perfume {
   v = '5.3.0';
@@ -27,7 +27,7 @@ export default class Perfume {
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
     config.analyticsTracker = options.analyticsTracker;
-    config.doNoTrack = (options.respectDoNotTrack && getTrack());
+    config.doNoTrack = (options.respectDoNotTrack && getDoNotTrack());
     config.isResourceTiming = !!options.resourceTiming;
     config.isElementTiming = !!options.elementTiming;
     config.maxTime = options.maxMeasureTime || config.maxTime;
