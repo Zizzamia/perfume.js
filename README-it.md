@@ -16,7 +16,7 @@
 <br />
 <br />
 
-[English](./README.md) | [简体中文](./README-zh_CN.md) | Italian
+[English](./README.md) | [简体中文](./README-zh_CN.md) | Italian | [한국어](./README-ko.md)
 
 ## Perchè Perfume.js?
 
