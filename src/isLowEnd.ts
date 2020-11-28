@@ -17,17 +17,20 @@ export const getIsLowEndExperience = (
   et: EffectiveConnectionType,
   sd: boolean,
 ): boolean => {
-  if (getIsLowEndDevice()) {
-    return true;
-  }
   // If the effective type of the connection meaning
   // one of 'slow-2g', '2g', '3g', or '4g' is !== 4g
-  if (['slow-2g', '2g', '3g'].includes(et)) {
-    return true;
+  switch (et) {
+    case 'slow-2g':
+      return true;
+      break;
+    case '2g':
+      return true;
+      break;
+    case '3g':
+      return true;
+      break;
+    default:
+      // Data Saver preference
+      return (getIsLowEndDevice() || sd);
   }
-  // Data Saver preference
-  if (sd) {
-    return true;
-  }
-  return false;
 };
