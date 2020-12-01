@@ -165,7 +165,7 @@ Coo coo coo [cool](https://www.youtube.com/watch?v=zDcbpFimUc8), 새로운 것�
 
 탐색 타이밍은 네트워크 요청의 수명과 타이밍에 대한 성능 메트릭을 수집합니다.
 
-Perfume은 필요한 주요 지표 중 일부를 노출하는 데 도움이됩니다.
+Perfume은 필요한 주요 지표 중 일부를 노출하는 데 도움이 됩니다.
 
 <ul>
   <li><b>DNS lookup</b>: 사용자가 URL을 요청하면 도메인을 IP 주소로 변환하기 위해 DNS (Domain Name System)가 쿼리(queried)됩니다.</li>
