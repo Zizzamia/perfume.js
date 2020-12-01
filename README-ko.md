@@ -7,71 +7,70 @@
 
 [![Current version](https://img.shields.io/github/tag/zizzamia/perfume.js?color=3498DB&label=version)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-27ae60.svg"> [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js) [![brotli size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=brotli&label=JS+brotli+size)](https://unpkg.com/perfume.js)
 
-> 提升<b>页面速度</b>需要了解许多因素和基本限制。如果我们可以衡量它，我们就可以改进它。
+> <b>페이지 속도</b>는 기능이며, 이를 제공하려면 작용하는 많은 요인과 근본적인 제한을 이해해야 합니다. 측정 할 수 있다면 개선 할 수 있습니다.
 
 <br />
 <br />
 <br />
 <br />
 
-[English](./README.md) | 简体中文 | [Italian](./README-it.md) | [한국어](./README-ko.md)
+[English](./README.md)| [简体中文](./README-zh_CN.md) | [Italian](./README-it.md) | 한국어
 
-## Why Perfume.js?
+## 왜 Perfume.js인가?
 
-Perfume 是一个微小的网络性能监控库，可以将数据报告给你最喜欢的分析工具。
+Perfume은 웹 퍼포먼스를 모니터링 하여, 당신이 선호 하는 분석 도구로 필드 데이터를 리포트 할 수 있는 경량 라이브러리입니다.
 
-- ⏰ 支持最新的 Performance APIs 以实现精确的指标
-- 🚀 设备数据丰富
-- 🔨 跨浏览器测试
-- 🚿 过滤虚假的结果
-- 🤙 仅 2Kb gzip
-- 🏅 Web Vitals Score
-- 🛰 灵活的分析工具
-- ⚡️ 内置 [requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback) 策略，不浪费一毫秒。
+- ⏰ 정확한 메트릭을 위한 최신 성능 API 지원
+- 🚀 장치 데이터 보강
+- 🔨 크로스 브라우저 테스트
+- 🚿 오탐/부정 결과(false positive/negative) 제외
+- 🤙 오직 2Kb gzip
+- 🏅 Web Vitals 점수
+- 🛰 유연한 분석 도구
+- ⚡️ 시간 낭비가 없는, [requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback) 전략적인 빌트 인
   <br />
 
-## 最新指标和真实用户评估
+## 최신 메트릭 & 실제 사용자 측정
 
-**Perfume** 利用最新的 Performance API 收集**现场数据**，使我们能够了解现实世界中的用户实际遇到的情况。
+**Perfume**은 최신 Performance API를 활용하여 **필드 데이터**를 수집하고, 실제 사용자가 실제로 경험하는 것을 이해할 수 있습니다.
 
-- 导航时间
-- 导航器界面
-- 资源加载计时
-- 元素加载计时
-- Service Worker 状态
-- StorageManager 界面
-- 首次绘制 ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-- 首次内容绘制 ([FCP](https://web.dev/first-contentful-paint/))
-- 最大内容绘制 ([LCP](https://web.dev/lcp/))
-- 首次输入延迟 ([FID](https://web.dev/fid/))
-- 累计布局偏移 ([CLS](https://web.dev/cls/))
-- 总阻塞时间 ([TBT](https://web.dev/tbt/))
+- 탐색 타이밍
+- 내비게이터 인터페이스
+- 리소스 타이밍
+- 요소 타이밍
+- 서비스 Worker 상태
+- StorageManager 인터페이스
+- 첫 번째 Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+- 첫 번째 콘텐츠 Paint ([FCP](https://web.dev/first-contentful-paint/))
+- 콘텐츠가 가장 큰 Paint ([LCP](https://web.dev/lcp/))
+- 첫 번째 입력 지연 ([FID](https://web.dev/fid/))
+- 누적 레이아웃 이동 ([CLS](https://web.dev/cls/))
+- 총 차단 시간 ([TBT](https://web.dev/tbt/))
 - [Web Vitals Score](https://web.dev/vitals/)
 
+<br />Perfume.js를 사용하면, 이러한 메트릭을 수집하여 전 세계 고객이 Application의 웹 성능을 어떻게 인식하는지 더 깊이 이해할 수 있습니다.
 <br />
-使用 Perfume.js，您可以收集这些指标，以更深​​入地了解世界各地的客户如何看待您应用程序的 Web 性能。
-<br />
-使用您喜欢的分析工具可视化各个国家/地区的数据。
-让我们看一下这个示例，比较美国，意大利，印度尼西亚和尼日利亚的www.coinbase.com的 <b>FCP</b>。
+선호하는 분석 도구를 사용하여 국가별로 데이터를 시각화하십시오.
+미국, 이탈리아, 인도네시아 및 나이지리아에서  www.coinbase.com에 대한 <b>FCP</b>를 비교하는 이 예시를 살펴보십시오.
 <br />
 
 ![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
 
-## 安装
+## 설치하기
 
-npm (https://www.npmjs.com/package/perfume.js)：
+npm (https://www.npmjs.com/package/perfume.js):
 
     npm install perfume.js --save
 
-### 导入库
+### Importing library
 
-你可以导入生成的 bundle 来使用生成的整个库:
+생성 된 Bundle을 가져와 생성된 전체 라이브러리를 사용할 수 있습니다:
 
 ```javascript
 import Perfume from 'perfume.js';
 ```
 
-通用模块定义 (UMD)：
+범용 모듈 정의하기:
 
 ```javascript
 import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
@@ -79,11 +78,11 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 
 <br />
 
-## 快速入门
+## 빠르게 시작하기
 
-像 **Navigation Timing**, **Network Information**, **FP**, **FCP**, **FID**, **LCP**, **CLS** 和 **TBT** 这样的指标都是 Perfume 默认报告的；所有的结果都会被报告给 `analyticsTracker` 回调，下面的代码只是你组织跟踪的一种方式，可以根据自己的需要随意调整。
+**탐색 시간(Navigation Timing)**, **네트워크 정보(Network Information)**, **FP**, **FCP**, **FID**, **LCP**, **CLS** 와 **TBT** 같은 측정 항목은 Perfume에서 기본적으로 보고됩니다; 모든 결과는 `analyticsTracker` 콜백(callback)에 보고되며, 아래 코드는 추적(Tracking)을 구성하는 한 가지 방법일 뿐입니다. 필요에 맞게 자유롭게 조정할 수 있습니다.
 
-🚀 访问 [perfumejs.com](http://perfumejs.com/) 观看有关指标工作原理的现场演示。🌕
+🚀 메트릭(Metrics) 작동 방식에 대한 라이브 데모를 보려면 [perfumejs.com](http://perfumejs.com/)를 방문해주세요.🌕
 
 ```javascript
 const perfume = new Perfume({
@@ -149,93 +148,91 @@ const perfume = new Perfume({
 });
 ```
 
-在设备功能千差万别的世界中，“一刀切” 的活动并非总能奏效。Perfume 为所有事件增加了**数据丰富性**，因此我们可以更好地了解现实世界的体验：
+다양한 기기 기능이 있는 요즘 세상에서, 모든 상황에 적합한 이벤트가 항상 작동하는 것은 아닙니다. Perfume은 모든 이벤트에 **데이터 보강(data enrichment)** 을 추가하여 실제 경험을 더 잘 이해할 수 있도록 합니다.
 
-- **deviceMemory**: 用户的设备内存 (RAM)。
-- **hardwareConcurrency**: 用户设备上逻辑CPU处理器内核的数量。
-- **serviceWorkerStatus**: service worker 的状态，介于受控，受支持和不受支持之间。
+- **deviceMemory**: 사용자의 장치 메모리 (RAM).
+- **hardwareConcurrency**: 사용자 장치의 논리적 CPU 프로세서의 코어 수.
+- **serviceWorkerStatus**: controlled, supported와 unsupported 사이의 서비스 Worker의 상태.
 
-该库基于 Navigator API，可以帮助我们区分低端和高端设备/体验：
+Navigator API를 기반으로 하는 라이브러리는 저가형과 고급형 장치/경험을 구별하는 데 도움이 될 수 있습니다:
 
-- **isLowEndDevice**: RAM和CPU得分的组合。
-- **isLowEndExperience**: RAM，CPU，NetworkStatus 和 SaveData 得分的组合。
+- **isLowEndDevice**: RAM과 CPU 점수의 조합.
+- **isLowEndExperience**: RAM, CPU, NetworkStatus 및 SaveData 점수의 조합.
 
-## Performance audits
+## 성능 감사
 
-Coo coo coo [cool](https://www.youtube.com/watch?v=zDcbpFimUc8), 让我们学习一些新东西。
+Coo coo coo [cool](https://www.youtube.com/watch?v=zDcbpFimUc8), 새로운 것을 배워봅시다!
 
-### Navigation Timing
+탐색 타이밍은 네트워크 요청의 수명과 타이밍에 대한 성능 메트릭을 수집합니다.
 
-Navigation Timing 收集网络请求的生命周期和计时的性能指标。
-
-Perfume 整理公开了您可能需要的一些关键指标。
+Perfume은 필요한 주요 지표 중 일부를 노출하는 데 도움이 됩니다.
 
 <ul>
-  <li><b>DNS lookup</b>: 当用户请求URL时，将查询域名系统（DNS）以将域转换为IP地址。</li>
-  <li><b>Header size</b>: HTTP header 大小</li>
-  <li><b>Fetch time</b>: 缓存查找加响应时间</li>
-  <li><b>Worker time</b>: Service worker 时间加上响应时间</li>
-  <li><b>Total time</b>: 请求加响应时间 (仅网络)</li>
-  <li><b>Download time</b>: 仅响应时间 (下载)</li>
-  <li><b>Time to First Byte</b>: 客户端发送HTTP GET请求后，从服务器接收请求资源的第一个字节所需的时间。
-  它是最大的网页加载时间组成部分，占网页总延迟的 40% 到 60%。</li>
+  <li><b>DNS lookup</b>: 사용자가 URL을 요청하면 도메인을 IP 주소로 변환하기 위해 DNS (Domain Name System)가 쿼리(queried)됩니다.</li>
+  <li><b>Header size</b>: HTTP의 헤더 사이즈</li>
+  <li><b>Fetch time</b>: 캐시 탐색 및 응답 시간</li>
+  <li><b>Worker time</b>: 서비스 작업자 시간 및 응답 시간</li>
+  <li><b>Total time</b>: 요청 및 응답 시간 (네트워크 만 해당)</li>
+  <li><b>Download time</b>: 오직 응답 시간만 (다운로드)</li>
+  <li><b>Time to First Byte</b>: 클라이언트가 HTTP GET 요청을 보낸 후 서버에서 요청 된 리소스의 첫 번째 바이트를 수신하는 데 걸리는 시간입니다. 전체 웹 페이지 대기 시간의 40 ~ 60 %를 차지하는 가장 큰 웹 페이지로드 시간 구성 요소입니다.</li>
 </ul>
+
 
 ```javascript
 // Perfume.js: navigationTiming { ... timeToFirstByte: 192.65 }
 ```
 
-### 首次绘制 ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 
-**FP** 是指浏览器将任何事物渲染成与导航前的屏幕上的视觉效果不同的确切时间，例如，在长时间的白屏空白后，背景发生变化。
+**FP**는 브라우저가 탐색하기 전에 화면에 표시된 것과 시각적으로 다른 것을 렌더링하는 데 걸린 정확한 시간입니다. (예 : 긴 빈 흰색 화면 시간 후 배경 변경하기)
 
 ```javascript
 // Perfume.js: fp 1482.00 ms
 ```
 
-### 首次内容绘制 ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
+### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 
-**FCP** 是指浏览器从 DOM 中渲染第一个内容所需的确切时间，这个时间可以是任何重要的图片、文本，甚至是页面底部的小 SVG。
+**FCP**는 브라우저가 DOM에서 콘텐츠의 첫 번째 비트를 렌더링하는 데 걸리는 정확한 시간입니다. 중요한 이미지, 텍스트 또는 페이지 하단의 작은 SVG에서 가져온 콘텐츠 일 수 있습니다.
 
 ```javascript
 // Perfume.js: fcp 2029.00 ms
 ```
 
-### 最大内容绘制 (LCP)
+### Largest Contentful Paint (LCP)
 
-**LCP** 是一个重要的、以用户为中心的衡量标准，用于衡量感知加载速度，因为它标记了页面加载时间轴中页面的主要内容可能加载的时间点 -- 快速的 LCP 有助于向用户保证页面是有用的。
+**LCP**는 페이지의 주요 콘텐츠가 로드 되었을 가능성이 있는, 페이지 로드 타임 라인의 지점 **(marks the point in the Page load timeline)** 을 표시하기 때문에 인지 된 로드 속도를 측정하는 데 중요한, 사용자 중심 측정 항목입니다. 빠른 LCP는 페이지가 유용하다는 것을 사용자에게 확신시키는 데에 도움이 됩니다.
 
-我们在两个点上结束了最大内容绘制：当第一次输入延迟发生时和当页面的生命周期状态改变为隐藏时。
+가장 큰 콘텐츠가 있는 페인트 측정은 다음 두 지점에서 끝납니다: 첫 번째 입력 지연이 발생될 때와 페이지의 수명주기 상태가 숨김으로 변경 될 때.
 
 ```javascript
 // Perfume.js: lcp 2429.00 ms
 // Perfume.js: lcpFinal 2642.00 ms
 ```
 
-### 首次输入延迟 (FID)
+### First Input Delay (FID)
 
-**FID** 衡量的是从用户首次与您的网站进行交互（即当他们单击链接，点击按钮）到浏览器实际上能够响应该交互之间的时间。
+**FID**는 사용자가 사이트와 처음 상호 작용 한 시간 (예 : 링크를 클릭하고 버튼을 탭 할 때)부터 브라우저가 실제로 해당 상호 작용에 응답할 수 있는 시간까지의 시간을 측정합니다.
 
 ```javascript
 // Perfume.js: fid 3.20 ms
 ```
 
-### 累计布局偏移 (CLS)
+### Cumulative Layout Shift (CLS)
 
-**CLS** 是衡量视觉稳定性的一个重要的、以用户为中心的指标，因为它有助于量化用户经历意外布局变化的频率 -- 低 CLS 有助于确保页面令人愉悦。
+**CLS**는 사용자가 예상치 못한 레이아웃 변경을 경험하는 빈도를 정량화하는 데 도움이 되므로 시각적 안정성을 측정하는 데 중요한 사용자 중심 측정 항목입니다. — 낮은 CLS는 페이지를 만족스럽게 만드는 데 도움이됩니다.
 
-我们在两个点上结束累计布局偏移测量：当第一次输入延迟发生时和当页面的生命周期状态改变为隐藏时。
+CLS측정은 두 지점에서 끝납니다. 첫 번째 입력 지연이 발생할 때와 페이지의 수명주기 상태가 숨김으로 변경 될 때.
 
 ```javascript
 // Perfume.js: cls 0.13
 // Perfume.js: clsFinal 0.13
 ```
 
-### 总阻塞时间 (TBT)
+### Total Blocking Time (TBT)
 
-**TBT** 是一个重要的、以用户为中心的指标，用于衡量加载响应性，因为它有助于量化一个页面在成为可靠的交互性之前的非交互性的严重程度 -- 低 TBT 有助于确保页面的可用性。
+**TBT**는 페이지가 안정적으로 상호 작용하기 전에, 비대화 형 상태의 심각도를 정량화하는 데 도움이 되므로 로드 응답성을 측정하는 데 중요한 사용자 중심 측정 항목입니다.—TBT가 낮으면 페이지가 사용하기 편리한 상태임을 보장합니다.
 
-我们在四个点结束总阻塞时间的测量：第一次输入延迟发生时、FID 后5秒、FID 后10秒和页面的生命周期状态变为隐藏时。
+총 차단 시간 측정은 첫 번째 입력 지연이 발생할 때, FID 후 5초, FID 후 10초, 페이지의 수명주기 상태가 숨김으로 변경되는 네 지점에서 종료됩니다.
 
 ```javascript
 // Perfume.js: tbt 347.07 ms
@@ -244,10 +241,10 @@ Perfume 整理公开了您可能需要的一些关键指标。
 // Perfume.js: tbtFinal 526.08 ms
 ```
 
-### 资源计时
+### Resource Timing
 
-Resource Timing收集文档相关资源的性能指标。诸如 style sheets, scripts, images 等。
-Perfume 帮助暴露所有 PerformanceResourceTiming 条目，并按 Kb 使用量对数据数据消耗进行分组。
+리소스 타이밍은 문서 종속 리소스에 대한 성능 메트릭을 수집합니다. (스타일 시트, 스크립트, 이미지 등과 같은 것.)
+Perfume은 모든 PerformanceResourceTiming 항목을 노출하고 사용 된 Kb별로 데이터 소비를 그룹화합니다.
 
 ```javascript
 const perfume = new Perfume({
@@ -259,9 +256,9 @@ const perfume = new Perfume({
 // Perfume.js: dataConsumption { "css": 185.95, "fetch": 0, "img": 377.93, ... , "script": 8344.95 }
 ```
 
-### 在 DevTools 中注释指标
+### Annotate metrics in the DevTools
 
-**Performance.mark** ([User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API)) 用于在浏览器的性能条目缓冲区中创建一个应用程序定义的性能条目。
+**Performance.mark** ([User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API))는 브라우저의 성능 항목 버퍼에 애플리케이션 정의 성능 항목을 만드는 데 사용됩니다.
 
 ```javascript
 const perfume = new Perfume({
@@ -277,9 +274,9 @@ perfume.end('fibonacci');
 
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
 
-### 组件首次绘制
+### Component First Paint
 
-这个度量标志着创建新组件并且浏览器将像素渲染到屏幕上的耗时。
+이 측정 항목은 **새 구성 요소**(new component)를 만든 직후 브라우저가 화면에 픽셀을 렌더링 할 때 지점을 표시합니다.
 
 ```javascript
 const perfume = new Perfume({
@@ -295,9 +292,9 @@ perfume.endPaint('togglePopover');
 
 ![Performance](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
 
-### 元素计时
+### Element Timing
 
-通过使用新兴的 [Element Timing API](https://wicg.github.io/element-timing/) 规范来跟踪图像元素和文本节点在屏幕上显示的时间，只需简单地添加 `elementtiming` 属性，并在您想要测量的HTML元素上添加一个您选择的描述性值：
+[emerging](https://chromestatus.com/features#elementtiming) [Element Timing API](https://wicg.github.io/element-timing/)를 사용하여 이미지 요소와 텍스트 노드가 화면에 표시되는 시기를 추적합니다. 측정하려는 HTML 요소에 선택한 설명 값과 함께`elementtiming` 속성을 추가 하기만 하면 됩니다:
 
 ```html
 <h1 elementtiming="elPageTitle" class="title">Perfume.js</h1>
@@ -320,9 +317,9 @@ const perfume = new Perfume({
 // Perfume.js: elHeroLogo 1234.00 ms
 ```
 
-## Web Vitals Score
+## Web Vitals 점수
 
-Perfume 会暴露所有主要指标的生命体征得分，这些可以用来提高你的 [SEO and Google page rank](https://webmasters.googleblog.com/2020/05/evaluating-page-experience.html)。
+Perfume는 모든 주요 측정 항목에 대해 vitals 점수를 노출하며, 이 점수는  [SEO and Google page rank](https://webmasters.googleblog.com/2020/05/evaluating-page-experience.html)를 개선하는 데 사용할 수 있습니다.
 
 | Web Vitals                                |   Good | Needs Improvement |      Poor |
 | ----------------------------------------- | -----: | ----------------: | --------: |
@@ -338,9 +335,9 @@ Perfume 会暴露所有主要指标的生命体征得分，这些可以用来提
 | Total Blocking Time 10S (tbt10S)          |  0-300 |           301-600 |  Over 600 |
 | Total Blocking Time Final (tbtFinal)      |  0-300 |           301-600 |  Over 600 |
 
-## Perfume 自定义选项
+## Perfume의 커스텀 옵션
 
-提供给 Perfume.js 构造函数的默认选项。
+Perfume.js 생성자에 제공되는 기본 옵션입니다.
 
 ```javascript
 const options = {
@@ -351,11 +348,11 @@ const options = {
 };
 ```
 
-## 使用 Google Analytics
+## Google Analytics 사용
 
-在你的 Web 应用上查看页面速度结果的一个快速方法是使用 Google Analytics。这些 GA 事件将显示在 Behavior > Site Speed > User Timings 上。对于测试，您可能希望在 Realtime > Events 上实时看到它们。
+웹 앱에서 페이지 속도 결과를 확인하는 빠른 방법은 Google Analytics를 사용하는 것입니다. 이러한 GA 이벤트는 행동> 사이트 속도> 사용자 시간에 표시됩니다. 테스트를 위해 실시간> 이벤트에서 라이브로 제공되는 것을 볼 수 있습니다.
 
-Have fun ✨
+재미있는 시간 보내시길 바랍니다. ✨
 
 ```javascript
 const metricNames = ['fp', 'fcp', 'lcp', 'lcpFinal', 'fid', 'cls', 'clsFinal', 'tbt', 'tbt10S', 'tbtFinal'];
@@ -376,18 +373,18 @@ new Perfume({
 });
 ```
 
-要连接更多的分析提供者，请查看 [analytics plugin for Perfume.js](https://getanalytics.io/plugins/perfumejs/).
+Additional analytics providers와 연결하려면 이 링크를 참고해주세요. [analytics plugin for Perfume.js](https://getanalytics.io/plugins/perfumejs/).
 
 <br />
 
-## 开发
+## Develop
 
 - `npm run test`: Run test suite
 - `npm run build`: Generate bundles and typings
 - `npm run lint`: Lints code
   <br />
 
-## 插件
+## Plugins
 
 - [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
 - [Perfume.js plugin for Analytics](https://github.com/DavidWells/analytics/tree/master/packages/analytics-plugin-perfumejs)
@@ -430,7 +427,7 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 
 ## Copyright and license
 
-Code and documentation copyright 2020 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
+코드 및 문서 저작권 2020  [Leonardo Zizzamia](https://twitter.com/Zizzamia). [MIT license](LICENSE)에 따라 릴리스 된 코드입니다. Docs released under Creative Commons.
 
 ## Team
 
