@@ -184,7 +184,7 @@ Perfume은 필요한 주요 지표 중 일부를 노출하는 데 도움이 됩�
 
 ### First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 
-**FP**는 브라우저가 탐색하기 전에 화면에 표시된 것과 시각적으로 다른 것을 렌더링하는 데 걸린 정확한 시간입니다. (예 : 긴 빈 흰색 화면 시간 후 배경 변경하기.)
+**FP**는 브라우저가 탐색하기 전에 화면에 표시된 것과 시각적으로 다른 것을 렌더링하는 데 걸린 정확한 시간입니다. (예 : 긴 빈 흰색 화면 시간 후 배경 변경하기)
 
 ```javascript
 // Perfume.js: fp 1482.00 ms
