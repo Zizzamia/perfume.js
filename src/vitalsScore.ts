@@ -1,6 +1,6 @@
 import { IPerfumeData, IVitalsScore } from './types';
 
-const fcpScore = [1000, 2500];
+const fcpScore = [2000, 4000];
 const lcpScore = [2500, 4000];
 const fidcore = [100, 300];
 const clsScore = [0.1, 0.25];

@@ -49,9 +49,9 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - [Web Vitals Score](https://web.dev/vitals/)
 
 <br />
-With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world perceive web performance for your application. 
+With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world perceive web performance for your application.
 <br />
-Use your favorite analytics tool to visualize the data from country to country. 
+Use your favorite analytics tool to visualize the data from country to country.
 Take a look at this example comparing <b>FCP</b> for www.coinbase.com in the United States, Italy, Indonesia, and Nigeria.
 <br />
 
@@ -327,7 +327,7 @@ Perfume will expose for all major metrics the vitals score, those can be used to
 | Web Vitals                                |   Good | Needs Improvement |      Poor |
 | ----------------------------------------- | -----: | ----------------: | --------: |
 | Fist Paint (fp)                           | 0-1000 |         1001-2500 | Over 2500 |
-| First Contentful Paint (fcp)              | 0-1000 |         1001-2500 | Over 2500 |
+| First Contentful Paint (fcp)              | 0-2000 |         2001-4000 | Over 4000 |
 | Largest Contentful Paint (lcp)            | 0-2500 |         2501-4000 | Over 4000 |
 | Largest Contentful Paint Final (lcpFinal) | 0-2500 |         2501-4000 | Over 4000 |
 | First Input Delay (fid)                   |  0-100 |           101-300 |  Over 300 |
