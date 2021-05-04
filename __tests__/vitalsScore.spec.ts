@@ -6,8 +6,8 @@ describe('vitalsScore', () => {
   describe('webVitalsScore', () => {
     it('should default to the correct values', () => {
       expect(webVitalsScore).toEqual({
-        fp: [1000, 2500],
-        fcp: [1000, 2500],
+        fp: [2000, 4000],
+        fcp: [2000, 4000],
         lcp: [2500, 4000],
         lcpFinal: [2500, 4000],
         fid: [100, 300],
@@ -25,8 +25,8 @@ describe('vitalsScore', () => {
   describe('.getVitalsScore()', () => {
     it('should return the correct values for fcp', () => {
       expect(getVitalsScore('fcp', 200)).toEqual('good');
-      expect(getVitalsScore('fcp', 1200)).toEqual('needsImprovement');
-      expect(getVitalsScore('fcp', 3200)).toEqual('poor');
+      expect(getVitalsScore('fcp', 2200)).toEqual('needsImprovement');
+      expect(getVitalsScore('fcp', 4200)).toEqual('poor');
     });
 
     it('should return the correct values for lcp', () => {
