@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.0 (2021-5-5)
+
+* **fix:** terser properties updated.
+
 ## 6.1.0 (2021-5-5)
 
 * **feat:** improved CLS and all metrics accuracy to four digits after the decimal point.
