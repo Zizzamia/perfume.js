@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1.0 (2021-5-5)
+
+* **feat:** improved CLS and all metrics accuracy to four digits after the decimal point.
+
 ## 6.0.0 (2021-5-5)
 
 * **feat:** introduced **Time to First Byte** as his own top-level metric.

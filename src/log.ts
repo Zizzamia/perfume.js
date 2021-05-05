@@ -1,6 +1,6 @@
 import { config } from './config';
 import { reportPerf } from './reportPerf';
-import { roundByTwo } from './utils';
+import { roundByFour } from './utils';
 
 export const logData = (
   measureName: string,
@@ -9,7 +9,7 @@ export const logData = (
 ): void => {
   Object.keys(metric).forEach(key => {
     if (typeof metric[key] === 'number') {
-      metric[key] = roundByTwo(metric[key]);
+      metric[key] = roundByFour(metric[key]);
     }
   });
   // Sends the metric to an external tracking service
@@ -21,7 +21,7 @@ export const logData = (
  * and the external time tracking service.
  */
 export const logMetric = (duration: number, measureName: string, customProperties?: object): void => {
-  const duration2Decimal = roundByTwo(duration);
+  const duration2Decimal = roundByFour(duration);
   if (duration2Decimal <= config.maxTime && duration2Decimal >= 0) {
     // Sends the metric to an external tracking service
     reportPerf(measureName, duration2Decimal, customProperties);

@@ -19,10 +19,10 @@ import {
 import { didVisibilityChange, visibility } from './onVisibilityChange';
 import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
-import { roundByTwo } from './utils';
+import { roundByFour } from './utils';
 
 export default class Perfume {
-  v = '6.0.0';
+  v = '6.1.0';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
@@ -88,7 +88,7 @@ export default class Perfume {
     delete metrics[markName];
     logData(
       markName,
-      roundByTwo(performanceMeasure(markName)),
+      roundByFour(performanceMeasure(markName)),
       customProperties,
     );
   }

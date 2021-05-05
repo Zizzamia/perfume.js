@@ -6,7 +6,7 @@ describe('utils', () => {
 
   describe('.convertToKB()', () => {
     it('should convert number to Kilo Bytes', () => {
-      expect(convertToKB(100000000)).toEqual(95.37);
+      expect(convertToKB(100000000)).toEqual(95.3674);
     });
 
     it('should return null when input is not a number', () => {
