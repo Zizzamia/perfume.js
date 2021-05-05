@@ -86,16 +86,13 @@ const createConfig = ({ output, min = false }) => {
             'lcp',
             'lcpFinal',
             'fid',
-            'fidVitals',
             'cls',
             'clsFinal',
             'tbt',
-            'tbt5S',
-            'tbt10S',
-            'tbtFinal',
             'processingStart',
             'PerformanceObserver',
-            'performanceEntry'
+            'performanceEntry',
+            'ttfb'
           ]
         }
       },
