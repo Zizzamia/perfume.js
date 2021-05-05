@@ -3,7 +3,7 @@
   align="left" width="200" alt="Perfume.js logo" />
 </a>
 
-# [Perfume.js v5.3.0](http://perfumejs.com)
+# [Perfume.js v6.0.0](http://perfumejs.com)
 
 [![Current version](https://img.shields.io/github/tag/zizzamia/perfume.js?color=3498DB&label=version)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-27ae60.svg"> [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js) [![brotli size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=brotli&label=JS+brotli+size)](https://unpkg.com/perfume.js)
 
@@ -109,6 +109,9 @@ const perfume = new Perfume({
       case 'storageEstimate':
         myAnalyticsTool.track('storageEstimate', data);
         break;
+      case 'ttfb':
+        myAnalyticsTool.track('ttfb', { duration: data });
+        break;
       case 'fp':
         myAnalyticsTool.track('firstPaint', { duration: data });
         break;
@@ -134,9 +137,6 @@ const perfume = new Perfume({
         break;
       case 'tbt':
         myAnalyticsTool.track('totalBlockingTime', { duration: data });
-        break;
-      case 'tbt10S':
-        myAnalyticsTool.track('totalBlockingTime10S', { duration: data });
         break;
       case 'elPageTitle':
         myAnalyticsTool.track('elementTimingPageTitle', { duration: data });
@@ -235,13 +235,10 @@ We end the Cumulative Layout Shift measure at two points: when First Input Delay
 
 **TBT** is an important, user-centric metric for measuring load responsiveness because it helps quantify the severity of how non-interactive a page is prior to it becoming reliably interactive—a low TBT helps ensure that the page is usable.
 
-We end the Total Blocking Time measure at four points: when First Input Delay happen, 5 seconds after FID, 10 seconds after FID and when the page's lifecycle state changes to hidden.
+We end the Total Blocking Time measure 10 seconds after FID.
 
 ```javascript
 // Perfume.js: tbt 347.07 ms
-// Perfume.js: tbt5S 427.14 ms
-// Perfume.js: tbt10S 427.14 ms
-// Perfume.js: tbtFinal 526.08 ms
 ```
 
 ### Resource Timing
@@ -326,7 +323,8 @@ Perfume will expose for all major metrics the vitals score, those can be used to
 
 | Web Vitals                                |   Good | Needs Improvement |      Poor |
 | ----------------------------------------- | -----: | ----------------: | --------: |
-| Fist Paint (fp)                           | 0-1000 |         1001-2500 | Over 2500 |
+| Time to First Byte (ttfb)                 | 0-200 |            201-500 |  Over 500 |
+| Fist Paint (fp)                           | 0-2000 |         2001-4000 | Over 4000 |
 | First Contentful Paint (fcp)              | 0-2000 |         2001-4000 | Over 4000 |
 | Largest Contentful Paint (lcp)            | 0-2500 |         2501-4000 | Over 4000 |
 | Largest Contentful Paint Final (lcpFinal) | 0-2500 |         2501-4000 | Over 4000 |
@@ -334,9 +332,6 @@ Perfume will expose for all major metrics the vitals score, those can be used to
 | Cumulative Layout Shift (cls)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
 | Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
 | Total Blocking Time (tbt)                 |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time 5S (tbt5S)            |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time 10S (tbt10S)          |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time Final (tbtFinal)      |  0-300 |           301-600 |  Over 600 |
 
 ## Perfume custom options
 
@@ -347,7 +342,7 @@ const options = {
   resourceTiming: false,
   elementTiming: false,
   analyticsTracker: options => {},
-  maxMeasureTime: 15000,
+  maxMeasureTime: 30000,
 };
 ```
 
@@ -358,7 +353,7 @@ A quick way to see your page speed results on your web app is by using Google An
 Have fun ✨
 
 ```javascript
-const metricNames = ['fp', 'fcp', 'lcp', 'lcpFinal', 'fid', 'cls', 'clsFinal', 'tbt', 'tbt10S', 'tbtFinal'];
+const metricNames = ['ttfb', 'fp', 'fcp', 'lcp', 'lcpFinal', 'fid', 'cls', 'clsFinal', 'tbt'];
 new Perfume({
   analyticsTracker: ({ metricName, data, navigatorInformation }) => {
     if (metricNames.includes(metricName)) {
@@ -430,7 +425,7 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 
 ## Copyright and license
 
-Code and documentation copyright 2020 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
+Code and documentation copyright 2021 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
 
 ## Team
 

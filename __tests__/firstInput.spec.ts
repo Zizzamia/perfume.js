@@ -31,7 +31,7 @@ describe('firstInput', () => {
     it('should call logMetric three times', () => {
       spy = jest.spyOn(log, 'logMetric');
       initFirstInputDelay([]);
-      expect(spy.mock.calls.length).toEqual(3);
+      expect(spy.mock.calls.length).toEqual(2);
     });
 
     it('should call logMetric five times', () => {
@@ -41,20 +41,18 @@ describe('firstInput', () => {
       (metrics as any).tbt = { value: 3 };
       spy = jest.spyOn(log, 'logMetric');
       initFirstInputDelay([entry as any]);
-      expect(spy.mock.calls.length).toEqual(5);
-      expect(spy).toHaveBeenCalledWith(15, 'fidVitals', { performanceEntry: entry });
-      expect(spy).toHaveBeenCalledWith(10, 'fid', { performanceEntry: entry });
+      expect(spy.mock.calls.length).toEqual(3);
+      expect(spy).toHaveBeenCalledWith(15, 'fid', { performanceEntry: entry });
       expect(spy).toHaveBeenCalledWith(1, 'lcp');
       expect(spy).toHaveBeenCalledWith(2, 'cls');
-      expect(spy).toHaveBeenCalledWith(3, 'tbt');
     });
 
     it('should conditionally call takeRecords', () => {
-      //Delete the takeRecords method which isn't available on Safari and make sure all the metrics are still logged
+      // Delete the takeRecords method which isn't available on Safari and make sure all the metrics are still logged
       delete oi.perfObservers[3].takeRecords;
       spy = jest.spyOn(log, 'logMetric');
       initFirstInputDelay([]);
-      expect(spy.mock.calls.length).toEqual(3);
+      expect(spy.mock.calls.length).toEqual(2);
     });
   });
 });

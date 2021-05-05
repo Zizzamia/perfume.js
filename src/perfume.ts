@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v5.3.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v6.0.0 (http://zizzamia.github.io/perfume)
  * Copyright 2020 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -9,7 +9,7 @@ import { D, W, WN, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { getNetworkInformation } from './getNetworkInformation';
 import { isPerformanceSupported } from './isSupported';
-import { logData } from './log';
+import { logData, logMetric } from './log';
 import { performanceMeasure } from './measure';
 import { metrics } from './metrics';
 import {
@@ -22,7 +22,7 @@ import { IPerfumeOptions } from './types';
 import { roundByTwo } from './utils';
 
 export default class Perfume {
-  v = '5.3.0';
+  v = '6.0.0';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
@@ -48,8 +48,12 @@ export default class Perfume {
         didVisibilityChange.bind(this, disconnectPerfObserversHidden),
       );
     }
+    const navigationTiming = getNavigationTiming();
     // Log Navigation Timing
-    logData('navigationTiming', getNavigationTiming());
+    logData('navigationTiming', navigationTiming);
+    if (navigationTiming.timeToFirstByte) {
+      logMetric(navigationTiming.timeToFirstByte, 'ttfb');
+    }
     // Log Network Information
     logData('networkInformation', getNetworkInformation());
     // Let's estimate our storage capacity

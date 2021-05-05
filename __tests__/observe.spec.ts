@@ -35,7 +35,7 @@ describe('observe', () => {
     }
   });
 
-  describe('.initPerformanceObserver()', () => {
+  describe('initPerformanceObserver()', () => {
     describe.each`
       resourceTiming | elementTiming | calls
       ${false}       | ${false}      | ${4}
@@ -95,24 +95,22 @@ describe('observe', () => {
     );
   });
 
-  describe('.disconnectPerfObserversHidden()', () => {
+  describe('disconnectPerfObserversHidden()', () => {
     it('should call logMetric', () => {
       perfObservers[2] = { disconnect: jest.fn() };
       perfObservers[3] = { disconnect: jest.fn(), takeRecords: jest.fn() };
-      perfObservers[4] = { disconnect: jest.fn() };
       spy = jest.spyOn(log, 'logMetric');
       disconnectPerfObserversHidden();
-      expect(spy.mock.calls.length).toEqual(3);
+      expect(spy.mock.calls.length).toEqual(2);
     });
 
     it('should conditionally call takeRecords', () => {
       perfObservers[2] = { disconnect: jest.fn() };
       //Make sure all metrics are still logged even if we don't have the takeRecords method available
       perfObservers[3] = { disconnect: jest.fn() };
-      perfObservers[4] = { disconnect: jest.fn() };
       spy = jest.spyOn(log, 'logMetric');
       disconnectPerfObserversHidden();
-      expect(spy.mock.calls.length).toEqual(3);
+      expect(spy.mock.calls.length).toEqual(2);
     });
   });
 });

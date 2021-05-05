@@ -47,7 +47,7 @@ describe('log', () => {
 
     it('should not call reportPerf() when duration is higher of config.maxTime', () => {
       spy = jest.spyOn(reportPerf, 'reportPerf');
-      log.logMetric(20000, 'fcp');
+      log.logMetric(40000, 'fcp');
       expect(spy.mock.calls.length).toEqual(0);
     });
   });

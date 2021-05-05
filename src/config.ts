@@ -5,5 +5,5 @@ export const config: IPerfumeConfig = {
   isResourceTiming: false,
   isElementTiming: false,
   // Logging
-  maxTime: 15000,
+  maxTime: 30000,
 };

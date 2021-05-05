@@ -6,23 +6,26 @@ describe('vitalsScore', () => {
   describe('webVitalsScore', () => {
     it('should default to the correct values', () => {
       expect(webVitalsScore).toEqual({
+        ttfb: [200, 500],
         fp: [2000, 4000],
         fcp: [2000, 4000],
         lcp: [2500, 4000],
         lcpFinal: [2500, 4000],
         fid: [100, 300],
-        fidVitals: [100, 300],
         cls: [0.1, 0.25],
         clsFinal: [0.1, 0.25],
         tbt: [300, 600],
-        tbt5S: [300, 600],
-        tbt10S: [300, 600],
-        tbtFinal: [300, 600],
       });
     });
   });
 
-  describe('.getVitalsScore()', () => {
+  describe('getVitalsScore()', () => {
+    it('should return the correct values for ttfb', () => {
+      expect(getVitalsScore('ttfb', 100)).toEqual('good');
+      expect(getVitalsScore('ttfb', 300)).toEqual('needsImprovement');
+      expect(getVitalsScore('ttfb', 600)).toEqual('poor');
+    });
+
     it('should return the correct values for fcp', () => {
       expect(getVitalsScore('fcp', 200)).toEqual('good');
       expect(getVitalsScore('fcp', 2200)).toEqual('needsImprovement');
@@ -47,12 +50,6 @@ describe('vitalsScore', () => {
       expect(getVitalsScore('fid', 400)).toEqual('poor');
     });
 
-    it('should return the correct values for fidVitals', () => {
-      expect(getVitalsScore('fidVitals', 80)).toEqual('good');
-      expect(getVitalsScore('fidVitals', 150)).toEqual('needsImprovement');
-      expect(getVitalsScore('fidVitals', 400)).toEqual('poor');
-    });
-
     it('should return the correct values for cls', () => {
       expect(getVitalsScore('cls', 0.05)).toEqual('good');
       expect(getVitalsScore('cls', 0.2)).toEqual('needsImprovement');
@@ -75,24 +72,6 @@ describe('vitalsScore', () => {
       expect(getVitalsScore('tbt', 200)).toEqual('good');
       expect(getVitalsScore('tbt', 400)).toEqual('needsImprovement');
       expect(getVitalsScore('tbt', 700)).toEqual('poor');
-    });
-
-    it('should return the correct values for tbt5S', () => {
-      expect(getVitalsScore('tbt5S', 200)).toEqual('good');
-      expect(getVitalsScore('tbt5S', 400)).toEqual('needsImprovement');
-      expect(getVitalsScore('tbt5S', 700)).toEqual('poor');
-    });
-
-    it('should return the correct values for tbt10S', () => {
-      expect(getVitalsScore('tbt10S', 200)).toEqual('good');
-      expect(getVitalsScore('tbt10S', 400)).toEqual('needsImprovement');
-      expect(getVitalsScore('tbt10S', 700)).toEqual('poor');
-    });
-
-    it('should return the correct values for tbtFinal', () => {
-      expect(getVitalsScore('tbtFinal', 200)).toEqual('good');
-      expect(getVitalsScore('tbtFinal', 400)).toEqual('needsImprovement');
-      expect(getVitalsScore('tbtFinal', 700)).toEqual('poor');
     });
   });
 });

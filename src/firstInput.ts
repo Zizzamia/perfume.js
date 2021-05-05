@@ -11,12 +11,7 @@ export const initFirstInputDelay = (
   if (lastEntry) {
     // Core Web Vitals FID logic
     // Measure the delay to begin processing the first input event
-    logMetric(lastEntry.processingStart - lastEntry.startTime, 'fidVitals', {
-      performanceEntry: lastEntry
-    });
-    // Legacy FID logic
-    // Measure the duration of processing the first input event
-    logMetric(lastEntry.duration, 'fid', {
+    logMetric(lastEntry.processingStart - lastEntry.startTime, 'fid', {
       performanceEntry: lastEntry
     });
   }
@@ -27,14 +22,9 @@ export const initFirstInputDelay = (
     perfObservers[3].takeRecords();
   }
   logMetric(cls.value, 'cls');
-  logMetric(tbt.value, 'tbt');
-  // TBT with 5 second delay after FID
+  // TBT has 10 second delay after FID
   setTimeout(() => {
-    logMetric(tbt.value, `tbt5S`);
-  }, 5000);
-  // TBT with 10 second delay after FID
-  setTimeout(() => {
-    logMetric(tbt.value, `tbt10S`);
+    logMetric(tbt.value, `tbt`);
     logData('dataConsumption', rt.value);
   }, 10000);
 };

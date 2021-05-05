@@ -2,7 +2,7 @@ import { config } from './config';
 import { initLayoutShift } from './cumulativeLayoutShift';
 import { initFirstInputDelay } from './firstInput';
 import { logMetric } from './log';
-import { cls, lcp, tbt } from './metrics';
+import { cls, lcp } from './metrics';
 import { perfObservers } from './observeInstances';
 import {
   initElementTiming,
@@ -39,9 +39,5 @@ export const disconnectPerfObserversHidden = (): void => {
     }
     logMetric(cls.value, `clsFinal`);
     poDisconnect(3);
-  }
-  if (perfObservers[4]) {
-    logMetric(tbt.value, `tbtFinal`);
-    poDisconnect(4);
   }
 };

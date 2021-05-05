@@ -1,4 +1,4 @@
-import { W, WP } from './constants';
+import { WP } from './constants';
 
 /**
  * True if the browser supports the Navigation Timing API,

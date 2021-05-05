@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.0.0 (2021-5-5)
+
+* **feat:** introduced **Time to First Byte** as his own top-level metric.
+* **feat:** simplified **Total Blocking Time** metrics into one solo version that focuses on waiting 10s after **First Input Delay**.
+* **feat:** increased the `maxMeasureTime` default value from 15s to 30s, this will allow better data for metrics like LCP which tend to have much higher values. 
+
+### Breaking Changes
+The two key breaking changes in v6 are focus around the simplification of First Input Delay and Total Blocking Time, and the increase of the default value for `maxMeasureTime`.
+
 ## 5.3.0 (2020-9-2)
 
 * **feat:** added the raw `performanceEntry` object in the reporting for FID and FID Vitals. This will help developer to do more custom analysis based on the FID target.
