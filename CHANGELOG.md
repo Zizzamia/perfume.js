@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.3.0 (2021-10-20)
+
+* **feat:** added `redirectTime` to `navigationTiming`, this will help better understand performance regression related to redirect requests.
+
 ## 6.2.0 (2021-5-5)
 
 * **fix:** terser properties updated.
