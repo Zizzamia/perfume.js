@@ -23,6 +23,7 @@ describe('getNavigationTiming', () => {
         timeToFirstByte: 3.745000110939145,
         totalTime: 4.435000009834766,
         workerTime: 4.435000009834766,
+        redirectTime: 0,
       });
     });
 

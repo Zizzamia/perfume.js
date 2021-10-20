@@ -97,6 +97,7 @@ export interface IPerfumeNavigationTiming {
   timeToFirstByte?: number;
   headerSize?: number;
   dnsLookupTime?: number;
+  redirectTime?: number;
 }
 
 export type EffectiveConnectionType = '2g' | '3g' | '4g' | 'slow-2g' | 'lte';

@@ -37,5 +37,7 @@ export const getNavigationTiming = (): IPerfumeNavigationTiming => {
     headerSize: n.transferSize - n.encodedBodySize || 0,
     // Measuring DNS lookup time
     dnsLookupTime: n.domainLookupEnd - n.domainLookupStart,
+    // redirects could add latency to requests
+    redirectTime: n.redirectEnd - n.redirectStart,
   };
 };
