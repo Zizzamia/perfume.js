@@ -11,7 +11,6 @@ import {
   fp,
   fcp,
   lcp,
-  lcpFinal,
   fid,
   cls,
   clsFinal,
@@ -49,7 +48,6 @@ export class AppComponent implements AfterViewInit {
   fcp: number;
   fid: number;
   lcp: number;
-  lcpFinal: number;
   cls: number;
   clsFinal: number;
   tbt: number;
@@ -102,10 +100,6 @@ export class AppComponent implements AfterViewInit {
     });
     lcp.subscribe(result => {
       this.lcp = result;
-      this.ref.detectChanges();
-    });
-    lcpFinal.subscribe(result => {
-      this.lcpFinal = result;
       this.ref.detectChanges();
     });
     fid.subscribe(result => {

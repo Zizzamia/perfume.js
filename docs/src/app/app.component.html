@@ -42,7 +42,6 @@
       >// These metrics activate on a set delay or when the tab changes
       visibility</b
     ><br />
-    Largest Contentful Paint Final: <b>{{ lcpFinal }} ms</b><br />
     Cumulative Layout Shift Final: <b>{{ clsFinal }}</b
     ><br />
     Total Blocking Time 5S: <b>{{ tbt5s }} ms</b><br />
@@ -84,9 +83,6 @@
         <span class="red">break</span>;
       <span class="red">case</span> 'lcp'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('largestContentfulPaint', {{'{'}} duration: data {{'}'}});
-        <span class="red">break</span>;
-      <span class="red">case</span> 'lcpFinal'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('largestContentfulPaintFinal', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'cls'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('cumulativeLayoutShift', {{'{'}} duration: data {{'}'}});
@@ -235,7 +231,6 @@
   </p>
   <p class="box-demo">
     <b>Largest Contentful Paint:</b> {{ lcp }} ms<br />
-    <b>Largest Contentful Paint Final</b>: {{ lcpFinal }} ms
   </p>
 </div>
 

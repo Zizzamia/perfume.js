@@ -16,7 +16,6 @@ export const dataConsumption = new BehaviorSubject({});
 export const fp = new BehaviorSubject(0);
 export const fcp = new BehaviorSubject(0);
 export const lcp = new BehaviorSubject(0);
-export const lcpFinal = new BehaviorSubject(0);
 export const fid = new BehaviorSubject(0);
 export const cls = new BehaviorSubject(0);
 export const clsFinal = new BehaviorSubject(0);
@@ -51,7 +50,6 @@ export function analyticsTracker(options) {
       'fp',
       'fcp',
       'lcp',
-      'lcpFinal',
       'fid',
       'fidVitals',
       'cls',
@@ -94,9 +92,6 @@ export function analyticsTracker(options) {
       break;
     case 'lcp':
       lcp.next(data);
-      break;
-    case 'lcpFinal':
-      lcpFinal.next(data);
       break;
     case 'fid':
       fid.next(data);
