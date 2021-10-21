@@ -24,7 +24,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - 🚀 Device data enrichment
 - 🔨 Cross browser tested
 - 🚿 Filters out false positive/negative results
-- 🤙 Only 2Kb gzip
+- 🤙 Only 2.2Kb gzip
 - 🏅 Web Vitals Score
 - 🛰 Flexible analytics tool
 - ⚡️ Waste-zero ms with [requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback) strategy built-in
