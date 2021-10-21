@@ -3,7 +3,7 @@
   align="left" width="200" alt="Perfume.js logo" />
 </a>
 
-# [Perfume.js v5.3.0](http://perfumejs.com)
+# [Perfume.js v6.3.0](http://perfumejs.com)
 
 [![Current version](https://img.shields.io/github/tag/zizzamia/perfume.js?color=3498DB&label=version)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-27ae60.svg"> [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js) [![brotli size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=brotli&label=JS+brotli+size)](https://unpkg.com/perfume.js)
 
@@ -201,6 +201,7 @@ Navigation Timing raccoglie le metriche delle prestazioni per la durata e i temp
 Perfume aiuta a esporre alcune delle metriche chiave di cui potresti aver bisogno.
 
 <ul>
+  <li><b>Redirect time</b>: Page redirects aren't totally inconsequential, but they might not be something you run into very often. Still, redirects add latency to requests, so measuring them may be worth the effort.</li>
   <li><b>DNS lookup</b>: Quando un utente richiede un URL, viene richiesto al Domain Name System (DNS) di tradurre un dominio in un indirizzo IP.</li>
   <li><b>Header size</b>: La dimensione del HTTP header</li>
   <li><b>Tempo di Fetch</b>: Ricerca cache più tempo di risposta</li>
