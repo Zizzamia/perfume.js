@@ -120,11 +120,6 @@ const perfume = new Perfume({
       case 'lcp':
         myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
-      case 'lcpFinal':
-        myAnalyticsTool.track('largestContentfulPaintFinal', {
-          duration: data,
-        });
-        break;
       case 'cls':
         myAnalyticsTool.track('cumulativeLayoutShift', { value: data });
         break;
@@ -207,7 +202,6 @@ Perfume은 필요한 주요 지표 중 일부를 노출하는 데 도움이 됩�
 
 ```javascript
 // Perfume.js: lcp 2429.00 ms
-// Perfume.js: lcpFinal 2642.00 ms
 ```
 
 ### First Input Delay (FID)
@@ -327,7 +321,6 @@ Perfume는 모든 주요 측정 항목에 대해 vitals 점수를 노출하며, 
 | Fist Paint (fp)                           | 0-1000 |         1001-2500 | Over 2500 |
 | First Contentful Paint (fcp)              | 0-1000 |         1001-2500 | Over 2500 |
 | Largest Contentful Paint (lcp)            | 0-2500 |         2501-4000 | Over 4000 |
-| Largest Contentful Paint Final (lcpFinal) | 0-2500 |         2501-4000 | Over 4000 |
 | First Input Delay (fid)                   |  0-100 |           101-300 |  Over 300 |
 | Cumulative Layout Shift (cls)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
 | Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
@@ -356,7 +349,7 @@ const options = {
 재미있는 시간 보내시길 바랍니다. ✨
 
 ```javascript
-const metricNames = ['fp', 'fcp', 'lcp', 'lcpFinal', 'fid', 'cls', 'clsFinal', 'tbt', 'tbt10S', 'tbtFinal'];
+const metricNames = ['fp', 'fcp', 'lcp', 'fid', 'cls', 'clsFinal', 'tbt', 'tbt10S', 'tbtFinal'];
 new Perfume({
   analyticsTracker: ({ metricName, data, navigatorInformation }) => {
     if (metricNames.includes(metricName)) {
