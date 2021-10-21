@@ -124,11 +124,6 @@ const perfume = new Perfume({
       case 'lcp':
         myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
-      case 'lcpFinal':
-        myAnalyticsTool.track('largestContentfulPaintFinal', {
-          duration: data,
-        });
-        break;
       case 'cls':
         myAnalyticsTool.track('cumulativeLayoutShift', { value: data });
         break;
@@ -210,7 +205,6 @@ We end the Largest Contentful Paint measure at two points: when First Input Dela
 
 ```javascript
 // Perfume.js: lcp 2429.00 ms
-// Perfume.js: lcpFinal 2642.00 ms
 ```
 
 ### First Input Delay (FID)
@@ -328,7 +322,6 @@ Perfume will expose for all major metrics the vitals score, those can be used to
 | Fist Paint (fp)                           | 0-2000 |         2001-4000 | Over 4000 |
 | First Contentful Paint (fcp)              | 0-2000 |         2001-4000 | Over 4000 |
 | Largest Contentful Paint (lcp)            | 0-2500 |         2501-4000 | Over 4000 |
-| Largest Contentful Paint Final (lcpFinal) | 0-2500 |         2501-4000 | Over 4000 |
 | First Input Delay (fid)                   |  0-100 |           101-300 |  Over 300 |
 | Cumulative Layout Shift (cls)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
 | Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
@@ -354,7 +347,7 @@ A quick way to see your page speed results on your web app is by using Google An
 Have fun ✨
 
 ```javascript
-const metricNames = ['ttfb', 'fp', 'fcp', 'lcp', 'lcpFinal', 'fid', 'cls', 'clsFinal', 'tbt'];
+const metricNames = ['ttfb', 'fp', 'fcp', 'lcp', 'fid', 'cls', 'clsFinal', 'tbt'];
 new Perfume({
   analyticsTracker: ({ metricName, data, navigatorInformation }) => {
     if (metricNames.includes(metricName)) {
