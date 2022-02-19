@@ -43,10 +43,7 @@
       visibility</b
     ><br />
     Cumulative Layout Shift Final: <b>{{ clsFinal }}</b
-    ><br />
-    Total Blocking Time 5S: <b>{{ tbt5s }} ms</b><br />
-    Total Blocking Time 10S: <b>{{ tbt10s }} ms</b><br />
-    Total Blocking Time Final: <b>{{ tbtFinal }} ms</b><br /><br />
+    ><br /><br />
 
     <b>// Experimental Performance metrics</b><br />
     dataConsumption: <b>{{ dataConsumption }}</b><br />
@@ -92,15 +89,6 @@
         <span class="red">break</span>;
       <span class="red">case</span> 'tbt'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime', {{'{'}} duration: data {{'}'}});
-        <span class="red">break</span>;
-      <span class="red">case</span> 'tbt5S'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime5S', {{'{'}} duration: data {{'}'}});
-        <span class="red">break</span>;
-      <span class="red">case</span> 'tbt10S'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime10S', {{'{'}} duration: data {{'}'}});
-        <span class="red">break</span>;
-      <span class="red">case</span> 'tbtFinal'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('totalBlockingTimeFinal', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">default</span>:
         myAnalyticsTool.<span class="violet">track</span>(metricName, {{'{'}} duration: data {{'}'}});
@@ -278,9 +266,6 @@
   </p>
   <p class="box-demo">
     <b>Total Blocking Time</b>: {{ tbt }} ms<br />
-    <b>Total Blocking Time 5s</b>: {{ tbt5s }} ms<br />
-    <b>Total Blocking Time 10S</b>: {{ tbt10s }} ms<br />
-    <b>Total Blocking Time Final</b>: {{ tbtFinal }} ms<br />
   </p>
 </div>
 

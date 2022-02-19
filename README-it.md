@@ -146,12 +146,6 @@ const perfume = new Perfume({
       case 'tbt':
         myAnalyticsTool.track('totalBlockingTime', { duration: data });
         break;
-      case 'tbt5S':
-        myAnalyticsTool.track('totalBlockingTime5S', { duration: data });
-        break;
-      case 'tbt10S':
-        myAnalyticsTool.track('totalBlockingTime10S', { duration: data });
-        break;
       case 'tbtFinal':
         myAnalyticsTool.track('totalBlockingTimeFinal', { duration: data });
         break;
@@ -282,9 +276,6 @@ Terminiamo la misura Total Blocking Time in quattro punti: quando si verifica il
 
 ```javascript
 // Perfume.js: tbt 347.07 ms
-// Perfume.js: tbt5S 427.14 ms
-// Perfume.js: tbt10S 427.14 ms
-// Perfume.js: tbtFinal 526.08 ms
 ```
 
 ### Resource Timing
@@ -391,9 +382,6 @@ Perfume esporrà per tutte le principali metriche il punteggio dei valori vitali
 | Cumulative Layout Shift (cls)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
 | Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
 | Total Blocking Time (tbt)                 |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time 5S (tbt5S)            |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time 10S (tbt10S)          |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time Final (tbtFinal)      |  0-300 |           301-600 |  Over 600 |
 
 ## Opzioni personalizzate di Perfume
 
@@ -419,7 +407,7 @@ Un modo rapido per visualizzare i risultati sulla velocità della pagina sulla t
 Divertiti ✨
 
 ```javascript
-const metricNames = ['fp', 'fcp', 'lcp', 'fid', 'cls', 'clsFinal', 'tbt', 'tbt10S', 'tbtFinal'];
+const metricNames = ['fp', 'fcp', 'lcp', 'fid', 'cls', 'clsFinal', 'tbt'];
 new Perfume({
   analyticsTracker: ({ metricName, data, navigatorInformation }) => {
     if (metricNames.includes(metricName)) {

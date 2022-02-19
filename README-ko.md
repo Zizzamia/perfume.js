@@ -129,9 +129,6 @@ const perfume = new Perfume({
       case 'tbt':
         myAnalyticsTool.track('totalBlockingTime', { duration: data });
         break;
-      case 'tbt10S':
-        myAnalyticsTool.track('totalBlockingTime10S', { duration: data });
-        break;
       case 'elPageTitle':
         myAnalyticsTool.track('elementTimingPageTitle', { duration: data });
         break;
@@ -231,9 +228,6 @@ CLS측정은 두 지점에서 끝납니다. 첫 번째 입력 지연이 발생�
 
 ```javascript
 // Perfume.js: tbt 347.07 ms
-// Perfume.js: tbt5S 427.14 ms
-// Perfume.js: tbt10S 427.14 ms
-// Perfume.js: tbtFinal 526.08 ms
 ```
 
 ### Resource Timing
@@ -325,9 +319,6 @@ Perfume는 모든 주요 측정 항목에 대해 vitals 점수를 노출하며, 
 | Cumulative Layout Shift (cls)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
 | Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
 | Total Blocking Time (tbt)                 |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time 5S (tbt5S)            |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time 10S (tbt10S)          |  0-300 |           301-600 |  Over 600 |
-| Total Blocking Time Final (tbtFinal)      |  0-300 |           301-600 |  Over 600 |
 
 ## Perfume의 커스텀 옵션
 
@@ -349,7 +340,7 @@ const options = {
 재미있는 시간 보내시길 바랍니다. ✨
 
 ```javascript
-const metricNames = ['fp', 'fcp', 'lcp', 'fid', 'cls', 'clsFinal', 'tbt', 'tbt10S', 'tbtFinal'];
+const metricNames = ['fp', 'fcp', 'lcp', 'fid', 'cls', 'clsFinal', 'tbt'];
 new Perfume({
   analyticsTracker: ({ metricName, data, navigatorInformation }) => {
     if (metricNames.includes(metricName)) {
