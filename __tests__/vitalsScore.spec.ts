@@ -15,6 +15,7 @@ describe('vitalsScore', () => {
         cls: [0.1, 0.25],
         clsFinal: [0.1, 0.25],
         tbt: [300, 600],
+        ntbt: [400, 600],
       });
     });
   });
@@ -72,6 +73,13 @@ describe('vitalsScore', () => {
       expect(getVitalsScore('tbt', 200)).toEqual('good');
       expect(getVitalsScore('tbt', 400)).toEqual('needsImprovement');
       expect(getVitalsScore('tbt', 700)).toEqual('poor');
+    });
+
+    it('should return the correct values for ntbt', () => {
+      expect(getVitalsScore('ntbt', 200)).toEqual('good');
+      expect(getVitalsScore('ntbt', 400)).toEqual('good');
+      expect(getVitalsScore('ntbt', 401)).toEqual('needsImprovement');
+      expect(getVitalsScore('ntbt', 700)).toEqual('poor');
     });
   });
 });

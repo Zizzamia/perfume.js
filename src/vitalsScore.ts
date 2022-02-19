@@ -6,6 +6,7 @@ const lcpScore = [2500, 4000];
 const fidcore = [100, 300];
 const clsScore = [0.1, 0.25];
 const tbtScore = [300, 600];
+const ntbtScore = [400, 600];
 
 export const webVitalsScore: Record<string, number[]> = {
   ttfb: ttfbScore,
@@ -17,6 +18,7 @@ export const webVitalsScore: Record<string, number[]> = {
   cls: clsScore,
   clsFinal: clsScore,
   tbt: tbtScore,
+  ntbt: ntbtScore,
 };
 
 export const getVitalsScore = (

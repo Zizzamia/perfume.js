@@ -115,4 +115,21 @@ export default class Perfume {
     WP.clearMarks(`mark_${markName}_start`);
     WP.clearMarks(`mark_${markName}_end`);
   }
+
+  /**
+   * NTBT = Navigation Total Blocking Time
+   *
+   * NTBT is measured from call time until all the measurement
+   * durations have elapsed or some kind of interruption has occurred.
+   * NTBT is the summation of blocking time of all long tasks
+   * and reported for each measurement duration.
+   *
+   * NTBT measurement may terminate early (and not report)
+   * in the following situations:
+   *   - another NTBT measurement is triggered while one is already in progress
+   *   - the application gets interrupted (backgrounded)
+   */
+  markNavigationTotalBlockingTime(): void {
+    // TODO @zizzamia add stuff
+  }
 }
