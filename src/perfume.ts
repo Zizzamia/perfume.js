@@ -90,11 +90,7 @@ export default class Perfume {
     delete metrics[markName];
     const measure = performanceMeasure(markName);
     if (doLogData) {
-      logData(
-        markName,
-        roundByFour(measure),
-        customProperties,
-      );
+      logData(markName, roundByFour(measure), customProperties);
     }
   }
 
