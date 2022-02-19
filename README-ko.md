@@ -412,7 +412,7 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 
 ## Copyright and license
 
-코드 및 문서 저작권 2020  [Leonardo Zizzamia](https://twitter.com/Zizzamia). [MIT license](LICENSE)에 따라 릴리스 된 코드입니다. Docs released under Creative Commons.
+코드 및 문서 저작권 2022 [Leonardo Zizzamia](https://twitter.com/Zizzamia). [MIT license](LICENSE)에 따라 릴리스 된 코드입니다. Docs released under Creative Commons.
 
 ## Team
 

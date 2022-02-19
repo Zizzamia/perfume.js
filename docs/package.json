@@ -11,7 +11,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/build-ng-packagr": "~0.901.5",
+    "@angular-devkit/build-ng-packagr": "^0.1002.4",
     "@angular/animations": "9.1.6",
     "@angular/cdk": "9.2.3",
     "@angular/common": "9.1.6",

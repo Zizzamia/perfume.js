@@ -485,7 +485,7 @@ Grazie a tutti i nostri sostenitori! 🙏 [[Diventa un sostenitore](https://open
 
 ## Copyright and license
 
-Code and documentation copyright 2020 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
+Code and documentation copyright 2022 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
 
 ## Team
 
