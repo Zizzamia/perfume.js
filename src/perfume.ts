@@ -124,16 +124,16 @@ export default class Perfume {
    * This metric measures the amount of time the application may be blocked
    * from processing code during the 2s window after a user navigates
    * from page A to page B.
-   * 
+   *
    * Because this library is navigation agnostic, we have this method
    * to mark when the navigation starts.
-   * 
+   *
    * The NTBT metric is the summation of the blocking time of all long tasks
    * in the 2s window after this method is invoked.
-   * 
+   *
    * If this method is called before the 2s window ends; it will trigger a new
    * NTBT measurement and interrupt the previous one.
-   * 
+   *
    * Credit: Thank you Steven Lam for helping with this!
    */
   markNTBT(): void {
