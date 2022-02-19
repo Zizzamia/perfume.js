@@ -1,6 +1,6 @@
 import { C, WN, WP } from '../src/constants';
 import * as log from '../src/log';
-import { metrics } from '../src/metrics';
+import { metrics, ntbt } from '../src/metrics';
 import { visibility } from '../src/onVisibilityChange';
 import Perfume from '../src/perfume';
 import * as observe from '../src/observe';
@@ -175,6 +175,19 @@ describe('Perfume', () => {
       expect(spy.mock.calls.length).toEqual(2);
       expect(spy).toHaveBeenCalledWith('mark_measure_moon_start');
       expect(spy).toHaveBeenCalledWith('mark_measure_moon_end');
+    });
+  });
+
+
+  describe('.markNTBT()', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    it('should set ntbt.value to 0', () => {
+      ntbt.value = 1234;
+      perfume.markNTBT();
+      expect(ntbt.value).toEqual(0);
     });
   });
 });

@@ -11,7 +11,7 @@ import { getNetworkInformation } from './getNetworkInformation';
 import { isPerformanceSupported } from './isSupported';
 import { logData, logMetric } from './log';
 import { performanceMeasure } from './measure';
-import { metrics } from './metrics';
+import { metrics, ntbt } from './metrics';
 import {
   disconnectPerfObserversHidden,
   initPerformanceObserver,
@@ -20,6 +20,8 @@ import { didVisibilityChange, visibility } from './onVisibilityChange';
 import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
+
+let ntbtTimeoutID = 0;
 
 export default class Perfume {
   v = '6.2.0';
@@ -119,17 +121,29 @@ export default class Perfume {
   /**
    * NTBT = Navigation Total Blocking Time
    *
-   * NTBT is measured from call time until all the measurement
-   * durations have elapsed or some kind of interruption has occurred.
-   * NTBT is the summation of blocking time of all long tasks
-   * and reported for each measurement duration.
-   *
-   * NTBT measurement may terminate early (and not report)
-   * in the following situations:
-   *   - another NTBT measurement is triggered while one is already in progress
-   *   - the application gets interrupted (backgrounded)
+   * This metric measures the amount of time the application may be blocked
+   * from processing code during the 2s window after a user navigates
+   * from page A to page B.
+   * 
+   * Because this library is navigation agnostic, we have this method
+   * to mark when the navigation starts.
+   * 
+   * The NTBT metric is the summation of the blocking time of all long tasks
+   * in the 2s window after this method is invoked.
+   * 
+   * If this method is called before the 2s window ends; it will trigger a new
+   * NTBT measurement and interrupt the previous one.
+   * 
+   * Credit: Thank you Steven Lam for helping with this!
    */
-  markNavigationTotalBlockingTime(): void {
-    // TODO @zizzamia add stuff
+  markNTBT(): void {
+    // Reset NTBT value
+    ntbt.value = 0;
+    clearTimeout(ntbtTimeoutID);
+    // @ts-ignore
+    ntbtTimeoutID = setTimeout(() => {
+      logMetric(ntbt.value, `ntbt`);
+      ntbt.value = 0;
+    }, 2000);
   }
 }

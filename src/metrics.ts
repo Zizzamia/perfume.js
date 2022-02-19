@@ -26,3 +26,7 @@ export const rt: { value: IPerfumeDataConsumption } = {
 export const tbt = {
   value: 0,
 };
+export const ntbt = {
+  value: 0,
+};
+

@@ -1,4 +1,4 @@
-import { fcp, tbt } from './metrics';
+import { fcp, tbt, ntbt } from './metrics';
 import { IPerformanceEntry } from './types';
 
 export const initTotalBlockingTime = (
@@ -14,6 +14,7 @@ export const initTotalBlockingTime = (
     const blockingTime = entry.duration - 50;
     if (blockingTime > 0) {
       tbt.value += blockingTime;
+      ntbt.value += blockingTime;
     }
   });
 };

@@ -24,7 +24,7 @@ export const initFirstInputDelay = (
   logMetric(cls.value, 'cls');
   // TBT has 10 second delay after FID
   setTimeout(() => {
-    logMetric(tbt.value, `tbt`);
+    logMetric(tbt.value, 'tbt');
     logData('dataConsumption', rt.value);
   }, 10000);
 };
