@@ -268,6 +268,24 @@
 </div>
 
 <div class="box">
+  <h3 class="box-title" id="/total-blocking-time/">
+    <a href="{{ path }}#/navigation-total-blocking-time/">Navigationg Total Blocking Time (NTBT)</a>
+  </h3>
+  <p>
+    ~~~~
+  </p>
+  <p class="box-demo">
+    <button class="box-demo-btn" (click)="measureNTBT()">
+      Simulate Navigation action
+    </button>
+    <span>{{ ntbt }}ms</span>
+  </p>
+  <p>
+    ~~~~
+  </p>
+</div>
+
+<div class="box">
   <h3 class="box-title" id="/resource-timing/">
     <a href="{{ path }}#/resource-timing/">
       Resource Timing

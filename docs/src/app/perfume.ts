@@ -20,6 +20,7 @@ export const fid = new BehaviorSubject(0);
 export const cls = new BehaviorSubject(0);
 export const clsFinal = new BehaviorSubject(0);
 export const tbt = new BehaviorSubject(0);
+export const ntbt = new BehaviorSubject(0);
 export const fibonacci = new BehaviorSubject(0);
 export const custom_fibonacci = new BehaviorSubject(0);
 export const openDialog$ = new BehaviorSubject(0);
@@ -52,6 +53,7 @@ export function analyticsTracker(options) {
       'cls',
       'clsFinal',
       'tbt',
+      'ntbt',
     ].includes(metricName)
   ) {
     if ((window as any).ga) {
@@ -99,6 +101,9 @@ export function analyticsTracker(options) {
       break;
     case 'tbt':
       tbt.next(data);
+      break;
+    case 'ntbt':
+      ntbt.next(data);
       break;
     case 'fibonacci':
       fibonacci.next(data);

@@ -419,7 +419,7 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 
 ## Copyright and license
 
-Code and documentation copyright 2021 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
+Code and documentation copyright 2022 [Leonardo Zizzamia](https://twitter.com/Zizzamia). Code released under the [MIT license](LICENSE). Docs released under Creative Commons.
 
 ## Team
 

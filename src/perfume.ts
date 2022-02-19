@@ -81,18 +81,21 @@ export default class Perfume {
   /**
    * End performance measurement
    */
-  end(markName: string, customProperties = {}): void {
+  end(markName: string, customProperties = {}, doLogData = true): void {
     if (!isPerformanceSupported() || !metrics[markName]) {
       return;
     }
     // End Performance Mark
     WP.mark(`mark_${markName}_end`);
     delete metrics[markName];
-    logData(
-      markName,
-      roundByFour(performanceMeasure(markName)),
-      customProperties,
-    );
+    const measure = performanceMeasure(markName);
+    if (doLogData) {
+      logData(
+        markName,
+        roundByFour(measure),
+        customProperties,
+      );
+    }
   }
 
   /**
@@ -137,11 +140,13 @@ export default class Perfume {
    * Credit: Thank you Steven Lam for helping with this!
    */
   markNTBT(): void {
+    this.start('ntbt');
     // Reset NTBT value
     ntbt.value = 0;
     clearTimeout(ntbtTimeoutID);
     // @ts-ignore
     ntbtTimeoutID = setTimeout(() => {
+      this.end('ntbt', {}, false);
       logMetric(ntbt.value, `ntbt`);
       ntbt.value = 0;
     }, 2000);

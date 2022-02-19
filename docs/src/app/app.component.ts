@@ -15,6 +15,7 @@ import {
   cls,
   clsFinal,
   tbt,
+  ntbt,
   fibonacci,
   custom_fibonacci,
   networkInformation,
@@ -48,6 +49,7 @@ export class AppComponent implements AfterViewInit {
   cls: number;
   clsFinal: number;
   tbt: number;
+  ntbt: number;
   path: string;
   isLowEndDevice: boolean;
   isLowEndExperience: boolean;
@@ -112,6 +114,10 @@ export class AppComponent implements AfterViewInit {
       this.tbt = result;
       this.ref.detectChanges();
     });
+    ntbt.subscribe(result => {
+      this.ntbt = result;
+      this.ref.detectChanges();
+    });
     fibonacci.subscribe(result => {
       this.logFibonacci = `Perfume.js: fibonacci ${result} ms`;
       this.ref.detectChanges();
@@ -136,6 +142,13 @@ export class AppComponent implements AfterViewInit {
       this.elPageTitle = result;
       this.ref.detectChanges();
     });
+  }
+
+  measureNTBT() {
+    perfume.markNTBT();
+    perfume.start('measureNTBT');
+    this.fibonacci(4000);
+    perfume.end('measureNTBT');
   }
 
   measureFibonacci() {
