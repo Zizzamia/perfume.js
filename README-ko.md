@@ -338,7 +338,7 @@ const options = {
   resourceTiming: false,
   elementTiming: false,
   analyticsTracker: options => {},
-  maxMeasureTime: 15000,
+  maxMeasureTime: 30000,
 };
 ```
 
