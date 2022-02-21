@@ -47,7 +47,14 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": true
+              },
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
@@ -90,80 +97,6 @@
               "src/favicon.ico",
               "src/assets"
             ]
-          }
-        }
-      }
-    },
-    "docs-e2e": {
-      "root": "e2e/",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "docs:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "docs:serve:production"
-            }
-          }
-        }
-      }
-    },
-    "bella": {
-      "root": "projects/bella",
-      "sourceRoot": "projects/bella/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/bella/tsconfig.lib.json",
-            "project": "projects/bella/ng-package.json"
-          }
-        ,          "configurations": {
-            "production": {
-              "tsConfig": "projects/bella/tsconfig.lib.prod.json"
-            }
-          }
-},
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/bella/src/test.ts",
-            "tsConfig": "projects/bella/tsconfig.spec.json",
-            "karmaConfig": "projects/bella/karma.conf.js"
-          }
-        }
-      }
-    },
-    "perfume": {
-      "root": "projects/perfume",
-      "sourceRoot": "projects/perfume/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/perfume/tsconfig.lib.json",
-            "project": "projects/perfume/ng-package.json"
-          }
-        ,          "configurations": {
-            "production": {
-              "tsConfig": "projects/perfume/tsconfig.lib.prod.json"
-            }
-          }
-},
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/perfume/src/test.ts",
-            "tsConfig": "projects/perfume/tsconfig.spec.json",
-            "karmaConfig": "projects/perfume/karma.conf.js"
           }
         }
       }
