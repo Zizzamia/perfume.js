@@ -24,7 +24,7 @@ import { roundByFour } from './utils';
 let ntbtTimeoutID = 0;
 
 export default class Perfume {
-  v = '6.2.0';
+  v = '6.4.0';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
