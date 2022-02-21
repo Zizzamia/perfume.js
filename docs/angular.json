@@ -136,7 +136,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/bella/tsconfig.lib.json",
             "project": "projects/bella/ng-package.json"
@@ -176,7 +176,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/perfume/tsconfig.lib.json",
             "project": "projects/perfume/ng-package.json"
