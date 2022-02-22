@@ -53,6 +53,7 @@ Perfume è una piccola libreria che monitora le prestazioni web e che riporta i 
 - First Input Delay ([FID](https://web.dev/fid/))
 - Cumulative Layout Shift ([CLS](https://web.dev/cls/))
 - Total Blocking Time ([TBT](https://web.dev/tbt/))
+- Navigation Total Blocking Time (NTBT)
 - [Web Vitals Score](https://web.dev/vitals/)
 
 <br />

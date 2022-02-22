@@ -46,6 +46,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - First Input Delay ([FID](https://web.dev/fid/))
 - Cumulative Layout Shift ([CLS](https://web.dev/cls/))
 - Total Blocking Time ([TBT](https://web.dev/tbt/))
+- Navigation Total Blocking Time (NTBT)
 - [Web Vitals Score](https://web.dev/vitals/)
 
 <br />
@@ -234,6 +235,33 @@ We end the Total Blocking Time measure 10 seconds after FID.
 
 ```javascript
 // Perfume.js: tbt 347.07 ms
+```
+
+### Navigation Total Blocking Time (NTBT)
+
+This metric measures the amount of time the application may be blocked from processing code during the 2s window after a user navigates from page A to page B. The NTBT metric is the summation of the blocking time of all long tasks in the 2s window after this method is invoked.
+
+Because this library is navigation agnostic, we have this method to mark when the navigation starts.
+
+If this method is called before the 2s window ends; it will trigger a new NTBT measurement and interrupt the previous one.
+
+```javascript
+import { createBrowserHistory } from 'history';
+export const history = createBrowserHistory();
+
+const perfume = new Perfume({
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
+  })
+});
+
+// React custom history
+history.listen(() => {
+  // Measure NTBT at the beginning of each navigation
+  perfume.markNTBT();
+});
+
+// Perfume.js: ntbt 78 ms
 ```
 
 ### Resource Timing

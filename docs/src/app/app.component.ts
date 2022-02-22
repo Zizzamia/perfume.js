@@ -146,9 +146,7 @@ export class AppComponent implements AfterViewInit {
 
   measureNTBT() {
     perfume.markNTBT();
-    perfume.start('measureNTBT');
     this.fibonacci(4000);
-    perfume.end('measureNTBT');
   }
 
   measureFibonacci() {

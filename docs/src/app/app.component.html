@@ -272,16 +272,16 @@
     <a href="{{ path }}#/navigation-total-blocking-time/">Navigationg Total Blocking Time (NTBT)</a>
   </h3>
   <p>
-    ~~~~
+    This metric measures the amount of time the application may be blocked from processing code during the 2s window after a user navigates from page A to page B. The NTBT metric is the summation of the blocking time of all long tasks in the 2s window after this method is invoked.
+  </p>
+  <p>Because this library is navigation agnostic, we have this method to mark when the navigation starts.</p>
+  <p>If this method is called before the 2s window ends; it will trigger a new NTBT measurement and interrupt the previous one.</p>
   </p>
   <p class="box-demo">
     <button class="box-demo-btn" (click)="measureNTBT()">
-      Simulate Navigation action
+      Simulate Navigation Total Blocking Time
     </button>
-    <span>{{ ntbt }}ms</span>
-  </p>
-  <p>
-    ~~~~
+    <span> {{ ntbt }}ms</span>
   </p>
 </div>
 

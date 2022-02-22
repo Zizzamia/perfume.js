@@ -46,6 +46,7 @@ Perfume 是一个微小的网络性能监控库，可以将数据报告给你最
 - 首次输入延迟 ([FID](https://web.dev/fid/))
 - 累计布局偏移 ([CLS](https://web.dev/cls/))
 - 总阻塞时间 ([TBT](https://web.dev/tbt/))
+- Navigation Total Blocking Time (NTBT)
 - [Web Vitals Score](https://web.dev/vitals/)
 
 <br />

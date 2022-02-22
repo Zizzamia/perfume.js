@@ -46,6 +46,7 @@ Perfume은 웹 퍼포먼스를 모니터링 하여, 당신이 선호 하는 분�
 - 첫 번째 입력 지연 ([FID](https://web.dev/fid/))
 - 누적 레이아웃 이동 ([CLS](https://web.dev/cls/))
 - 총 차단 시간 ([TBT](https://web.dev/tbt/))
+- Navigation Total Blocking Time (NTBT)
 - [Web Vitals Score](https://web.dev/vitals/)
 
 <br />Perfume.js를 사용하면, 이러한 메트릭을 수집하여 전 세계 고객이 Application의 웹 성능을 어떻게 인식하는지 더 깊이 이해할 수 있습니다.
