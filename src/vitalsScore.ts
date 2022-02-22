@@ -5,8 +5,8 @@ const fcpScore = [2000, 4000];
 const lcpScore = [2500, 4000];
 const fidcore = [100, 300];
 const clsScore = [0.1, 0.25];
-const tbtScore = [300, 600];
-const ntbtScore = [400, 600];
+const tbtScore = [200, 600];
+const ntbtScore = [200, 600];
 
 export const webVitalsScore: Record<string, number[]> = {
   ttfb: ttfbScore,

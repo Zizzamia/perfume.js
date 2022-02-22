@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.0 (2022-2-21)
+
+* **feat:** changed both TBT and NTBT Vitals to be less than 200 milliseconds for Good Score.
+
 ## 6.4.0 (2022-2-21)
 
 * **feat:** added `perfume.markNTBT` as a way to mark the new Navigation Total Blocking Time metric.

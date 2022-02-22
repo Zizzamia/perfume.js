@@ -319,7 +319,8 @@ Perfume는 모든 주요 측정 항목에 대해 vitals 점수를 노출하며, 
 | First Input Delay (fid)                   |  0-100 |           101-300 |  Over 300 |
 | Cumulative Layout Shift (cls)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
 | Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
-| Total Blocking Time (tbt)                 |  0-300 |           301-600 |  Over 600 |
+| Total Blocking Time (tbt)                 |  0-200 |           201-600 |  Over 600 |
+| Navigation Total Blocking Time (tbt)      |  0-200 |           201-600 |  Over 600 |
 
 ## Perfume의 커스텀 옵션
 
