@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v7.0.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v7.1.0 (http://zizzamia.github.io/perfume)
  * Copyright 2022 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -55,6 +55,9 @@ export default class Perfume {
     logData('navigationTiming', navigationTiming);
     if (navigationTiming.timeToFirstByte) {
       logMetric(navigationTiming.timeToFirstByte, 'ttfb');
+    }
+    if (navigationTiming.redirectTime) {
+      logMetric(navigationTiming.redirectTime, 'rt');
     }
     // Log Network Information
     logData('networkInformation', getNetworkInformation());

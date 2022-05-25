@@ -113,6 +113,9 @@ const perfume = new Perfume({
       case 'ttfb':
         myAnalyticsTool.track('ttfb', { duration: data });
         break;
+      case 'rt':
+        myAnalyticsTool.track('rt', { duration: data });
+        break;
       case 'fp':
         myAnalyticsTool.track('firstPaint', { duration: data });
         break;
@@ -376,7 +379,7 @@ A quick way to see your page speed results on your web app is by using Google An
 Have fun ✨
 
 ```javascript
-const metricNames = ['ttfb', 'fp', 'fcp', 'lcp', 'fid', 'cls', 'clsFinal', 'tbt'];
+const metricNames = ['ttfb', 'rt', 'fp', 'fcp', 'lcp', 'fid', 'cls', 'clsFinal', 'tbt'];
 new Perfume({
   analyticsTracker: ({ metricName, data, navigatorInformation }) => {
     if (metricNames.includes(metricName)) {

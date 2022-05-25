@@ -7,6 +7,7 @@ describe('vitalsScore', () => {
     it('should default to the correct values', () => {
       expect(webVitalsScore).toEqual({
         ttfb: [200, 500],
+        rt: [100, 200],
         fp: [2000, 4000],
         fcp: [2000, 4000],
         lcp: [2500, 4000],
@@ -25,6 +26,12 @@ describe('vitalsScore', () => {
       expect(getVitalsScore('ttfb', 100)).toEqual('good');
       expect(getVitalsScore('ttfb', 300)).toEqual('needsImprovement');
       expect(getVitalsScore('ttfb', 600)).toEqual('poor');
+    });
+
+    it('should return the correct values for rt', () => {
+      expect(getVitalsScore('rt', 80)).toEqual('good');
+      expect(getVitalsScore('rt', 120)).toEqual('needsImprovement');
+      expect(getVitalsScore('rt', 220)).toEqual('poor');
     });
 
     it('should return the correct values for fcp', () => {

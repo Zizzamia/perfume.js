@@ -97,7 +97,8 @@ const createConfig = ({ output, min = false }) => {
             'processingStart',
             'PerformanceObserver',
             'performanceEntry',
-            'ttfb'
+            'ttfb',
+            'rt'
           ]
         }
       },
