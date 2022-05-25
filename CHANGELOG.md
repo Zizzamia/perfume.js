@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.1.0 (2022-5-25)
+
+* **feat:** added `redirectTime` as new Core Vitals metric (`rt`).
+
 ## 7.0.0 (2022-2-21)
 
 * **feat:** changed both TBT and NTBT Vitals to be less than 200 milliseconds for Good Score.
