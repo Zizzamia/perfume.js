@@ -100,7 +100,7 @@
     "collectCoverage": true
   },
   "devDependencies": {
-    "@angular/core": "8.1.0",
+    "@angular/core": "11.0.5",
     "@types/jest": "24.0.23",
     "@types/node": "12.12.8",
     "colors": "1.4.0",
