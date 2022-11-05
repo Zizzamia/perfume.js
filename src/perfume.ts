@@ -53,9 +53,6 @@ export default class Perfume {
     const navigationTiming = getNavigationTiming();
     // Log Navigation Timing
     logData('navigationTiming', navigationTiming);
-    if (navigationTiming.timeToFirstByte) {
-      logMetric(navigationTiming.timeToFirstByte, 'ttfb');
-    }
     if (navigationTiming.redirectTime) {
       logMetric(navigationTiming.redirectTime, 'rt');
     }
