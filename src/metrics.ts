@@ -1,16 +1,9 @@
 import { IMetricMap, IPerfumeDataConsumption } from './types';
 
 export const metrics: IMetricMap = {};
-export const cls = {
-  value: 0,
-};
 export const fcp = {
   value: 0,
 };
-export const lcp = {
-  value: 0,
-};
-export const fcpEntryName = 'first-contentful-paint';
 export const rt: { value: IPerfumeDataConsumption } = {
   value: {
     beacon: 0,

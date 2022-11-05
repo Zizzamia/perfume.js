@@ -20,6 +20,7 @@ import { didVisibilityChange, visibility } from './onVisibilityChange';
 import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
+import { getVitalsScore } from './vitalsScore';
 
 let ntbtTimeoutID = 0;
 
@@ -54,7 +55,12 @@ export default class Perfume {
     // Log Navigation Timing
     logData('navigationTiming', navigationTiming);
     if (navigationTiming.redirectTime) {
-      logMetric(navigationTiming.redirectTime, 'rt');
+      logMetric({
+        attribution: {},
+        name: `RT`,
+        rating: getVitalsScore('RT', navigationTiming.redirectTime),
+        value: navigationTiming.redirectTime
+      });
     }
     // Log Network Information
     logData('networkInformation', getNetworkInformation());
@@ -143,7 +149,12 @@ export default class Perfume {
     // @ts-ignore
     ntbtTimeoutID = setTimeout(() => {
       this.end('ntbt', {}, false);
-      logMetric(ntbt.value, `ntbt`);
+      logMetric({
+        attribution: {},
+        name: `NTBT`,
+        rating: getVitalsScore('NTBT', ntbt.value),
+        value: ntbt.value
+      });
       ntbt.value = 0;
     }, 2000);
   }

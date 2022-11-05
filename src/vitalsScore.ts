@@ -5,9 +5,9 @@ const tbtScore = [200, 600];
 const ntbtScore = [200, 600];
 
 export const webVitalsScore: Record<string, number[]> = {
-  rt: rtScore,
-  tbt: tbtScore,
-  ntbt: ntbtScore,
+  RT: rtScore,
+  TBT: tbtScore,
+  NTBT: ntbtScore,
 };
 
 export const getVitalsScore = (
