@@ -18,12 +18,15 @@ describe('isSupported', () => {
     });
 
     it('should return false if the browser does not supports performance.mark', () => {
+      // @ts-ignore
       delete window.performance.mark;
       expect(isPerformanceSupported()).toEqual(false);
     });
 
     it('should return false if the browser does not supports performance.now', () => {
+      // @ts-ignore
       window.performance.mark = () => 1;
+      // @ts-ignore
       delete window.performance.now;
       expect(isPerformanceSupported()).toEqual(false);
     });

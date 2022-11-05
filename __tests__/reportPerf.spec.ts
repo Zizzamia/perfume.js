@@ -20,7 +20,7 @@ describe('reportPerf', () => {
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
       visibility.isHidden = true;
-      reportPerf('metricName', 123);
+      reportPerf('metricName', 123, 'good', {});
       expect(spy).not.toHaveBeenCalled();
     });
 
@@ -28,12 +28,12 @@ describe('reportPerf', () => {
       visibility.isHidden = false;
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
-      reportPerf('fcp', 123);
+      reportPerf('fcp', 123, 'good', {});
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         metricName: 'fcp',
         data: 123,
-        eventProperties: {},
+        attribution: {},
         navigatorInformation: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
@@ -41,7 +41,7 @@ describe('reportPerf', () => {
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
         },
-        vitalsScore: 'good',
+        rating: 'good',
       });
     });
 
@@ -49,12 +49,12 @@ describe('reportPerf', () => {
       visibility.isHidden = false;
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
-      reportPerf('tbt', 423, { mare: 'sea' });
+      reportPerf('tbt', 423, 'needsImprovement', { mare: 'sea' });
       expect(spy.mock.calls.length).toEqual(1);
       expect(spy).toHaveBeenCalledWith({
         metricName: 'tbt',
         data: 423,
-        eventProperties: { mare: 'sea' },
+        attribution: { mare: 'sea' },
         navigatorInformation: {
           deviceMemory: 8,
           hardwareConcurrency: 12,
@@ -62,7 +62,7 @@ describe('reportPerf', () => {
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
         },
-        vitalsScore: 'needsImprovement',
+        rating: 'needsImprovement',
       });
     });
   });

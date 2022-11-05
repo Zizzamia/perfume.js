@@ -30,6 +30,7 @@ describe('resourceTiming', () => {
 
     it('should float the dataConsumption result', () => {
       resourceTiming.initResourceTiming([
+        // @ts-ignore
         {
           decodedBodySize: 12345678,
           // @ts-ignore
@@ -45,11 +46,13 @@ describe('resourceTiming', () => {
 
     it('should sum the dataConsumption result', () => {
       resourceTiming.initResourceTiming([
+        // @ts-ignore
         {
           decodedBodySize: 12345678,
           // @ts-ignore
           initiatorType: 'css',
         },
+        // @ts-ignore
         {
           decodedBodySize: 10000678,
           // @ts-ignore
@@ -66,11 +69,13 @@ describe('resourceTiming', () => {
     it('should call logData for each performanceEntry', () => {
       spy = jest.spyOn(log, 'logData');
       resourceTiming.initResourceTiming([
+        // @ts-ignore
         {
           decodedBodySize: 12345678,
           // @ts-ignore
           initiatorType: 'css',
         },
+        // @ts-ignore
         {
           decodedBodySize: 10000678,
           // @ts-ignore

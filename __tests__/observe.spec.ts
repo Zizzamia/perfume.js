@@ -4,12 +4,10 @@
 import { config } from '../src/config';
 import { WP } from '../src/constants';
 import { initResourceTiming } from '../src/resourceTiming';
-import * as log from '../src/log';
 import {
-  disconnectPerfObserversHidden,
   initPerformanceObserver,
 } from '../src/observe';
-import { perfObservers } from '../src/observeInstances';
+import { initElementTiming } from '../src/element-timing';
 import * as po from '../src/performanceObserver';
 import mock from './_mock';
 
@@ -33,10 +31,10 @@ describe('observe', () => {
   describe('initPerformanceObserver()', () => {
     describe.each`
       resourceTiming | elementTiming | calls
-      ${false}       | ${false}      | ${4}
-      ${true}        | ${false}      | ${5}
-      ${false}       | ${true}       | ${5}
-      ${true}        | ${true}       | ${6}
+      ${false}       | ${false}      | ${0}
+      ${true}        | ${false}      | ${1}
+      ${false}       | ${true}       | ${1}
+      ${true}        | ${true}       | ${2}
     `(
       'when resourceTiming is $resourceTiming and elementTiming is $elementTiming',
       ({ resourceTiming, elementTiming, calls }) => {
@@ -50,16 +48,6 @@ describe('observe', () => {
 
         it(`should call po $calls times`, () => {
           expect(spy.mock.calls.length).toEqual(calls);
-          expect(spy).toHaveBeenCalledWith('paint', paint.initFirstPaint);
-          expect(spy).toHaveBeenCalledWith(
-            'first-input',
-            firstInput.initFirstInputDelay,
-          );
-          expect(spy).toHaveBeenCalledWith(
-            'largest-contentful-paint',
-            paint.initLargestContentfulPaint,
-          );
-          expect(spy).toHaveBeenCalledWith('layout-shift', initLayoutShift);
         });
 
         it('should only call po for resource timing when is enabled', () => {
@@ -77,12 +65,12 @@ describe('observe', () => {
           if (config.isElementTiming) {
             expect(spy).toHaveBeenCalledWith(
               'element',
-              paint.initElementTiming,
+              initElementTiming,
             );
           } else {
             expect(spy).not.toHaveBeenCalledWith(
               'element',
-              paint.initElementTiming,
+              initElementTiming,
             );
           }
         });
