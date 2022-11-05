@@ -7,7 +7,14 @@ export const initElementTiming = (
 ) => {
   performanceEntries.forEach(entry => {
     if (entry.identifier) {
-      logMetric(entry.startTime, entry.identifier);
+      logMetric({
+        attribution: {
+          identifier: entry.identifier,
+        },
+        name: 'ET',
+        rating: null,
+        value: entry.startTime
+      });
     }
   });
 };

@@ -59,7 +59,7 @@ export default class Perfume {
         attribution: {},
         name: `RT`,
         rating: getVitalsScore('RT', navigationTiming.redirectTime),
-        value: navigationTiming.redirectTime
+        value: navigationTiming.redirectTime,
       });
     }
     // Log Network Information
@@ -153,7 +153,7 @@ export default class Perfume {
         attribution: {},
         name: `NTBT`,
         rating: getVitalsScore('NTBT', ntbt.value),
-        value: ntbt.value
+        value: ntbt.value,
       });
       ntbt.value = 0;
     }, 2000);

@@ -2,7 +2,7 @@ export interface Metric {
   /**
    * The name of the metric (in acronym form).
    */
-  name: 'CLS' | 'FCP' | 'FID' | 'INP' | 'LCP' | 'TTFB' | 'RT' | 'TBT' | 'NTBT';
+  name: 'CLS' | 'FCP' | 'FID' | 'INP' | 'LCP' | 'TTFB' | 'RT' | 'TBT' | 'NTBT' | 'ET';
   /**
    * The current value of the metric.
    */
