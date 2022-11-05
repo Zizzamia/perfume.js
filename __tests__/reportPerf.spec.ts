@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { config } from '../src/config';
 import { WN, WP } from '../src/constants';
 import { visibility } from '../src/onVisibilityChange';

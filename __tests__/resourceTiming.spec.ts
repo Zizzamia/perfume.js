@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { config } from '../src/config';
 import * as log from '../src/log';
 import { rt } from '../src/metrics';

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { WN  } from '../src/constants';
 import { getIsLowEndDevice, getIsLowEndExperience } from '../src/isLowEnd';
 import mock from './_mock';

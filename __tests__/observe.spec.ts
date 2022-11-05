@@ -1,7 +1,8 @@
+/**
+ * @jest-environment jsdom
+ */
 import { config } from '../src/config';
 import { WP } from '../src/constants';
-import { initLayoutShift } from '../src/cumulativeLayoutShift';
-import * as firstInput from '../src/firstInput';
 import { initResourceTiming } from '../src/resourceTiming';
 import * as log from '../src/log';
 import {
@@ -9,7 +10,6 @@ import {
   initPerformanceObserver,
 } from '../src/observe';
 import { perfObservers } from '../src/observeInstances';
-import * as paint from '../src/paint';
 import * as po from '../src/performanceObserver';
 import mock from './_mock';
 
@@ -21,11 +21,6 @@ describe('observe', () => {
     (window as any).PerformanceObserver = mock.PerformanceObserver;
     config.isResourceTiming = false;
     config.isElementTiming = false;
-    jest.spyOn(paint, 'initFirstPaint').mockImplementation(() => {});
-    jest.spyOn(firstInput, 'initFirstInputDelay').mockImplementation(() => {});
-    jest
-      .spyOn(paint, 'initLargestContentfulPaint')
-      .mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -93,24 +88,5 @@ describe('observe', () => {
         });
       },
     );
-  });
-
-  describe('disconnectPerfObserversHidden()', () => {
-    it('should call logMetric', () => {
-      perfObservers[2] = { disconnect: jest.fn() };
-      perfObservers[3] = { disconnect: jest.fn(), takeRecords: jest.fn() };
-      spy = jest.spyOn(log, 'logMetric');
-      disconnectPerfObserversHidden();
-      expect(spy.mock.calls.length).toEqual(2);
-    });
-
-    it('should conditionally call takeRecords', () => {
-      perfObservers[2] = { disconnect: jest.fn() };
-      //Make sure all metrics are still logged even if we don't have the takeRecords method available
-      perfObservers[3] = { disconnect: jest.fn() };
-      spy = jest.spyOn(log, 'logMetric');
-      disconnectPerfObserversHidden();
-      expect(spy.mock.calls.length).toEqual(2);
-    });
   });
 });

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { W } from '../src/constants';
 import { convertToKB, pushTask } from '../src/utils';
 

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import * as log from '../src/log';
 import * as st from '../src/storageEstimate';
 

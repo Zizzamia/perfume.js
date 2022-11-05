@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { WN  } from '../src/constants';
 import { getNetworkInformation } from '../src/getNetworkInformation';
 import mock from './_mock';

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { W, WP } from '../src/constants';
 import { po } from '../src/performanceObserver';
 import mock from './_mock';

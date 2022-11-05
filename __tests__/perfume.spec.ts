@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { C, WN, WP } from '../src/constants';
 import * as log from '../src/log';
 import { metrics, ntbt } from '../src/metrics';

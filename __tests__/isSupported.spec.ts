@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { WP  } from '../src/constants';
 import { isPerformanceSupported } from '../src/isSupported';
 import mock from './_mock';

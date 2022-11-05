@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { WP } from '../src/constants';
 import * as measure from '../src/measure';
 import mock from './_mock';

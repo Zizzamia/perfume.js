@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { WP  } from '../src/constants';
 import { getNavigationTiming } from '../src/getNavigationTiming';
 import mock from './_mock';

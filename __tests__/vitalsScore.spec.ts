@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { webVitalsScore, getVitalsScore } from '../src/vitalsScore';
 
 describe('vitalsScore', () => {

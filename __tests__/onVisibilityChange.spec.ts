@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { didVisibilityChange, visibility } from '../src/onVisibilityChange';
 
 describe('onVisibilityChange', () => {

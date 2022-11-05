@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import * as log from '../src/log';
 import { initElementTiming } from '../src/element-timing';
 import mock from './_mock';

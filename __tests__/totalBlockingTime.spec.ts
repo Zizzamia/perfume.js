@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { fcp, tbt } from '../src/metrics';
 import { initTotalBlockingTime } from '../src/totalBlockingTime';
 
