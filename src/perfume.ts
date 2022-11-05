@@ -1,5 +1,5 @@
 /*!
- * Perfume.js v7.1.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v8.0.0 (http://zizzamia.github.io/perfume)
  * Copyright 2022 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * @license
@@ -24,7 +24,7 @@ import { roundByFour } from './utils';
 let ntbtTimeoutID = 0;
 
 export default class Perfume {
-  v = '7.0.0';
+  v = '8.0.0';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options

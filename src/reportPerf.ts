@@ -15,7 +15,7 @@ export const reportPerf = function(
   pushTask(() => {
     // Doesn't send timing when page is hidden
     if (
-      (visibility.isHidden && measureName.indexOf('Final') < 0) ||
+      (visibility.isHidden) ||
       !config.analyticsTracker
     ) {
       return;
