@@ -5,14 +5,13 @@ import { AppComponent } from './app.component';
 import './perfume';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-  ],
-  providers: [],
-  entryComponents: [],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}
