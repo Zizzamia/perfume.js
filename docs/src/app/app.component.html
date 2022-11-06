@@ -5,7 +5,7 @@
     </a>
   </h3>
   <p>
-    Metrics like Navigation Timing, Network Information, FP, FCP, FID, LCP, CLS
+    Metrics like Navigation Timing, Network Information, FCP, FID, LCP, CLS
     and TBT are default reported with Perfume; All results will be reported to
     the analyticsTracker callback, and the code below is just one way for you to
     organize your tracking, feel free to tweak it suit your needs.
@@ -28,7 +28,7 @@
     ><br />
     <br />
     <b>// Main Performance Metrics</b><br />
-    Time To First Byte: <b>{{ navigationTiming?.timeToFirstByte || 0 }}ms</b
+    Time To First Byte: <b>{{ ttfb || 0 }}ms</b
     ><br />
     First Contentful Paint: <b>{{ fcp }} ms</b><br />
     First Input Delay: <b>{{ fid }} ms</b><br />
@@ -41,8 +41,6 @@
       >// These metrics activate on a set delay or when the tab changes
       visibility</b
     ><br />
-    Cumulative Layout Shift Final: <b>{{ clsFinal }}</b
-    ><br /><br />
 
     <b>// Experimental Performance metrics</b><br />
     dataConsumption: <b>{{ dataConsumption }}</b><br />
@@ -68,22 +66,19 @@
           myAnalyticsTool.<span class="violet">track</span>('networkInformation', data);
         {{'}'}}
         <span class="red">break</span>;
-      <span class="red">case</span> 'fcp'<span class="red">:</span>
+      <span class="red">case</span> 'FPC'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('firstContentfulPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'fid'<span class="red">:</span>
+      <span class="red">case</span> 'FID'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('firstInputDelay', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'lcp'<span class="red">:</span>
+      <span class="red">case</span> 'LCP'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('largestContentfulPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'cls'<span class="red">:</span>
+      <span class="red">case</span> 'CLS'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('cumulativeLayoutShift', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
-      <span class="red">case</span> 'clsFinal'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('cumulativeLayoutShiftFinal', {{'{'}} duration: data {{'}'}});
-        <span class="red">break</span>;
-      <span class="red">case</span> 'tbt'<span class="red">:</span>
+      <span class="red">case</span> 'TBT'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('totalBlockingTime', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">default</span>:
@@ -227,7 +222,6 @@
   </p>
   <p class="box-demo">
     <b>Cumulative Layout Shift</b>: {{ cls }}<br />
-    <b>Cumulative Layout Shift Final</b>: {{ clsFinal }}
   </p>
 </div>
 

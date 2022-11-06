@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
-// import Perfume from 'perfume.js';
-import Perfume from '../../../';
+import Perfume from 'perfume.js';
+// import Perfume from '../../../';
 
 export const navigationTiming = new BehaviorSubject({});
 export const networkInformation = new BehaviorSubject({
@@ -13,11 +13,11 @@ export const navigatorInformation$ = new BehaviorSubject({
 });
 export const resourceTiming = new BehaviorSubject({});
 export const dataConsumption = new BehaviorSubject({});
+export const ttfb = new BehaviorSubject(0);
 export const fcp = new BehaviorSubject(0);
 export const lcp = new BehaviorSubject(0);
 export const fid = new BehaviorSubject(0);
 export const cls = new BehaviorSubject(0);
-export const clsFinal = new BehaviorSubject(0);
 export const tbt = new BehaviorSubject(0);
 export const ntbt = new BehaviorSubject(0);
 export const fibonacci = new BehaviorSubject(0);
@@ -44,6 +44,7 @@ export function analyticsTracker(options) {
   });
   if (
     [
+      'TTFB',
       'FCP',
       'LCP',
       'FID',
@@ -77,6 +78,9 @@ export function analyticsTracker(options) {
     case 'dataConsumption':
       dataConsumption.next(data);
       break;
+    case 'TTFB':
+      ttfb.next(data);
+      break;
     case 'FCP':
       fcp.next(data);
       break;
@@ -88,9 +92,6 @@ export function analyticsTracker(options) {
       break;
     case 'CLS':
       cls.next(data);
-      break;
-    case 'clsFinal':
-      clsFinal.next(data);
       break;
     case 'TBT':
       tbt.next(data);

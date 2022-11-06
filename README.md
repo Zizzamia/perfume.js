@@ -3,7 +3,7 @@
   align="left" width="200" alt="Perfume.js logo" />
 </a>
 
-# [Perfume.js v7.1.0](http://perfumejs.com)
+# [Perfume.js v8.0.0](http://perfumejs.com)
 
 [![Current version](https://img.shields.io/github/tag/zizzamia/perfume.js?color=3498DB&label=version)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-27ae60.svg"> [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js) [![brotli size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=brotli&label=JS+brotli+size)](https://unpkg.com/perfume.js)
 
@@ -40,7 +40,6 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - Element Timing
 - Service Worker Status
 - StorageManager interface
-- First Paint ([FP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
 - First Contentful Paint ([FCP](https://web.dev/first-contentful-paint/))
 - Largest Contentful Paint ([LCP](https://web.dev/lcp/))
 - First Input Delay ([FID](https://web.dev/fid/))
@@ -49,14 +48,19 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - Navigation Total Blocking Time (NTBT)
 - [Web Vitals Score](https://web.dev/vitals/)
 
+
 <br />
-With Perfume.js, you can collect these metrics to develop a deeper understanding of how customers around the world perceive web performance for your application.
-<br />
-Use your favorite analytics tool to visualize the data from country to country.
-Take a look at this example comparing <b>FCP</b> for www.coinbase.com in the United States, Italy, Indonesia, and Nigeria.
+At Coinbase, we use [Perfume.js to capture a high-level scoring system](https://www.coinbase.com/blog/performance-vitals-a-unified-scoring-system-to-guide-performance-health-and-prioritization) that is clear, trusted, and easy to understand.
+
+Summarizing the performance health of an application into a reliable and consistent score helps increase urgency and directs company attention and resources towards addressing each performance opportunity.
 <br />
 
-![First Contentful Paint](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/first-contentful-paint-desktop.png)
+
+## Perfume.js vs [Web Vitals](https://github.com/GoogleChrome/web-vitals)
+
+**Perfume** leverages the [Web Vitals](https://github.com/GoogleChrome/web-vitals) library to collect all the standardized performance metrics. It explores new metrics like Navigation Total Blocking Time and dimensions like Low-End Devices, Service Worker status to understand your data better.
+
+So don't worry, Perfume.js is a superset of Web Vitals, a bit like Typescript is a superset of Javascript.
 
 ## Installing
 
@@ -110,31 +114,25 @@ const perfume = new Perfume({
       case 'storageEstimate':
         myAnalyticsTool.track('storageEstimate', data);
         break;
-      case 'ttfb':
-        myAnalyticsTool.track('ttfb', { duration: data });
+      case 'TTFB':
+        myAnalyticsTool.track('timeToFirstByte', { duration: data });
         break;
-      case 'rt':
-        myAnalyticsTool.track('rt', { duration: data });
+      case 'RT':
+        myAnalyticsTool.track('redirectTime', { duration: data });
         break;
-      case 'fp':
-        myAnalyticsTool.track('firstPaint', { duration: data });
-        break;
-      case 'fcp':
+      case 'FCP':
         myAnalyticsTool.track('firstContentfulPaint', { duration: data });
         break;
-      case 'fid':
+      case 'FID':
         myAnalyticsTool.track('firstInputDelay', { duration: data });
         break;
-      case 'lcp':
+      case 'LCP':
         myAnalyticsTool.track('largestContentfulPaint', { duration: data });
         break;
-      case 'cls':
+      case 'CLS':
         myAnalyticsTool.track('cumulativeLayoutShift', { value: data });
         break;
-      case 'clsFinal':
-        myAnalyticsTool.track('cumulativeLayoutShiftFinal', { value: data });
-        break;
-      case 'tbt':
+      case 'TBT':
         myAnalyticsTool.track('totalBlockingTime', { duration: data });
         break;
       case 'elPageTitle':
@@ -227,7 +225,6 @@ We end the Cumulative Layout Shift measure at two points: when First Input Delay
 
 ```javascript
 // Perfume.js: cls 0.13
-// Perfume.js: clsFinal 0.13
 ```
 
 ### Total Blocking Time (TBT)
@@ -355,7 +352,6 @@ Perfume will expose for all major metrics the vitals score, those can be used to
 | Largest Contentful Paint (lcp)            | 0-2500 |         2501-4000 | Over 4000 |
 | First Input Delay (fid)                   |  0-100 |           101-300 |  Over 300 |
 | Cumulative Layout Shift (cls)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
-| Cumulative Layout Shift Final (clsFinal)  | 0-2500 |         2501-4000 | Over 4000 |
 | Total Blocking Time (tbt)                 |  0-200 |           201-600 |  Over 600 |
 | Navigation Total Blocking Time (tbt)      |  0-200 |           201-600 |  Over 600 |
 
@@ -379,7 +375,7 @@ A quick way to see your page speed results on your web app is by using Google An
 Have fun ✨
 
 ```javascript
-const metricNames = ['ttfb', 'rt', 'fp', 'fcp', 'lcp', 'fid', 'cls', 'clsFinal', 'tbt'];
+const metricNames = ['TTFB', 'RT', 'FCP', 'LCP', 'FID', 'CLS', 'TBT'];
 new Perfume({
   analyticsTracker: ({ metricName, data, navigatorInformation }) => {
     if (metricNames.includes(metricName)) {
@@ -406,13 +402,13 @@ To connect with additional analytics providers, checkout the [analytics plugin f
 - `npm run test`: Run test suite
 - `npm run build`: Generate bundles and typings
 - `npm run lint`: Lints code
-  <br />
+<br />
 
 ## Plugins
 
 - [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
 - [Perfume.js plugin for Analytics](https://github.com/DavidWells/analytics/tree/master/packages/analytics-plugin-perfumejs)
-  <br />
+<br />
 
 ## Perfume is used by
 
@@ -424,7 +420,7 @@ To connect with additional analytics providers, checkout the [analytics plugin f
 - [Hearst](https://www.cosmopolitan.com/)
 - [Plan](https://getplan.co)
 - Add your company name :)
-  <br />
+<br />
 
 ## Credits and Specs
 

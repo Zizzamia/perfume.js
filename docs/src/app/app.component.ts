@@ -8,11 +8,11 @@ import {
 import {
   navigationTiming,
   dataConsumption,
+  ttfb,
   fcp,
   lcp,
   fid,
   cls,
-  clsFinal,
   tbt,
   ntbt,
   fibonacci,
@@ -41,11 +41,11 @@ export class AppComponent implements AfterViewInit {
   dataConsumption = {};
   logCustom: string;
   logFibonacci: string;
+  ttfb: number;
   fcp: number;
   fid: number;
   lcp: number;
   cls: number;
-  clsFinal: number;
   tbt: number;
   ntbt: number;
   path: string;
@@ -84,6 +84,10 @@ export class AppComponent implements AfterViewInit {
       this.dataConsumption = JSON.stringify(result, undefined, 2);
       this.ref.detectChanges();
     });
+    ttfb.subscribe(result => {
+      this.ttfb = result;
+      this.ref.detectChanges();
+    });
     fcp.subscribe(result => {
       this.fcp = result;
       this.ref.detectChanges();
@@ -98,10 +102,6 @@ export class AppComponent implements AfterViewInit {
     });
     cls.subscribe(result => {
       this.cls = result;
-      this.ref.detectChanges();
-    });
-    clsFinal.subscribe(result => {
-      this.clsFinal = result;
       this.ref.detectChanges();
     });
     tbt.subscribe(result => {
