@@ -40,6 +40,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - Element Timing
 - Service Worker Status
 - StorageManager interface
+- Time to First Byte ([TTFB](https://web.dev/ttfb/#what-is-a-good-ttfb-score))
 - First Contentful Paint ([FCP](https://web.dev/first-contentful-paint/))
 - Largest Contentful Paint ([LCP](https://web.dev/lcp/))
 - First Input Delay ([FID](https://web.dev/fid/))
@@ -346,7 +347,7 @@ Perfume will expose for all major metrics the vitals score, those can be used to
 
 | Web Vitals                                |   Good | Needs Improvement |      Poor |
 | ----------------------------------------- | -----: | ----------------: | --------: |
-| Time to First Byte (ttfb)                 | 0-200 |            201-500 |  Over 500 |
+| Time to First Byte (ttfb)                 |  0-800 |          801-1800 | Over 1800 |
 | Fist Paint (fp)                           | 0-2000 |         2001-4000 | Over 4000 |
 | First Contentful Paint (fcp)              | 0-2000 |         2001-4000 | Over 4000 |
 | Largest Contentful Paint (lcp)            | 0-2500 |         2501-4000 | Over 4000 |

@@ -66,7 +66,10 @@
           myAnalyticsTool.<span class="violet">track</span>('networkInformation', data);
         {{'}'}}
         <span class="red">break</span>;
-      <span class="red">case</span> 'FPC'<span class="red">:</span>
+      <span class="red">case</span> 'TTFB'<span class="red">:</span>
+        myAnalyticsTool.<span class="violet">track</span>('timeToFirstByte', {{'{'}} duration: data {{'}'}});
+        <span class="red">break</span>;
+      <span class="red">case</span> 'FCP'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('firstContentfulPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'FID'<span class="red">:</span>
