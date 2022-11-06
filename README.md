@@ -94,11 +94,11 @@ Metrics like **Navigation Timing**, **Network Information**, **FP**, **FCP**, **
 const perfume = new Perfume({
   analyticsTracker: options => {
     const {
+      attribution,
       metricName,
       data,
-      eventProperties,
       navigatorInformation,
-      vitalsScore,
+      rating
     } = options;
     switch (metricName) {
       case 'navigationTiming':
@@ -377,7 +377,7 @@ Have fun ✨
 ```javascript
 const metricNames = ['TTFB', 'RT', 'FCP', 'LCP', 'FID', 'CLS', 'TBT'];
 new Perfume({
-  analyticsTracker: ({ metricName, data, navigatorInformation }) => {
+  analyticsTracker: ({ attribution, metricName, data, navigatorInformation, rating }) => {
     if (metricNames.includes(metricName)) {
       ga('send', 'event', {
         eventCategory: 'Perfume.js',

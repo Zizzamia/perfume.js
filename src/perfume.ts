@@ -1,7 +1,8 @@
-/*!
- * Perfume.js v8.0.0-alpha (http://zizzamia.github.io/perfume)
+/**
+ * Perfume.js v8.0.0 (http://zizzamia.github.io/perfume)
  * Copyright 2022 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
+ * 
  * @license
  */
 import { config } from './config';
@@ -12,10 +13,7 @@ import { isPerformanceSupported } from './isSupported';
 import { logData, logMetric } from './log';
 import { performanceMeasure } from './measure';
 import { metrics, ntbt } from './metrics';
-import {
-  disconnectPerfObserversHidden,
-  initPerformanceObserver,
-} from './observe';
+import { initPerformanceObserver } from './observe';
 import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
@@ -24,7 +22,7 @@ import { getVitalsScore } from './vitalsScore';
 let ntbtTimeoutID = 0;
 
 export default class Perfume {
-  v = '8.0.0-alpha.2';
+  v = '8.0.0';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options

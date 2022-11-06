@@ -8,11 +8,11 @@ import { INavigatorInfo } from './types';
  * 1. Device Memory
  * 2. Hardware Concurency
  * 3. Status of the service worker:
- *     - controlled: a service worker is controlling the page
- *     - supported: the browser supports service worker
- *     - unsupported: the user's browser does not support service worker
+ *    - controlled: a service worker is controlling the page
+ *    - supported: the browser supports service worker
+ *    - unsupported: the user's browser does not support service worker
  */
-export const getNavigatorInfo = function(): INavigatorInfo {
+export const getNavigatorInfo = (): INavigatorInfo => {
   if (WN) {
     return {
       deviceMemory: getDM() || 0,

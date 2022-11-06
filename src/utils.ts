@@ -1,8 +1,6 @@
 import { W } from './constants';
 
-export const roundByFour = (num: number) => {
-  return parseFloat(num.toFixed(4));
-}
+export const roundByFour = (num: number) => parseFloat(num.toFixed(4));
 
 export const convertToKB = (bytes: number): number | null => {
   if (typeof bytes !== 'number') {

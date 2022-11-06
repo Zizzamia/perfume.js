@@ -1,5 +1,24 @@
 # Changelog
 
+## 8.0.0 (2022-11-6)
+
+* **feat:** made Perfume.js a superset of the [Web Vitals](https://github.com/GoogleChrome/web-vitals) library. This means you will get access to all the latest metrics from Google and plus all the extra features you learn to love from Perfume.
+
+### Breaking Changes
+As now we are a superset of Web Vitals, here a quick overview on what changed:
+- Metrics like TTFB, CLS might have a slight change in value as the Web Vitals lib covers more edge cases.
+- The CLS metric will fire when the page changes visibility and not anymore after FID.
+- The `analyticsTracker` options will use the word `attribution` for all custom data of each metric, and `vitalsScore` will change to `rating`.
+```ts
+new Perfume({
+    ...
+    analyticsTracker: ({ attribution, metricName, data, navigatorInformation, rating }) => {
+        // Report the metric with your favorite analytics tool
+    }
+});
+```
+- The name for all Vital metric will be in uppercase, such as `FID`, `LPC`, etc...
+
 ## 7.1.0 (2022-5-25)
 
 * **feat:** added `redirectTime` as new Core Vitals metric (`rt`).

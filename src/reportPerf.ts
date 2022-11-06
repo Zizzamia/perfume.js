@@ -6,12 +6,12 @@ import { pushTask } from './utils';
 /**
  * Sends the User timing measure to analyticsTracker
  */
-export const reportPerf = function(
+export const reportPerf = (
   measureName: string,
   data: any,
   rating: IVitalsScore,
   attribution: object,
-): void {
+): void => {
   pushTask(() => {
     if (!config.analyticsTracker) {
       return;

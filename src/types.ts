@@ -50,7 +50,7 @@ export interface Metric {
    attribution: {
     [key: string]: unknown;
    }
-};
+}
 
 export interface IAnalyticsTrackerOptions {
   attribution: object,

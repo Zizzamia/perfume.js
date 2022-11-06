@@ -3,7 +3,6 @@
  */
 import { C, WN, WP } from '../src/constants';
 import * as log from '../src/log';
-import { visibility } from '../src/onVisibilityChange';
 import * as reportPerf from '../src/reportPerf';
 import * as utils from '../src/utils';
 import mock from './_mock';
@@ -15,7 +14,6 @@ describe('log', () => {
     (WN as any) = mock.navigator();
     (WP as any) = mock.performance();
     (C as any).log = (n: any) => n;
-    visibility.isHidden = false;
   });
 
   afterEach(() => {

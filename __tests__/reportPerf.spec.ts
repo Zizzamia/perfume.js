@@ -3,7 +3,6 @@
  */
 import { config } from '../src/config';
 import { WN, WP } from '../src/constants';
-import { visibility } from '../src/onVisibilityChange';
 import { reportPerf } from '../src/reportPerf';
 import mock from './_mock';
 
@@ -16,16 +15,7 @@ describe('reportPerf', () => {
   });
 
   describe('.reportPerf()', () => {
-    it('should not call analyticsTracker() if isHidden is true', () => {
-      config.analyticsTracker = () => {};
-      spy = jest.spyOn(config, 'analyticsTracker');
-      visibility.isHidden = true;
-      reportPerf('metricName', 123, 'good', {});
-      expect(spy).not.toHaveBeenCalled();
-    });
-
     it('should call analyticsTracker() if analyticsTracker is defined', () => {
-      visibility.isHidden = false;
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
       reportPerf('fcp', 123, 'good', {});
@@ -46,7 +36,6 @@ describe('reportPerf', () => {
     });
 
     it('should call analyticsTracker() with customProperties', () => {
-      visibility.isHidden = false;
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
       reportPerf('tbt', 423, 'needsImprovement', { mare: 'sea' });

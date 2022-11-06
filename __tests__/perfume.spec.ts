@@ -4,7 +4,6 @@
 import { C, WN, WP } from '../src/constants';
 import * as log from '../src/log';
 import { metrics, ntbt } from '../src/metrics';
-import { visibility } from '../src/onVisibilityChange';
 import Perfume from '../src/perfume';
 import * as observe from '../src/observe';
 import mock from './_mock';
@@ -21,7 +20,6 @@ describe('Perfume', () => {
     (C as any).log = (n: any) => n;
     (window as any).console.warn = (n: any) => n;
     (observe as any).perfObservers = {};
-    visibility.isHidden = false;
   });
 
   afterEach(() => {
@@ -74,20 +72,6 @@ describe('Perfume', () => {
     it('when navigator is supported should call WN.storage.estimate()', () => {
       (WN as any) = mock.navigator();
       const spy = jest.spyOn(WN.storage, 'estimate');
-      new Perfume();
-      expect(spy.mock.calls.length).toEqual(1);
-    });
-
-    it('should not call document.addEventListener() when document.hidden is undefined', () => {
-      spy = jest.spyOn(document, 'addEventListener');
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(undefined as any);
-      new Perfume();
-      expect(spy.mock.calls.length).toEqual(0);
-    });
-
-    it('should call document.addEventListener() with the correct argument', () => {
-      spy = jest.spyOn(document, 'addEventListener');
-      jest.spyOn(document, 'hidden', 'get').mockReturnValue(true);
       new Perfume();
       expect(spy.mock.calls.length).toEqual(1);
     });
