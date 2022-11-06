@@ -3,6 +3,7 @@
 ## 8.0.0 (2022-11-6)
 
 * **feat:** made Perfume.js a superset of the [Web Vitals](https://github.com/GoogleChrome/web-vitals) library. This means you will get access to all the latest metrics from Google and plus all the extra features you learn to love from Perfume.
+* **feat:** with Web Vitals now we get for free also the INP metric.
 
 ### Breaking Changes
 As now we are a superset of Web Vitals, here a quick overview on what changed:

@@ -45,6 +45,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - Largest Contentful Paint ([LCP](https://web.dev/lcp/))
 - First Input Delay ([FID](https://web.dev/fid/))
 - Cumulative Layout Shift ([CLS](https://web.dev/cls/))
+- Interaction to Next Paint ([INP](https://web.dev/inp/)) 
 - Total Blocking Time ([TBT](https://web.dev/tbt/))
 - Navigation Total Blocking Time (NTBT)
 - [Web Vitals Score](https://web.dev/vitals/)
@@ -132,6 +133,9 @@ const perfume = new Perfume({
         break;
       case 'CLS':
         myAnalyticsTool.track('cumulativeLayoutShift', { value: data });
+        break;
+      case 'INP':
+        myAnalyticsTool.track('interactionToNextPaint', { value: data });
         break;
       case 'TBT':
         myAnalyticsTool.track('totalBlockingTime', { duration: data });
@@ -347,14 +351,15 @@ Perfume will expose for all major metrics the vitals score, those can be used to
 
 | Web Vitals                                |   Good | Needs Improvement |      Poor |
 | ----------------------------------------- | -----: | ----------------: | --------: |
-| Time to First Byte (ttfb)                 |  0-800 |          801-1800 | Over 1800 |
-| Fist Paint (fp)                           | 0-2000 |         2001-4000 | Over 4000 |
-| First Contentful Paint (fcp)              | 0-2000 |         2001-4000 | Over 4000 |
-| Largest Contentful Paint (lcp)            | 0-2500 |         2501-4000 | Over 4000 |
-| First Input Delay (fid)                   |  0-100 |           101-300 |  Over 300 |
-| Cumulative Layout Shift (cls)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
-| Total Blocking Time (tbt)                 |  0-200 |           201-600 |  Over 600 |
-| Navigation Total Blocking Time (tbt)      |  0-200 |           201-600 |  Over 600 |
+| Time to First Byte (TTFB)                 |  0-800 |          801-1800 | Over 1800 |
+| Redirect Time (RT)                        |  0-100 |           101-200 |  Over 200 |
+| First Contentful Paint (FCP)              | 0-2000 |         2001-4000 | Over 4000 |
+| Largest Contentful Paint (LCP)            | 0-2500 |         2501-4000 | Over 4000 |
+| First Input Delay (FID)                   |  0-100 |           101-300 |  Over 300 |
+| Cumulative Layout Shift (CLS)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
+| Interaction to Next Paint (INP)           |  0-200 |           201-500 |  Over 500 |
+| Total Blocking Time (TBT)                 |  0-200 |           201-600 |  Over 600 |
+| Navigation Total Blocking Time (NTBT)     |  0-200 |           201-600 |  Over 600 |
 
 ## Perfume custom options
 
