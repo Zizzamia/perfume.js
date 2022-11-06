@@ -88,7 +88,7 @@ import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 
 ## Quick start
 
-Metrics like **Navigation Timing**, **Network Information**, **FP**, **FCP**, **FID**, **LCP**, **CLS** and **TBT** are default reported with Perfume; All results will be reported to the `analyticsTracker` callback, and the code below is just one way for you to organize your tracking, feel free to tweak it suit your needs.
+Metrics like **Navigation Timing**, **Network Information**, **TTFB**, **FCP**, **FID**, **LCP**, **CLS**, **INP** and **TBT** are default reported with Perfume; All results will be reported to the `analyticsTracker` callback, and the code below is just one way for you to organize your tracking, feel free to tweak it suit your needs.
 
 🚀 Visit [perfumejs.com](http://perfumejs.com/) for a live demo on how the metrics work. 🌕
 
