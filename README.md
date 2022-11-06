@@ -53,6 +53,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 <br />
 At <a href="https://www.coinbase.com/blog/performance-vitals-a-unified-scoring-system-to-guide-performance-health-and-prioritization">Coinbase</a>, we use Perfume.js to capture a high-level scoring system that is clear, trusted, and easy to understand.
 <br />
+<br />
 Summarizing the performance health of an application into a reliable and consistent score helps increase urgency and directs company attention and resources towards addressing each performance opportunity.
 <br />
 
