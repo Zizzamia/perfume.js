@@ -36,7 +36,7 @@ export const logMetric = ({attribution, name, rating, value}: Metric): void => {
     perfObservers[4] = po('longtask', initTotalBlockingTime);
   }
   // TODO Add docs
-  if ('FID' ===name) {
+  if ('FID' === name) {
     setTimeout(() => {
       logMetric({
         attribution,

@@ -1,6 +1,5 @@
 import { config } from './config';
 import { getNavigatorInfo } from './getNavigatorInfo';
-import { visibility } from './onVisibilityChange';
 import { IVitalsScore } from './types';
 import { pushTask } from './utils';
 
@@ -14,11 +13,7 @@ export const reportPerf = function(
   attribution: object,
 ): void {
   pushTask(() => {
-    // Doesn't send timing when page is hidden
-    if (
-      (visibility.isHidden) ||
-      !config.analyticsTracker
-    ) {
+    if (!config.analyticsTracker) {
       return;
     }
     // Send metric to custom Analytics service

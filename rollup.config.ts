@@ -9,7 +9,7 @@ const createConfig = ({ output, min = false }) => {
     min &&
     terser({
       output: {
-        comments(node, { text, type }) {
+        comments(_, { text, type }) {
           if (type === 'comment2') {
             // multiline comment
             return /@preserve|@license|@cc_on/i.test(text);
@@ -38,6 +38,7 @@ const createConfig = ({ output, min = false }) => {
       format: output.format,
       name: 'Perfume',
       sourcemap: true,
+      exports: 'default',
     },
     watch: { include: 'dist/es/**' },
     plugins: plugins.filter(Boolean),

@@ -2,7 +2,7 @@ export interface Metric {
   /**
    * The name of the metric (in acronym form).
    */
-  name: 'CLS' | 'FCP' | 'FID' | 'INP' | 'LCP' | 'TTFB' | 'RT' | 'TBT' | 'NTBT' | 'ET';
+  name: 'CLS' | 'FCP' | 'FID' | 'INP' | 'LCP' | 'TTFB' | 'RT' | 'TBT' | 'NTBT' | 'ET' | 'INP';
   /**
    * The current value of the metric.
    */
@@ -32,7 +32,7 @@ export interface Metric {
    * The array may also be empty if the metric value was not based on any
    * entries (e.g. a CLS value of 0 given no layout shifts).
    */
-  entries?: (PerformanceEntry | LayoutShift)[];
+  entries?: (PerformanceEntry)[];
   /**
    * The type of navigation
    *

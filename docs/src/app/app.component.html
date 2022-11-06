@@ -30,7 +30,6 @@
     <b>// Main Performance Metrics</b><br />
     Time To First Byte: <b>{{ navigationTiming?.timeToFirstByte || 0 }}ms</b
     ><br />
-    First Paint: <b>{{ fp }} ms</b><br />
     First Contentful Paint: <b>{{ fcp }} ms</b><br />
     First Input Delay: <b>{{ fid }} ms</b><br />
     Largest Contentful Paint: <b>{{ lcp }} ms</b><br />
@@ -68,9 +67,6 @@
         if (data && data.effectiveType) {{'{'}}
           myAnalyticsTool.<span class="violet">track</span>('networkInformation', data);
         {{'}'}}
-        <span class="red">break</span>;
-      <span class="red">case</span> 'fp'<span class="red">:</span>
-        myAnalyticsTool.<span class="violet">track</span>('firstPaint', {{'{'}} duration: data {{'}'}});
         <span class="red">break</span>;
       <span class="red">case</span> 'fcp'<span class="red">:</span>
         myAnalyticsTool.<span class="violet">track</span>('firstContentfulPaint', {{'{'}} duration: data {{'}'}});
@@ -171,20 +167,6 @@
   <p class="box-demo">
     <b>Navigation Timing</b>: {{ navigationTiming }}
   </p>
-</div>
-
-<div class="box">
-  <h3 class="box-title" id="/first-paint/">
-    <a href="{{ path }}#/first-paint/">
-      First Paint (FP)
-    </a>
-  </h3>
-  <p>
-    <b>First Paint</b> is the exact time taken for the browser to render anything as
-    visually different from what was on the screen before navigation, e.g. a
-    background change after a long blank white screen time.
-  </p>
-  <p class="box-demo"><b>First Paint</b>: {{ fp }} ms</p>
 </div>
 
 <div class="box">

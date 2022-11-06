@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
-import Perfume from 'perfume.js';
-// import Perfume from '../../../';
+// import Perfume from 'perfume.js';
+import Perfume from '../../../';
 
 export const navigationTiming = new BehaviorSubject({});
 export const networkInformation = new BehaviorSubject({
@@ -13,7 +13,6 @@ export const navigatorInformation$ = new BehaviorSubject({
 });
 export const resourceTiming = new BehaviorSubject({});
 export const dataConsumption = new BehaviorSubject({});
-export const fp = new BehaviorSubject(0);
 export const fcp = new BehaviorSubject(0);
 export const lcp = new BehaviorSubject(0);
 export const fid = new BehaviorSubject(0);
@@ -31,7 +30,7 @@ export const elPageTitle = new BehaviorSubject(0);
 
 // Supports AOT and DI
 export function analyticsTracker(options) {
-  const { metricName, data, navigatorInformation, vitalsScore, eventProperties } = options;
+  const { metricName, data, navigatorInformation, rating, attribution } = options;
   if (navigatorInformation && navigatorInformation.deviceMemory) {
     navigatorInformation$.next(navigatorInformation);
     isLowEndDevice$.next(navigatorInformation.isLowEndDevice);
@@ -40,20 +39,17 @@ export function analyticsTracker(options) {
   console.log(`%c Perfume.js: ${metricName}`, 'color:#ff6d00;font-size:11px;', {
     data,
     ...navigatorInformation,
-    vitalsScore,
-    eventProperties
+    rating,
+    attribution
   });
   if (
     [
-      'fp',
-      'fcp',
-      'lcp',
-      'fid',
-      'fidVitals',
-      'cls',
-      'clsFinal',
-      'tbt',
-      'ntbt',
+      'FCP',
+      'LCP',
+      'FID',
+      'CLS',
+      'TBT',
+      'NTBT',
     ].includes(metricName)
   ) {
     if ((window as any).ga) {
@@ -81,28 +77,25 @@ export function analyticsTracker(options) {
     case 'dataConsumption':
       dataConsumption.next(data);
       break;
-    case 'fp':
-      fp.next(data);
-      break;
-    case 'fcp':
+    case 'FCP':
       fcp.next(data);
       break;
-    case 'lcp':
+    case 'LCP':
       lcp.next(data);
       break;
-    case 'fid':
+    case 'FID':
       fid.next(data);
       break;
-    case 'cls':
+    case 'CLS':
       cls.next(data);
       break;
     case 'clsFinal':
       clsFinal.next(data);
       break;
-    case 'tbt':
+    case 'TBT':
       tbt.next(data);
       break;
-    case 'ntbt':
+    case 'NTBT':
       ntbt.next(data);
       break;
     case 'fibonacci':

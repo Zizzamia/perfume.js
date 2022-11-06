@@ -8,7 +8,6 @@ import {
 import {
   navigationTiming,
   dataConsumption,
-  fp,
   fcp,
   lcp,
   fid,
@@ -42,7 +41,6 @@ export class AppComponent implements AfterViewInit {
   dataConsumption = {};
   logCustom: string;
   logFibonacci: string;
-  fp: number;
   fcp: number;
   fid: number;
   lcp: number;
@@ -84,10 +82,6 @@ export class AppComponent implements AfterViewInit {
     });
     dataConsumption.subscribe(result => {
       this.dataConsumption = JSON.stringify(result, undefined, 2);
-      this.ref.detectChanges();
-    });
-    fp.subscribe(result => {
-      this.fp = result;
       this.ref.detectChanges();
     });
     fcp.subscribe(result => {

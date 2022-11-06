@@ -5,7 +5,7 @@
  * @license
  */
 import { config } from './config';
-import { D, W, WN, WP } from './constants';
+import { W, WN, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { getNetworkInformation } from './getNetworkInformation';
 import { isPerformanceSupported } from './isSupported';
@@ -16,7 +16,6 @@ import {
   disconnectPerfObserversHidden,
   initPerformanceObserver,
 } from './observe';
-import { didVisibilityChange, visibility } from './onVisibilityChange';
 import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
@@ -25,7 +24,7 @@ import { getVitalsScore } from './vitalsScore';
 let ntbtTimeoutID = 0;
 
 export default class Perfume {
-  v = '8.0.0-alpha';
+  v = '8.0.0-alpha.2';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
@@ -43,14 +42,6 @@ export default class Perfume {
       initPerformanceObserver();
     }
 
-    // Init visibilitychange listener
-    if (typeof D.hidden !== 'undefined') {
-      // Opera 12.10 and Firefox 18 and later support
-      D.addEventListener(
-        'visibilitychange',
-        didVisibilityChange.bind(this, disconnectPerfObserversHidden),
-      );
-    }
     const navigationTiming = getNavigationTiming();
     // Log Navigation Timing
     logData('navigationTiming', navigationTiming);
@@ -80,8 +71,6 @@ export default class Perfume {
     metrics[markName] = true;
     // Creates a timestamp in the browser's performance entry buffer
     WP.mark(`mark_${markName}_start`);
-    // Reset hidden value
-    visibility.isHidden = false;
   }
 
   /**
