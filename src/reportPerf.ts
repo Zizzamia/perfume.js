@@ -14,8 +14,11 @@ export const reportPerf = (
   attribution: object,
 ): void => {
   pushTask(() => {
+    if (!config.analyticsTracker) {
+      return;
+    }
     // Doesn't send timing when page is hidden
-    if (visibility.isHidden || !config.analyticsTracker) {
+    if (visibility.isHidden && !['CLS', 'INP'].includes(measureName)) {
       return;
     }
     // Send metric to custom Analytics service
