@@ -2,7 +2,7 @@
  * Perfume.js v8.1.6 (http://zizzamia.github.io/perfume)
  * Copyright 2022 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
- * 
+ *
  * @license
  */
 import { config } from './config';
@@ -31,6 +31,7 @@ export default class Perfume {
     config.isResourceTiming = !!options.resourceTiming;
     config.isElementTiming = !!options.elementTiming;
     config.maxTime = options.maxMeasureTime || config.maxTime;
+    config.reportOptions = options.reportOptions || config.reportOptions;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!isPerformanceSupported()) {

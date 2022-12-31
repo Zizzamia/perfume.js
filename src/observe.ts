@@ -4,7 +4,7 @@ import {
   onFID,
   onINP,
   onLCP,
-  onTTFB
+  onTTFB,
 } from 'web-vitals/attribution';
 
 import { config } from './config';
@@ -15,24 +15,24 @@ import { initResourceTiming } from './resourceTiming';
 
 export const initPerformanceObserver = (): void => {
   // @ts-ignore
-  onTTFB((report) => {
+  onTTFB(report => {
     // Calculate the request time by subtracting from TTFB
     // everything that happened prior to the request starting.
     // @ts-ignore
     report.value = report.value - report.entries[0].requestStart;
     // @ts-ignore
     logMetric(report);
-  });
+  }, config.reportOptions.ttfb);
   // @ts-ignore
-  onCLS((report) => logMetric(report));
+  onCLS(report => logMetric(report), config.reportOptions.cls);
   // @ts-ignore
-  onFCP((report) => logMetric(report));
+  onFCP(report => logMetric(report), config.reportOptions.fcp);
   // @ts-ignore
-  onFID((report) => logMetric(report));
+  onFID(report => logMetric(report), config.reportOptions.fid);
   // @ts-ignore
-  onLCP((report) => logMetric(report));
+  onLCP(report => logMetric(report), config.reportOptions.lcp);
   // @ts-ignore
-  onINP((report) => logMetric(report));
+  onINP(report => logMetric(report), config.reportOptions.inp);
 
   if (config.isResourceTiming) {
     po('resource', initResourceTiming);

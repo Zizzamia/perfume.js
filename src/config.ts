@@ -6,4 +6,6 @@ export const config: IPerfumeConfig = {
   isElementTiming: false,
   // Logging
   maxTime: 30000,
+  // web-vitals report options
+  reportOptions: {},
 };

@@ -1,8 +1,21 @@
+import type { ReportOpts } from 'web-vitals';
+
 export interface Metric {
   /**
    * The name of the metric (in acronym form).
    */
-  name: 'CLS' | 'FCP' | 'FID' | 'INP' | 'LCP' | 'TTFB' | 'RT' | 'TBT' | 'NTBT' | 'ET' | 'INP';
+  name:
+    | 'CLS'
+    | 'FCP'
+    | 'FID'
+    | 'INP'
+    | 'LCP'
+    | 'TTFB'
+    | 'RT'
+    | 'TBT'
+    | 'NTBT'
+    | 'ET'
+    | 'INP';
   /**
    * The current value of the metric.
    */
@@ -32,7 +45,7 @@ export interface Metric {
    * The array may also be empty if the metric value was not based on any
    * entries (e.g. a CLS value of 0 given no layout shifts).
    */
-  entries?: (PerformanceEntry)[];
+  entries?: PerformanceEntry[];
   /**
    * The type of navigation
    *
@@ -40,24 +53,38 @@ export interface Metric {
    * support that API). For pages that are restored from the bfcache, this
    * value will be 'back-forward-cache'.
    */
-  navigationType?: 'navigate' | 'reload' | 'back-forward' | 'back-forward-cache' | 'prerender';
+  navigationType?:
+    | 'navigate'
+    | 'reload'
+    | 'back-forward'
+    | 'back-forward-cache'
+    | 'prerender';
 
   /**
    * An object containing potentially-helpful debugging information that
    * can be sent along with the metric value for the current page visit in
    * order to help identify issues happening to real-users in the field.
    */
-   attribution: {
+  attribution: {
     [key: string]: unknown;
-   }
+  };
 }
 
 export interface IAnalyticsTrackerOptions {
-  attribution: object,
+  attribution: object;
   data: IPerfumeData;
   metricName: string;
   navigatorInformation: INavigatorInfo;
   rating: IVitalsScore;
+}
+
+interface WebVitalsReportOptions {
+  ttfb?: ReportOpts;
+  cls?: ReportOpts;
+  fcp?: ReportOpts;
+  fid?: ReportOpts;
+  lcp?: ReportOpts;
+  inp?: ReportOpts;
 }
 
 export interface IPerfumeConfig {
@@ -68,6 +95,8 @@ export interface IPerfumeConfig {
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   // Logging
   maxTime: number;
+  // web-vitals report options
+  reportOptions: WebVitalsReportOptions;
 }
 
 export interface IPerfumeOptions {
@@ -78,6 +107,8 @@ export interface IPerfumeOptions {
   analyticsTracker?: (options: IAnalyticsTrackerOptions) => void;
   // Logging
   maxMeasureTime?: number;
+  // web-vitals report options
+  reportOptions?: WebVitalsReportOptions;
 }
 
 export interface IMetricMap {
@@ -175,6 +206,9 @@ export interface IPerfumeDataConsumption {
   xmlhttprequest: number;
 }
 
-export type IPerfumeData = number | IPerfumeNavigationTiming | IPerfumeNetworkInformation;
+export type IPerfumeData =
+  | number
+  | IPerfumeNavigationTiming
+  | IPerfumeNetworkInformation;
 
 export type IVitalsScore = 'good' | 'needsImprovement' | 'poor' | null;
