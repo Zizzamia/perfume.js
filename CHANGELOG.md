@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.2.0 (2022-12-30)
+
+* **feat:** added ability to provide web-vitals report options
+
 ## 8.1.6 (2022-12-30)
 
 * **fix:** added back the `visibility.isHidden` check when reporting metrics. Apparently, without this check, we end up over-reporting metrics that risk being inaccurate because the page suddenly becomes hidden.
