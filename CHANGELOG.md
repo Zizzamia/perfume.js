@@ -1,8 +1,10 @@
 # Changelog
 
-## 8.1.4 (2022-12-30)
+## 8.1.5 (2022-12-30)
 
 * **fix:** added back the `visibility.isHidden` check when reporting metrics. Apparently, without this check, we end up over-reporting metrics that risk being inaccurate because the page suddenly becomes hidden.
+
+Currently, the only initial metrics that will be reported after visibility changes are CLS and INP.
 
 ## 8.0.0 (2022-11-6)
 

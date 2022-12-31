@@ -34,11 +34,14 @@ export const logMetric = ({attribution, name, rating, value}: Metric): void => {
   }
   // TODO Add docs
   if (['FCP', 'LCP'].includes(name)) {
-    perfObservers[4] = po('longtask', initTotalBlockingTime);
+    perfObservers[0] = po('longtask', initTotalBlockingTime);
   }
   // TODO Add docs
-  if ('FID' === name && !visibility.didChange) {
+  if ('FID' === name) {
     setTimeout(() => {
+      if (!visibility.didChange) {
+        return;
+      }
       logMetric({
         attribution,
         name: 'TBT',
