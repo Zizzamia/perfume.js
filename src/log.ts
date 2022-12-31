@@ -39,7 +39,7 @@ export const logMetric = ({attribution, name, rating, value}: Metric): void => {
   // TODO Add docs
   if ('FID' === name) {
     setTimeout(() => {
-      if (!visibility.didChange) {
+      if (visibility.didChange) {
         return;
       }
       logMetric({
