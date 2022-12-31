@@ -1,5 +1,6 @@
 export const visibility = {
   isHidden: false,
+  didChange: false,
 };
 
 /**
@@ -11,5 +12,6 @@ export const didVisibilityChange = function() {
   visibility.isHidden = false;
   if (document.hidden) {
     visibility.isHidden = document.hidden;
+    visibility.didChange = true;
   }
 };

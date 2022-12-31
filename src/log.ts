@@ -1,6 +1,7 @@
 import { config } from './config';
 import { fcp, rt, tbt } from './metrics';
 import { perfObservers } from './observeInstances';
+import { visibility } from './onVisibilityChange';
 import { po } from './performanceObserver';
 import { reportPerf } from './reportPerf';
 import { initTotalBlockingTime } from './totalBlockingTime';
@@ -36,7 +37,7 @@ export const logMetric = ({attribution, name, rating, value}: Metric): void => {
     perfObservers[4] = po('longtask', initTotalBlockingTime);
   }
   // TODO Add docs
-  if ('FID' === name) {
+  if ('FID' === name && !visibility.didChange) {
     setTimeout(() => {
       logMetric({
         attribution,

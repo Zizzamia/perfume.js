@@ -271,9 +271,9 @@ Terminiamo la misura Cumulative Layout Shift in due punti: quando si verifica il
 
 **TBT** è una metrica importante e incentrata sull'utente per misurare la capacità di risposta al carico perché aiuta a quantificare la gravità di quanto una pagina non sia interattiva prima che diventi interattiva in modo affidabile: un TBT basso aiuta a garantire che la pagina sia utilizzabile.
 
-<!-- We end the Total Blocking Time measure at four points: when First Input Delay happen, 5 seconds after FID, 10 seconds after FID and when the page's lifecycle state changes to hidden. -->
+<!-- We end the Total Blocking Time measure at four points: when First Input Delay happen, 10 seconds after FID, 10 seconds after FID and when the page's lifecycle state changes to hidden. -->
 
-Terminiamo la misura Total Blocking Time in quattro punti: quando si verifica il First Input Delay, 5 secondi dopo FID, 10 secondi dopo FID e quando lo stato del ciclo di vita della pagina cambia in hidden.
+Terminiamo la misura Total Blocking Time in quattro punti: quando si verifica il First Input Delay, 10 secondi dopo FID, 10 secondi dopo FID e quando lo stato del ciclo di vita della pagina cambia in hidden.
 
 ```javascript
 // Perfume.js: tbt 347.07 ms
