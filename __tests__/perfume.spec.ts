@@ -6,6 +6,7 @@ import * as log from '../src/log';
 import { metrics, ntbt } from '../src/metrics';
 import Perfume from '../src/perfume';
 import * as observe from '../src/observe';
+import { visibility } from '../src/onVisibilityChange';
 import mock from './_mock';
 
 describe('Perfume', () => {
@@ -20,6 +21,7 @@ describe('Perfume', () => {
     (C as any).log = (n: any) => n;
     (window as any).console.warn = (n: any) => n;
     (observe as any).perfObservers = {};
+    visibility.isHidden = false;
   });
 
   afterEach(() => {

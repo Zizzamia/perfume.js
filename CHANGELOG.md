@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.1.0 (2022-12-30)
+
+* **fix:** added back the `visibility.isHidden` check when reporting metrics. Apparently, without this check, we end up over-reporting metrics that risk being inaccurate because the page suddenly becomes hidden.
+
 ## 8.0.0 (2022-11-6)
 
 * **feat:** made Perfume.js a superset of the [Web Vitals](https://github.com/GoogleChrome/web-vitals) library. This means you will get access to all the latest metrics from Google and plus all the extra features you learn to love from Perfume.
