@@ -1,5 +1,5 @@
 /**
- * Perfume.js v8.1.0 (http://zizzamia.github.io/perfume)
+ * Perfume.js v8.1.1 (http://zizzamia.github.io/perfume)
  * Copyright 2022 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  * 
@@ -14,7 +14,7 @@ import { logData, logMetric } from './log';
 import { performanceMeasure } from './measure';
 import { metrics, ntbt } from './metrics';
 import { initPerformanceObserver } from './observe';
-import { didVisibilityChange, visibility } from './onVisibilityChange';
+import { didVisibilityChange } from './onVisibilityChange';
 import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
@@ -23,7 +23,7 @@ import { getVitalsScore } from './vitalsScore';
 let ntbtTimeoutID = 0;
 
 export default class Perfume {
-  v = '8.1.0';
+  v = '8.1.1';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
@@ -45,8 +45,7 @@ export default class Perfume {
     if (typeof document.hidden !== 'undefined') {
       // Opera 12.10 and Firefox 18 and later support
       document.addEventListener(
-        'visibilitychange',
-        () => didVisibilityChange,
+        'visibilitychange', didVisibilityChange,
       );
     }
 
