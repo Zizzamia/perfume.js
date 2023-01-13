@@ -38,10 +38,11 @@ describe('log', () => {
         attribution: {},
         name: 'CLS',
         rating: 'good',
-        value: 0
+        value: 0,
+        navigationType: 'navigate',
       });
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('CLS', 0, 'good', {});
+      expect(spy).toHaveBeenCalledWith('CLS', 0, 'good', {}, 'navigate');
     });
 
     it('should call reportPerf() with the correct arguments', () => {
@@ -50,10 +51,11 @@ describe('log', () => {
         attribution: {},
         name: 'FCP',
         rating: 'good',
-        value: 1
+        value: 1,
+        navigationType: 'navigate',
       });
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('FCP', 1, 'good', {});
+      expect(spy).toHaveBeenCalledWith('FCP', 1, 'good', {}, 'navigate');
     });
 
     it('should not call reportPerf() when duration is higher of config.maxTime', () => {

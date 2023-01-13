@@ -27,7 +27,7 @@ export const logData = (
  * Dispatches the metric duration into internal logs
  * and the external time tracking service.
  */
-export const logMetric = ({attribution, name, rating, value}: Metric): void => {
+export const logMetric = ({attribution, name, rating, value, navigationType}: Metric): void => {
   // TODO Add docs
   if (name === 'FCP') {
     fcp.value = value;
@@ -47,6 +47,7 @@ export const logMetric = ({attribution, name, rating, value}: Metric): void => {
         name: 'TBT',
         rating: getVitalsScore('TBT', tbt.value),
         value: tbt.value,
+        navigationType,
       });
       logData('dataConsumption', rt.value);
     }, 10000);
@@ -55,6 +56,6 @@ export const logMetric = ({attribution, name, rating, value}: Metric): void => {
   const duration2Decimal = roundByFour(value);
   if (duration2Decimal <= config.maxTime && duration2Decimal >= 0) {
     // Sends the metric to an external tracking service
-    reportPerf(name, duration2Decimal, rating, attribution);
+    reportPerf(name, duration2Decimal, rating, attribution, navigationType);
   }
 };
