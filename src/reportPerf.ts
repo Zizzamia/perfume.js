@@ -1,7 +1,7 @@
 import { config } from './config';
 import { getNavigatorInfo } from './getNavigatorInfo';
 import { visibility } from './onVisibilityChange';
-import { IVitalsScore } from './types';
+import { IVitalsScore, INavigationType } from './types';
 import { pushTask } from './utils';
 
 /**
@@ -12,6 +12,7 @@ export const reportPerf = (
   data: any,
   rating: IVitalsScore,
   attribution: object,
+  navigationType?: INavigationType,
 ): void => {
   pushTask(() => {
     if (!config.analyticsTracker) {
@@ -28,6 +29,7 @@ export const reportPerf = (
       data,
       navigatorInformation: getNavigatorInfo(),
       rating,
+      navigationType,
     });
   });
 };

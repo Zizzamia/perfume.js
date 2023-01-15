@@ -53,12 +53,7 @@ export interface Metric {
    * support that API). For pages that are restored from the bfcache, this
    * value will be 'back-forward-cache'.
    */
-  navigationType?:
-    | 'navigate'
-    | 'reload'
-    | 'back-forward'
-    | 'back-forward-cache'
-    | 'prerender';
+  navigationType?: INavigationType;
 
   /**
    * An object containing potentially-helpful debugging information that
@@ -76,6 +71,7 @@ export interface IAnalyticsTrackerOptions {
   metricName: string;
   navigatorInformation: INavigatorInfo;
   rating: IVitalsScore;
+  navigationType?: INavigationType;
 }
 
 interface WebVitalsReportOptions {
@@ -212,3 +208,10 @@ export type IPerfumeData =
   | IPerfumeNetworkInformation;
 
 export type IVitalsScore = 'good' | 'needsImprovement' | 'poor' | null;
+
+export type INavigationType =
+  | 'navigate'
+  | 'reload'
+  | 'back-forward'
+  | 'back-forward-cache'
+  | 'prerender';
