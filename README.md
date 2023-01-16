@@ -100,7 +100,8 @@ const perfume = new Perfume({
       metricName,
       data,
       navigatorInformation,
-      rating
+      rating,
+      navigationType
     } = options;
     switch (metricName) {
       case 'navigationTiming':
@@ -383,7 +384,7 @@ Have fun ✨
 ```javascript
 const metricNames = ['TTFB', 'RT', 'FCP', 'LCP', 'FID', 'CLS', 'TBT'];
 new Perfume({
-  analyticsTracker: ({ attribution, metricName, data, navigatorInformation, rating }) => {
+  analyticsTracker: ({ attribution, metricName, data, navigatorInformation, rating, navigationType }) => {
     if (metricNames.includes(metricName)) {
       ga('send', 'event', {
         eventCategory: 'Perfume.js',
