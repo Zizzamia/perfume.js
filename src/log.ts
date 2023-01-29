@@ -33,7 +33,8 @@ export const logMetric = ({attribution, name, rating, value, navigationType}: Me
     fcp.value = value;
   }
   // TODO Add docs
-  if (['FCP', 'LCP'].includes(name)) {
+  // create longtask observer only once, otherwise entries will be duplicated
+  if (['FCP', 'LCP'].includes(name) && !perfObservers[0]) {
     perfObservers[0] = po('longtask', initTotalBlockingTime);
   }
   // TODO Add docs
