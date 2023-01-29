@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.3.0 (2023-1-29)
+
+* **feat:** added `navigationType` support (#210)
+* **fix:** run `po` for longtask only once (#215)
+
 ## 8.2.0 (2022-12-30)
 
 * **feat:** added ability to provide web-vitals report options
