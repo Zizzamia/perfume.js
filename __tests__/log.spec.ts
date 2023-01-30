@@ -4,6 +4,7 @@
 import { C, WN, WP } from '../src/constants';
 import * as log from '../src/log';
 import * as reportPerf from '../src/reportPerf';
+import * as totalBlockingTime from '../src/totalBlockingTime';
 import * as utils from '../src/utils';
 import mock from './_mock';
 
@@ -67,6 +68,35 @@ describe('log', () => {
         value: 40000
       });
       expect(spy.mock.calls.length).toEqual(0);
+    });
+
+    it('should call initTotalBlockingTime only once', () => {
+      const tbtSpy = jest.spyOn(totalBlockingTime, 'initTotalBlockingTime');
+
+      (window as any).PerformanceObserver = mock.PerformanceObserver;
+
+      // FCP and LCP both trigger TBT measurement
+      log.logMetric({
+        attribution: {},
+        name: 'FCP',
+        rating: 'good',
+        value: 1,
+        navigationType: 'navigate',
+      });
+      log.logMetric({
+        attribution: {},
+        name: 'LCP',
+        rating: 'good',
+        value: 1,
+        navigationType: 'navigate',
+      });
+
+      expect(tbtSpy.mock.calls.length).toEqual(1);
+      expect(tbtSpy).toHaveBeenCalledWith([
+        { 'name': 'first-paint', 'startTime': 1 },
+        { 'name': 'first-contentful-paint', 'startTime': 1 },
+        { 'duration': 4, 'name': 'mousedown' }
+      ]);
     });
   });
 });
