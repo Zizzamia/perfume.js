@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { config } from '../src/config';
-import { WN, WP } from '../src/constants';
+import { W, WN, WP } from '../src/constants';
 import { visibility } from '../src/onVisibilityChange';
 import { reportPerf } from '../src/reportPerf';
 import mock from './_mock';
@@ -106,6 +106,58 @@ describe('reportPerf', () => {
         },
         rating: 'needsImprovement',
       });
+    });
+
+    it('CLS and INP should be reported immediately without requestIdleCallback', () => {
+      config.analyticsTracker = () => {};
+      spy = jest.spyOn(config, 'analyticsTracker');
+
+      // emulate requestIdleCallback delay
+      const tasks: Function[] = [];
+      (W as any).requestIdleCallback = (cb: Function) => tasks.push(cb);
+
+      const immediatelyReportedMetrics = ['CLS', 'INP'];
+      const delayedMetrics = [
+        'TTFB',
+        'FCP',
+        'LCP',
+        'FID',
+        'TBT',
+      ];
+      const defaultData = {
+        data: 123,
+        attribution: {},
+        navigationType: undefined,
+        navigatorInformation: {
+          deviceMemory: 8,
+          hardwareConcurrency: 12,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported',
+        },
+        rating: 'good',
+      };
+
+      [...immediatelyReportedMetrics, ...delayedMetrics].forEach((metric) => {
+        reportPerf(metric, 123, 'good', {});
+      });
+
+      expect(spy.mock.calls).toEqual(
+        immediatelyReportedMetrics.map((metric) => ([{
+          metricName: metric, 
+          ...defaultData,
+        }]))
+      );
+
+      // run requestIdleCallback tasks
+      tasks.forEach((task) => task());
+
+      expect(spy.mock.calls).toEqual(
+        [...immediatelyReportedMetrics, ...delayedMetrics].map((metric) => ([{
+          metricName: metric, 
+          ...defaultData,
+        }]))
+      );
     });
   });
 });
