@@ -14,7 +14,7 @@ export const reportPerf = (
   attribution: object,
   navigationType?: INavigationType,
 ): void => {
-  pushTask(() => {
+  const reportTask = () => {
     if (!config.analyticsTracker) {
       return;
     }
@@ -31,5 +31,13 @@ export const reportPerf = (
       rating,
       navigationType,
     });
-  });
+  };
+
+  // Send CLS and INP metrics immediately,
+  // because this metrics are reported when page is hidden or closed
+  if (['CLS', 'INP'].includes(measureName)) {
+    reportTask();
+  } else {
+    pushTask(reportTask);
+  }
 };
