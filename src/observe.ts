@@ -14,14 +14,11 @@ import { po } from './performanceObserver';
 import { initResourceTiming } from './resourceTiming';
 
 export const initPerformanceObserver = (): void => {
-  // @ts-ignore
   onTTFB(report => {
-    // Calculate the request time by subtracting from TTFB
-    // everything that happened prior to the request starting.
-    // @ts-ignore
-    report.value = report.value - report.entries[0].requestStart;
-    // @ts-ignore
-    logMetric(report);
+    if (report.value > 0) {
+      // @ts-ignore
+      logMetric(report);
+    }
   }, config.reportOptions.ttfb);
   // @ts-ignore
   onCLS(report => logMetric(report), config.reportOptions.cls);
