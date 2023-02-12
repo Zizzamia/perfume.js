@@ -19,5 +19,5 @@
   },
   "include": [
     "src"
-  ]
+, "src/userJourneyTestConstants.ts"  ]
 }
