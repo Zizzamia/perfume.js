@@ -19,6 +19,10 @@ import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
 import { getVitalsScore } from './vitalsScore';
+import {
+  setUserJourneyFinalStepsMap,
+  setUserJourneyStepsMap,
+} from './userJourneyMap';
 
 let ntbtTimeoutID = 0;
 
@@ -70,6 +74,12 @@ export default class Perfume {
     // Let's estimate our storage capacity
     if (WN && WN.storage && typeof WN.storage.estimate === 'function') {
       WN.storage.estimate().then(reportStorageEstimate);
+    }
+    console.log('creating new perfume')
+    // initializing User Journeys if present
+    if(config.userJourneys && config.userJourneySteps){
+      setUserJourneyStepsMap();
+      setUserJourneyFinalStepsMap();
     }
   }
 

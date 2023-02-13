@@ -1,29 +1,28 @@
-/* eslint-disable prefer-arrow/prefer-arrow-functions */
-import { IStepConfig, IUserJourney, IVitalsScore, IMetricMap } from './types';
+import { IStepConfig, IUserJourney, } from './types';
 
 import { config } from './config';
 
 
 export const userJourneyMap = {
-    finalMarkToStepsMap: new Map<string, Map<string, string[]>>(),
-    startMarkToStepsMap: {} as Record<string, Set<string>>,
-    finalSteps: new Map<string, string[]>(),
-    activeSteps: {} as IMetricMap,
+    finalMarkToStepsMap: {} as Record<string, Record<string, string[]>>,
+    startMarkToStepsMap: {} as Record<string, Record<string, boolean>>,
+    finalSteps: {} as Record<string, string[]>,
+    activeSteps: {} as Record<string, boolean>,
   };
 
-  export function resetActiveSteps() {
+  export const resetActiveSteps = ()  => {
     userJourneyMap.activeSteps = {};
   }
 
-  export function resetUserJourneyMap() {
+  export const resetUserJourneyMap = ()  => {
     // reset all values
     userJourneyMap.startMarkToStepsMap = {};
-    userJourneyMap.finalMarkToStepsMap = new Map<string, Map<string, string[]>>();
-    userJourneyMap.finalSteps = new Map<string, string[]>();
+    userJourneyMap.finalMarkToStepsMap = {};
+    userJourneyMap.finalSteps = {}; 
     resetActiveSteps();
   }
 
-  export function setUserJourneyStepsMap() {
+  export const setUserJourneyStepsMap = () => {
     if (!config.userJourneySteps) {
       return;
     }
@@ -33,47 +32,40 @@ export const userJourneyMap = {
     Object.entries<IStepConfig<string>>(config.userJourneySteps).forEach(([step, { marks }]) => {
       const startMark = marks[0];
       const endMark = marks[1];
+        // getting the current steps associated with the current start mark
+        const currentStartMarks = userJourneyMap.startMarkToStepsMap[startMark] ?? {}
+        currentStartMarks[step] = true;
+        userJourneyMap.startMarkToStepsMap[startMark] = currentStartMarks;
 
-      // TODO -  currently broken, sets all values as an empty {}, ex "launch": {}
-      userJourneyMap.startMarkToStepsMap[startMark] = new Set<string>([
-        ...(userJourneyMap.startMarkToStepsMap[startMark] ?? []),
-        step,
-      ]);
-
-      if (!userJourneyMap.finalMarkToStepsMap.has(endMark)) {
+      if (!userJourneyMap.finalMarkToStepsMap[endMark]) {
         // insert when top level end mark is not present
-        // TODO - currently broken, doesnt set any value
-        userJourneyMap.finalMarkToStepsMap.set(endMark, new Map([[startMark, [step]]]));
-      } else if (!userJourneyMap.finalMarkToStepsMap.get(endMark)?.has(startMark)) {
-        // insert when top level end mark is present but second level start mark is not
-        // TODO - currently broken, doesnt set any value
-        userJourneyMap.finalMarkToStepsMap.get(endMark)?.set(startMark, [step]);
+        userJourneyMap.finalMarkToStepsMap[endMark] = {startMark: [step]};
       } else {
-        // insert when end mark and start mark are both presen
-        // TODO - currently broken, doesnt set any value
-        userJourneyMap.finalMarkToStepsMap.get(endMark)?.get(startMark)?.push(step);
-      }
+        // insert when end mark and start mark are both present
+        const currentSteps = userJourneyMap.finalMarkToStepsMap[endMark][startMark];
+        currentSteps.push(step);
+        userJourneyMap.finalMarkToStepsMap[endMark][startMark] = currentSteps;
+    }
     });
+    console.log(JSON.stringify(userJourneyMap))
   }
 
-  export function setUserJourneyFinalStepsMap() {
+  export const setUserJourneyFinalStepsMap = ()  => {
     if (!config.userJourneys) {
       return;
     }
     // reset values
-    userJourneyMap.finalSteps = new Map<string, string[]>();
+    userJourneyMap.finalSteps = {};
 
     Object.entries<IUserJourney<string> | IStepConfig<string>>(config.userJourneys).forEach(
       ([key, value]) => {
         if (key !== 'steps') {
           const { steps } = value as IUserJourney<string>;
           const finalStep = steps[steps.length - 1];
-          if (userJourneyMap.finalSteps.has(finalStep)) {
-            // TODO - currently broken, doesnt update map
-            userJourneyMap.finalSteps.get(finalStep)?.push(key);
+          if (userJourneyMap.finalSteps[finalStep]){
+            userJourneyMap.finalSteps[finalStep].push(key)
           } else {
-            // TODO - currently broken, doesnt update map
-            userJourneyMap.finalSteps.set(finalStep, [key]);
+            userJourneyMap.finalSteps[finalStep] = [key];
           }
         }
       },
@@ -82,13 +74,13 @@ export const userJourneyMap = {
 
   /**
    * this method allows to add new steps by passing the start mark
+   *
    * @param startMark
    */
-  export function addActiveSteps(startMark: string) {
+  export const addActiveSteps = (startMark: string) => {
     const newSteps = userJourneyMap.startMarkToStepsMap[startMark] ?? [];
     // adding the new steps to the active map
-    newSteps.forEach(step => { 
-        // if we already have it as an active step, do nothing , else add it as active. 
+    Object.keys(newSteps).forEach(step => {
         if(userJourneyMap.activeSteps[step]){
             return;
         } else { 
@@ -99,8 +91,9 @@ export const userJourneyMap = {
 
   /**
    * removes one step from active steps
+   * 
    * @param step
    */
-  export function removeActiveStep(step: string) {
+  export const removeActiveStep = (step: string) => {
     delete userJourneyMap.activeSteps[step];
   }

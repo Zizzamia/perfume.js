@@ -256,7 +256,7 @@ export type INavigationType =
     steps: Steps[];
   } & Partial<IOutlierThreshold>;
 
-  export interface IStepMarks<Marks extends string> { marks: [Marks | 'launch', Marks] };
+  export interface IStepMarks<Marks extends string> { marks: [Marks | 'launch', Marks] }
 
   export type IStepConfig<Marks extends string> = { threshold: IThresholdTier } & IStepMarks<Marks>;
 
