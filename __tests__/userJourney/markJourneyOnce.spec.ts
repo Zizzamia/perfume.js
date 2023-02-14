@@ -7,7 +7,7 @@ import mock from '.././_mock';
 import Perfume from '../../src/perfume'
 import { markJourneyOnce } from '../../src/userJourney';
 
-import { testConfig } from '../../src/userJourneyTestConstants';
+import { testConfig } from '../userJourneyTestConstants';
 
 describe('markJourneyOnce', () => {
   let spy: jest.SpyInstance;
