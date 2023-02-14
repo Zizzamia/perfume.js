@@ -32,6 +32,10 @@ export default class Perfume {
     config.isElementTiming = !!options.elementTiming;
     config.maxTime = options.maxMeasureTime || config.maxTime;
     config.reportOptions = options.reportOptions || config.reportOptions;
+    config.userJourneySteps = options.userJourneySteps;
+    config.userJourneys = options.userJourneys;
+    config.journeyMaxOutlierThreshold = options.journeyMaxOutlierThreshold;
+    config.onMarkJourney = options.onMarkJourney;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!isPerformanceSupported()) {

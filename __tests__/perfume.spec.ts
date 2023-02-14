@@ -7,6 +7,9 @@ import { metrics, ntbt } from '../src/metrics';
 import Perfume from '../src/perfume';
 import * as observe from '../src/observe';
 import { visibility } from '../src/onVisibilityChange';
+import { IThresholdTier } from '../src/types';
+import { config } from '../src/config';
+import { testConfig } from './userJourneyTestConstants'
 import mock from './_mock';
 
 describe('Perfume', () => {
@@ -53,6 +56,77 @@ describe('Perfume', () => {
         resourceTiming: true,
         elementTiming: true,
       });
+    });
+
+    it('should run with userJourney config version A', () => {
+      new Perfume({
+        userJourneys: {    
+          first_journey: {
+            steps: [
+            'load_first_screen_first_journey',
+            'load_second_screen_first_journey',
+            'load_third_screen_first_journey',
+            'load_fourth_screen_first_journey',
+          ],
+        }}
+      });
+    });
+
+    it('should run with userJourney config version B', () => {
+      new Perfume({
+        userJourneySteps: { 
+          load_first_screen_first_journey: {
+            threshold: IThresholdTier.unavoidable,
+            marks: ['launch', 'loaded_first_screen_first_journey'],
+          },
+          load_second_screen_first_journey: {
+            threshold: IThresholdTier.instant,
+            marks: ['start_navigate_to_second_screen_first_journey', 'loaded_second_screen_first_journey'],
+          },
+        }
+      });
+    });
+
+    it('should run with userJourney config version C', () => {
+      new Perfume({
+        journeyMaxOutlierThreshold: 10000
+      });
+    });
+
+    it('should run with userJourney config version D', () => {
+      new Perfume({
+        onMarkJourney: () => {}
+      });
+    });
+
+    it('should run with userJourney config version E', () => {
+      new Perfume({
+        userJourneys: {    
+          first_journey: {
+            steps: [
+            'load_first_screen_first_journey',
+            'load_second_screen_first_journey',
+            'load_third_screen_first_journey',
+            'load_fourth_screen_first_journey',
+          ],
+        }},
+        userJourneySteps: { 
+          load_first_screen_first_journey: {
+            threshold: IThresholdTier.unavoidable,
+            marks: ['launch', 'loaded_first_screen_first_journey'],
+          },
+          load_second_screen_first_journey: {
+            threshold: IThresholdTier.instant,
+            marks: ['start_navigate_to_second_screen_first_journey', 'loaded_second_screen_first_journey'],
+          },
+        }
+      });
+    });
+
+    it('should run with all userJourney config', () => {
+      expect(config).not.toMatchObject(testConfig);
+      new Perfume(testConfig);
+      expect(config).toMatchObject(testConfig);
     });
 
     it('when navigator is not supported should not call WN.storage.estimate()', () => {
