@@ -1,10 +1,12 @@
+/* istanbul ignore file */
+
 import {
     IUserJourneyThresholds,   
     IPerfumeOptions,
     IPerfumeConfig,
     IThresholdTier,
     IUserJourneyConfig,
-    IUserJourneyStepsConfig, } from './types';
+    IUserJourneyStepsConfig, } from '../src/types';
 
 export const USER_JOURNEY_THRESHOLDS: IUserJourneyThresholds = {
     [IThresholdTier.instant]: {

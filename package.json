@@ -73,6 +73,7 @@
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "testPathIgnorePatterns": [
       "_mock.ts",
+      "userJourneyTestConstants.ts",
       "/docs/",
       "/node_modules/"
     ],
