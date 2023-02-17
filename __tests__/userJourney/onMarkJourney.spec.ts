@@ -4,12 +4,12 @@
 import { WP } from '../../src/constants';
 import mock from '.././_mock';
 import Perfume from '../../src/perfume';
-import { markJourney, markJourneyOnce } from '../../src/userJourney';
+import { markJourney } from '../../src/userJourney';
 import { config } from '../../src/config';
 
 import { testConfig } from '../userJourneyTestConstants';
 
-describe('markJourneyOnce', () => {
+describe('markJourney', () => {
   let spy: jest.SpyInstance;
   let onMarkJourneySpy: jest.SpyInstance;
 
