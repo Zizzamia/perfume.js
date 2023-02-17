@@ -75,7 +75,6 @@ export default class Perfume {
     if (WN && WN.storage && typeof WN.storage.estimate === 'function') {
       WN.storage.estimate().then(reportStorageEstimate);
     }
-    console.log('creating new perfume')
     // initializing User Journeys if present
     if(config.userJourneys && config.userJourneySteps){
       setUserJourneyStepsMap();
