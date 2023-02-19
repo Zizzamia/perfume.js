@@ -2,34 +2,19 @@
  * @jest-environment jsdom
  */
 import { WP } from '../../src/constants';
-import mock from '.././_mock';
+import mock from '../_mock';
 import Perfume from '../../src/perfume';
-import { markJourney } from '../../src/userJourney/markJourney';
 import { userJourneyMap } from '../../src/userJourney/userJourneyMap';
 
 import { testConfig } from '../userJourneyTestConstants';
 
-describe('userJourneyMap', () => {
-  let spy: jest.SpyInstance;
-
+describe('setUserJourneyStepsMap', () => {
   beforeEach(() => {
     (WP as any) = mock.performance();
     const perfume = new Perfume(testConfig);
   });
 
   describe('correctly sets each map', () => {
-    it('correctly sets the activeSteps maps', () => {
-      spy = jest.spyOn(WP, 'mark');
-      markJourney('start_navigate_to_second_screen_first_journey');
-      expect(spy.mock.calls.length).toBe(1);
-      expect(spy).toHaveBeenCalledWith(
-        'user_journey_mark.start_navigate_to_second_screen_first_journey',
-      );
-      expect(userJourneyMap.activeSteps).toMatchObject({
-        load_second_screen_first_journey: true,
-      });
-    });
-
     it('correctly sets the finalMarkToStepsMap map', () => {
       expect(userJourneyMap.finalMarkToStepsMap).toMatchObject({
         loaded_first_screen_first_journey: {

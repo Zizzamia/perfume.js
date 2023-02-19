@@ -22,7 +22,7 @@ import { getVitalsScore } from './vitalsScore';
 import {
   setUserJourneyFinalStepsMap,
   setUserJourneyStepsMap,
-} from './userJourney/userJourneyMap';
+} from './userJourney/setUserJourneyStepsMap';
 
 let ntbtTimeoutID = 0;
 
