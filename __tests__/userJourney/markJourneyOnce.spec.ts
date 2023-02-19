@@ -5,7 +5,7 @@
 import { WP } from '../../src/constants';
 import mock from '.././_mock';
 import Perfume from '../../src/perfume';
-import { markJourneyOnce } from '../../src/userJourney';
+import { markJourneyOnce } from '../../src/userJourney/markJourneyOnce';
 
 import { testConfig } from '../userJourneyTestConstants';
 

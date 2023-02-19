@@ -1,6 +1,6 @@
-import { IStepConfig, IUserJourney } from './types';
+import { IStepConfig, IUserJourney } from '../types';
 
-import { config } from './config';
+import { config } from '../config';
 
 export const userJourneyMap = {
   finalMarkToStepsMap: {} as Record<string, Record<string, string[]>>,

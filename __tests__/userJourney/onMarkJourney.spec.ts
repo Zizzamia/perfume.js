@@ -4,7 +4,7 @@
 import { WP } from '../../src/constants';
 import mock from '.././_mock';
 import Perfume from '../../src/perfume';
-import { markJourney } from '../../src/userJourney';
+import { markJourney } from '../../src/userJourney/markJourney';
 import { config } from '../../src/config';
 
 import { testConfig } from '../userJourneyTestConstants';

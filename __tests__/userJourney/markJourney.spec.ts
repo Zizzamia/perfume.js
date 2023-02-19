@@ -4,7 +4,7 @@
 import { WP } from '../../src/constants';
 import mock from '.././_mock';
 import Perfume from '../../src/perfume';
-import { markJourney } from '../../src/userJourney';
+import { markJourney } from '../../src/userJourney/markJourney';
 
 import { testConfig } from '../userJourneyTestConstants';
 
@@ -23,7 +23,7 @@ describe('markJourney', () => {
     }
   });
 
-  describe('markJourney', () => {
+  describe('markJourney()', () => {
     it('using the markJourneyOnce function should call WP.mark with the journey name', () => {
       spy = jest.spyOn(WP, 'mark');
       markJourney('start_navigate_to_second_screen_first_journey');
