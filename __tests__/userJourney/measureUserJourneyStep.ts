@@ -108,12 +108,12 @@ describe('measureUserJourneyStep', () => {
       );
       expect(measureSpy).toHaveBeenCalledTimes(2);
       expect(measureSpy).toHaveBeenCalledWith(
-        'user_journey_step.load_second_screen_first_journey',
+        'step.load_second_screen_first_journey',
         'mark.start_navigate_to_second_screen_first_journey',
         'mark.loaded_second_screen_first_journey',
       );
       expect(measureSpy).toHaveBeenLastCalledWith(
-        'user_journey_step.load_second_screen_first_journey_vitals_good',
+        'step.load_second_screen_first_journey_vitals_good',
         {
           detail: {
             duration: 100,
@@ -125,7 +125,7 @@ describe('measureUserJourneyStep', () => {
       );
       expect(analyticsTrackerSpy).toHaveBeenCalledTimes(1);
       expect(analyticsTrackerSpy).toHaveBeenCalledWith({
-        attribution: { category: 'user_journey_step' },
+        attribution: { category: 'step' },
         metricName: 'load_second_screen_first_journey',
         rating: 'good',
         data: 100,
@@ -182,7 +182,7 @@ describe('measureUserJourneyStep', () => {
         metricName: 'load_first_screen_first_journey',
         rating: 'good',
         data: 2000,
-        attribution: { category: 'user_journey_step' },
+        attribution: { category: 'step' },
         navigationType: undefined,
         navigatorInformation: {
           deviceMemory: 0,

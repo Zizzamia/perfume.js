@@ -1,8 +1,7 @@
-import { M, WP } from '../constants';
+import { M, S, WP } from '../constants';
 import { reportPerf } from '../reportPerf';
 import { config } from '../config';
 
-import { getJourneyStepMetricName } from './getJourneyStepMetricName';
 import { USER_JOURNEY_THRESHOLDS } from '../vitalsScore';
 import { getRating } from '../vitalsScore';
 import { getJourneyStepVitalMetricName } from './getJourneyStepVitalMetricName';
@@ -12,8 +11,7 @@ export const measureJourneyStep = (
   startMark: string,
   endMark: string,
 ) => {
-  const journeyStepMetricName = getJourneyStepMetricName(step);
-
+  const journeyStepMetricName = S + step;
   const isLaunchJourney = startMark === 'launch';
   const startMarkExists = WP.getEntriesByName(M + startMark).length > 0;
   const endMarkExists = WP.getEntriesByName(M + endMark).length > 0;
@@ -37,7 +35,7 @@ export const measureJourneyStep = (
         step,
         journeyStepMeasure.duration,
         score,
-        { category: 'user_journey_step' },
+        { category: 'step' },
         undefined,
       );
     }
@@ -56,7 +54,7 @@ export const measureJourneyStep = (
           step,
           duration,
           score,
-          { category: 'user_journey_step' },
+          { category: 'step' },
           undefined,
         );
         const journeyStepVitalMetricName = getJourneyStepVitalMetricName(
