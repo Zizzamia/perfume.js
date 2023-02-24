@@ -1,7 +1,6 @@
 export const userJourneyMap = {
   finalMarkToStepsMap: {} as Record<string, Record<string, string[]>>,
   startMarkToStepsMap: {} as Record<string, Record<string, boolean>>,
-  finalSteps: {} as Record<string, string[]>,
   activeSteps: {} as Record<string, boolean>,
 };
 
@@ -35,6 +34,5 @@ export const resetUserJourneyMap = () => {
   // reset all values
   userJourneyMap.startMarkToStepsMap = {};
   userJourneyMap.finalMarkToStepsMap = {};
-  userJourneyMap.finalSteps = {};
   resetActiveSteps();
 };

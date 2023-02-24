@@ -1,14 +1,13 @@
 import { config } from '../config';
 
+import { measureStep } from './measureStep';
 import {
   userJourneyMap,
   addActiveSteps,
   removeActiveStep,
 } from './userJourneyMap';
 
-import { measureJourneyStep } from './measureJourneyStep';
-
-export const measureJourneySteps = (endMark: string) => {
+export const measureSteps = (endMark: string) => {
   if (userJourneyMap.finalMarkToStepsMap[endMark]) {
     // this is an end mark so we delete the entry
     const finalSteps = userJourneyMap.finalMarkToStepsMap[endMark];
@@ -18,7 +17,7 @@ export const measureJourneySteps = (endMark: string) => {
       Promise.all(
         steps.map(async step => {
           // measure
-          await measureJourneyStep(step, startMark, endMark);
+          await measureStep(step, startMark, endMark);
         }),
       ).catch(() => {
         // TODO @zizzamia log error

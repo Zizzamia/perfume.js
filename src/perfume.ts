@@ -19,10 +19,7 @@ import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
 import { getVitalsScore } from './vitalsScore';
-import {
-  setUserJourneyFinalStepsMap,
-  setUserJourneyStepsMap,
-} from './userJourney/setUserJourneyStepsMap';
+import { setStepsMap } from './userJourney/setStepsMap';
 
 let ntbtTimeoutID = 0;
 
@@ -73,8 +70,7 @@ export default class Perfume {
     }
     // initializing User Journeys if present
     if (config.userJourneySteps) {
-      setUserJourneyStepsMap();
-      setUserJourneyFinalStepsMap();
+      setStepsMap();
     }
   }
 

@@ -81,11 +81,5 @@ describe('setUserJourneyStepsMap', () => {
         },
       });
     });
-    it('correctly sets the finalSteps map', () => {
-      expect(userJourneyMap.finalSteps).toMatchObject({
-        load_fourth_screen_first_journey: ['first_journey'],
-        load_fourth_screen_second_journey: ['second_journey'],
-      });
-    });
   });
 });

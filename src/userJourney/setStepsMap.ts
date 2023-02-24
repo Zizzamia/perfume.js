@@ -3,7 +3,7 @@ import { IStepConfig, IUserJourney } from '../types';
 
 import { resetUserJourneyMap, userJourneyMap } from './userJourneyMap';
 
-export const setUserJourneyStepsMap = () => {
+export const setStepsMap = () => {
   if (!config.userJourneySteps) {
     return;
   }
@@ -32,26 +32,4 @@ export const setUserJourneyStepsMap = () => {
       }
     },
   );
-};
-
-export const setUserJourneyFinalStepsMap = () => {
-  if (!config.userJourneys) {
-    return;
-  }
-  // reset values
-  userJourneyMap.finalSteps = {};
-
-  Object.entries<IUserJourney<string> | IStepConfig<string>>(
-    config.userJourneys,
-  ).forEach(([key, value]) => {
-    if (key !== 'steps') {
-      const { steps } = value as IUserJourney<string>;
-      const finalStep = steps[steps.length - 1];
-      if (userJourneyMap.finalSteps[finalStep]) {
-        userJourneyMap.finalSteps[finalStep].push(key);
-      } else {
-        userJourneyMap.finalSteps[finalStep] = [key];
-      }
-    }
-  });
 };
