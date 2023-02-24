@@ -1,16 +1,12 @@
 import { config } from '../config';
 
 import { measureStep } from './measureStep';
-import {
-  userJourneyMap,
-  addActiveSteps,
-  removeActiveStep,
-} from './userJourneyMap';
+import { steps, addActiveSteps, removeActiveStep } from './steps';
 
 export const measureSteps = (endMark: string) => {
-  if (userJourneyMap.finalMarkToStepsMap[endMark]) {
+  if (steps.finalMarkToStepsMap[endMark]) {
     // this is an end mark so we delete the entry
-    const finalSteps = userJourneyMap.finalMarkToStepsMap[endMark];
+    const finalSteps = steps.finalMarkToStepsMap[endMark];
     Object.keys(finalSteps).forEach(startMark => {
       const steps = finalSteps[startMark];
       steps.forEach(removeActiveStep);
@@ -26,5 +22,5 @@ export const measureSteps = (endMark: string) => {
   } else {
     addActiveSteps(endMark);
   }
-  config.onMarkJourney?.(endMark, Object.keys(userJourneyMap.activeSteps));
+  config.onMarkStep?.(endMark, Object.keys(steps.active));
 };

@@ -2,14 +2,14 @@
  * @jest-environment jsdom
  */
 import { WP } from '../../src/constants';
-import mock from '.././_mock';
+import mock from '../_mock';
 import Perfume from '../../src/perfume';
-import { markJourney } from '../../src/userJourney/markJourney';
+import { markStep } from '../../src/steps/markStep';
 import { config } from '../../src/config';
 
-import { testConfig } from '../userJourneyTestConstants';
+import { testConfig } from '../stepsTestConstants';
 
-describe('measureUserJourneyStep', () => {
+describe('measureStep', () => {
   let spy: jest.SpyInstance;
   let analyticsTrackerSpy: jest.SpyInstance;
   let measureSpy: jest.SpyInstance;
@@ -31,12 +31,12 @@ describe('measureUserJourneyStep', () => {
       config.analyticsTracker = () => {};
       spy = jest.spyOn(WP, 'mark');
       analyticsTrackerSpy = jest.spyOn(config, 'analyticsTracker');
-      markJourney('start_navigate_to_second_screen_first_journey');
+      markStep('start_navigate_to_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith(
         'mark.start_navigate_to_second_screen_first_journey',
       );
-      markJourney('start_navigate_to_third_screen_first_journey');
+      markStep('start_navigate_to_third_screen_first_journey');
       expect(spy.mock.calls.length).toBe(2);
       expect(spy).toHaveBeenLastCalledWith(
         'mark.start_navigate_to_third_screen_first_journey',
@@ -51,7 +51,7 @@ describe('measureUserJourneyStep', () => {
       spy = jest.spyOn(WP, 'mark');
       measureSpy = jest.spyOn(WP, 'measure');
       analyticsTrackerSpy = jest.spyOn(config, 'analyticsTracker');
-      markJourney('start_navigate_to_second_screen_first_journey');
+      markStep('start_navigate_to_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith(
         'mark.start_navigate_to_second_screen_first_journey',
@@ -100,7 +100,7 @@ describe('measureUserJourneyStep', () => {
         return [entries[name]] ?? [];
       });
       // ========== Mock Data end ==========
-      markJourney('loaded_second_screen_first_journey');
+      markStep('loaded_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(2);
       expect(spy).toHaveBeenLastCalledWith(
         'mark.loaded_second_screen_first_journey',

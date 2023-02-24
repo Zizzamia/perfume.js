@@ -4,11 +4,11 @@
 import { WP } from '../../src/constants';
 import mock from '../_mock';
 import Perfume from '../../src/perfume';
-import { userJourneyMap } from '../../src/userJourney/userJourneyMap';
+import { steps } from '../../src/steps/steps';
 
-import { testConfig } from '../userJourneyTestConstants';
+import { testConfig } from '../stepsTestConstants';
 
-describe('setUserJourneyStepsMap', () => {
+describe('setSteps', () => {
   beforeEach(() => {
     (WP as any) = mock.performance();
     const perfume = new Perfume(testConfig);
@@ -16,7 +16,7 @@ describe('setUserJourneyStepsMap', () => {
 
   describe('correctly sets each map', () => {
     it('correctly sets the finalMarkToStepsMap map', () => {
-      expect(userJourneyMap.finalMarkToStepsMap).toMatchObject({
+      expect(steps.finalMarkToStepsMap).toMatchObject({
         loaded_first_screen_first_journey: {
           launch: ['load_first_screen_first_journey'],
         },
@@ -56,7 +56,7 @@ describe('setUserJourneyStepsMap', () => {
       });
     });
     it('correctly sets the startMarkToStepsMap map', () => {
-      expect(userJourneyMap.startMarkToStepsMap).toMatchObject({
+      expect(steps.startMarkToStepsMap).toMatchObject({
         launch: {
           load_first_screen_first_journey: true,
           load_first_screen_second_journey: true,

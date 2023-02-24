@@ -93,12 +93,10 @@ export interface IPerfumeConfig {
   maxTime: number;
   // web-vitals report options
   reportOptions: WebVitalsReportOptions;
-  // UserJourney Definitions
-  userJourneys?: IUserJourneyConfig;
-  // UserJourney Step definitions
-  userJourneySteps?: IUserJourneyStepsConfig;
+  // Steps definitions
+  steps?: IStepsConfig;
   // Callback that will run each time a mark is called
-  onMarkJourney?: (mark: string, steps: string[]) => void;
+  onMarkStep?: (mark: string, steps: string[]) => void;
 }
 
 export interface IPerfumeOptions {
@@ -111,12 +109,10 @@ export interface IPerfumeOptions {
   maxMeasureTime?: number;
   // web-vitals report options
   reportOptions?: WebVitalsReportOptions;
-  // UserJourney Definitions
-  userJourneys?: IUserJourneyConfig;
-  // UserJourney Step definitions
-  userJourneySteps?: IUserJourneyStepsConfig;
+  // Steps definitions
+  steps?: IStepsConfig;
   // Callback that will run each time a mark is called
-  onMarkJourney?: (mark: string, steps: string[]) => void;
+  onMarkStep?: (mark: string, steps: string[]) => void;
 }
 
 export interface IMetricMap {
@@ -243,12 +239,12 @@ export enum IThresholdTier {
   unavoidable = 'unavoidable',
 }
 
-export type IUserJourneyThresholdConfig = IVitalsThresholds & IOutlierThreshold;
-export type IUserJourneyThresholds = {
-  [key in IThresholdTier]: IUserJourneyThresholdConfig;
+export type IStepsThresholdConfig = IVitalsThresholds & IOutlierThreshold;
+export type IStepsThresholds = {
+  [key in IThresholdTier]: IStepsThresholdConfig;
 };
 
-export type IUserJourney<Steps extends string> = {
+export type ISteps<Steps extends string> = {
   steps: Steps[];
 } & Partial<IOutlierThreshold>;
 
@@ -260,6 +256,4 @@ export type IStepConfig<Marks extends string> = {
   threshold: IThresholdTier;
 } & IStepMarks<Marks>;
 
-export type IUserJourneyConfig = Record<string, IUserJourney<string>>;
-
-export type IUserJourneyStepsConfig = Record<string, IStepConfig<string>>;
+export type IStepsConfig = Record<string, IStepConfig<string>>;

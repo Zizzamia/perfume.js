@@ -19,7 +19,7 @@ import { reportStorageEstimate } from './storageEstimate';
 import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
 import { getVitalsScore } from './vitalsScore';
-import { setStepsMap } from './userJourney/setStepsMap';
+import { setStepsMap } from './steps/setStepsMap';
 
 let ntbtTimeoutID = 0;
 
@@ -33,8 +33,8 @@ export default class Perfume {
     config.isElementTiming = !!options.elementTiming;
     config.maxTime = options.maxMeasureTime || config.maxTime;
     config.reportOptions = options.reportOptions || config.reportOptions;
-    config.userJourneySteps = options.userJourneySteps;
-    config.onMarkJourney = options.onMarkJourney;
+    config.steps = options.steps;
+    config.onMarkStep = options.onMarkStep;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!isPerformanceSupported()) {
@@ -68,8 +68,8 @@ export default class Perfume {
     if (WN && WN.storage && typeof WN.storage.estimate === 'function') {
       WN.storage.estimate().then(reportStorageEstimate);
     }
-    // initializing User Journeys if present
-    if (config.userJourneySteps) {
+    // initializing Steps if present
+    if (config.steps) {
       setStepsMap();
     }
   }

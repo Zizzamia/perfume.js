@@ -2,16 +2,16 @@
  * @jest-environment jsdom
  */
 import { WP } from '../../src/constants';
-import mock from '.././_mock';
+import mock from '../_mock';
 import Perfume from '../../src/perfume';
-import { markJourney } from '../../src/userJourney/markJourney';
+import { markStep } from '../../src/steps/markStep';
 import { config } from '../../src/config';
 
-import { testConfig } from '../userJourneyTestConstants';
+import { testConfig } from '../stepsTestConstants';
 
-describe('markJourney', () => {
+describe('markStep', () => {
   let spy: jest.SpyInstance;
-  let onMarkJourneySpy: jest.SpyInstance;
+  let onMarkStepSpy: jest.SpyInstance;
 
   beforeEach(() => {
     (WP as any) = mock.performance();
@@ -25,20 +25,20 @@ describe('markJourney', () => {
     }
   });
 
-  describe('callback markJourney', () => {
+  describe('callback onMarkStep', () => {
     it('start and finish one single step', () => {
-      config.onMarkJourney = () => {};
-      onMarkJourneySpy = jest.spyOn(config, 'onMarkJourney');
+      config.onMarkStep = () => {};
+      onMarkStepSpy = jest.spyOn(config, 'onMarkStep');
       // start with the first mark
-      markJourney('start_navigate_to_second_screen_first_journey');
+      markStep('start_navigate_to_second_screen_first_journey');
 
-      expect(onMarkJourneySpy).toHaveBeenCalledWith(
+      expect(onMarkStepSpy).toHaveBeenCalledWith(
         'start_navigate_to_second_screen_first_journey',
         ['load_second_screen_first_journey'],
       );
 
-      markJourney('loaded_second_screen_first_journey');
-      expect(onMarkJourneySpy).toHaveBeenLastCalledWith(
+      markStep('loaded_second_screen_first_journey');
+      expect(onMarkStepSpy).toHaveBeenLastCalledWith(
         'loaded_second_screen_first_journey',
         ['load_second_screen_first_journey'],
       );

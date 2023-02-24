@@ -1,20 +1,20 @@
-export const userJourneyMap = {
+export const steps = {
   finalMarkToStepsMap: {} as Record<string, Record<string, string[]>>,
   startMarkToStepsMap: {} as Record<string, Record<string, boolean>>,
-  activeSteps: {} as Record<string, boolean>,
+  active: {} as Record<string, boolean>,
 };
 
 /**
  * This method allows to add new steps by passing the start mark
  */
 export const addActiveSteps = (startMark: string) => {
-  const newSteps = userJourneyMap.startMarkToStepsMap[startMark] ?? [];
+  const newSteps = steps.startMarkToStepsMap[startMark] ?? [];
   // adding the new steps to the active map
   Object.keys(newSteps).forEach(step => {
-    if (userJourneyMap.activeSteps[step]) {
+    if (steps.active[step]) {
       return;
     } else {
-      userJourneyMap.activeSteps[step] = true;
+      steps.active[step] = true;
     }
   });
 };
@@ -23,16 +23,16 @@ export const addActiveSteps = (startMark: string) => {
  * Removes one step from active steps
  */
 export const removeActiveStep = (step: string) => {
-  delete userJourneyMap.activeSteps[step];
+  delete steps.active[step];
 };
 
 export const resetActiveSteps = () => {
-  userJourneyMap.activeSteps = {};
+  steps.active = {};
 };
 
-export const resetUserJourneyMap = () => {
+export const resetSteps = () => {
   // reset all values
-  userJourneyMap.startMarkToStepsMap = {};
-  userJourneyMap.finalMarkToStepsMap = {};
+  steps.startMarkToStepsMap = {};
+  steps.finalMarkToStepsMap = {};
   resetActiveSteps();
 };

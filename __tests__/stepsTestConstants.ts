@@ -1,14 +1,14 @@
 /* istanbul ignore file */
 
 import {
-  IUserJourneyThresholds,
+  IStepsThresholds,
   IPerfumeOptions,
   IPerfumeConfig,
   IThresholdTier,
-  IUserJourneyStepsConfig,
+  IStepsConfig,
 } from '../src/types';
 
-export const STEP_THRESHOLDS: IUserJourneyThresholds = {
+export const STEP_THRESHOLDS: IStepsThresholds = {
   [IThresholdTier.instant]: {
     vitalsThresholds: [100, 200],
     maxOutlierThreshold: 10000,
@@ -31,7 +31,7 @@ export const STEP_THRESHOLDS: IUserJourneyThresholds = {
   },
 };
 
-const userJourneySteps: IUserJourneyStepsConfig = {
+const steps: IStepsConfig = {
   load_second_screen_first_journey: {
     threshold: IThresholdTier.instant,
     marks: [
@@ -81,8 +81,8 @@ const userJourneySteps: IUserJourneyStepsConfig = {
 };
 
 export const testConfig: IPerfumeOptions = {
-  userJourneySteps,
-  onMarkJourney: jest.fn(),
+  steps,
+  onMarkStep: jest.fn(),
 };
 
 export type TestConfig = IPerfumeConfig;

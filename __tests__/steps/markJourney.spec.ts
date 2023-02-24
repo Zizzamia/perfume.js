@@ -2,14 +2,14 @@
  * @jest-environment jsdom
  */
 import { WP } from '../../src/constants';
-import mock from '.././_mock';
+import mock from '../_mock';
 import Perfume from '../../src/perfume';
-import { markJourney } from '../../src/userJourney/markJourney';
-import { userJourneyMap } from '../../src/userJourney/userJourneyMap';
+import { markStep } from '../../src/steps/markStep';
+import { steps } from '../../src/steps/steps';
 
-import { testConfig } from '../userJourneyTestConstants';
+import { testConfig } from '../stepsTestConstants';
 
-describe('markJourney', () => {
+describe('markStep', () => {
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
@@ -24,22 +24,22 @@ describe('markJourney', () => {
     }
   });
 
-  describe('markJourney()', () => {
+  describe('markStep()', () => {
     it('correctly sets the activeSteps maps', () => {
       spy = jest.spyOn(WP, 'mark');
-      markJourney('start_navigate_to_second_screen_first_journey');
+      markStep('start_navigate_to_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith(
         'mark.start_navigate_to_second_screen_first_journey',
       );
-      expect(userJourneyMap.activeSteps).toMatchObject({
+      expect(steps.active).toMatchObject({
         load_second_screen_first_journey: true,
       });
     });
 
-    it('using the markJourneyOnce function should call WP.mark with the journey name', () => {
+    it('using the markStepOnce function should call WP.mark with the journey name', () => {
       spy = jest.spyOn(WP, 'mark');
-      markJourney('start_navigate_to_second_screen_first_journey');
+      markStep('start_navigate_to_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith(
         'mark.start_navigate_to_second_screen_first_journey',

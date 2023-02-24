@@ -1,7 +1,7 @@
 import {
   IPerfumeData,
   IThresholdTier,
-  IUserJourneyThresholds,
+  IStepsThresholds,
   IVitalsScore,
 } from './types';
 
@@ -9,7 +9,7 @@ const rtScore = [100, 200];
 const tbtScore = [200, 600];
 const ntbtScore = [200, 600];
 
-export const STEP_THRESHOLDS: IUserJourneyThresholds = {
+export const STEP_THRESHOLDS: IStepsThresholds = {
   [IThresholdTier.instant]: {
     vitalsThresholds: [100, 200],
     maxOutlierThreshold: 10000,

@@ -10,35 +10,31 @@ export const measureStep = (
   startMark: string,
   endMark: string,
 ) => {
-  const journeyStepMetricName = S + step;
+  const stepMetricName = S + step;
   const startMarkExists = WP.getEntriesByName(M + startMark).length > 0;
   const endMarkExists = WP.getEntriesByName(M + endMark).length > 0;
-  if (!endMarkExists || !config.userJourneySteps) {
+  if (!endMarkExists || !config.steps) {
     return;
   }
 
   const { maxOutlierThreshold, vitalsThresholds } =
-    STEP_THRESHOLDS[config.userJourneySteps[step].threshold];
+    STEP_THRESHOLDS[config.steps[step].threshold];
 
   if (!startMarkExists) {
     return;
   }
-  const journeyStepMeasure = WP.measure(
-    journeyStepMetricName,
-    M + startMark,
-    M + endMark,
-  );
-  const { duration } = journeyStepMeasure;
+  const stepMeasure = WP.measure(stepMetricName, M + startMark, M + endMark);
+  const { duration } = stepMeasure;
   if (duration <= maxOutlierThreshold) {
     const score = getRating(duration, vitalsThresholds);
     // Do not want to measure or log negative metrics
     if (duration >= 0) {
       reportPerf(step, duration, score, { category: 'step' }, undefined);
       WP.measure(`step.${step}_vitals_${score}`, {
-        start: journeyStepMeasure.startTime + journeyStepMeasure.duration,
-        end: journeyStepMeasure.startTime + journeyStepMeasure.duration,
+        start: stepMeasure.startTime + stepMeasure.duration,
+        end: stepMeasure.startTime + stepMeasure.duration,
         detail: {
-          type: 'userJourneyStepVital',
+          type: 'stepVital',
           duration,
         },
       });
