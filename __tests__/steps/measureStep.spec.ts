@@ -116,7 +116,7 @@ describe('measureStep', () => {
         {
           detail: {
             duration: 100,
-            type: 'userJourneyStepVital',
+            type: 'stepVital',
           },
           end: 100,
           start: 100,
@@ -131,7 +131,7 @@ describe('measureStep', () => {
         navigationType: undefined,
         navigatorInformation: {
           deviceMemory: 0,
-          hardwareConcurrency: 8,
+          hardwareConcurrency: 12,
           isLowEndDevice: false,
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
