@@ -97,8 +97,6 @@ export interface IPerfumeConfig {
   userJourneys?: IUserJourneyConfig;
   // UserJourney Step definitions
   userJourneySteps?: IUserJourneyStepsConfig;
-  // Highest value accepted for a journey length
-  journeyMaxOutlierThreshold?: number;
   // Callback that will run each time a mark is called
   onMarkJourney?: (mark: string, steps: string[]) => void;
 }
@@ -117,8 +115,6 @@ export interface IPerfumeOptions {
   userJourneys?: IUserJourneyConfig;
   // UserJourney Step definitions
   userJourneySteps?: IUserJourneyStepsConfig;
-  // Highest value accepted for a journey length
-  journeyMaxOutlierThreshold?: number;
   // Callback that will run each time a mark is called
   onMarkJourney?: (mark: string, steps: string[]) => void;
 }

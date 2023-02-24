@@ -15,7 +15,7 @@ describe('markJourney', () => {
 
   beforeEach(() => {
     (WP as any) = mock.performance();
-    const perfume = new Perfume(testConfig);
+    new Perfume(testConfig);
   });
 
   afterEach(() => {

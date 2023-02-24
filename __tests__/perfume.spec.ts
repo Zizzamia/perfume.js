@@ -91,12 +91,6 @@ describe('Perfume', () => {
       });
     });
 
-    it('should run with userJourney config version C', () => {
-      new Perfume({
-        journeyMaxOutlierThreshold: 10000,
-      });
-    });
-
     it('should run with userJourney config version D', () => {
       new Perfume({
         onMarkJourney: () => {},

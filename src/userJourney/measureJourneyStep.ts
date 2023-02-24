@@ -5,8 +5,7 @@ import { config } from '../config';
 import { getJourneyMarkName } from './getJourneyMarkName';
 import { getJourneyStepMetricName } from './getJourneyStepMetricName';
 import { USER_JOURNEY_THRESHOLDS } from '../vitalsScore';
-import { getRating } from './getRating';
-import { measureJourney } from './measureJourney';
+import { getRating } from '../vitalsScore';
 import { getJourneyStepVitalMetricName } from './getJourneyStepVitalMetricName';
 
 export const measureJourneyStep = (
@@ -44,7 +43,6 @@ export const measureJourneyStep = (
         { category: 'user_journey_step' },
         undefined,
       );
-      measureJourney(step);
     }
   } else if (startMarkExists) {
     const journeyStepMeasure = WP.measure(
@@ -78,6 +76,5 @@ export const measureJourneyStep = (
         });
       }
     }
-    measureJourney(step);
   }
 };

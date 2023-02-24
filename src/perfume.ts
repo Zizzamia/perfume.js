@@ -38,7 +38,6 @@ export default class Perfume {
     config.reportOptions = options.reportOptions || config.reportOptions;
     config.userJourneySteps = options.userJourneySteps;
     config.userJourneys = options.userJourneys;
-    config.journeyMaxOutlierThreshold = options.journeyMaxOutlierThreshold;
     config.onMarkJourney = options.onMarkJourney;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported

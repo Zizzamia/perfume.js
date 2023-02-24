@@ -38,6 +38,16 @@ export const webVitalsScore: Record<string, number[]> = {
   NTBT: ntbtScore,
 };
 
+export const getRating = (
+  value: number,
+  vitalsThresholds: [number, number],
+): IVitalsScore => {
+  if (value <= vitalsThresholds[0]) {
+    return 'good';
+  }
+  return value <= vitalsThresholds[1] ? 'needsImprovement' : 'poor';
+};
+
 export const getVitalsScore = (
   measureName: string,
   value: IPerfumeData,

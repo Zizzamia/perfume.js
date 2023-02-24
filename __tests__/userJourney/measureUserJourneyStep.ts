@@ -9,7 +9,7 @@ import { config } from '../../src/config';
 
 import { testConfig } from '../userJourneyTestConstants';
 
-describe('markJourneyOnce', () => {
+describe('measureUserJourneyStep', () => {
   let spy: jest.SpyInstance;
   let analyticsTrackerSpy: jest.SpyInstance;
   let measureSpy: jest.SpyInstance;
@@ -132,7 +132,7 @@ describe('markJourneyOnce', () => {
         navigationType: undefined,
         navigatorInformation: {
           deviceMemory: 0,
-          hardwareConcurrency: 12,
+          hardwareConcurrency: 8,
           isLowEndDevice: false,
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
@@ -186,7 +186,7 @@ describe('markJourneyOnce', () => {
         navigationType: undefined,
         navigatorInformation: {
           deviceMemory: 0,
-          hardwareConcurrency: 12,
+          hardwareConcurrency: 8,
           isLowEndDevice: false,
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
