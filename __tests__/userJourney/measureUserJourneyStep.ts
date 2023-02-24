@@ -13,11 +13,10 @@ describe('measureUserJourneyStep', () => {
   let spy: jest.SpyInstance;
   let analyticsTrackerSpy: jest.SpyInstance;
   let measureSpy: jest.SpyInstance;
-  let onMarkJourneySpy: jest.SpyInstance;
 
   beforeEach(() => {
     (WP as any) = mock.performance();
-    const perfume = new Perfume(testConfig);
+    new Perfume(testConfig);
   });
 
   afterEach(() => {
@@ -129,60 +128,6 @@ describe('measureUserJourneyStep', () => {
         metricName: 'load_second_screen_first_journey',
         rating: 'good',
         data: 100,
-        navigationType: undefined,
-        navigatorInformation: {
-          deviceMemory: 0,
-          hardwareConcurrency: 8,
-          isLowEndDevice: false,
-          isLowEndExperience: false,
-          serviceWorkerStatus: 'unsupported',
-        },
-      });
-    });
-
-    it('should run analyticsTracker with duration starting from App launch', async () => {
-      config.analyticsTracker = () => {};
-      spy = jest.spyOn(WP, 'mark');
-      measureSpy = jest.spyOn(WP, 'measure');
-      analyticsTrackerSpy = jest.spyOn(config, 'analyticsTracker');
-      // ============ Mock Data ============
-      jest.spyOn(WP, 'getEntriesByName').mockImplementation(name =>
-        name === 'mark.loaded_first_screen_first_journey'
-          ? [
-              {
-                name: 'mark.loaded_first_screen_first_journey',
-                entryType: 'mark',
-                duration: 0,
-                startTime: 0,
-                toJSON: jest.fn(),
-              },
-            ]
-          : [],
-      );
-      jest.spyOn(WP, 'measure').mockImplementationOnce(() => ({
-        name: 'mark.loaded_first_screen_first_journey',
-        entryType: 'mark',
-        duration: 2000,
-        startTime: 0,
-        toJSON: jest.fn(),
-        detail: '',
-      }));
-
-      // ========== Mock Data end ==========
-      markJourney('loaded_first_screen_first_journey');
-      // we wait for promises to flush since getting the launch time duration is async
-      await Promise.resolve();
-      expect(spy.mock.calls.length).toBe(1);
-      expect(spy).toHaveBeenLastCalledWith(
-        'mark.loaded_first_screen_first_journey',
-      );
-      expect(measureSpy).toHaveBeenCalledTimes(1);
-      expect(analyticsTrackerSpy).toHaveBeenCalledTimes(1);
-      expect(analyticsTrackerSpy).toHaveBeenLastCalledWith({
-        metricName: 'load_first_screen_first_journey',
-        rating: 'good',
-        data: 2000,
-        attribution: { category: 'step' },
         navigationType: undefined,
         navigatorInformation: {
           deviceMemory: 0,

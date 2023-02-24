@@ -6,8 +6,7 @@ export const userJourneyMap = {
 };
 
 /**
- * this method allows to add new steps by passing the start mark
- *
+ * This method allows to add new steps by passing the start mark
  */
 export const addActiveSteps = (startMark: string) => {
   const newSteps = userJourneyMap.startMarkToStepsMap[startMark] ?? [];
@@ -22,8 +21,7 @@ export const addActiveSteps = (startMark: string) => {
 };
 
 /**
- * removes one step from active steps
- *
+ * Removes one step from active steps
  */
 export const removeActiveStep = (step: string) => {
   delete userJourneyMap.activeSteps[step];

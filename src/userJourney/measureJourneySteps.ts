@@ -15,7 +15,6 @@ export const measureJourneySteps = (endMark: string) => {
     Object.keys(finalSteps).forEach(startMark => {
       const steps = finalSteps[startMark];
       steps.forEach(removeActiveStep);
-
       Promise.all(
         steps.map(async step => {
           // measure

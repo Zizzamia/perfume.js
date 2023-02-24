@@ -27,7 +27,7 @@ import {
 let ntbtTimeoutID = 0;
 
 export default class Perfume {
-  v = '8.3.0';
+  v = '8.4.0';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options
@@ -37,7 +37,6 @@ export default class Perfume {
     config.maxTime = options.maxMeasureTime || config.maxTime;
     config.reportOptions = options.reportOptions || config.reportOptions;
     config.userJourneySteps = options.userJourneySteps;
-    config.userJourneys = options.userJourneys;
     config.onMarkJourney = options.onMarkJourney;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
@@ -73,7 +72,7 @@ export default class Perfume {
       WN.storage.estimate().then(reportStorageEstimate);
     }
     // initializing User Journeys if present
-    if (config.userJourneys && config.userJourneySteps) {
+    if (config.userJourneySteps) {
       setUserJourneyStepsMap();
       setUserJourneyFinalStepsMap();
     }

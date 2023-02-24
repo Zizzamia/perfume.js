@@ -9,7 +9,7 @@ const rtScore = [100, 200];
 const tbtScore = [200, 600];
 const ntbtScore = [200, 600];
 
-export const USER_JOURNEY_THRESHOLDS: IUserJourneyThresholds = {
+export const STEP_THRESHOLDS: IUserJourneyThresholds = {
   [IThresholdTier.instant]: {
     vitalsThresholds: [100, 200],
     maxOutlierThreshold: 10000,

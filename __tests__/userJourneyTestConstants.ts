@@ -5,11 +5,10 @@ import {
   IPerfumeOptions,
   IPerfumeConfig,
   IThresholdTier,
-  IUserJourneyConfig,
   IUserJourneyStepsConfig,
 } from '../src/types';
 
-export const USER_JOURNEY_THRESHOLDS: IUserJourneyThresholds = {
+export const STEP_THRESHOLDS: IUserJourneyThresholds = {
   [IThresholdTier.instant]: {
     vitalsThresholds: [100, 200],
     maxOutlierThreshold: 10000,
@@ -31,30 +30,8 @@ export const USER_JOURNEY_THRESHOLDS: IUserJourneyThresholds = {
     maxOutlierThreshold: 20000,
   },
 };
-const userJourneys: IUserJourneyConfig = {
-  first_journey: {
-    steps: [
-      'load_first_screen_first_journey',
-      'load_second_screen_first_journey',
-      'load_third_screen_first_journey',
-      'load_fourth_screen_first_journey',
-    ],
-  },
-  second_journey: {
-    steps: [
-      'load_first_screen_second_journey',
-      'load_second_screen_second_journey',
-      'load_third_screen_second_journey',
-      'load_fourth_screen_second_journey',
-    ],
-  },
-};
 
 const userJourneySteps: IUserJourneyStepsConfig = {
-  load_first_screen_first_journey: {
-    threshold: IThresholdTier.unavoidable,
-    marks: ['launch', 'loaded_first_screen_first_journey'],
-  },
   load_second_screen_first_journey: {
     threshold: IThresholdTier.instant,
     marks: [
@@ -104,7 +81,6 @@ const userJourneySteps: IUserJourneyStepsConfig = {
 };
 
 export const testConfig: IPerfumeOptions = {
-  userJourneys,
   userJourneySteps,
   onMarkJourney: jest.fn(),
 };
