@@ -35,12 +35,12 @@ describe('measureUserJourneyStep', () => {
       markJourney('start_navigate_to_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith(
-        'user_journey_mark.start_navigate_to_second_screen_first_journey',
+        'mark.start_navigate_to_second_screen_first_journey',
       );
       markJourney('start_navigate_to_third_screen_first_journey');
       expect(spy.mock.calls.length).toBe(2);
       expect(spy).toHaveBeenLastCalledWith(
-        'user_journey_mark.start_navigate_to_third_screen_first_journey',
+        'mark.start_navigate_to_third_screen_first_journey',
       );
       expect(analyticsTrackerSpy).toHaveBeenCalledTimes(0);
     });
@@ -55,13 +55,13 @@ describe('measureUserJourneyStep', () => {
       markJourney('start_navigate_to_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith(
-        'user_journey_mark.start_navigate_to_second_screen_first_journey',
+        'mark.start_navigate_to_second_screen_first_journey',
       );
       // ============ Mock Data ============
       jest.spyOn(WP, 'getEntriesByName').mockImplementationOnce(name => {
         const entries: Record<string, PerformanceEntry> = {
-          'user_journey_mark.start_navigate_to_second_screen_first_journey': {
-            name: 'user_journey_mark.start_navigate_to_second_screen_first_journey',
+          'mark.start_navigate_to_second_screen_first_journey': {
+            name: 'mark.start_navigate_to_second_screen_first_journey',
             entryType: 'mark',
             duration: 0,
             startTime: 0,
@@ -71,7 +71,7 @@ describe('measureUserJourneyStep', () => {
         return [entries[name]] ?? [];
       });
       jest.spyOn(WP, 'measure').mockImplementationOnce(() => ({
-        name: 'user_journey_mark.start_navigate_to_second_screen_first_journey',
+        name: 'mark.start_navigate_to_second_screen_first_journey',
         entryType: 'mark',
         duration: 100,
         startTime: 0,
@@ -83,15 +83,15 @@ describe('measureUserJourneyStep', () => {
       // ============ Mock Data ============
       jest.spyOn(WP, 'getEntriesByName').mockImplementationOnce(name => {
         const entries: Record<string, PerformanceEntry> = {
-          'user_journey_mark.start_navigate_to_second_screen_first_journey': {
-            name: 'user_journey_mark.start_navigate_to_second_screen_first_journey',
+          'mark.start_navigate_to_second_screen_first_journey': {
+            name: 'mark.start_navigate_to_second_screen_first_journey',
             entryType: 'mark',
             duration: 0,
             startTime: 0,
             toJSON: jest.fn(),
           },
-          'user_journey_mark.loaded_second_screen_first_journey': {
-            name: 'user_journey_mark.loaded_second_screen_first_journey',
+          'mark.loaded_second_screen_first_journey': {
+            name: 'mark.loaded_second_screen_first_journey',
             entryType: 'mark',
             duration: 0,
             startTime: 100,
@@ -104,13 +104,13 @@ describe('measureUserJourneyStep', () => {
       markJourney('loaded_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(2);
       expect(spy).toHaveBeenLastCalledWith(
-        'user_journey_mark.loaded_second_screen_first_journey',
+        'mark.loaded_second_screen_first_journey',
       );
       expect(measureSpy).toHaveBeenCalledTimes(2);
       expect(measureSpy).toHaveBeenCalledWith(
         'user_journey_step.load_second_screen_first_journey',
-        'user_journey_mark.start_navigate_to_second_screen_first_journey',
-        'user_journey_mark.loaded_second_screen_first_journey',
+        'mark.start_navigate_to_second_screen_first_journey',
+        'mark.loaded_second_screen_first_journey',
       );
       expect(measureSpy).toHaveBeenLastCalledWith(
         'user_journey_step.load_second_screen_first_journey_vitals_good',
@@ -147,10 +147,10 @@ describe('measureUserJourneyStep', () => {
       analyticsTrackerSpy = jest.spyOn(config, 'analyticsTracker');
       // ============ Mock Data ============
       jest.spyOn(WP, 'getEntriesByName').mockImplementation(name =>
-        name === 'user_journey_mark.loaded_first_screen_first_journey'
+        name === 'mark.loaded_first_screen_first_journey'
           ? [
               {
-                name: 'user_journey_mark.loaded_first_screen_first_journey',
+                name: 'mark.loaded_first_screen_first_journey',
                 entryType: 'mark',
                 duration: 0,
                 startTime: 0,
@@ -160,7 +160,7 @@ describe('measureUserJourneyStep', () => {
           : [],
       );
       jest.spyOn(WP, 'measure').mockImplementationOnce(() => ({
-        name: 'user_journey_mark.loaded_first_screen_first_journey',
+        name: 'mark.loaded_first_screen_first_journey',
         entryType: 'mark',
         duration: 2000,
         startTime: 0,
@@ -174,7 +174,7 @@ describe('measureUserJourneyStep', () => {
       await Promise.resolve();
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenLastCalledWith(
-        'user_journey_mark.loaded_first_screen_first_journey',
+        'mark.loaded_first_screen_first_journey',
       );
       expect(measureSpy).toHaveBeenCalledTimes(1);
       expect(analyticsTrackerSpy).toHaveBeenCalledTimes(1);

@@ -1,6 +1,5 @@
-import { WP } from '../constants';
+import { M, WP } from '../constants';
 
-import { getJourneyMarkName } from './getJourneyMarkName';
 import { measureJourneySteps } from './measureJourneySteps';
 
 /**
@@ -9,13 +8,12 @@ import { measureJourneySteps } from './measureJourneySteps';
  * already exist when called.
  *
  * The generated mark name has the following format:
- * `user_journey_mark.${mark}`
+ * `mark.${mark}`
  *
  */
 export const markJourneyOnce = (mark: string) => {
-  const markName = getJourneyMarkName(mark);
-  if (WP.getEntriesByName(markName).length === 0) {
-    WP.mark(markName);
+  if (WP.getEntriesByName(M + mark).length === 0) {
+    WP.mark(M + mark);
     measureJourneySteps(mark);
   }
 };

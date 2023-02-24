@@ -31,7 +31,7 @@ describe('markJourneyOnce', () => {
       markJourneyOnce('start_navigate_to_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith(
-        'user_journey_mark.start_navigate_to_second_screen_first_journey',
+        'mark.start_navigate_to_second_screen_first_journey',
       );
     });
   });

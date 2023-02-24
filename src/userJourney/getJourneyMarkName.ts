@@ -1,2 +1,1 @@
-export const getJourneyMarkName = (mark: string): string =>
-  `user_journey_mark.${mark}`;
+export const getMarkName = (mark: string): string => `mark.${mark}`;

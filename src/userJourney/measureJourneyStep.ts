@@ -1,8 +1,7 @@
-import { WP } from '../constants';
+import { M, WP } from '../constants';
 import { reportPerf } from '../reportPerf';
 import { config } from '../config';
 
-import { getJourneyMarkName } from './getJourneyMarkName';
 import { getJourneyStepMetricName } from './getJourneyStepMetricName';
 import { USER_JOURNEY_THRESHOLDS } from '../vitalsScore';
 import { getRating } from '../vitalsScore';
@@ -14,12 +13,10 @@ export const measureJourneyStep = (
   endMark: string,
 ) => {
   const journeyStepMetricName = getJourneyStepMetricName(step);
-  const startMarkName = getJourneyMarkName(startMark);
-  const endMarkName = getJourneyMarkName(endMark);
 
   const isLaunchJourney = startMark === 'launch';
-  const startMarkExists = WP.getEntriesByName(startMarkName).length > 0;
-  const endMarkExists = WP.getEntriesByName(endMarkName).length > 0;
+  const startMarkExists = WP.getEntriesByName(M + startMark).length > 0;
+  const endMarkExists = WP.getEntriesByName(M + endMark).length > 0;
   if (!endMarkExists || !config.userJourneySteps) {
     return;
   }
@@ -31,7 +28,7 @@ export const measureJourneyStep = (
     const duration = 0;
     const journeyStepMeasure = WP.measure(journeyStepMetricName, {
       duration,
-      end: endMarkName,
+      end: M + endMark,
     });
     const score = getRating(duration, vitalsThresholds);
     // Do not want to measure or log negative metrics
@@ -47,8 +44,8 @@ export const measureJourneyStep = (
   } else if (startMarkExists) {
     const journeyStepMeasure = WP.measure(
       journeyStepMetricName,
-      startMarkName,
-      endMarkName,
+      M + startMark,
+      M + endMark,
     );
     const { duration } = journeyStepMeasure;
     if (duration <= maxOutlierThreshold) {
