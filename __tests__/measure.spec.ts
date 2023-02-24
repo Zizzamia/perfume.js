@@ -17,7 +17,7 @@ describe('measure', () => {
       spy.mockReset();
       spy.mockRestore();
     }
-  })
+  });
 
   describe('.performanceMeasure()', () => {
     it('should return entry.duration when entryType is not measure', () => {
@@ -26,7 +26,7 @@ describe('measure', () => {
       const value = measure.performanceMeasure('metricName');
       expect(value).toEqual(-1);
     });
-  
+
     it('should return -1 when entryType is a measure', () => {
       const value = measure.performanceMeasure('metricName');
       expect(value).toEqual(12346);

@@ -24,7 +24,7 @@ export const getNavigatorInfo = (): INavigatorInfo => {
             : 'supported'
           : 'unsupported',
       isLowEndDevice: getIsLowEndDevice(),
-      isLowEndExperience: getIsLowEndExperience(et, sd)
+      isLowEndExperience: getIsLowEndExperience(et, sd),
     };
   }
   return {};

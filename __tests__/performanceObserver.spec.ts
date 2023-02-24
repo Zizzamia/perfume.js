@@ -7,7 +7,6 @@ import mock from './_mock';
 
 describe('observe', () => {
   let spy: jest.SpyInstance;
-  
 
   beforeEach(() => {
     (WP as any) = mock.performance();

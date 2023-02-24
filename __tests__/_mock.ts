@@ -4,9 +4,9 @@ import { IPerformanceEntry } from '../src/types';
 
 export const MockPerformanceEntry: IPerformanceEntry = {
   duration: 123,
-  entryType: "paint",
+  entryType: 'paint',
   loadTime: 456,
-  name: "entry name",
+  name: 'entry name',
   renderTime: 789,
   startTime: 987,
 };

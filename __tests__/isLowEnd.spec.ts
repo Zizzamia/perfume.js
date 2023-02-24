@@ -1,12 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-import { WN  } from '../src/constants';
+import { WN } from '../src/constants';
 import { getIsLowEndDevice, getIsLowEndExperience } from '../src/isLowEnd';
 import mock from './_mock';
 
 describe('isLowEnd', () => {
-
   beforeEach(() => {
     (WN as any) = mock.navigator();
   });
@@ -22,8 +21,8 @@ describe('isLowEnd', () => {
     });
 
     it('should return true when deviceMemory is 4', () => {
-       (WN as any).hardwareConcurrency = 8;
-       (WN as any).deviceMemory = 4;
+      (WN as any).hardwareConcurrency = 8;
+      (WN as any).deviceMemory = 4;
       expect(getIsLowEndDevice()).toEqual(true);
     });
   });

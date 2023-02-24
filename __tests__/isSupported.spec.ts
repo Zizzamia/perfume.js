@@ -1,12 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-import { WP  } from '../src/constants';
+import { WP } from '../src/constants';
 import { isPerformanceSupported } from '../src/isSupported';
 import mock from './_mock';
 
 describe('isSupported', () => {
-
   beforeEach(() => {
     (WP as any) = mock.performance();
     (window as any).PerformanceObserver = mock.PerformanceObserver;

@@ -31,6 +31,6 @@ export const getIsLowEndExperience = (
       break;
     default:
       // Data Saver preference
-      return (getIsLowEndDevice() || sd);
+      return getIsLowEndDevice() || sd;
   }
 };

@@ -2,17 +2,14 @@ import { WP } from '../constants';
 import { reportPerf } from '../reportPerf';
 import { config } from '../config';
 
-
 import { getJourneyMarkName } from './getJourneyMarkName';
 import { getJourneyStepMetricName } from './getJourneyStepMetricName';
-import { USER_JOURNEY_THRESHOLDS } from './userJourneyConstants';
+import { USER_JOURNEY_THRESHOLDS } from '../vitalsScore';
 import { getRating } from './getRating';
 import { measureJourney } from './measureJourney';
 import { getJourneyStepVitalMetricName } from './getJourneyStepVitalMetricName';
 
-
-
-export const measureJourneyStep =  (
+export const measureJourneyStep = (
   step: string,
   startMark: string,
   endMark: string,
@@ -44,7 +41,7 @@ export const measureJourneyStep =  (
         step,
         journeyStepMeasure.duration,
         score,
-        {category: 'user_journey_step'},
+        { category: 'user_journey_step' },
         undefined,
       );
       measureJourney(step);
@@ -60,7 +57,13 @@ export const measureJourneyStep =  (
       const score = getRating(duration, vitalsThresholds);
       // Do not want to measure or log negative metrics
       if (duration >= 0) {
-        reportPerf(step, duration, score, {category: 'user_journey_step'}, undefined);
+        reportPerf(
+          step,
+          duration,
+          score,
+          { category: 'user_journey_step' },
+          undefined,
+        );
         const journeyStepVitalMetricName = getJourneyStepVitalMetricName(
           step,
           score,

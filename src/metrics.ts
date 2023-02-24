@@ -22,4 +22,3 @@ export const tbt = {
 export const ntbt = {
   value: 0,
 };
-

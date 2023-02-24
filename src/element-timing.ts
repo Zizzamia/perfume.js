@@ -1,10 +1,7 @@
 import { logMetric } from './log';
 import { IPerformanceEntry } from './types';
 
-
-export const initElementTiming = (
-  performanceEntries: IPerformanceEntry[],
-) => {
+export const initElementTiming = (performanceEntries: IPerformanceEntry[]) => {
   performanceEntries.forEach(entry => {
     if (entry.identifier) {
       logMetric({
@@ -13,7 +10,7 @@ export const initElementTiming = (
         },
         name: 'ET',
         rating: null,
-        value: entry.startTime
+        value: entry.startTime,
       });
     }
   });

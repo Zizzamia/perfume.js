@@ -9,7 +9,7 @@ import * as observe from '../src/observe';
 import { visibility } from '../src/onVisibilityChange';
 import { IThresholdTier } from '../src/types';
 import { config } from '../src/config';
-import { testConfig } from './userJourneyTestConstants'
+import { testConfig } from './userJourneyTestConstants';
 import mock from './_mock';
 
 describe('Perfume', () => {
@@ -60,66 +60,74 @@ describe('Perfume', () => {
 
     it('should run with userJourney config version A', () => {
       new Perfume({
-        userJourneys: {    
+        userJourneys: {
           first_journey: {
             steps: [
-            'load_first_screen_first_journey',
-            'load_second_screen_first_journey',
-            'load_third_screen_first_journey',
-            'load_fourth_screen_first_journey',
-          ],
-        }}
+              'load_first_screen_first_journey',
+              'load_second_screen_first_journey',
+              'load_third_screen_first_journey',
+              'load_fourth_screen_first_journey',
+            ],
+          },
+        },
       });
     });
 
     it('should run with userJourney config version B', () => {
       new Perfume({
-        userJourneySteps: { 
+        userJourneySteps: {
           load_first_screen_first_journey: {
             threshold: IThresholdTier.unavoidable,
             marks: ['launch', 'loaded_first_screen_first_journey'],
           },
           load_second_screen_first_journey: {
             threshold: IThresholdTier.instant,
-            marks: ['start_navigate_to_second_screen_first_journey', 'loaded_second_screen_first_journey'],
+            marks: [
+              'start_navigate_to_second_screen_first_journey',
+              'loaded_second_screen_first_journey',
+            ],
           },
-        }
+        },
       });
     });
 
     it('should run with userJourney config version C', () => {
       new Perfume({
-        journeyMaxOutlierThreshold: 10000
+        journeyMaxOutlierThreshold: 10000,
       });
     });
 
     it('should run with userJourney config version D', () => {
       new Perfume({
-        onMarkJourney: () => {}
+        onMarkJourney: () => {},
       });
     });
 
     it('should run with userJourney config version E', () => {
       new Perfume({
-        userJourneys: {    
+        userJourneys: {
           first_journey: {
             steps: [
-            'load_first_screen_first_journey',
-            'load_second_screen_first_journey',
-            'load_third_screen_first_journey',
-            'load_fourth_screen_first_journey',
-          ],
-        }},
-        userJourneySteps: { 
+              'load_first_screen_first_journey',
+              'load_second_screen_first_journey',
+              'load_third_screen_first_journey',
+              'load_fourth_screen_first_journey',
+            ],
+          },
+        },
+        userJourneySteps: {
           load_first_screen_first_journey: {
             threshold: IThresholdTier.unavoidable,
             marks: ['launch', 'loaded_first_screen_first_journey'],
           },
           load_second_screen_first_journey: {
             threshold: IThresholdTier.instant,
-            marks: ['start_navigate_to_second_screen_first_journey', 'loaded_second_screen_first_journey'],
+            marks: [
+              'start_navigate_to_second_screen_first_journey',
+              'loaded_second_screen_first_journey',
+            ],
           },
-        }
+        },
       });
     });
 
@@ -186,11 +194,7 @@ describe('Perfume', () => {
       perfume.start('metricName');
       perfume.end('metricName');
       expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith(
-        'metricName',
-        12346,
-        {},
-      );
+      expect(spy).toHaveBeenCalledWith('metricName', 12346, {});
     });
 
     it('should add metrics properly', () => {
@@ -240,7 +244,6 @@ describe('Perfume', () => {
       expect(spy).toHaveBeenCalledWith('mark_measure_moon_end');
     });
   });
-
 
   describe('.markNTBT()', () => {
     beforeEach(() => {

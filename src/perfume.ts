@@ -53,9 +53,7 @@ export default class Perfume {
     // Init visibilitychange listener
     if (typeof document.hidden !== 'undefined') {
       // Opera 12.10 and Firefox 18 and later support
-      document.addEventListener(
-        'visibilitychange', didVisibilityChange,
-      );
+      document.addEventListener('visibilitychange', didVisibilityChange);
     }
 
     const navigationTiming = getNavigationTiming();
@@ -76,7 +74,7 @@ export default class Perfume {
       WN.storage.estimate().then(reportStorageEstimate);
     }
     // initializing User Journeys if present
-    if(config.userJourneys && config.userJourneySteps){
+    if (config.userJourneys && config.userJourneySteps) {
       setUserJourneyStepsMap();
       setUserJourneyFinalStepsMap();
     }

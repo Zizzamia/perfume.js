@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { WN  } from '../src/constants';
+import { WN } from '../src/constants';
 import { getNavigatorInfo } from '../src/getNavigatorInfo';
 import mock from './_mock';
 

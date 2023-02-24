@@ -232,34 +232,38 @@ export type INavigationType =
   | 'back-forward-cache'
   | 'prerender';
 
-  export interface IVitalsThresholds {
-    vitalsThresholds: [number, number];
-  }
-  export interface IOutlierThreshold {
-    maxOutlierThreshold: number;
-  }
+export interface IVitalsThresholds {
+  vitalsThresholds: [number, number];
+}
+export interface IOutlierThreshold {
+  maxOutlierThreshold: number;
+}
 
-  export enum IThresholdTier {
-    instant = 'instant',
-    quick = 'quick',
-    moderate = 'moderate',
-    slow = 'slow',
-    unavoidable = 'unavoidable',
-  }
+export enum IThresholdTier {
+  instant = 'instant',
+  quick = 'quick',
+  moderate = 'moderate',
+  slow = 'slow',
+  unavoidable = 'unavoidable',
+}
 
-  export type IUserJourneyThresholdConfig = IVitalsThresholds & IOutlierThreshold;
-  export type IUserJourneyThresholds = {
-    [key in IThresholdTier]: IUserJourneyThresholdConfig;
-  };
+export type IUserJourneyThresholdConfig = IVitalsThresholds & IOutlierThreshold;
+export type IUserJourneyThresholds = {
+  [key in IThresholdTier]: IUserJourneyThresholdConfig;
+};
 
-  export type IUserJourney<Steps extends string> = {
-    steps: Steps[];
-  } & Partial<IOutlierThreshold>;
+export type IUserJourney<Steps extends string> = {
+  steps: Steps[];
+} & Partial<IOutlierThreshold>;
 
-  export interface IStepMarks<Marks extends string> { marks: [Marks | 'launch', Marks] }
+export interface IStepMarks<Marks extends string> {
+  marks: [Marks | 'launch', Marks];
+}
 
-  export type IStepConfig<Marks extends string> = { threshold: IThresholdTier } & IStepMarks<Marks>;
+export type IStepConfig<Marks extends string> = {
+  threshold: IThresholdTier;
+} & IStepMarks<Marks>;
 
-  export type IUserJourneyConfig = Record<string, IUserJourney<string>>;
+export type IUserJourneyConfig = Record<string, IUserJourney<string>>;
 
-  export type IUserJourneyStepsConfig = Record<string, IStepConfig<string>>;
+export type IUserJourneyStepsConfig = Record<string, IStepConfig<string>>;

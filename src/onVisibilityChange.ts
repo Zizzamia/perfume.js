@@ -8,7 +8,7 @@ export const visibility = {
  * the page gets hidden, because it's important to not
  * use the wrong "hidden" value when send timing or logging.
  */
-export const didVisibilityChange = function() {
+export const didVisibilityChange = function () {
   visibility.isHidden = false;
   if (document.hidden) {
     visibility.isHidden = document.hidden;

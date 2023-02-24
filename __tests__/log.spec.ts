@@ -65,7 +65,7 @@ describe('log', () => {
         attribution: {},
         name: 'FCP',
         rating: 'good',
-        value: 40000
+        value: 40000,
       });
       expect(spy.mock.calls.length).toEqual(0);
     });
@@ -93,9 +93,9 @@ describe('log', () => {
 
       expect(tbtSpy.mock.calls.length).toEqual(1);
       expect(tbtSpy).toHaveBeenCalledWith([
-        { 'name': 'first-paint', 'startTime': 1 },
-        { 'name': 'first-contentful-paint', 'startTime': 1 },
-        { 'duration': 4, 'name': 'mousedown' }
+        { name: 'first-paint', startTime: 1 },
+        { name: 'first-contentful-paint', startTime: 1 },
+        { duration: 4, name: 'mousedown' },
       ]);
     });
   });

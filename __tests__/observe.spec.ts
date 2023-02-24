@@ -4,9 +4,7 @@
 import { config } from '../src/config';
 import { WP } from '../src/constants';
 import { initResourceTiming } from '../src/resourceTiming';
-import {
-  initPerformanceObserver,
-} from '../src/observe';
+import { initPerformanceObserver } from '../src/observe';
 import { initElementTiming } from '../src/element-timing';
 import * as po from '../src/performanceObserver';
 import mock from './_mock';
@@ -63,15 +61,9 @@ describe('observe', () => {
 
         it('should only call po for element timing when is enabled', () => {
           if (config.isElementTiming) {
-            expect(spy).toHaveBeenCalledWith(
-              'element',
-              initElementTiming,
-            );
+            expect(spy).toHaveBeenCalledWith('element', initElementTiming);
           } else {
-            expect(spy).not.toHaveBeenCalledWith(
-              'element',
-              initElementTiming,
-            );
+            expect(spy).not.toHaveBeenCalledWith('element', initElementTiming);
           }
         });
       },

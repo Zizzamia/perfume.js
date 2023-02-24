@@ -36,7 +36,7 @@ describe('markJourney', () => {
         load_second_screen_first_journey: true,
       });
     });
-    
+
     it('using the markJourneyOnce function should call WP.mark with the journey name', () => {
       spy = jest.spyOn(WP, 'mark');
       markJourney('start_navigate_to_second_screen_first_journey');

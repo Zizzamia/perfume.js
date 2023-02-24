@@ -5,10 +5,7 @@ export const initTotalBlockingTime = (
   performanceEntries: IPerformanceEntry[],
 ): void => {
   performanceEntries.forEach(entry => {
-    if (
-      entry.name !== 'self' ||
-      entry.startTime < fcp.value
-    ) {
+    if (entry.name !== 'self' || entry.startTime < fcp.value) {
       return;
     }
     const blockingTime = entry.duration - 50;

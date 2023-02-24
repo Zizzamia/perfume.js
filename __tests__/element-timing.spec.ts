@@ -17,7 +17,9 @@ describe('element-timing', () => {
 
     it('should call logMetric when entries have an identifier', () => {
       spy = jest.spyOn(log, 'logMetric');
-      initElementTiming([{...mock.PerformanceEntry, ...{identifier: "elPageTitle"}}]);
+      initElementTiming([
+        { ...mock.PerformanceEntry, ...{ identifier: 'elPageTitle' } },
+      ]);
       expect(spy.mock.calls.length).toEqual(1);
     });
   });

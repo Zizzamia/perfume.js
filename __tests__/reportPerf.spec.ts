@@ -14,7 +14,6 @@ describe('reportPerf', () => {
     visibility.isHidden = false;
     (WN as any) = mock.navigator();
     (WP as any) = mock.performance();
-    
   });
 
   describe('reportPerf()', () => {
@@ -117,13 +116,7 @@ describe('reportPerf', () => {
       (W as any).requestIdleCallback = (cb: Function) => tasks.push(cb);
 
       const immediatelyReportedMetrics = ['CLS', 'INP'];
-      const delayedMetrics = [
-        'TTFB',
-        'FCP',
-        'LCP',
-        'FID',
-        'TBT',
-      ];
+      const delayedMetrics = ['TTFB', 'FCP', 'LCP', 'FID', 'TBT'];
       const defaultData = {
         data: 123,
         attribution: {},
@@ -138,25 +131,29 @@ describe('reportPerf', () => {
         rating: 'good',
       };
 
-      [...immediatelyReportedMetrics, ...delayedMetrics].forEach((metric) => {
+      [...immediatelyReportedMetrics, ...delayedMetrics].forEach(metric => {
         reportPerf(metric, 123, 'good', {});
       });
 
       expect(spy.mock.calls).toEqual(
-        immediatelyReportedMetrics.map((metric) => ([{
-          metricName: metric, 
-          ...defaultData,
-        }]))
+        immediatelyReportedMetrics.map(metric => [
+          {
+            metricName: metric,
+            ...defaultData,
+          },
+        ]),
       );
 
       // run requestIdleCallback tasks
-      tasks.forEach((task) => task());
+      tasks.forEach(task => task());
 
       expect(spy.mock.calls).toEqual(
-        [...immediatelyReportedMetrics, ...delayedMetrics].map((metric) => ([{
-          metricName: metric, 
-          ...defaultData,
-        }]))
+        [...immediatelyReportedMetrics, ...delayedMetrics].map(metric => [
+          {
+            metricName: metric,
+            ...defaultData,
+          },
+        ]),
       );
     });
   });

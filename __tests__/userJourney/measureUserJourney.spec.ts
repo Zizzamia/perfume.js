@@ -175,8 +175,7 @@ describe('measureUserJourney', () => {
         metricName: 'load_third_screen_first_journey',
         rating: 'needsImprovement',
         data: 333,
-        attribution: {        category: 'user_journey_step',
-    },
+        attribution: { category: 'user_journey_step' },
         navigationType: undefined,
         navigatorInformation: {
           deviceMemory: 0,
@@ -194,18 +193,18 @@ describe('measureUserJourney', () => {
         metricName: 'first_journey',
         value: 10360,
         attribution: {
-            category: "user_journey",
+          category: 'user_journey',
         },
         data: 250,
         navigationType: undefined,
         navigatorInformation: {
-        deviceMemory: 0,
-        hardwareConcurrency: 12,
-        isLowEndDevice: false,
-        isLowEndExperience: false,
-        serviceWorkerStatus: "unsupported",
+          deviceMemory: 0,
+          hardwareConcurrency: 12,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported',
         },
-        rating: "poor",
+        rating: 'poor',
       });
     });
   });

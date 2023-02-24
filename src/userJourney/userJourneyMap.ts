@@ -9,7 +9,7 @@ export const userJourneyMap = {
  * this method allows to add new steps by passing the start mark
  *
  */
- export const addActiveSteps = (startMark: string) => {
+export const addActiveSteps = (startMark: string) => {
   const newSteps = userJourneyMap.startMarkToStepsMap[startMark] ?? [];
   // adding the new steps to the active map
   Object.keys(newSteps).forEach(step => {

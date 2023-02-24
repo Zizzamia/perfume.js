@@ -9,4 +9,5 @@ import { WP } from './constants';
  * Support: developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver
  * Support: developer.mozilla.org/en-US/docs/Web/API/Performance/getEntriesByType
  */
-export const isPerformanceSupported = (): boolean => WP && !!WP.getEntriesByType && !!WP.now && !!WP.mark;
+export const isPerformanceSupported = (): boolean =>
+  WP && !!WP.getEntriesByType && !!WP.now && !!WP.mark;

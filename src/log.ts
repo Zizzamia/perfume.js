@@ -27,7 +27,13 @@ export const logData = (
  * Dispatches the metric duration into internal logs
  * and the external time tracking service.
  */
-export const logMetric = ({attribution, name, rating, value, navigationType}: Metric): void => {
+export const logMetric = ({
+  attribution,
+  name,
+  rating,
+  value,
+  navigationType,
+}: Metric): void => {
   // TODO Add docs
   if (name === 'FCP') {
     fcp.value = value;
