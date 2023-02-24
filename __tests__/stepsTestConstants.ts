@@ -32,6 +32,10 @@ export const STEP_THRESHOLDS: IStepsThresholds = {
 };
 
 const steps: IStepsConfig = {
+  load_first_screen_first_journey: {
+    threshold: IThresholdTier.unavoidable,
+    marks: ['launch', 'loaded_first_screen_first_journey'],
+  },
   load_second_screen_first_journey: {
     threshold: IThresholdTier.instant,
     marks: [

@@ -8,10 +8,10 @@ export const measureSteps = (endMark: string) => {
     // this is an end mark so we delete the entry
     const finalSteps = steps.finalMarkToStepsMap[endMark];
     Object.keys(finalSteps).forEach(startMark => {
-      const steps = finalSteps[startMark];
-      steps.forEach(removeActiveStep);
+      const possibleSteps = finalSteps[startMark];
+      possibleSteps.forEach(removeActiveStep);
       Promise.all(
-        steps.map(async step => {
+        possibleSteps.map(async step => {
           // measure
           await measureStep(step, startMark, endMark);
         }),

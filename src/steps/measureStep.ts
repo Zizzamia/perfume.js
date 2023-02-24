@@ -2,8 +2,7 @@ import { M, S, WP } from '../constants';
 import { reportPerf } from '../reportPerf';
 import { config } from '../config';
 
-import { STEP_THRESHOLDS } from '../vitalsScore';
-import { getRating } from '../vitalsScore';
+import { STEP_THRESHOLDS, getRating } from '../vitalsScore';
 
 export const measureStep = (
   step: string,

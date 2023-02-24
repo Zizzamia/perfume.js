@@ -40,7 +40,7 @@ describe('markStep', () => {
       markStep('loaded_second_screen_first_journey');
       expect(onMarkStepSpy).toHaveBeenLastCalledWith(
         'loaded_second_screen_first_journey',
-        ['load_second_screen_first_journey'],
+        [],
       );
     });
   });
