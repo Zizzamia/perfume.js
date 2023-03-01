@@ -20,6 +20,8 @@ import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
 import { getVitalsScore } from './vitalsScore';
 import { setStepsMap } from './steps/setStepsMap';
+export { markStep } from './steps/markStep';
+export { markStepOnce } from './steps/markStepOnce';
 
 let ntbtTimeoutID = 0;
 
