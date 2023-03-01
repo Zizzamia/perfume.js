@@ -37,8 +37,7 @@ const createConfig = ({ output, min = false }) => {
       file: output.file,
       format: output.format,
       name: 'Perfume',
-      sourcemap: true,
-      exports: 'default',
+      sourcemap: true
     },
     watch: { include: 'dist/es/**' },
     plugins: plugins.filter(Boolean),

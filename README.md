@@ -75,13 +75,13 @@ npm (https://www.npmjs.com/package/perfume.js):
 You can import the generated bundle to use the whole library generated:
 
 ```javascript
-import Perfume from 'perfume.js';
+import { Perfume } from 'perfume.js';
 ```
 
 Universal Module Definition:
 
 ```javascript
-import Perfume from 'node_modules/perfume.js/dist/perfume.umd.min.js';
+import { Perfume } from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 ```
 
 <br />

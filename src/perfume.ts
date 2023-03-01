@@ -20,12 +20,10 @@ import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
 import { getVitalsScore } from './vitalsScore';
 import { setStepsMap } from './steps/setStepsMap';
-export { markStep } from './steps/markStep';
-export { markStepOnce } from './steps/markStepOnce';
 
 let ntbtTimeoutID = 0;
 
-export default class Perfume {
+class Perfume {
   v = '9.0.0-rc.2';
 
   constructor(options: IPerfumeOptions = {}) {
@@ -163,3 +161,7 @@ export default class Perfume {
     }, 2000);
   }
 }
+
+import { markStep } from './steps/markStep';
+import { markStepOnce } from './steps/markStepOnce';
+export { Perfume, markStep, markStepOnce };
