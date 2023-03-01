@@ -6,7 +6,7 @@
  * @license
  */
 import { config } from './config';
-import { W, WN, WP } from './constants';
+import { M, W, WN, WP } from './constants';
 import { getNavigationTiming } from './getNavigationTiming';
 import { getNetworkInformation } from './getNetworkInformation';
 import { isPerformanceSupported } from './isSupported';
@@ -20,6 +20,7 @@ import { IPerfumeOptions } from './types';
 import { roundByFour } from './utils';
 import { getVitalsScore } from './vitalsScore';
 import { setStepsMap } from './steps/setStepsMap';
+import { measureSteps } from './steps/measureSteps';
 
 let ntbtTimeoutID = 0;
 
@@ -160,4 +161,33 @@ export default class Perfume {
       ntbt.value = 0;
     }, 2000);
   }
+
+  /**
+   * Function which creates a step mark with a name generated
+   * from the provided mark when called.
+   *
+   * The generated mark name has the following format:
+   * `mark.${mark}`
+   *
+   */
+  markStep = (mark: string) => {
+    WP.mark(M + mark);
+    measureSteps(mark);
+  };
+
+  /**
+   * Function which creates a step mark with a name generated
+   * from the provided mark if a mark with the same name does not
+   * already exist when called.
+   *
+   * The generated mark name has the following format:
+   * `mark.${mark}`
+   *
+   */
+  markStepOnce = (mark: string) => {
+    if (WP.getEntriesByName(M + mark).length === 0) {
+      WP.mark(M + mark);
+      measureSteps(mark);
+    }
+  };
 }

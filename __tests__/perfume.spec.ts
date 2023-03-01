@@ -11,6 +11,7 @@ import { IThresholdTier } from '../src/types';
 import { config } from '../src/config';
 import { testConfig } from './stepsTestConstants';
 import mock from './_mock';
+import { steps } from '../src/steps/steps';
 
 describe('Perfume', () => {
   let perfume: Perfume;
@@ -223,6 +224,40 @@ describe('Perfume', () => {
       ntbt.value = 1234;
       perfume.markNTBT();
       expect(ntbt.value).toEqual(0);
+    });
+  });
+  describe('markStepOnce()', () => {
+    it('using the markJourneyOnce function should call WP.mark with the journey name', () => {
+      jest.spyOn(WP, 'getEntriesByName').mockImplementation(() => []);
+      spy = jest.spyOn(WP, 'mark');
+      perfume.markStepOnce('start_navigate_to_second_screen_first_journey');
+      expect(spy.mock.calls.length).toBe(1);
+      expect(spy).toHaveBeenCalledWith(
+        'mark.start_navigate_to_second_screen_first_journey',
+      );
+    });
+  });
+
+  describe('markStep()', () => {
+    it('correctly sets the activeSteps maps', () => {
+      spy = jest.spyOn(WP, 'mark');
+      perfume.markStep('start_navigate_to_second_screen_first_journey');
+      expect(spy.mock.calls.length).toBe(1);
+      expect(spy).toHaveBeenCalledWith(
+        'mark.start_navigate_to_second_screen_first_journey',
+      );
+      expect(steps.active).toMatchObject({
+        load_second_screen_first_journey: true,
+      });
+    });
+
+    it('using the markStepOnce function should call WP.mark with the journey name', () => {
+      spy = jest.spyOn(WP, 'mark');
+      perfume.markStep('start_navigate_to_second_screen_first_journey');
+      expect(spy.mock.calls.length).toBe(1);
+      expect(spy).toHaveBeenCalledWith(
+        'mark.start_navigate_to_second_screen_first_journey',
+      );
     });
   });
 });

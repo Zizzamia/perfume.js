@@ -4,7 +4,6 @@
 import { WP } from '../../src/constants';
 import mock from '../_mock';
 import Perfume from '../../src/perfume';
-import { markStep } from '../../src/steps/markStep';
 import { config } from '../../src/config';
 
 import { testConfig } from '../stepsTestConstants';
@@ -13,10 +12,11 @@ describe('measureStep', () => {
   let spy: jest.SpyInstance;
   let analyticsTrackerSpy: jest.SpyInstance;
   let measureSpy: jest.SpyInstance;
+  let perfume: Perfume;
 
   beforeEach(() => {
     (WP as any) = mock.performance();
-    new Perfume(testConfig);
+    perfume = new Perfume(testConfig);
   });
 
   afterEach(() => {
@@ -31,12 +31,12 @@ describe('measureStep', () => {
       config.analyticsTracker = () => {};
       spy = jest.spyOn(WP, 'mark');
       analyticsTrackerSpy = jest.spyOn(config, 'analyticsTracker');
-      markStep('start_navigate_to_second_screen_first_journey');
+      perfume.markStep('start_navigate_to_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith(
         'mark.start_navigate_to_second_screen_first_journey',
       );
-      markStep('start_navigate_to_third_screen_first_journey');
+      perfume.markStep('start_navigate_to_third_screen_first_journey');
       expect(spy.mock.calls.length).toBe(2);
       expect(spy).toHaveBeenLastCalledWith(
         'mark.start_navigate_to_third_screen_first_journey',
@@ -51,7 +51,7 @@ describe('measureStep', () => {
       spy = jest.spyOn(WP, 'mark');
       measureSpy = jest.spyOn(WP, 'measure');
       analyticsTrackerSpy = jest.spyOn(config, 'analyticsTracker');
-      markStep('start_navigate_to_second_screen_first_journey');
+      perfume.markStep('start_navigate_to_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(1);
       expect(spy).toHaveBeenCalledWith(
         'mark.start_navigate_to_second_screen_first_journey',
@@ -100,7 +100,7 @@ describe('measureStep', () => {
         return [entries[name]] ?? [];
       });
       // ========== Mock Data end ==========
-      markStep('loaded_second_screen_first_journey');
+      perfume.markStep('loaded_second_screen_first_journey');
       expect(spy.mock.calls.length).toBe(2);
       expect(spy).toHaveBeenLastCalledWith(
         'mark.loaded_second_screen_first_journey',
