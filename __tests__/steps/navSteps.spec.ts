@@ -6,9 +6,8 @@ import mock from '../_mock';
 import { Perfume } from '../../src/perfume';
 import { markStep } from '../../src/steps/markStep';
 import {
-  resetActiveSteps,
   getNavigationState,
-  resetNavigationSteps,
+  ,
 } from '../../src/steps/steps';
 import {
   getActiveStepsFromNavigationSteps,
@@ -24,8 +23,6 @@ describe('navSteps', () => {
   beforeEach(() => {
     (WP as any) = mock.performance();
     new Perfume(navigationTestConfig);
-    // resetActiveSteps();
-    // resetNavigationSteps();
   });
 
   afterEach(() => {

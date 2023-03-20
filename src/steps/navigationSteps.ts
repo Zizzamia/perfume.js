@@ -53,7 +53,6 @@ export const recordStartMark = (startMark: string) => {
 
   const newCurrentMark = currentMarks;
   newCurrentMark[startMark] = true;
-  console.log(`new current mark is${  JSON.stringify(newCurrentMark)}`)
   navigationSteps[lastNavIndex] = newCurrentMark;
 }
 

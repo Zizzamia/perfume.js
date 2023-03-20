@@ -148,7 +148,7 @@ const perfume = new Perfume({
         if( attribution?.category === 'step' ){
           myAnalyticsTool.track('stepTracking', {
             duration: data,
-            stepName: metricName
+            stepName: metricName,
             vitals_score: rating
           })
         }
