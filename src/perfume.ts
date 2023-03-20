@@ -35,6 +35,7 @@ class Perfume {
     config.reportOptions = options.reportOptions || config.reportOptions;
     config.steps = options.steps;
     config.onMarkStep = options.onMarkStep;
+    config.enableNavigationBasedActiveSteps = options.enableNavigationBasedActiveSteps;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!isPerformanceSupported()) {
@@ -164,4 +165,5 @@ class Perfume {
 
 import { markStep } from './steps/markStep';
 import { markStepOnce } from './steps/markStepOnce';
-export { Perfume, markStep, markStepOnce };
+import { incrementCujNavigation } from './steps/navigationSteps';
+export { Perfume, markStep, markStepOnce, incrementCujNavigation };

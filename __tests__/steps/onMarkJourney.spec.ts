@@ -3,7 +3,7 @@
  */
 import { WP } from '../../src/constants';
 import mock from '../_mock';
-import Perfume from '../../src/perfume';
+import { Perfume } from '../../src/perfume';
 import { markStep } from '../../src/steps/markStep';
 import { config } from '../../src/config';
 

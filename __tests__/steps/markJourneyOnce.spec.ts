@@ -4,7 +4,7 @@
  */
 import { WP } from '../../src/constants';
 import mock from '../_mock';
-import Perfume from '../../src/perfume';
+import { Perfume } from '../../src/perfume';
 import { markStepOnce } from '../../src/steps/markStepOnce';
 
 import { testConfig } from '../stepsTestConstants';
