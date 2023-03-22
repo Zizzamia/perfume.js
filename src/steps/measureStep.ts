@@ -28,7 +28,7 @@ export const measureStep = (
     const score = getRating(duration, vitalsThresholds);
     // Do not want to measure or log negative metrics
     if (duration >= 0) {
-      reportPerf(step, duration, score, { category: 'step' }, undefined);
+      reportPerf('userJourneyStep', duration, score, { stepName: step }, undefined);
       WP.measure(`step.${step}_vitals_${score}`, {
         start: stepMeasure.startTime + stepMeasure.duration,
         end: stepMeasure.startTime + stepMeasure.duration,

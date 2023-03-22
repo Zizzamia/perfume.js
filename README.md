@@ -143,15 +143,14 @@ const perfume = new Perfume({
       case 'elPageTitle':
         myAnalyticsTool.track('elementTimingPageTitle', { duration: data });
         break;
+      case 'userJourneyStep': 
+        myAnalyticsTool.track('userJourneyStep', {
+          duration: data,
+          stepName: attribution.step_name,
+          vitals_score: rating
+        });
+        break;
       default:
-        // Step tracking
-        if( attribution?.category === 'step' ){
-          myAnalyticsTool.track('stepTracking', {
-            duration: data,
-            stepName: metricName,
-            vitals_score: rating
-          })
-        }
         myAnalyticsTool.track(metricName, { duration: data });
         break;
     }
@@ -353,7 +352,7 @@ const perfume = new Perfume({
 // Perfume.js: elHeroLogo 1234.00 ms
 ```
 
-### Step Tracking
+### User Journey Step Tracking
 
 A Step represents a slice of time in the User Journey where the user is blocked by **system time**. System time is time the system is blocking the user. For example, the time it takes to navigate between screens or fetch critical information from the server. This should not be confused with **cognitive time**, which is the time the user spends thinking about what to do next. User Journey steps should only cover system time.
 
@@ -381,18 +380,10 @@ const ScreenA = () => {
 
 // Marking the end of the step
 const ScreenB = () => {
-  const { viewer } = useLazyLoadQuery(
-    graphql`
-      query ScreenBQuery {
-        viewer {
-          userProperties {
-            name
-          }
-        }
-      }
-    `,
-    {},
-  );
+  const { viewer } = fetch("http://example.com/userInfo")
+                     .then((response) => response.json())
+                     .then((data) => data);
+
   const {name} = viewer.userProperties;
 
   useEffect(() => {
@@ -407,7 +398,7 @@ const ScreenB = () => {
 ```
 
 #### Defining Steps
-In order for us to be able to track metrics for Steps, we need to configure the steps and provide them when initializing Perfume.
+In order for Perfume to be able to track metrics for Steps, we need to configure the steps and provide them when initializing Perfume.
 
 Below you can find an example of how to do this.
 
