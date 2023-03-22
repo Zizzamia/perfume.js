@@ -11,7 +11,7 @@ import {
 } from '../../src/steps/steps';
 import {
   getActiveStepsFromNavigationSteps,
-  incrementCujNavigation,
+  incrementUjNavigation,
 } from '../../src/steps/navigationSteps';
 
 import { navigationTestConfig } from '../stepsTestConstants';
@@ -55,9 +55,9 @@ describe('navSteps', () => {
     });
 
     it('incrementCujNavigation the navigation state on page navigations', () => {
-      incrementCujNavigation();
+      incrementUjNavigation();
       expect(getNavigationState()).toMatchObject({ 0: {} });
-      incrementCujNavigation();
+      incrementUjNavigation();
       expect(getNavigationState()).toMatchObject({ 0: {}, 1: {} });
     });
   });
@@ -88,7 +88,7 @@ describe('navSteps', () => {
 
     it('returns the active steps for the last navigation step', () => {
       // load app
-      incrementCujNavigation();
+      incrementUjNavigation();
 
       markStep('start_navigate_to_second_screen_first_journey');
       expect(getNavigationState()).toMatchObject({
@@ -104,10 +104,10 @@ describe('navSteps', () => {
     it('returns the active steps for the last 2 navigation steps', () => {
       markStep('start_navigate_to_second_screen_first_journey');
       // load some next page
-      incrementCujNavigation();
+      incrementUjNavigation();
       markStep('start_navigate_to_third_screen_first_journey');
 
-      incrementCujNavigation();
+      incrementUjNavigation();
       markStep('start_navigate_to_fourth_screen_first_journey');
       expect(getNavigationState()).toMatchObject({
         0: {
@@ -123,15 +123,15 @@ describe('navSteps', () => {
 
     it('does not return stale steps - i.e. steps older than the last 2 navigations', () => {
       // navigate to some page
-      incrementCujNavigation();
+      incrementUjNavigation();
       markStep('start_navigate_to_second_screen_first_journey');
 
       // navigate to next page
-      incrementCujNavigation();
+      incrementUjNavigation();
       markStep('start_navigate_to_third_screen_first_journey');
 
       // navigate to a third page
-      incrementCujNavigation();
+      incrementUjNavigation();
       markStep('start_navigate_to_fourth_screen_first_journey');
 
       expect(getNavigationState()).toMatchObject({
