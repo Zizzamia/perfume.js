@@ -6,8 +6,7 @@ import mock from '../_mock';
 import { Perfume } from '../../src/perfume';
 import { markStep } from '../../src/steps/markStep';
 import {
-  getNavigationState,
-  ,
+  getNavigationState
 } from '../../src/steps/steps';
 import {
   getActiveStepsFromNavigationSteps,

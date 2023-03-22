@@ -23,7 +23,7 @@ export const setStepsMap = () => {
         steps.finalMarkToStepsMap[endMark] = { [startMark]: [step] };
       } else {
         // insert when end mark and start mark are both present
-        const currentSteps = steps.finalMarkToStepsMap[endMark][startMark];
+        const currentSteps = steps.finalMarkToStepsMap[endMark][startMark] || [];
         currentSteps.push(step);
         steps.finalMarkToStepsMap[endMark][startMark] = currentSteps;
       }

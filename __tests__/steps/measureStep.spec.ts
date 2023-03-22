@@ -124,8 +124,8 @@ describe('measureStep', () => {
       );
       expect(analyticsTrackerSpy).toHaveBeenCalledTimes(1);
       expect(analyticsTrackerSpy).toHaveBeenCalledWith({
-        attribution: { category: 'step' },
-        metricName: 'load_second_screen_first_journey',
+        attribution: { stepName: 'load_second_screen_first_journey' },
+        metricName: 'userJourneyStep',
         rating: 'good',
         data: 100,
         navigationType: undefined,
