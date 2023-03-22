@@ -165,5 +165,5 @@ class Perfume {
 
 import { markStep } from './steps/markStep';
 import { markStepOnce } from './steps/markStepOnce';
-import { incrementCujNavigation } from './steps/navigationSteps';
-export { Perfume, markStep, markStepOnce, incrementCujNavigation };
+import { incrementUjNavigation } from './steps/navigationSteps';
+export { Perfume, markStep, markStepOnce, incrementUjNavigation };
