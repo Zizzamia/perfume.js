@@ -29,7 +29,7 @@ export const measureSteps = (mark: string) => {
     recordStartMark(mark);
     addActiveSteps(mark);
   }
-  if (config.enableNavigationBasedActiveSteps) {
+  if (config.enableNavigationTracking) {
     const navigationBasedActiveSteps = getActiveStepsFromNavigationSteps();
     config.onMarkStep?.(mark, Object.keys(navigationBasedActiveSteps));
   } else {

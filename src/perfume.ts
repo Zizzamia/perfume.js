@@ -35,7 +35,7 @@ class Perfume {
     config.reportOptions = options.reportOptions || config.reportOptions;
     config.steps = options.steps;
     config.onMarkStep = options.onMarkStep;
-    config.enableNavigationBasedActiveSteps = options.enableNavigationBasedActiveSteps;
+    config.enableNavigationTracking = options.enableNavigationTracking;
 
     // Exit from Perfume when basic Web Performance APIs aren't supported
     if (!isPerformanceSupported()) {

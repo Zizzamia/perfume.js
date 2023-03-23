@@ -94,11 +94,11 @@ const steps: IStepsConfig = {
 export const testConfig: IPerfumeOptions = {
   steps,
   onMarkStep: jest.fn(),
+  enableNavigationTracking: false,
 };
 export const navigationTestConfig: IPerfumeOptions = {
   steps,
   onMarkStep: jest.fn(),
-  enableNavigationBasedActiveSteps: true
 };
 
 export type TestConfig = IPerfumeConfig;
