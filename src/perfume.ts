@@ -1,5 +1,5 @@
 /**
- * Perfume.js v9.0.0-rc.2 (http://zizzamia.github.io/perfume)
+ * Perfume.js v9.0.0-rc.3 (http://zizzamia.github.io/perfume)
  * Copyright 2022 Leonardo Zizzamia (https://github.com/Zizzamia/perfume.js/graphs/contributors)
  * Licensed under MIT (https://github.com/Zizzamia/perfume.js/blob/master/LICENSE)
  *
@@ -24,7 +24,7 @@ import { setStepsMap } from './steps/setStepsMap';
 let ntbtTimeoutID = 0;
 
 class Perfume {
-  v = '9.0.0-rc.2';
+  v = '9.0.0-rc.3';
 
   constructor(options: IPerfumeOptions = {}) {
     // Extend default config with external options

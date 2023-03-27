@@ -1,5 +1,9 @@
 # Changelog
 
+## 9.0.0 ()
+
+RC. IN-PROGRESS
+
 ## 8.4.0 (2023-2-3)
 
 * **fix:** disable `requestIdleCallback` for CLS and INP reports (#212)
