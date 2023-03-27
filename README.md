@@ -92,7 +92,7 @@ Metrics like **Navigation Timing**, **Network Information**, **TTFB**, **FCP**, 
 🚀 Visit [perfumejs.com](http://perfumejs.com/) for a live demo on how the metrics work. 🌕
 
 ```javascript
-const perfume = new Perfume({
+initPerfume({
   analyticsTracker: options => {
     const {
       attribution,
@@ -261,7 +261,7 @@ If this method is called before the 2s window ends; it will trigger a new NTBT m
 import { createBrowserHistory } from 'history';
 export const history = createBrowserHistory();
 
-const perfume = new Perfume({
+initPerfume({
   analyticsTracker: ({ metricName, data }) => {
     myAnalyticsTool.track(metricName, data);
   })
@@ -282,7 +282,7 @@ Resource Timing collects performance metrics for document-dependent resources. S
 Perfume helps expose all PerformanceResourceTiming entries and groups data data consumption by Kb used.
 
 ```javascript
-const perfume = new Perfume({
+initPerfume({
   resourceTiming: true,
   analyticsTracker: ({ metricName, data }) => {
     myAnalyticsTool.track(metricName, data);
@@ -296,14 +296,14 @@ const perfume = new Perfume({
 **Performance.mark** ([User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API)) is used to create an application-defined peformance entry in the browser's performance entry buffer.
 
 ```javascript
-const perfume = new Perfume({
+initPerfume({
   analyticsTracker: ({ metricName, data }) => {
     myAnalyticsTool.track(metricName, data);
   })
 });
-perfume.start('fibonacci');
+start('fibonacci');
 fibonacci(400);
-perfume.end('fibonacci');
+end('fibonacci');
 // Perfume.js: fibonacci 0.14 ms
 ```
 
@@ -314,7 +314,7 @@ perfume.end('fibonacci');
 This metric mark the point, immediately after creating a **new component**, when the browser renders pixels to the screen.
 
 ```javascript
-const perfume = new Perfume({
+initPerfume({
   analyticsTracker: ({ metricName, data }) => {
     myAnalyticsTool.track(metricName, data);
   })
@@ -341,7 +341,7 @@ Track when image elements and text nodes are displayed on screen using the [emer
 ```
 
 ```javascript
-const perfume = new Perfume({
+initPerfume({
   elementTiming: true,
   analyticsTracker: ({ metricName, data }) => {
     myAnalyticsTool.track(metricName, data);
@@ -414,7 +414,7 @@ export const steps = {
   },
 };
 
-new Perfume ({ steps });
+initPerfume({ steps });
 
 ``` 
 
@@ -499,7 +499,7 @@ Have fun ✨
 
 ```javascript
 const metricNames = ['TTFB', 'RT', 'FCP', 'LCP', 'FID', 'CLS', 'TBT'];
-new Perfume({
+initPerfume({
   analyticsTracker: ({ attribution, metricName, data, navigatorInformation, rating, navigationType }) => {
     if (metricNames.includes(metricName)) {
       ga('send', 'event', {

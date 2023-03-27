@@ -4,7 +4,7 @@
  */
 import { WP } from '../../src/constants';
 import mock from '../_mock';
-import { Perfume } from '../../src/perfume';
+import { initPerfume } from '../../src/initPerfume';
 import { markStepOnce } from '../../src/steps/markStepOnce';
 
 import { testConfig } from '../stepsTestConstants';
@@ -14,7 +14,7 @@ describe('markStepOnce', () => {
 
   beforeEach(() => {
     (WP as any) = mock.performance();
-    const perfume = new Perfume(testConfig);
+    initPerfume(testConfig);
   });
 
   afterEach(() => {

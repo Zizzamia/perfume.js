@@ -3,7 +3,7 @@
  */
 import { WP } from '../../src/constants';
 import mock from '../_mock';
-import { Perfume } from '../../src/perfume';
+import { initPerfume } from '../../src/initPerfume';
 import { markStep } from '../../src/steps/markStep';
 import { config } from '../../src/config';
 
@@ -16,7 +16,7 @@ describe('measureStep', () => {
 
   beforeEach(() => {
     (WP as any) = mock.performance();
-    new Perfume(testConfig);
+    initPerfume(testConfig);
   });
 
   afterEach(() => {

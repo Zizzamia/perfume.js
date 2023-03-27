@@ -3,7 +3,7 @@
  */
 import { WP } from '../../src/constants';
 import mock from '../_mock';
-import { Perfume } from '../../src/perfume';
+import { initPerfume } from '../../src/initPerfume';
 import { steps } from '../../src/steps/steps';
 
 import { testConfig } from '../stepsTestConstants';
@@ -11,7 +11,7 @@ import { testConfig } from '../stepsTestConstants';
 describe('setSteps', () => {
   beforeEach(() => {
     (WP as any) = mock.performance();
-    const perfume = new Perfume(testConfig);
+    initPerfume(testConfig);
   });
 
   describe('correctly sets each map', () => {

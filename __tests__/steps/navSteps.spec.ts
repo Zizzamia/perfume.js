@@ -3,7 +3,7 @@
  */
 import { WP } from '../../src/constants';
 import mock from '../_mock';
-import { Perfume } from '../../src/perfume';
+import { initPerfume } from '../../src/initPerfume';
 import { markStep } from '../../src/steps/markStep';
 import {
   getNavigationState
@@ -21,7 +21,7 @@ describe('navSteps', () => {
 
   beforeEach(() => {
     (WP as any) = mock.performance();
-    new Perfume(navigationTestConfig);
+    initPerfume(navigationTestConfig);
   });
 
   afterEach(() => {

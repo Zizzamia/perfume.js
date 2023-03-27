@@ -2,9 +2,7 @@
  * @jest-environment jsdom
  */
 import { C, WN, WP } from '../src/constants';
-import * as log from '../src/log';
-import { metrics, ntbt } from '../src/metrics';
-import { Perfume } from '../src/perfume';
+import { initPerfume } from '../src/initPerfume';
 import * as observe from '../src/observe';
 import { visibility } from '../src/onVisibilityChange';
 import { IThresholdTier } from '../src/types';
@@ -13,13 +11,12 @@ import { testConfig } from './stepsTestConstants';
 import mock from './_mock';
 
 describe('Perfume', () => {
-  let perfume: Perfume;
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
     (WN as any) = mock.navigator();
     (WP as any) = mock.performance();
-    perfume = new Perfume({ ...mock.defaultPerfumeConfig });
+    initPerfume({ ...mock.defaultPerfumeConfig });
     (window as any).PerformanceObserver = mock.PerformanceObserver;
     (C as any).log = (n: any) => n;
     (window as any).console.warn = (n: any) => n;
@@ -36,30 +33,30 @@ describe('Perfume', () => {
 
   describe('constructor', () => {
     it('should run with config version A', () => {
-      new Perfume({});
+      initPerfume({});
     });
 
     it('should run with config version B', () => {
-      new Perfume({
+      initPerfume({
         resourceTiming: true,
       });
     });
 
     it('should run with config version C', () => {
-      new Perfume({
+      initPerfume({
         elementTiming: true,
       });
     });
 
     it('should run with config version D', () => {
-      new Perfume({
+      initPerfume({
         resourceTiming: true,
         elementTiming: true,
       });
     });
 
     it('should run with steps config version B', () => {
-      new Perfume({
+      initPerfume({
         steps: {
           load_first_screen_first_journey: {
             threshold: IThresholdTier.unavoidable,
@@ -77,13 +74,13 @@ describe('Perfume', () => {
     });
 
     it('should run with steps config version D', () => {
-      new Perfume({
+      initPerfume({
         onMarkStep: () => {},
       });
     });
 
     it('should run with steps config version E', () => {
-      new Perfume({
+      initPerfume({
         steps: {
           load_first_screen_first_journey: {
             threshold: IThresholdTier.unavoidable,
@@ -102,7 +99,7 @@ describe('Perfume', () => {
 
     it('should run with all userJourney config', () => {
       expect(config).not.toMatchObject(testConfig);
-      new Perfume(testConfig);
+      initPerfume(testConfig);
       expect(config).toMatchObject(testConfig);
     });
 
@@ -110,7 +107,7 @@ describe('Perfume', () => {
       (WN as any) = mock.navigator();
       const spy = jest.spyOn(WN.storage, 'estimate');
       (WN as any).storage = undefined;
-      new Perfume();
+      initPerfume();
       expect(spy.mock.calls.length).toEqual(0);
     });
 
@@ -118,111 +115,15 @@ describe('Perfume', () => {
       (WN as any) = mock.navigator();
       const spy = jest.spyOn(WN.storage, 'estimate');
       (WN as any).storage.estimate = undefined;
-      expect(() => new Perfume()).not.toThrow(TypeError);
+      expect(() => initPerfume()).not.toThrow(TypeError);
       expect(spy.mock.calls.length).toEqual(0);
     });
 
     it('when navigator is supported should call WN.storage.estimate()', () => {
       (WN as any) = mock.navigator();
       const spy = jest.spyOn(WN.storage, 'estimate');
-      new Perfume();
+      initPerfume();
       expect(spy.mock.calls.length).toEqual(1);
-    });
-  });
-
-  describe('.start()', () => {
-    beforeEach(() => {
-      perfume = new Perfume({ ...mock.defaultPerfumeConfig });
-      delete metrics.metric_moon;
-    });
-
-    it('should call window.performance.mark with the correct argument', () => {
-      spy = jest.spyOn(WP, 'mark');
-      perfume.start('metric_moon');
-      expect(spy.mock.calls.length).toBe(1);
-      expect(spy).toHaveBeenCalledWith('mark_metric_moon_start');
-    });
-  });
-
-  describe('.end()', () => {
-    beforeEach(() => {
-      delete metrics.metric_moon;
-    });
-
-    it('should call window.performance.mark with the correct argument', () => {
-      spy = jest.spyOn(WP, 'mark');
-      perfume.start('metric_moon');
-      perfume.end('metric_moon');
-      expect(spy.mock.calls.length).toBe(2);
-      expect(spy).toHaveBeenCalledWith('mark_metric_moon_start');
-      expect(spy).toHaveBeenCalledWith('mark_metric_moon_end');
-    });
-
-    it('should call logData() with correct params', () => {
-      spy = jest.spyOn(log, 'logData');
-      perfume.start('metricName');
-      perfume.end('metricName');
-      expect(spy.mock.calls.length).toEqual(1);
-      expect(spy).toHaveBeenCalledWith('metricName', 12346, {});
-    });
-
-    it('should add metrics properly', () => {
-      perfume = new Perfume();
-      perfume.start('metricName');
-      expect(metrics['metricName']).toBeDefined();
-    });
-
-    it('should delete metrics properly', () => {
-      perfume = new Perfume();
-      perfume.start('metricName');
-      perfume.end('metricName');
-      expect(metrics['metricName']).not.toBeDefined();
-    });
-  });
-
-  describe('.endPaint()', () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-
-    it('should call end() after the first setTimeout', () => {
-      spy = jest.spyOn(perfume, 'end');
-      perfume.endPaint('test');
-      jest.runAllTimers();
-      expect(spy.mock.calls.length).toEqual(1);
-    });
-  });
-
-  describe('.clear()', () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-
-    it('should not call clearMarks() when not supported', () => {
-      spy = jest.spyOn(WP, 'clearMarks');
-      delete (WP as any).clearMarks;
-      perfume.clear('measure_moon');
-      expect(spy.mock.calls.length).toEqual(0);
-    });
-
-    it('should call clearMarks() twice and with the correct arguments', () => {
-      spy = jest.spyOn(WP, 'clearMarks');
-      perfume.clear('measure_moon');
-      expect(spy.mock.calls.length).toEqual(2);
-      expect(spy).toHaveBeenCalledWith('mark_measure_moon_start');
-      expect(spy).toHaveBeenCalledWith('mark_measure_moon_end');
-    });
-  });
-
-  describe('.markNTBT()', () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-
-    it('should set ntbt.value to 0', () => {
-      ntbt.value = 1234;
-      perfume.markNTBT();
-      expect(ntbt.value).toEqual(0);
     });
   });
 });
