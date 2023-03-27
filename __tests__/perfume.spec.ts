@@ -4,7 +4,7 @@
 import { C, WN, WP } from '../src/constants';
 import * as log from '../src/log';
 import { metrics, ntbt } from '../src/metrics';
-import Perfume from '../src/perfume';
+import { Perfume } from '../src/perfume';
 import * as observe from '../src/observe';
 import { visibility } from '../src/onVisibilityChange';
 import { IThresholdTier } from '../src/types';

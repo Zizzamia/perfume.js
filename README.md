@@ -28,6 +28,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - 🏅 Web Vitals Score
 - 🛰 Flexible analytics tool
 - ⚡️ Waste-zero ms with [requestIdleCallback](https://developers.google.com/web/updates/2015/08/using-requestidlecallback) strategy built-in
+- Ability to track data about user actions
   <br />
 
 ## The latest in metrics & Real User Measurement
@@ -45,10 +46,9 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - Largest Contentful Paint ([LCP](https://web.dev/lcp/))
 - First Input Delay ([FID](https://web.dev/fid/))
 - Cumulative Layout Shift ([CLS](https://web.dev/cls/))
-- Interaction to Next Paint ([INP](https://web.dev/inp/)) 
+- Interaction to Next Paint ([INP](https://web.dev/inp/))
 - Total Blocking Time ([TBT](https://web.dev/tbt/))
 - Navigation Total Blocking Time (NTBT)
-
 
 <br />
 At <a href="https://www.coinbase.com/blog/performance-vitals-a-unified-scoring-system-to-guide-performance-health-and-prioritization">Coinbase</a>, we use Perfume.js to capture a high-level scoring system that is clear, trusted, and easy to understand.
@@ -56,7 +56,6 @@ At <a href="https://www.coinbase.com/blog/performance-vitals-a-unified-scoring-s
 <br />
 Summarizing the performance health of an application into a reliable and consistent score helps increase urgency and directs company attention and resources towards addressing each performance opportunity.
 <br />
-
 
 ## Perfume.js vs [Web Vitals](https://github.com/GoogleChrome/web-vitals)
 
@@ -143,6 +142,13 @@ const perfume = new Perfume({
         break;
       case 'elPageTitle':
         myAnalyticsTool.track('elementTimingPageTitle', { duration: data });
+        break;
+      case 'userJourneyStep': 
+        myAnalyticsTool.track('userJourneyStep', {
+          duration: data,
+          stepName: attribution.step_name,
+          vitals_score: rating
+        });
         break;
       default:
         myAnalyticsTool.track(metricName, { duration: data });
@@ -346,21 +352,130 @@ const perfume = new Perfume({
 // Perfume.js: elHeroLogo 1234.00 ms
 ```
 
+### User Journey Step Tracking
+
+A Step represents a slice of time in the User Journey where the user is blocked by **system time**. System time is time the system is blocking the user. For example, the time it takes to navigate between screens or fetch critical information from the server. This should not be confused with **cognitive time**, which is the time the user spends thinking about what to do next. User Journey steps should only cover system time.
+
+A Step is defined by an event to start the step, and another event to end the step. These events are referred to as **Marks**.
+
+As an example, a Step could be to navigate from screen A to screen B. The appropriate way to mark a start and end to this step is by marking the start when tapping on the button on screen A that starts the navigation and marking the end when screen B comes into focus with the critical data rendered on the screen.
+
+```typescript
+// Marking the start of the step
+const ScreenA = () => {
+  const handleNavigation = () =>  {
+    ... // Navigation logic
+    // Mark when navigating to screen B
+    markStep('navigate_to_screen_B');
+  }
+
+  ...
+
+  return (
+    <>
+      <Button onPress={handleNavigation} />
+    </>
+  );
+}
+
+// Marking the end of the step
+const ScreenB = () => {
+  const { viewer } = fetch("http://example.com/userInfo")
+                     .then((response) => response.json())
+                     .then((data) => data);
+
+  const {name} = viewer.userProperties;
+
+  useEffect(() => {
+    if (name) {
+      // Mark when data is ready for screen B
+      markStep('loaded_screen_B');
+    }
+  }, [name])
+
+  ...
+}
+```
+
+#### Defining Steps
+In order for Perfume to be able to track metrics for Steps, we need to configure the steps and provide them when initializing Perfume.
+
+Below you can find an example of how to do this.
+
+``` typescript 
+export const steps = {
+  load_screen_A: {
+    threshold: ThresholdTier.quick,
+    marks: ['navigate_to_screen_A', 'loaded_screen_A'],
+  },
+  load_screen_B: {
+    threshold: ThresholdTier.quick,
+    marks: ['navigate_to_screen_B', 'loaded_screen_B'],
+  },
+};
+
+new Perfume ({ steps });
+
+``` 
+
+#### MarkStep
+`markStep` is the function used to start and end steps in applications.
+
+For example, if we wanted to mark the beginning of load_screen_B step above, we would add in `markStep('navigate_to_screen_B')` to our code.
+
+#### `enableNavigationTracking`
+
+`enableNavigationTracking` is a boolean in the config that will tell Perfume to take into account page navigation changes or not. By default this is `true`, but it can be set to false if needed. 
+
+The purpose of this feature is to only account for active steps that the user is working on. The feature will remove any inactive or 'stale' steps that are not currently in progress. 
+
+Stale steps can be created by navigating away from a page before it fully loads, this would cause the start mark to be triggered, but the end mark to not be called. This would affect the `active` steps being returned to `onMarkStep` as well as would create incorrect data if we returned back to the end mark much later than expected. 
+
+`enableNavigationTracking` works together with the `incrementUjNavigation` function. The `incrementUjNavigation` function is to be called anytime there is a navigation change in your application. Below is an example for how this would work in a React Application:
+
+``` typescript 
+import { useLocation } from 'react-router-dom';
+
+const MyComponent = () => {
+  const location = useLocation()
+
+  React.useEffect(() => {
+    // runs on location, i.e. route, change
+    incrementUjNavigation();
+  }, [location])
+  ...
+}
+
+``` 
+
 ## Web Vitals Score
 
 Perfume will expose for all major metrics the vitals score, those can be used to improve your [SEO and Google page rank](https://webmasters.googleblog.com/2020/05/evaluating-page-experience.html).
 
-| Web Vitals                                |   Good | Needs Improvement |      Poor |
-| ----------------------------------------- | -----: | ----------------: | --------: |
-| Time to First Byte (TTFB)                 |  0-800 |          801-1800 | Over 1800 |
-| Redirect Time (RT)                        |  0-100 |           101-200 |  Over 200 |
-| First Contentful Paint (FCP)              | 0-2000 |         2001-4000 | Over 4000 |
-| Largest Contentful Paint (LCP)            | 0-2500 |         2501-4000 | Over 4000 |
-| First Input Delay (FID)                   |  0-100 |           101-300 |  Over 300 |
-| Cumulative Layout Shift (CLS)             |  0-0.1 |         0.11-0.25 | Over 0.25 |
-| Interaction to Next Paint (INP)           |  0-200 |           201-500 |  Over 500 |
-| Total Blocking Time (TBT)                 |  0-200 |           201-600 |  Over 600 |
-| Navigation Total Blocking Time (NTBT)     |  0-200 |           201-600 |  Over 600 |
+| Web Vitals                            |   Good | Needs Improvement |      Poor |
+| ------------------------------------- | -----: | ----------------: | --------: |
+| Time to First Byte (TTFB)             |  0-800 |          801-1800 | Over 1800 |
+| Redirect Time (RT)                    |  0-100 |           101-200 |  Over 200 |
+| First Contentful Paint (FCP)          | 0-2000 |         2001-4000 | Over 4000 |
+| Largest Contentful Paint (LCP)        | 0-2500 |         2501-4000 | Over 4000 |
+| First Input Delay (FID)               |  0-100 |           101-300 |  Over 300 |
+| Cumulative Layout Shift (CLS)         |  0-0.1 |         0.11-0.25 | Over 0.25 |
+| Interaction to Next Paint (INP)       |  0-200 |           201-500 |  Over 500 |
+| Total Blocking Time (TBT)             |  0-200 |           201-600 |  Over 600 |
+| Navigation Total Blocking Time (NTBT) |  0-200 |           201-600 |  Over 600 |
+
+Step Tracking is based on various [thresholds](https://github.com/Zizzamia/perfume.js/blob/master/__tests__/stepsTestConstants.ts) defined.
+
+Below are the thresholds available for each step:
+
+| Label       | Vital Thresholds |
+| ----------- | ---------------- |
+| INSTANT     | [100, 200]       |
+| QUICK       | [200, 500]       |
+| MODERATE    | [500, 1000]      |
+| SLOW        | [1000, 2000]     |
+| UNAVOIDABLE | [2000, 5000]     |
+
 
 ## Perfume custom options
 
@@ -372,6 +487,7 @@ const options = {
   elementTiming: false,
   analyticsTracker: options => {},
   maxMeasureTime: 30000,
+  enableNavigtionTracking: true,
 };
 ```
 
@@ -409,13 +525,13 @@ To connect with additional analytics providers, checkout the [analytics plugin f
 - `npm run test`: Run test suite
 - `npm run build`: Generate bundles and typings
 - `npm run lint`: Lints code
-<br />
+  <br />
 
 ## Plugins
 
 - [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
 - [Perfume.js plugin for Analytics](https://github.com/DavidWells/analytics/tree/master/packages/analytics-plugin-perfumejs)
-<br />
+  <br />
 
 ## Perfume is used by
 
@@ -427,7 +543,7 @@ To connect with additional analytics providers, checkout the [analytics plugin f
 - [Hearst](https://www.cosmopolitan.com/)
 - [Plan](https://getplan.co)
 - Add your company name :)
-<br />
+  <br />
 
 ## Credits and Specs
 

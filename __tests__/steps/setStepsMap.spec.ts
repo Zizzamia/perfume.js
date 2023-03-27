@@ -3,7 +3,7 @@
  */
 import { WP } from '../../src/constants';
 import mock from '../_mock';
-import Perfume from '../../src/perfume';
+import { Perfume } from '../../src/perfume';
 import { steps } from '../../src/steps/steps';
 
 import { testConfig } from '../stepsTestConstants';
@@ -47,6 +47,9 @@ describe('setSteps', () => {
           start_navigate_to_third_screen_second_journey: [
             'load_third_screen_second_journey',
           ],
+          start_navigate_to_fourth_screen_second_journey: [
+            'test_load_reusing_marks',
+          ],
         },
         loaded_fourth_screen_second_journey: {
           start_navigate_to_fourth_screen_second_journey: [
@@ -78,6 +81,7 @@ describe('setSteps', () => {
         },
         start_navigate_to_fourth_screen_second_journey: {
           load_fourth_screen_second_journey: true,
+          test_load_reusing_marks: true,
         },
       });
     });
