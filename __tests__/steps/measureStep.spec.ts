@@ -8,6 +8,7 @@ import { markStep } from '../../src/steps/markStep';
 import { config } from '../../src/config';
 
 import { testConfig } from '../stepsTestConstants';
+import { measureStep } from '../../src/steps/measureStep';
 
 describe('measureStep', () => {
   let spy: jest.SpyInstance;
@@ -138,5 +139,14 @@ describe('measureStep', () => {
         },
       });
     });
+    it('should return when the start mark doesnt exist', () => { 
+      measureSpy = jest.spyOn(WP, 'measure');
+      // ============ Mock Data ============
+      jest.spyOn(WP, 'getEntriesByName').mockImplementationOnce(name => {
+        return [];
+      });
+      measureStep('not-valid-step', 'startMark', 'endmark');
+      expect(measureSpy).toBeCalledTimes(0);
+    })
   });
 });

@@ -5,6 +5,7 @@ import { WP } from '../../src/constants';
 import mock from '../_mock';
 import { initPerfume } from '../../src/initPerfume';
 import { steps } from '../../src/steps/steps';
+import { setStepsMap } from '../../src/steps/setStepsMap';
 
 import { testConfig } from '../stepsTestConstants';
 
@@ -85,5 +86,12 @@ describe('setSteps', () => {
         },
       });
     });
+
+    it('returns when no steps are provided', () => { 
+      initPerfume({});
+      setStepsMap();
+      expect(steps.finalMarkToStepsMap).toMatchObject({});
+      expect(steps.finalMarkToStepsMap).toMatchObject({});
+    })
   });
 });
