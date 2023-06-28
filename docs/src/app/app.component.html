@@ -398,3 +398,46 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
     </table>
   </div>
 </div>
+<div class="box">
+  <h3 class="box-title" id="/user-journey-step-tracking">
+    <a href="{{ path }}#/user-journey-step-tracking">User Journey Step Tracking</a>
+  </h3>
+  <p>
+    A Step represents a slice of time in the User Journey where the user is blocked by system time. System time is time the system is blocking the user. For example, the time it takes to navigate between screens or fetch critical information from the server. This should not be confused with cognitive time, which is the time the user spends thinking about what to do next. User Journey steps should only cover system time.
+  </p>
+  <p>A Step is defined by an event to start the step, and another event to end the step. These events are referred to as <b>Marks</b>.</p>
+  <p>As an example, a Step could be to navigate from screen A to screen B. The appropriate way to mark a start and end to this step is by marking the start when tapping on the button on screen A that starts the navigation and marking the end when screen B comes into focus with the critical data rendered on the screen.</p>
+  <div class="box-code js">
+    <table>
+      <tbody>
+        <tr>
+          <td class="code">
+            <pre>
+<span class="gray">// Marking the start of the step</span>
+<span class="red">const</span> <span class="blue">ScreenA</span> <span class="red">= () =></span> ({{'{'}}             
+  <span class="red">const</span> <span class="blue">handleNavigation</span> <span class="red">= () =></span> {{'{'}}
+    <span class="gray">// Navigation logic</span>
+    <span class="gray">// Mark when navigating to screen B</span>
+    <span class="violet">markStep</span><span>('navigate_to_screen_B')</span>
+  }
+  <span class="violet">return </span>(
+    <span class="violet">{{'<'}}Button</span> <span class="blue">onPress</span><span class="violet">="</span><span class="red">{{'{'}}handleNavigation}</span><span class="violet">" </span><span class="violet">/></span>
+  )
+})
+
+<span class="gray">// Marking the end of the step</span>
+<span class="red">const</span> <span class="blue">ScreenB</span> <span class="red">= () =></span> ({{'{'}}             
+  <span class="red">const</span> <span class="blue">{{'{'}} data }</span> <span class="red">=</span> <span class="violet">fetch</span><span>("http://example.com/data")</span>
+
+  <span class="violet">useEffect</span><span>(() =></span> {{'{'}}             
+    <span class="red">if</span> <span>(data)</span> {{'{'}}   
+      <span class="violet">markStep</span><span>('loaded_screen_B')</span>
+    }
+  },[<span class="blue">data</span>])
+})</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
