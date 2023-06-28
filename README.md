@@ -100,7 +100,7 @@ initPerfume({
       data,
       navigatorInformation,
       rating,
-      navigationType
+      navigationType,
     } = options;
     switch (metricName) {
       case 'navigationTiming':
@@ -147,7 +147,7 @@ initPerfume({
         myAnalyticsTool.track('userJourneyStep', {
           duration: data,
           stepName: attribution.step_name,
-          vitals_score: rating
+          vitals_score: rating,
         });
         break;
       default:
@@ -398,11 +398,12 @@ const ScreenB = () => {
 ```
 
 #### Defining Steps
+
 In order for Perfume to be able to track metrics for Steps, we need to configure the steps and provide them when initializing Perfume.
 
 Below you can find an example of how to do this.
 
-``` typescript
+```typescript
 export const steps = {
   load_screen_A: {
     threshold: ThresholdTier.quick,
@@ -415,10 +416,10 @@ export const steps = {
 };
 
 initPerfume({ steps });
-
 ```
 
 #### MarkStep
+
 `markStep` is the function used to start and end steps in applications.
 
 For example, if we wanted to mark the beginning of load_screen_B step above, we would add in `markStep('navigate_to_screen_B')` to our code.
@@ -431,9 +432,9 @@ The purpose of this feature is to only account for active steps that the user is
 
 Stale steps can be created by navigating away from a page before it fully loads, this would cause the start mark to be triggered, but the end mark to not be called. This would affect the `active` steps being returned to `onMarkStep` as well as would create incorrect data if we returned back to the end mark much later than expected.
 
-`enableNavigationTracking` works together with the `incrementUjNavigation` function. The `incrementUjNavigation` function is to be called anytime there is a navigation change in your application. Below is an example for how this would work in a React Application:
+`enableNavigationTracking` works together with the `advancedUJStep` function. The `advancedUJStep` function is to be called anytime there is a navigation change in your application. Below is an example for how this would work in a React Application:
 
-``` typescript
+```typescript
 import { useLocation } from 'react-router-dom';
 
 const MyComponent = () => {
@@ -441,7 +442,7 @@ const MyComponent = () => {
 
   React.useEffect(() => {
     // runs on location, i.e. route, change
-    incrementUjNavigation();
+    advancedUJStep();
   }, [location])
   ...
 }
@@ -475,7 +476,6 @@ Below are the thresholds available for each step:
 | MODERATE    | [500, 1000]      |
 | SLOW        | [1000, 2000]     |
 | UNAVOIDABLE | [2000, 5000]     |
-
 
 ## Perfume custom options
 

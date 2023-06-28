@@ -2,15 +2,15 @@ import { initPerfume } from './initPerfume';
 
 import { clear, end, endPaint, markStep, start } from './steps/markStep';
 import { markStepOnce } from './steps/markStepOnce';
-import { incrementUjNavigation } from './steps/navigationSteps';
+import { advancedUJStep } from './steps/navigationSteps';
 
-export { 
+export {
   clear,
   end,
   endPaint,
   initPerfume,
   markStep,
   markStepOnce,
-  incrementUjNavigation,
-  start
+  advancedUJStep,
+  start,
 };
