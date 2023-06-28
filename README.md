@@ -100,7 +100,7 @@ initPerfume({
       data,
       navigatorInformation,
       rating,
-      navigationType,
+      navigationType
     } = options;
     switch (metricName) {
       case 'navigationTiming':
@@ -143,7 +143,7 @@ initPerfume({
       case 'elPageTitle':
         myAnalyticsTool.track('elementTimingPageTitle', { duration: data });
         break;
-      case 'userJourneyStep':
+      case 'userJourneyStep': 
         myAnalyticsTool.track('userJourneyStep', {
           duration: data,
           stepName: attribution.step_name,
@@ -398,12 +398,11 @@ const ScreenB = () => {
 ```
 
 #### Defining Steps
-
 In order for Perfume to be able to track metrics for Steps, we need to configure the steps and provide them when initializing Perfume.
 
 Below you can find an example of how to do this.
 
-```typescript
+``` typescript 
 export const steps = {
   load_screen_A: {
     threshold: ThresholdTier.quick,
@@ -416,25 +415,25 @@ export const steps = {
 };
 
 initPerfume({ steps });
+
 ```
 
 #### MarkStep
-
 `markStep` is the function used to start and end steps in applications.
 
 For example, if we wanted to mark the beginning of load_screen_B step above, we would add in `markStep('navigate_to_screen_B')` to our code.
 
 #### `enableNavigationTracking`
 
-`enableNavigationTracking` is a boolean in the config that will tell Perfume to take into account page navigation changes or not. By default this is `true`, but it can be set to false if needed.
+`enableNavigationTracking` is a boolean in the config that will tell Perfume to take into account page navigation changes or not. By default this is `true`, but it can be set to false if needed. 
 
-The purpose of this feature is to only account for active steps that the user is working on. The feature will remove any inactive or 'stale' steps that are not currently in progress.
+The purpose of this feature is to only account for active steps that the user is working on. The feature will remove any inactive or 'stale' steps that are not currently in progress. 
 
-Stale steps can be created by navigating away from a page before it fully loads, this would cause the start mark to be triggered, but the end mark to not be called. This would affect the `active` steps being returned to `onMarkStep` as well as would create incorrect data if we returned back to the end mark much later than expected.
+Stale steps can be created by navigating away from a page before it fully loads, this would cause the start mark to be triggered, but the end mark to not be called. This would affect the `active` steps being returned to `onMarkStep` as well as would create incorrect data if we returned back to the end mark much later than expected. 
 
 `enableNavigationTracking` works together with the `advancedUJStep` function. The `advancedUJStep` function is to be called anytime there is a navigation change in your application. Below is an example for how this would work in a React Application:
 
-```typescript
+``` typescript 
 import { useLocation } from 'react-router-dom';
 
 const MyComponent = () => {
@@ -447,7 +446,7 @@ const MyComponent = () => {
   ...
 }
 
-```
+``` 
 
 ## Web Vitals Score
 
@@ -476,6 +475,7 @@ Below are the thresholds available for each step:
 | MODERATE    | [500, 1000]      |
 | SLOW        | [1000, 2000]     |
 | UNAVOIDABLE | [2000, 5000]     |
+
 
 ## Perfume custom options
 
