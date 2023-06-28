@@ -147,7 +147,7 @@ initPerfume({
         myAnalyticsTool.track('userJourneyStep', {
           duration: data,
           stepName: attribution.step_name,
-          vitals_score: rating,
+          vitals_score: rating
         });
         break;
       default:
@@ -416,7 +416,7 @@ export const steps = {
 
 initPerfume({ steps });
 
-```
+``` 
 
 #### MarkStep
 `markStep` is the function used to start and end steps in applications.

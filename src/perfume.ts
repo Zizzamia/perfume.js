@@ -12,5 +12,5 @@ export {
   markStep,
   markStepOnce,
   advancedUJStep,
-  start,
+  start
 };
