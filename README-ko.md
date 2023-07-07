@@ -373,7 +373,6 @@ Additional analytics providers와 연결하려면 이 링크를 참고해주세�
 
 ## Plugins
 
-- [Perfume.js plugin for GatsbyJS](https://github.com/NoriSte/gatsby-plugin-perfume.js)
 - [Perfume.js plugin for Analytics](https://github.com/DavidWells/analytics/tree/master/packages/analytics-plugin-perfumejs)
   <br />
 
