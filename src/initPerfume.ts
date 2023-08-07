@@ -5,19 +5,19 @@
  *
  * @license
  */
- import { config } from './config';
- import { W, WN } from './constants';
- import { getNavigationTiming } from './getNavigationTiming';
- import { getNetworkInformation } from './getNetworkInformation';
- import { isPerformanceSupported } from './isSupported';
- import { logData, logMetric } from './log';
- import { initPerformanceObserver } from './observe';
- import { didVisibilityChange } from './onVisibilityChange';
- import { reportStorageEstimate } from './storageEstimate';
- import { IPerfumeOptions } from './types';
- import { getVitalsScore } from './vitalsScore';
- import { setStepsMap } from './steps/setStepsMap';
- 
+import { config } from './config';
+import { W, WN } from './constants';
+import { getNavigationTiming } from './getNavigationTiming';
+import { getNetworkInformation } from './getNetworkInformation';
+import { isPerformanceSupported } from './isSupported';
+import { logData, logMetric } from './log';
+import { initPerformanceObserver } from './observe';
+import { didVisibilityChange } from './onVisibilityChange';
+import { reportStorageEstimate } from './storageEstimate';
+import { IPerfumeOptions } from './types';
+import { getVitalsScore } from './vitalsScore';
+import { setStepsMap } from './steps/setStepsMap';
+
 export const initPerfume = (options: IPerfumeOptions = {}) => {
   // Extend default config with external options
   config.analyticsTracker = options.analyticsTracker;
@@ -27,7 +27,6 @@ export const initPerfume = (options: IPerfumeOptions = {}) => {
   config.reportOptions = options.reportOptions || config.reportOptions;
   config.steps = options.steps;
   config.onMarkStep = options.onMarkStep;
-  config.enableNavigationTracking = options.enableNavigationTracking;
 
   // Exit from Perfume when basic Web Performance APIs aren't supported
   if (!isPerformanceSupported()) {

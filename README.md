@@ -424,15 +424,13 @@ initPerfume({ steps });
 
 For example, if we wanted to mark the beginning of load_screen_B step above, we would add in `markStep('navigate_to_screen_B')` to our code.
 
-#### `enableNavigationTracking`
+#### `trackUJNavigation`
 
-`enableNavigationTracking` is a boolean in the config that will tell Perfume to take into account page navigation changes or not. By default this is `true`, but it can be set to false if needed.
-
-The purpose of this feature is to only account for active steps that the user is working on. The feature will remove any inactive or 'stale' steps that are not currently in progress.
+The purpose of this function is to only account for active steps that the user is working on. The feature will remove any inactive or 'stale' steps that are not currently in progress.
 
 Stale steps can be created by navigating away from a page before it fully loads, this would cause the start mark to be triggered, but the end mark to not be called. This would affect the `active` steps being returned to `onMarkStep` as well as would create incorrect data if we returned back to the end mark much later than expected.
 
-`enableNavigationTracking` works together with the `advanceUJStep` function. The `advanceUJStep` function is to be called anytime there is a navigation change in your application. Below is an example for how this would work in a React Application:
+The `trackUJNavigation` function is to be called anytime there is a navigation change in your application. Below is an example for how this would work in a React Application:
 
 ```typescript
 import { useLocation } from 'react-router-dom';
@@ -442,7 +440,7 @@ const MyComponent = () => {
 
   React.useEffect(() => {
     // runs on location, i.e. route, change
-    advanceUJStep();
+    trackUJNavigation();
   }, [location])
   ...
 }

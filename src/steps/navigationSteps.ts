@@ -117,7 +117,7 @@ export const recordEndMark = (endMark: string) => {
  * steps that don't hit their final mark because the users navigates
  * backwards in journey.
  */
-export const advanceUJStep = () => {
+export const trackUJNavigation = () => {
   // navigationSteps are 0-index based, so size will give us the next key value
   const navigationLength = Object.keys(steps.navigationSteps).length;
   steps.navigationSteps[navigationLength] = {};

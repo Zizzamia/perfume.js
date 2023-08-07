@@ -43,7 +43,8 @@ const steps: IStepsConfig = {
       'loaded_second_screen_first_journey',
     ],
   },
-  test_load_reusing_marks: { // step with the same start and end mark as another
+  test_load_reusing_marks: {
+    // step with the same start and end mark as another
     threshold: IThresholdTier.instant,
     marks: [
       'start_navigate_to_fourth_screen_second_journey',
@@ -94,7 +95,6 @@ const steps: IStepsConfig = {
 export const testConfig: IPerfumeOptions = {
   steps,
   onMarkStep: jest.fn(),
-  enableNavigationTracking: false,
 };
 export const navigationTestConfig: IPerfumeOptions = {
   steps,
