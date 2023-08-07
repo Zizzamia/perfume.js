@@ -12,16 +12,13 @@ export const measureStep = (
   const stepMetricName = S + step;
   const startMarkExists = WP.getEntriesByName(M + startMark).length > 0;
   const endMarkExists = WP.getEntriesByName(M + endMark).length > 0;
-  if (!endMarkExists || !config.steps) {
+  if (!endMarkExists || !startMarkExists || !config.steps || !config.steps[step]) {
     return;
   }
 
   const { maxOutlierThreshold, vitalsThresholds } =
     STEP_THRESHOLDS[config.steps[step].threshold];
 
-  if (!startMarkExists) {
-    return;
-  }
   const stepMeasure = WP.measure(stepMetricName, M + startMark, M + endMark);
   const { duration } = stepMeasure;
   if (duration <= maxOutlierThreshold) {

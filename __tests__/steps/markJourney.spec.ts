@@ -4,16 +4,18 @@
 import { WP } from '../../src/constants';
 import mock from '../_mock';
 import { initPerfume } from '../../src/initPerfume';
-import { markStep } from '../../src/steps/markStep';
+import { markStep, end } from '../../src/steps/markStep';
 import { steps } from '../../src/steps/steps';
 
-import { testConfig } from '../stepsTestConstants';
+import { testConfig, navigationTestConfig } from '../stepsTestConstants';
+import { config } from '../../src/config';
 
 describe('markStep', () => {
   let spy: jest.SpyInstance;
 
   beforeEach(() => {
     (WP as any) = mock.performance();
+    (window as any).PerformanceObserver = mock.PerformanceObserver;
     initPerfume(testConfig);
   });
 
@@ -45,5 +47,15 @@ describe('markStep', () => {
         'mark.start_navigate_to_second_screen_first_journey',
       );
     });
+    it('shouldnt mark anything if performance is not supported', () => { 
+      spy = jest.spyOn(WP, 'mark');
+      // @ts-ignore
+      delete window.performance.mark;
+      markStep('start_navigate_to_second_screen_first_journey');
+      expect(spy.mock.calls.length).toBe(0);
+      end('test');
+      expect(spy.mock.calls.length).toBe(0);
+    })
+    
   });
 });

@@ -14,6 +14,7 @@ import {
 } from '../../src/steps/navigationSteps';
 
 import { navigationTestConfig } from '../stepsTestConstants';
+import { config } from '../../src/config';
 
 describe('navSteps', () => {
   let spy: jest.SpyInstance;
@@ -65,6 +66,16 @@ describe('navSteps', () => {
     it('returns and empty list if there are not navigations steps recorded', () => {
       expect(getActiveStepsFromNavigationSteps()).toEqual({});
     });
+
+    it('it should run the navigationbased active steps', () => { 
+      config.onMarkStep = () => {};
+      spy = jest.spyOn(config, 'onMarkStep');
+      markStep('start_navigate_to_second_screen_first_journey');
+      expect(spy).toHaveBeenCalledWith(
+        'start_navigate_to_second_screen_first_journey',
+        ['load_second_screen_first_journey'],
+      );
+    })
 
     it('returns load_home_screen as an active step', () => {
       markStep('start_navigate_to_second_screen_first_journey');
@@ -149,6 +160,20 @@ describe('navSteps', () => {
         load_fourth_screen_first_journey: true,
         load_third_screen_first_journey: true,
       });
+
+      // closing most recent step
+      markStep('loaded_third_screen_first_journey');
+
+      expect(getActiveStepsFromNavigationSteps()).toEqual({
+        load_fourth_screen_first_journey: true,
+        load_third_screen_first_journey: true,
+      });
     });
+
+    it('departs endmark if theres no start mark', () => { 
+      markStep('loaded_third_screen_first_journey');
+      // never encountered a start mark so nothing is active
+      expect(getActiveStepsFromNavigationSteps()).toEqual({});
+    })
   });
 });
