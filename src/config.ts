@@ -8,5 +8,4 @@ export const config: IPerfumeConfig = {
   maxTime: 30000,
   // web-vitals report options
   reportOptions: {},
-  enableNavigationTracking: true,
 };

@@ -97,8 +97,6 @@ export interface IPerfumeConfig {
   steps?: IStepsConfig;
   // Callback that will run each time a mark is called
   onMarkStep?: (mark: string, steps: string[]) => void;
-  // Boolean to decide to utilize navigation based steps
-  enableNavigationTracking?: boolean;
 }
 
 export interface IPerfumeOptions {
@@ -115,8 +113,6 @@ export interface IPerfumeOptions {
   steps?: IStepsConfig;
   // Callback that will run each time a mark is called
   onMarkStep?: (mark: string, steps: string[]) => void;
-  // Boolean to decide to utilize navigation based steps
-  enableNavigationTracking?: boolean;
 }
 
 export interface IMetricMap {

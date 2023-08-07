@@ -5,12 +5,10 @@ import { WP } from '../../src/constants';
 import mock from '../_mock';
 import { initPerfume } from '../../src/initPerfume';
 import { markStep } from '../../src/steps/markStep';
-import {
-  getNavigationState
-} from '../../src/steps/steps';
+import { getNavigationState } from '../../src/steps/steps';
 import {
   getActiveStepsFromNavigationSteps,
-  incrementUjNavigation,
+  trackUJNavigation,
 } from '../../src/steps/navigationSteps';
 
 import { navigationTestConfig } from '../stepsTestConstants';
@@ -55,9 +53,9 @@ describe('navSteps', () => {
     });
 
     it('incrementCujNavigation the navigation state on page navigations', () => {
-      incrementUjNavigation();
+      trackUJNavigation();
       expect(getNavigationState()).toMatchObject({ 0: {} });
-      incrementUjNavigation();
+      trackUJNavigation();
       expect(getNavigationState()).toMatchObject({ 0: {}, 1: {} });
     });
   });
@@ -98,7 +96,7 @@ describe('navSteps', () => {
 
     it('returns the active steps for the last navigation step', () => {
       // load app
-      incrementUjNavigation();
+      trackUJNavigation();
 
       markStep('start_navigate_to_second_screen_first_journey');
       expect(getNavigationState()).toMatchObject({
@@ -114,10 +112,10 @@ describe('navSteps', () => {
     it('returns the active steps for the last 2 navigation steps', () => {
       markStep('start_navigate_to_second_screen_first_journey');
       // load some next page
-      incrementUjNavigation();
+      trackUJNavigation();
       markStep('start_navigate_to_third_screen_first_journey');
 
-      incrementUjNavigation();
+      trackUJNavigation();
       markStep('start_navigate_to_fourth_screen_first_journey');
       expect(getNavigationState()).toMatchObject({
         0: {
@@ -133,15 +131,15 @@ describe('navSteps', () => {
 
     it('does not return stale steps - i.e. steps older than the last 2 navigations', () => {
       // navigate to some page
-      incrementUjNavigation();
+      trackUJNavigation();
       markStep('start_navigate_to_second_screen_first_journey');
 
       // navigate to next page
-      incrementUjNavigation();
+      trackUJNavigation();
       markStep('start_navigate_to_third_screen_first_journey');
 
       // navigate to a third page
-      incrementUjNavigation();
+      trackUJNavigation();
       markStep('start_navigate_to_fourth_screen_first_journey');
 
       expect(getNavigationState()).toMatchObject({
