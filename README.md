@@ -48,7 +48,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - Cumulative Layout Shift ([CLS](https://web.dev/cls/))
 - Interaction to Next Paint ([INP](https://web.dev/inp/))
 - Total Blocking Time ([TBT](https://web.dev/tbt/))
-- Navigation Total Blocking Time ([NTBT])(#navigation-total-blocking-time-ntbt)
+- Navigation Total Blocking Time ([NTBT](#navigation-total-blocking-time-ntbt))
 
 <br />
 At <a href="https://www.coinbase.com/blog/performance-vitals-a-unified-scoring-system-to-guide-performance-health-and-prioritization">Coinbase</a>, we use Perfume.js to capture a high-level scoring system that is clear, trusted, and easy to understand.
