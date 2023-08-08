@@ -35,10 +35,10 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 
 **Perfume** leverages the latest Performance APIs to collect **field data** that allows us to understand what real-world users are actually experiencing.
 
-- Navigation Timing
+- [Navigation Timing](#navigation-timing)
 - Navigator Interface
-- Resource Timing
-- Element Timing
+- [Resource Timing](#resource-timing)
+- [Element Timing](#element-timing)
 - Service Worker Status
 - StorageManager interface
 - Time to First Byte ([TTFB](https://web.dev/ttfb/#what-is-a-good-ttfb-score))
@@ -48,7 +48,7 @@ Perfume is a tiny, web performance monitoring library that reports field data ba
 - Cumulative Layout Shift ([CLS](https://web.dev/cls/))
 - Interaction to Next Paint ([INP](https://web.dev/inp/))
 - Total Blocking Time ([TBT](https://web.dev/tbt/))
-- Navigation Total Blocking Time (NTBT)
+- Navigation Total Blocking Time ([NTBT](#navigation-total-blocking-time-ntbt))
 
 <br />
 At <a href="https://www.coinbase.com/blog/performance-vitals-a-unified-scoring-system-to-guide-performance-health-and-prioritization">Coinbase</a>, we use Perfume.js to capture a high-level scoring system that is clear, trusted, and easy to understand.
@@ -201,52 +201,6 @@ Perfume helps expose some of the key metrics you might need.
 
 ```javascript
 // Perfume.js: fp 1482.00 ms
-```
-
-### First Contentful Paint ([FCP](https://medium.com/@zizzamia/first-contentful-paint-with-a-touch-of-perfume-js-cd11dfd2e18f))
-
-**FCP** is the exact time taken for the browser to render the first bit of content from the DOM, which can be anything from an important image, text, or even the small SVG at the bottom of the page.
-
-```javascript
-// Perfume.js: fcp 2029.00 ms
-```
-
-### Largest Contentful Paint (LCP)
-
-**LCP** is an important, user-centric metric for measuring perceived load speed because it marks the point in the page load timeline when the page's main content has likely loaded—a fast LCP helps reassure the user that the page is useful.
-
-We end the Largest Contentful Paint measure at two points: when First Input Delay happen and when the page's lifecycle state changes to hidden.
-
-```javascript
-// Perfume.js: lcp 2429.00 ms
-```
-
-### First Input Delay (FID)
-
-**FID** measures the time from when a user first interacts with your site (i.e. when they click a link, tap on a button) to the time when the browser is actually able to respond to that interaction.
-
-```javascript
-// Perfume.js: fid 3.20 ms
-```
-
-### Cumulative Layout Shift (CLS)
-
-**CLS** is an important, user-centric metric for measuring visual stability because it helps quantify how often users experience unexpected layout shifts—a low CLS helps ensure that the page is delightful.
-
-We end the Cumulative Layout Shift measure at two points: when First Input Delay happen and when the page's lifecycle state changes to hidden.
-
-```javascript
-// Perfume.js: cls 0.13
-```
-
-### Total Blocking Time (TBT)
-
-**TBT** is an important, user-centric metric for measuring load responsiveness because it helps quantify the severity of how non-interactive a page is prior to it becoming reliably interactive—a low TBT helps ensure that the page is usable.
-
-We end the Total Blocking Time measure 10 seconds after FID.
-
-```javascript
-// Perfume.js: tbt 347.07 ms
 ```
 
 ### Navigation Total Blocking Time (NTBT)
