@@ -7,7 +7,7 @@ import * as log from '../../src/log';
 import { metrics } from '../../src/metrics';
 import * as observe from '../../src/observe';
 import { visibility } from '../../src/onVisibilityChange';
-import { clear, end, endPaint, start } from '../../src/steps/markStep';
+import { clear, end, start } from '../../src/steps/markStep';
 import mock from './../_mock';
 
 describe('Perfume', () => {
@@ -80,20 +80,6 @@ describe('Perfume', () => {
       expect(metrics['metricName']).not.toBeDefined();
     });
   });
-
-  // TODO Fix this test or just deprecate by deprecating end()
-  //describe('endPaint()', () => {
-  //  beforeEach(() => {
-  //    jest.useFakeTimers();
-  //  });
-  //
-  //  it('should call end() after the first setTimeout', () => {
-  //    spy = jest.spyOn(perfume, 'end');
-  //    endPaint('test');
-  //    jest.runAllTimers();
-  //    expect(spy.mock.calls.length).toEqual(1);
-  //  });
-  //});
 
   describe('clear()', () => {
     beforeEach(() => {
