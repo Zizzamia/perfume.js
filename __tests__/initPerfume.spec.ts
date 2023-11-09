@@ -9,6 +9,11 @@ import { IThresholdTier } from '../src/types';
 import { config } from '../src/config';
 import { testConfig } from './stepsTestConstants';
 import mock from './_mock';
+import { isPerformanceSupported } from '../src/isSupported';
+
+jest.mock('../src/isSupported', () => ({
+  isPerformanceSupported: jest.fn(),
+}));
 
 describe('Perfume', () => {
   let spy: jest.SpyInstance;
@@ -22,6 +27,7 @@ describe('Perfume', () => {
     (window as any).console.warn = (n: any) => n;
     (observe as any).perfObservers = {};
     visibility.isHidden = false;
+    (isPerformanceSupported as jest.Mock).mockImplementation(() => true);
   });
 
   afterEach(() => {
@@ -124,6 +130,16 @@ describe('Perfume', () => {
       const spy = jest.spyOn(WN.storage, 'estimate');
       initPerfume();
       expect(spy.mock.calls.length).toEqual(1);
+    });
+
+    it('should not initiate if isPerformanceSupported is false', () => {
+      (isPerformanceSupported as jest.Mock).mockImplementation(() => false);
+      const initPerformanceObserverSpy = jest.spyOn(
+        observe,
+        'initPerformanceObserver',
+      );
+      initPerfume(testConfig);
+      expect(initPerformanceObserverSpy).not.toHaveBeenCalled();
     });
   });
 });
