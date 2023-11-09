@@ -132,7 +132,7 @@ describe('measureStep', () => {
         navigationType: undefined,
         navigatorInformation: {
           deviceMemory: 0,
-          hardwareConcurrency: 12,
+          hardwareConcurrency: 16,
           isLowEndDevice: false,
           isLowEndExperience: false,
           serviceWorkerStatus: 'unsupported',
