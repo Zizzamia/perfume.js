@@ -22,13 +22,10 @@ export const getIsLowEndExperience = (
   switch (et) {
     case 'slow-2g':
       return true;
-      break;
     case '2g':
       return true;
-      break;
     case '3g':
       return true;
-      break;
     default:
       // Data Saver preference
       return getIsLowEndDevice() || sd;
