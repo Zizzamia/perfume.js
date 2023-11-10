@@ -24,7 +24,7 @@ export const markStep = (mark: string) => {
 };
 
 // --------------------- TMP Location Before Deprecation -----------------
-// For start(), end(), endPaint(), clear()
+// For start(), end(), clear()
 
 /**
  * Start performance measurement
@@ -52,15 +52,6 @@ export const start = (markName: string): void => {
   if (doLogData) {
     logData(markName, roundByFour(measure), customProperties);
   }
-}
-
-/**
- * End performance measurement after first paint from the beging of it
- */
- export const endPaint = (markName: string, customProperties?: object): void => {
-  setTimeout(() => {
-    end(markName, customProperties);
-  });
 }
 
 /**
