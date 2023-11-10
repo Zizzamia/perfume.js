@@ -6,6 +6,7 @@ import { initPerfume } from '../src/perfume';
 import { markNTBT } from '../src/markNTBT';
 import { ntbt } from '../src/metrics';
 import * as observe from '../src/observe';
+import * as log from '../src/log';
 import { visibility } from '../src/onVisibilityChange';
 import mock from './_mock';
 
@@ -39,6 +40,14 @@ describe('Perfume', () => {
       ntbt.value = 1234;
       markNTBT();
       expect(ntbt.value).toEqual(0);
+    });
+
+    it('should call logMetric', () => {
+      jest.useFakeTimers();
+      const logMetricSpy = jest.spyOn(log, 'logMetric');
+      markNTBT();
+      jest.advanceTimersByTime(2000);
+      expect(logMetricSpy).toHaveBeenCalled();
     });
   });
 });

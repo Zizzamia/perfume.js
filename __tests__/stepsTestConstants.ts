@@ -99,7 +99,6 @@ export const testConfig: IPerfumeOptions = {
 export const navigationTestConfig: IPerfumeOptions = {
   steps,
   onMarkStep: jest.fn(),
-  enableNavigationTracking: true,
 };
 
 export type TestConfig = IPerfumeConfig;
