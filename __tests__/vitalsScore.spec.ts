@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { webVitalsScore, getVitalsScore } from '../src/vitalsScore';
+import { webVitalsScore, getVitalsScore, getRating } from '../src/vitalsScore';
 
 describe('vitalsScore', () => {
   describe('webVitalsScore', () => {
@@ -33,6 +33,18 @@ describe('vitalsScore', () => {
       expect(getVitalsScore('NTBT', 200)).toEqual('good');
       expect(getVitalsScore('NTBT', 201)).toEqual('needsImprovement');
       expect(getVitalsScore('NTBT', 700)).toEqual('poor');
+    });
+
+    it('should return null if vital does not exist', () => {
+      expect(getVitalsScore('InvalidVital', 100)).toBeNull();
+    });
+  });
+
+  describe('getRating()', () => {
+    it('should return the correct values', () => {
+      expect(getRating(50, [100, 200])).toEqual('good');
+      expect(getRating(150, [100, 200])).toEqual('needsImprovement');
+      expect(getRating(250, [100, 200])).toEqual('poor');
     });
   });
 });
