@@ -1,6 +1,6 @@
 {
   "name": "perfume.js",
-  "version": "9.0.0-rc.3",
+  "version": "9.0.0",
   "description": "Web performance library for measuring all User-centric performance metrics, including the latest Web Vitals.",
   "keywords": [
     "performance",
@@ -102,7 +102,7 @@
     "collectCoverage": true
   },
   "dependencies": {
-    "web-vitals": "^3.1.0"
+    "web-vitals": "^3.5.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "23.0.2",

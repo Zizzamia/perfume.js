@@ -1,13 +1,15 @@
 # Changelog
 
-## 9.0.0 ()
+## 9.0.0 (2023-11-30)
 
-RC. IN-PROGRESS
+A long time coming, but we are back :)
+We did some internal cleanup, making the library more accessible for tracking Critical User Journeys.
 
-* **feat** remove `enableNavigationTracking` and have the behavior as the default
-* **feat** `getRating` has been consolidated into `getVitalsScore`
-* **chore** rename `incrementUjNavigation` to `trackUJNavigation`
-* **chore** deprecate `startPaint` and `endPaint`
+### Breaking Changes
+* **feat** remove `enableNavigationTracking` and have the behavior as the default.
+* **feat** `getRating` has been consolidated into `getVitalsScore`.
+* **chore** rename `incrementUjNavigation` to `trackUJNavigation`.
+* **chore** deprecate `startPaint` and `endPaint`.
 
 ## 8.4.0 (2023-2-3)
 
