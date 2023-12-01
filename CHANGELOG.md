@@ -2,6 +2,9 @@
 
 ## 9.0.0 (2023-11-30)
 
+A long time coming, but we are back :)
+We did some internal cleanup, making the library more accessible for tracking Critical User Journeys.
+
 ### Breaking Changes
 * **feat** remove `enableNavigationTracking` and have the behavior as the default.
 * **feat** `getRating` has been consolidated into `getVitalsScore`.
