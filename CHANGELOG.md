@@ -1,15 +1,27 @@
 # Changelog
 
-## 9.0.0 (2023-11-30)
+## 9.1.0 (2023-11-30)
 
 A long time coming, but we are back :)
 We did some internal cleanup, making the library more accessible for tracking Critical User Journeys.
+
+The most significant change is that we moved away from being Object-oriented and everything is Functional-oriented, which means to start Perfume, you can do.
+
+```javascript
+import { initPerfume } from 'perfume.js';
+
+initPerfume({
+  analyticsTracker: ({ metricName, data }) => {
+    myAnalyticsTool.track(metricName, data);
+  })
+});
+```
 
 ### Breaking Changes
 * **feat** remove `enableNavigationTracking` and have the behavior as the default.
 * **feat** `getRating` has been consolidated into `getVitalsScore`.
 * **chore** rename `incrementUjNavigation` to `trackUJNavigation`.
-* **chore** deprecate `startPaint` and `endPaint`.
+* **chore** deprecate `endPaint`.
 
 ## 8.4.0 (2023-2-3)
 
