@@ -3,7 +3,7 @@
   align="left" width="200" alt="Perfume.js logo" />
 </a>
 
-# [Perfume.js v9.0.0-rc.3](http://perfumejs.com)
+# [Perfume.js v9.1.0](http://perfumejs.com)
 
 [![Current version](https://img.shields.io/github/tag/zizzamia/perfume.js?color=3498DB&label=version)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-27ae60.svg"> [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js) [![brotli size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=brotli&label=JS+brotli+size)](https://unpkg.com/perfume.js)
 
@@ -74,13 +74,13 @@ npm (https://www.npmjs.com/package/perfume.js):
 You can import the generated bundle to use the whole library generated:
 
 ```javascript
-import { Perfume } from 'perfume.js';
+import { initPerfume } from 'perfume.js';
 ```
 
 Universal Module Definition:
 
 ```javascript
-import { Perfume } from 'node_modules/perfume.js/dist/perfume.umd.min.js';
+import { initPerfume } from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 ```
 
 <br />
@@ -92,6 +92,8 @@ Metrics like **Navigation Timing**, **Network Information**, **TTFB**, **FCP**, 
 🚀 Visit [perfumejs.com](http://perfumejs.com/) for a live demo on how the metrics work. 🌕
 
 ```javascript
+import { initPerfume } from 'perfume.js';
+
 initPerfume({
   analyticsTracker: options => {
     const {
@@ -250,6 +252,8 @@ initPerfume({
 **Performance.mark** ([User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API)) is used to create an application-defined peformance entry in the browser's performance entry buffer.
 
 ```javascript
+import { start, end } from 'perfume.js';
+
 initPerfume({
   analyticsTracker: ({ metricName, data }) => {
     myAnalyticsTool.track(metricName, data);
@@ -262,24 +266,6 @@ end('fibonacci');
 ```
 
 ![Performance Mark](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-mark.png)
-
-### Component First Paint
-
-This metric mark the point, immediately after creating a **new component**, when the browser renders pixels to the screen.
-
-```javascript
-initPerfume({
-  analyticsTracker: ({ metricName, data }) => {
-    myAnalyticsTool.track(metricName, data);
-  })
-});
-perfume.start('togglePopover');
-$(element).popover('toggle');
-perfume.endPaint('togglePopover');
-// Perfume.js: togglePopover 10.54 ms
-```
-
-![Performance](https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/performance-cfp.png)
 
 ### Element Timing
 
