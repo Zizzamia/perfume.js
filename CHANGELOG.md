@@ -1,5 +1,9 @@
 # Changelog
 
+## 9.2.0 (2023-12-4)
+
+* **feat** added export for `markNTBT` function.
+
 ## 9.1.0 (2023-11-30)
 
 A long time coming, but we are back :)
