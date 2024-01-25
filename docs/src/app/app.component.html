@@ -248,7 +248,7 @@
 
 <div class="box">
   <h3 class="box-title" id="/navigation-total-blocking-time/">
-    <a href="{{ path }}#/navigation-total-blocking-time/">Navigationg Total Blocking Time (NTBT)</a>
+    <a href="{{ path }}#/navigation-total-blocking-time/">Navigation Total Blocking Time (NTBT)</a>
   </h3>
   <p>
     This metric measures the amount of time the application may be blocked from processing code during the 2s window after a user navigates from page A to page B. The NTBT metric is the summation of the blocking time of all long tasks in the 2s window after this method is invoked.
@@ -414,7 +414,7 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
           <td class="code">
             <pre>
 <span class="gray">// Marking the start of the step</span>
-<span class="red">const</span> <span class="blue">ScreenA</span> <span class="red">= () =></span> ({{'{'}}             
+<span class="red">const</span> <span class="blue">ScreenA</span> <span class="red">= () =></span> ({{'{'}}
   <span class="red">const</span> <span class="blue">handleNavigation</span> <span class="red">= () =></span> {{'{'}}
     <span class="gray">// Navigation logic</span>
     <span class="gray">// Mark when navigating to screen B</span>
@@ -426,11 +426,11 @@ perfume.<span class="violet">end</span>('fibonacci');</pre>
 })
 
 <span class="gray">// Marking the end of the step</span>
-<span class="red">const</span> <span class="blue">ScreenB</span> <span class="red">= () =></span> ({{'{'}}             
+<span class="red">const</span> <span class="blue">ScreenB</span> <span class="red">= () =></span> ({{'{'}}
   <span class="red">const</span> <span class="blue">{{'{'}} data }</span> <span class="red">=</span> <span class="violet">fetch</span><span>("http://example.com/data")</span>
 
-  <span class="violet">useEffect</span><span>(() =></span> {{'{'}}             
-    <span class="red">if</span> <span>(data)</span> {{'{'}}   
+  <span class="violet">useEffect</span><span>(() =></span> {{'{'}}
+    <span class="red">if</span> <span>(data)</span> {{'{'}}
       <span class="violet">markStep</span><span>('loaded_screen_B')</span>
     }
   },[<span class="blue">data</span>])
