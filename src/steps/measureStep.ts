@@ -20,6 +20,11 @@ export const measureStep = (
     STEP_THRESHOLDS[config.steps[step].threshold];
 
   const stepMeasure = WP.measure(stepMetricName, M + startMark, M + endMark);
+
+  if(!stepMeasure){
+    return;
+  }
+  
   const { duration } = stepMeasure;
   if (duration <= maxOutlierThreshold) {
     const score = getRating(duration, vitalsThresholds);

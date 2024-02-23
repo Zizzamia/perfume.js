@@ -17,9 +17,9 @@ export const measureSteps = (mark: string) => {
       const possibleSteps = finalSteps[startMark];
       possibleSteps.forEach(removeActiveStep);
       Promise.all(
-        possibleSteps.map(step => {
+        possibleSteps.map(async step => {
           // measure
-          measureStep(step, startMark, mark);
+          await measureStep(step, startMark, mark);
         }),
       ).catch(() => {
         // TODO @zizzamia log error
