@@ -139,7 +139,7 @@ describe('measureStep', () => {
         },
       });
     });
-    it('should return when the start mark doesnt exist', () => { 
+    it('should return when the start mark doesnt exist', () => {
       measureSpy = jest.spyOn(WP, 'measure');
       // ============ Mock Data ============
       jest.spyOn(WP, 'getEntriesByName').mockImplementationOnce(name => {
@@ -147,6 +147,36 @@ describe('measureStep', () => {
       });
       measureStep('not-valid-step', 'startMark', 'endmark');
       expect(measureSpy).toBeCalledTimes(0);
-    })
+    });
+
+    it('should return when the start mark doesnt exist', () => {
+      measureSpy = jest.spyOn(WP, 'measure');
+      jest
+        .spyOn(WP, 'measure')
+        // @ts-ignore
+        .mockImplementationOnce(() => undefined);
+      // ============ Mock Data ============
+      jest.spyOn(WP, 'getEntriesByName').mockImplementationOnce(name => {
+        const entries: Record<string, PerformanceEntry> = {
+          'mark.start_navigate_to_second_screen_first_journey': {
+            name: 'mark.start_navigate_to_second_screen_first_journey',
+            entryType: 'mark',
+            duration: 0,
+            startTime: 0,
+            toJSON: jest.fn(),
+          },
+          'mark.loaded_second_screen_first_journey': {
+            name: 'mark.loaded_second_screen_first_journey',
+            entryType: 'mark',
+            duration: 0,
+            startTime: 100,
+            toJSON: jest.fn(),
+          },
+        };
+        return [entries[name]] ?? [];
+      });
+      measureStep('load_second_screen_first_journey', 'start_navigate_to_second_screen_first_journey', 'start_navigate_to_second_screen_first_journey');
+      expect(measureSpy).toBeCalledTimes(1); // after the first call that returns undefined, it exits the function and does not call measure again
+    });
   });
 });
