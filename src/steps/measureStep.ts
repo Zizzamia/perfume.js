@@ -21,6 +21,7 @@ export const measureStep = (
 
   const stepMeasure = WP.measure(stepMetricName, M + startMark, M + endMark);
 
+  // checking to ensure stepMeasure is defined - it can be undefined if measure is called on a mark that has already been measured and cleared
   if(!stepMeasure){
     return;
   }
