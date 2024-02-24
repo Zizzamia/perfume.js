@@ -1,5 +1,9 @@
 # Changelog
 
+## 9.3.0 (2024-2-24)
+
+* **fix**: Added extra check for undefined values. #260
+
 ## 9.2.0 (2023-12-4)
 
 * **feat** added export for `markNTBT` function.
