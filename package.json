@@ -1,6 +1,6 @@
 {
   "name": "perfume.js",
-  "version": "9.3.0",
+  "version": "9.3.1",
   "description": "Web performance library for measuring all User-centric performance metrics, including the latest Web Vitals.",
   "keywords": [
     "performance",
