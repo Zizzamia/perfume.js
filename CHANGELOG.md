@@ -1,5 +1,9 @@
 # Changelog
 
+## 9.3.1 (2024-4-21)
+
+* **fix**: Fix import crash under node.js
+
 ## 9.3.0 (2024-2-24)
 
 * **fix**: Added extra check for undefined values. #260
