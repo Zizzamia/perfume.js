@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.3.1 (2024-4-21)
+## 9.4.0 (2024-4-22)
 
 * **fix**: Fix import crash under node.js
 
