@@ -1,6 +1,6 @@
 // Have private variable outside the class,
 // helps drastically reduce the library size
-export const W = globalThis;
+export const W = typeof window !== 'undefined' ? window : {} as typeof window;
 export const C = W.console;
 export const WN = W.navigator;
 export const WP = W.performance;
