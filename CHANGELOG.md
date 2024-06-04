@@ -1,5 +1,9 @@
 # Changelog
 
+## 9.4.1 (2024-6-03)
+
+* **fix**: Improve browser compatibility around globalThis.
+
 ## 9.4.0 (2024-4-22)
 
 * **fix**: Fix import crash under node.js
