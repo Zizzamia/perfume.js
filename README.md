@@ -1,9 +1,9 @@
-<a href="http://www.perfumejs.com/">
+<a href="https://zizzamia.github.io/perfume/">
   <img src="https://github.com/Zizzamia/perfume.js/blob/master/docs/src/assets/perfume-logo-v5-0-0.png"
   align="left" width="200" alt="Perfume.js logo" />
 </a>
 
-# [Perfume.js v9.4.0](http://perfumejs.com)
+# [Perfume.js v9.4.0](https://zizzamia.github.io/perfume/)
 
 [![Current version](https://img.shields.io/github/tag/zizzamia/perfume.js?color=3498DB&label=version)](https://www.npmjs.org/package/perfume.js) [![Test Coverage](https://api.codeclimate.com/v1/badges/f813d2f45b274d93b8c5/test_coverage)](https://codeclimate.com/github/Zizzamia/perfume.js/test_coverage) <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-27ae60.svg"> [![Build Status](https://travis-ci.org/Zizzamia/perfume.js.svg?branch=master)](https://travis-ci.org/Zizzamia/perfume.js) [![NPM Downloads](http://img.shields.io/npm/dm/perfume.js.svg)](https://www.npmjs.org/package/perfume.js) [![gzip size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=gzip&label=JS+gzip+size)](https://unpkg.com/perfume.js) [![brotli size](https://img.badgesize.io/https://unpkg.com/perfume.js?compression=brotli&label=JS+brotli+size)](https://unpkg.com/perfume.js)
 
@@ -87,7 +87,7 @@ import { initPerfume } from 'node_modules/perfume.js/dist/perfume.umd.min.js';
 
 Metrics like **Navigation Timing**, **Network Information**, **TTFB**, **FCP**, **FID**, **LCP**, **CLS**, **INP** and **TBT** are default reported with Perfume; All results will be reported to the `analyticsTracker` callback, and the code below is just one way for you to organize your tracking, feel free to tweak it suit your needs.
 
-🚀 Visit [perfumejs.com](http://perfumejs.com/) for a live demo on how the metrics work. 🌕
+🚀 Visit [https://zizzamia.github.io/perfume/](https://zizzamia.github.io/perfume/) for a live demo on how the metrics work. 🌕
 
 ```javascript
 import { initPerfume } from 'perfume.js';
