@@ -1,7 +1,7 @@
 import { config } from './config';
 import { getNavigatorInfo } from './getNavigatorInfo';
 import { visibility } from './onVisibilityChange';
-import { IVitalsScore, INavigationType } from './types';
+import { IVitalsScore, INavigationType, IPerfumeData } from './types';
 import { pushTask } from './utils';
 
 /**
@@ -9,7 +9,7 @@ import { pushTask } from './utils';
  */
 export const reportPerf = (
   measureName: string,
-  data: any,
+  data: IPerfumeData,
   rating: IVitalsScore,
   attribution: object,
   navigationType?: INavigationType,

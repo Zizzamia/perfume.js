@@ -5,22 +5,33 @@ import { visibility } from './onVisibilityChange';
 import { po } from './performanceObserver';
 import { reportPerf } from './reportPerf';
 import { initTotalBlockingTime } from './totalBlockingTime';
-import { Metric } from './types';
+import { IPerfumeData, Metric } from './types';
 import { roundByFour } from './utils';
 import { getVitalsScore } from './vitalsScore';
 
 export const logData = (
   measureName: string,
-  metric: any,
+  metric: IPerfumeData,
   attribution?: object,
 ): void => {
-  Object.keys(metric).forEach(key => {
-    if (typeof metric[key] === 'number') {
-      metric[key] = roundByFour(metric[key]);
+  const roundNumericProperties = (data: IPerfumeData): IPerfumeData => {
+    if (typeof data === 'number') {
+      return data;
     }
-  });
+
+    return Object.entries(data).reduce(
+      (acc, [key, value]) => ({
+        ...acc,
+        [key]: typeof value === 'number' ? roundByFour(value) : value,
+      }),
+      {} as typeof data,
+    );
+  };
+
+  const convertedMetric = roundNumericProperties(metric);
+
   // Sends the metric to an external tracking service
-  reportPerf(measureName, metric, null, attribution || {});
+  reportPerf(measureName, convertedMetric, null, attribution || {});
 };
 
 /**

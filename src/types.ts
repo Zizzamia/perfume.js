@@ -199,6 +199,14 @@ export interface IPerfumeNetworkInformation {
   saveData?: boolean;
 }
 
+export interface IPerfumeStorageEstimate {
+  quota: number | null;
+  usage: number | null;
+  caches: number | null;
+  indexedDB: number | null;
+  serviceWorker: number | null;
+}
+
 export interface IPerfumeDataConsumption {
   beacon: number;
   css: number;
@@ -213,7 +221,10 @@ export interface IPerfumeDataConsumption {
 export type IPerfumeData =
   | number
   | IPerfumeNavigationTiming
-  | IPerfumeNetworkInformation;
+  | IPerfumeNetworkInformation
+  | IPerfumeStorageEstimate
+  | IPerfumeDataConsumption
+  | IPerformanceEntry;
 
 export type IVitalsScore = 'good' | 'needsImprovement' | 'poor' | null;
 
