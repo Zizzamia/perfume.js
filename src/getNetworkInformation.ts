@@ -7,7 +7,7 @@ export let sd = false;
 export const getNetworkInformation = (): IPerfumeNetworkInformation => {
   if ('connection' in WN) {
     const dataConnection = (WN as any).connection;
-    if (typeof dataConnection !== 'object') {
+    if (!dataConnection || typeof dataConnection !== 'object') {
       return {};
     }
     et = dataConnection.effectiveType;
