@@ -27,5 +27,11 @@ describe('getNavigationTiming', () => {
       (WN as any).connection = 'test';
       expect(getNetworkInformation()).toEqual({});
     });
+
+    it('when connection is supported and connection is null should return an empty object', () => {
+      (WN as any) = mock.navigator();
+      (WN as any).connection = null;
+      expect(getNetworkInformation()).toEqual({});
+    });
   });
 });
