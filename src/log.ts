@@ -23,6 +23,8 @@ export const logData = (
   reportPerf(measureName, metric, null, attribution || {});
 };
 
+let tbtReportScheduled = false;
+
 /**
  * Dispatches the metric duration into internal logs
  * and the external time tracking service.
@@ -44,7 +46,13 @@ export const logMetric = ({
     perfObservers[0] = po('longtask', initTotalBlockingTime);
   }
   // TODO Add docs
-  if ('FID' === name) {
+  if (
+    name === 'FCP' &&
+    navigationType !== 'soft-navigation' &&
+    !tbtReportScheduled
+  ) {
+    tbtReportScheduled = true;
+
     setTimeout(() => {
       if (visibility.didChange) {
         return;

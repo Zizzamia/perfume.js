@@ -12,6 +12,7 @@
     "emitDecoratorMetadata": true,
     "declarationDir": "dist/types",
     "outDir": "dist/es",
+    "skipLibCheck": true,
     "typeRoots": [
       "node_modules/@types",
       "./types"
