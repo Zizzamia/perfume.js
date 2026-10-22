@@ -17,8 +17,6 @@
     "fp",
     "first-contentful-paint",
     "fcp",
-    "first-input-delay",
-    "fid",
     "largest-contentful-paint",
     "lcp",
     "cumulative-layout-shift",
@@ -102,7 +100,7 @@
     "collectCoverage": true
   },
   "dependencies": {
-    "web-vitals": "^3.5.0"
+    "web-vitals": "^6.2.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "23.0.2",

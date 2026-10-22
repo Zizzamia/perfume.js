@@ -1,5 +1,11 @@
 # Changelog
 
+## 10.0.0 (2026-10-22)
+
+### Breaking Changes
+* **feat** update web-vitals on 6.2.3, now supports soft-navigations
+* **feat** remove `FID` metric
+
 ## 9.4.1 (2024-6-03)
 
 * **fix**: Improve browser compatibility around globalThis.

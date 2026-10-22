@@ -7,7 +7,6 @@ export interface Metric {
   name:
     | 'CLS'
     | 'FCP'
-    | 'FID'
     | 'INP'
     | 'LCP'
     | 'TTFB'
@@ -78,7 +77,6 @@ interface WebVitalsReportOptions {
   ttfb?: ReportOpts;
   cls?: ReportOpts;
   fcp?: ReportOpts;
-  fid?: ReportOpts;
   lcp?: ReportOpts;
   inp?: ReportOpts;
 }
@@ -132,7 +130,6 @@ export interface IPerfObservers {
 }
 
 export type IPerformanceObserverType =
-  | 'first-input'
   | 'largest-contentful-paint'
   | 'layout-shift'
   | 'longtask'
@@ -222,6 +219,7 @@ export type INavigationType =
   | 'reload'
   | 'back-forward'
   | 'back-forward-cache'
+  | 'soft-navigation'
   | 'prerender';
 
 export interface IVitalsThresholds {

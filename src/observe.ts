@@ -1,7 +1,6 @@
 import {
   onCLS,
   onFCP,
-  onFID,
   onINP,
   onLCP,
   onTTFB,
@@ -24,8 +23,6 @@ export const initPerformanceObserver = (): void => {
   onCLS(report => logMetric(report), config.reportOptions.cls);
   // @ts-ignore
   onFCP(report => logMetric(report), config.reportOptions.fcp);
-  // @ts-ignore
-  onFID(report => logMetric(report), config.reportOptions.fid);
   // @ts-ignore
   onLCP(report => logMetric(report), config.reportOptions.lcp);
   // @ts-ignore
