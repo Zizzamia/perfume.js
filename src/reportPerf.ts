@@ -19,7 +19,7 @@ export const reportPerf = (
       return;
     }
     // Doesn't send timing when page is hidden
-    if (visibility.isHidden && !['CLS', 'INP'].includes(measureName)) {
+    if (visibility.isHidden && !['CLS', 'INP', 'LCP'].includes(measureName)) {
       return;
     }
     // Send metric to custom Analytics service
@@ -33,9 +33,9 @@ export const reportPerf = (
     });
   };
 
-  // Send CLS and INP metrics immediately,
+  // Send CLS, INP and LCP metrics immediately,
   // because this metrics are reported when page is hidden or closed
-  if (['CLS', 'INP'].includes(measureName)) {
+  if (['CLS', 'INP', 'LCP'].includes(measureName)) {
     reportTask();
   } else {
     pushTask(reportTask);

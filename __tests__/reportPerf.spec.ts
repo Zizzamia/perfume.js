@@ -67,6 +67,27 @@ describe('reportPerf', () => {
       });
     });
 
+    it('should not call analyticsTracker() if isHidden is true and measureName is LCP', () => {
+      visibility.isHidden = true;
+      config.analyticsTracker = () => {};
+      spy = jest.spyOn(config, 'analyticsTracker');
+      reportPerf('LCP', 123, 'good', {});
+      expect(spy.mock.calls.length).toEqual(1);
+      expect(spy).toHaveBeenCalledWith({
+        metricName: 'LCP',
+        data: 123,
+        attribution: {},
+        navigatorInformation: {
+          deviceMemory: 8,
+          hardwareConcurrency: 12,
+          isLowEndDevice: false,
+          isLowEndExperience: false,
+          serviceWorkerStatus: 'unsupported',
+        },
+        rating: 'good',
+      });
+    });
+
     it('should call analyticsTracker() if analyticsTracker is defined', () => {
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
@@ -107,7 +128,7 @@ describe('reportPerf', () => {
       });
     });
 
-    it('CLS and INP should be reported immediately without requestIdleCallback', () => {
+    it('CLS, INP and LCP should be reported immediately without requestIdleCallback', () => {
       config.analyticsTracker = () => {};
       spy = jest.spyOn(config, 'analyticsTracker');
 
@@ -115,8 +136,8 @@ describe('reportPerf', () => {
       const tasks: Function[] = [];
       (W as any).requestIdleCallback = (cb: Function) => tasks.push(cb);
 
-      const immediatelyReportedMetrics = ['CLS', 'INP'];
-      const delayedMetrics = ['TTFB', 'FCP', 'LCP', 'FID', 'TBT'];
+      const immediatelyReportedMetrics = ['CLS', 'INP', 'LCP'];
+      const delayedMetrics = ['TTFB', 'FCP', 'FID', 'TBT'];
       const defaultData = {
         data: 123,
         attribution: {},
